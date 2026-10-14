@@ -1,5 +1,6 @@
 #include "Asteroid.hpp"
 #include "Animator.hpp"
+#include "Theme.hpp"
 
 #define SMALL_ASTEROID 1.5f
 #define MEDIUM_ASTEROID 2.5f
@@ -77,7 +78,7 @@ void Asteroid::destruct()
     rect = { position.x, position.y, float(size * 10), float(size * 10) };
     Animator::GetInstance().AddAnimation(asteroidID, std::make_shared<Animation>(
         ResourceManager::GetInstance().GetTextureRef("asteroid_destruct"),
-        ResourceManager::GetInstance().GetTexture("asteroid_destruct").width / 7,
+        ResourceManager::GetInstance().GetTexture("asteroid_destruct").width / Theme::FRAMES_ASTEROID_DESTRUCT,
         ResourceManager::GetInstance().GetTexture("asteroid_destruct").height,
         0.1f,
         false,

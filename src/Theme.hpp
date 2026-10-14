@@ -7,7 +7,8 @@ namespace Theme {
     inline constexpr float BARRICADE_DRAW_SIZE = 20.0f, BARRICADE_SPIN = 20.0f;
     inline constexpr float BARRICADE_IDLE_FRAME_TIME = 1.0f;
     inline constexpr float BARRICADE_DESTRUCT_FRAME_TIME = 0.1f;
-    inline constexpr int BARRICADE_DESTRUCT_FRAMES = 7;
+    inline constexpr int FRAMES_ASTEROID_DESTRUCT = 8;
+    inline constexpr int BARRICADE_DESTRUCT_FRAMES = FRAMES_ASTEROID_DESTRUCT;
     inline constexpr Vector2 BARRICADE_STATUS_POSITION = {1350.0f, 270.0f};
     inline constexpr float BARRICADE_STATUS_SIZE = 40.0f;
     inline constexpr float ORIGINAL_PLAYER_SIZE = 8.0f;

@@ -1,13 +1,24 @@
 # Asset provenance
 
+## Orbital scrap reskin (14 October 2026)
+
+User-requested replacement of the two asteroid textures. Original files are preserved byte-for-byte in `textures/legacy/` and are no longer loaded. New artwork was generated with OpenAI's built-in image tool using the supplied legacy sprites as style/layout references; no third-party asset pack was added. AI-generated output is not claimed as CC0; legacy reference provenance remains pending audit. Prompts and export notes: `source/debris/generation.json`. Human art review pending.
+
+| File | Resource key | Source / author | License | Edits | Date |
+|---|---|---|---|---|---|
+| `textures/asteroid.png` | `asteroid` | OpenAI image_gen, directed by user/Codex | AI-generated; legacy style reference audit pending | Nearest-neighbor export, binary transparency; 96 x 96 with centered 36 x 31 body | 2026-10-14 |
+| `textures/asteroid_destruct.png` | `asteroid_destruct` | OpenAI image_gen, directed by user/Codex | AI-generated; legacy style reference audit pending | Uniformly scaled/repacked from 4 x 2 grid to 768 x 96 strip; eight 96 x 96 frames, final frame transparent | 2026-10-14 |
+| `source/debris/scrap-generated.png` | - | OpenAI image_gen | AI-generated; legacy style reference audit pending | Unmodified generated intact source | 2026-10-14 |
+| `source/debris/scrap-destruct-generated.png` | - | OpenAI image_gen | AI-generated; legacy style reference audit pending | Unmodified generated destruction source | 2026-10-14 |
+
 ## Barricade placeholder reuse (14 October 2026)
 
 Existing repository textures reused at the user's request; no new external assets or image edits. Legacy provenance verification remains item 02.
 
 | File | Resource key | Source / author | License | Edits | Date |
 |---|---|---|---|---|---|
-| `textures/asteroid.png` | `asteroid` | Existing Space Ablaze repository; original author pending audit | Pending legacy audit | None; reused for event enemy | 2026-10-14 |
-| `textures/asteroid_destruct.png` | `asteroid_destruct` | Existing Space Ablaze repository; original author pending audit | Pending legacy audit | None; reused for event enemy destruction | 2026-10-14 |
+| `textures/legacy/asteroid.png` | - (archived) | Existing Space Ablaze repository; original author pending audit | Pending legacy audit | Original 96 x 96 file preserved unchanged | 2026-10-14 |
+| `textures/legacy/asteroid_destruct.png` | - (archived) | Existing Space Ablaze repository; original author pending audit | Pending legacy audit | Original seven-frame 672 x 96 file preserved unchanged | 2026-10-14 |
 
 ## Player equipment pack (14 October 2026)
 

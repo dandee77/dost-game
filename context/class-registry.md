@@ -244,6 +244,7 @@ All use the same pattern: `static X& GetInstance()` with a function-local static
 
 ### Asteroid
 - Files: src/Asteroid.hpp, src/Asteroid.cpp
+- Art update (14 October): orbital scrap replaces the static texture; destruction uses `Theme::FRAMES_ASTEROID_DESTRUCT` (8), shared with barricades. Each frame remains 96 x 96; original sprites archived in `assets/textures/legacy/`.
 - Status: existing → reskinned as "debris" (item 15)
 - Kind: entity
 - Inherits: `Entity`
@@ -327,7 +328,7 @@ All use the same pattern: `static X& GetInstance()` with a function-local static
 - Constructor: `BarricadeEnemy(const std::string& id, Vector2 center, float angle)`.
 - Behavior: orbits a fixed center at 4 degrees/s while shrinking, then scatters straight along its release heading, using accumulated simulation time. `update()` delegates to deterministic `advance(float dt)`. Previous position supports relative swept contact.
 - Combat: normal enemy HP/damage/removal paths; cannot receive knockback or crowd separation. Never removed by ordinary kamikaze or asteroid contact. Gameplay values are `Balance::BARRICADE_*`.
-- Drawing: existing static asteroid texture registered as a one-frame WORLD animation under its unique enemy ID; existing seven-frame asteroid destruction animation. Flying enemies retain their top layer.
+  - Drawing: orbital scrap texture registered as a one-frame WORLD animation under its unique enemy ID; eight-frame debris destruction uses the shared `Theme::FRAMES_ASTEROID_DESTRUCT` count. Flying enemies retain their top layer.
 
 ### BarricadeEvent
 - P3 follow-up queries: `getRadius() const`, `getAliveSegments() const`, `hasTriggeredAutomatically() const` provide live diagnostics without exposing mutable event state. Radius includes outward scatter; inactive radius is zero.

@@ -8,7 +8,9 @@ Why tokens became a header: in C++ the values must live in code. Writing them in
 
 ## Canvas and Window
 
-P3 event UI: a sky-blue `BARRICADE Ns - BREAK A GAP` countdown at Theme's safe-area status position, changing to `BARRICADE DISPERSING` on timeout. Existing asteroid art is a one-frame WORLD animation, with 20-unit draw size (including transparent sprite padding) and 20 degrees/s rotation; normal seven-frame asteroid destruction is reused. Camera zoom smoothly changes from 20 to 13 during containment, returning to 20 after scatter/escape/death. No new art or font assets.
+P3 event UI: a sky-blue `BARRICADE Ns - BREAK A GAP` countdown at Theme's safe-area status position, changing to `BARRICADE DISPERSING` on timeout. Orbital scrap art is a one-frame WORLD animation, with 20-unit draw size (including transparent sprite padding) and 20 degrees/s rotation; normal eight-frame debris destruction is reused. Camera zoom smoothly changes from 20 to 13 during containment, returning to 20 after scatter/escape/death.
+
+14 October user-requested debris reskin: muted lavender-gray plates, dented canister, broken panel, bent pipe and wiring replace the asteroid art. Preserve 96 x 96 transparent frames and the roughly 36-pixel centered body. Destruction now has eight horizontal frames (768 x 96), ending fully transparent, at the existing 0.1 seconds per frame. `Theme::FRAMES_ASTEROID_DESTRUCT` is shared by normal debris and barricades. Original seven-frame sheet and intact sprite are archived under `assets/textures/legacy/`. User's explicit eight-frame request supersedes the old seven-frame asset constraint.
 
 | Item | Value | Where |
 |---|---|---|
@@ -200,7 +202,7 @@ Existing sheets (sizes measured from the current files). "Frame" is width x heig
 | `mid_level_enemy` | mid_level_enemy.png | 64 x 64 | 12 | 15 | Rogue Satellite (spinning panels) |
 | `mid_level_enemy_destruct` | | 64 x 64 | 7 | 15 | |
 | `asteroid` | asteroid.png | 96 x 96 | 1 | 15 / 25 / 30 | Debris chunk |
-| `asteroid_destruct` | asteroid_destruct.png | 96 x 96 | 7 | same | |
+| `asteroid_destruct` | asteroid_destruct.png | 96 x 96 | 8 | same | Scrap breakup; last frame transparent |
 | `background1` to `background4` | background1-4.png | 500 x 500 | 1 | tiled parallax | Orbit layers: far stars, Earth haze, debris field, near dust |
 | `health_bar`, `health` | healthBar.png, health.png | 128 x 16 | 1 | screen 1000 x 150 | Hull bar frame and fill |
 | `wasd_keys` | wasd_keys.png | 67 x 43 | 3 | world 16 x 10 | Keep |

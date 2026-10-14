@@ -275,6 +275,8 @@ A1 ─> A2..A9 ─> 15, 26
 ### 15 Reskin Low, Mid and debris
 **Owner:** Programmer 2 with Artist. **Date:** 19 Oct. **Depends on:** A3, A5.
 
+**14 Oct user-requested debris-only work:** orbital scrap intact/destruction textures delivered with original 96 x 96 frame size; destruction expanded from seven to eight frames at the user's request. Originals archived under `assets/textures/legacy/`, provenance/prompts recorded. Debug build and 7,513 native checks pass. Human art review and all other item 15/A5 assets remain pending.
+
 - Drop in the new sheets with the same sizes and frame counts (no code change), or update `Theme::FRAMES_*` if counts changed.
 - Optional toxic tint pulse on enemies (`Theme::COLOR_TOXIC`).
 - Enemy bullet art; debris art.
