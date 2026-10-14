@@ -69,7 +69,7 @@ int runDebrisChecks(const std::string& artifactDirectory)
     const auto frameRender = LoadRenderTexture(96, 96);
     for (int frame = 0; frame < 8; ++frame) {
         scraps.reset(); scraps.spawnDebris({48, 48}, 0, DEBRIS_CLUMP, 96, false);
-        scraps.update(frame * 0.1f + 0.05f, {});
+        scraps.update((frame + 0.5f) * Theme::DEBRIS_DESTRUCT_FRAME_TIME, {});
         BeginTextureMode(frameRender); ClearBackground(BLANK); scraps.draw(); EndTextureMode();
         Image actual = LoadImageFromTexture(frameRender.texture); ImageFlipVertical(&actual);
         require(actual.format == PIXELFORMAT_UNCOMPRESSED_R8G8B8A8, "Capture has readable RGBA pixels");
@@ -97,9 +97,9 @@ int runDebrisChecks(const std::string& artifactDirectory)
     for (const float angle : {0.0f, 33.0f, 90.0f, 245.0f}) {
         clear();
         scraps.spawnDebris({12, -9}, angle, DEBRIS_WING, 48, true);
-        require(scraps.update(0.699f, {500, 0}) == 0 && scraps.count() == 0,
+        require(scraps.update(Theme::SCRAP_HANDOFF_TIME - 0.001f, {500, 0}) == 0 && scraps.count() == 0,
             "Last visible frame finishes before any orb appears");
-        scraps.update(Theme::SCRAP_HANDOFF_TIME - 0.699f, {500, 0});
+        scraps.update(0.001f, {500, 0});
         require(scraps.count() == centers.size(), "One orb replaces every final fleck");
         for (std::size_t i = 0; i < centers.size(); ++i) {
             const auto local = Vector2Scale(Vector2Subtract(centers[i], {48, 48}), 0.5f);
@@ -136,7 +136,7 @@ int runDebrisChecks(const std::string& artifactDirectory)
         require(scraps.count() == 0 && scraps.destructionCount() == 1, "Destruction sheet plays before pickups spawn");
         require(scraps.pendingValue() == Balance::DEBRIS_SCRAP_VALUES[type], "Breakup preserves exact variant value");
         require(!debris.removeDebris(id, true), "Repeated destruction is harmless");
-        require(scraps.update(0.5f, {}) == 0, "No credit during scatter");
+        require(scraps.update(Theme::SCRAP_HANDOFF_TIME * 0.75f, {}) == 0, "No credit during destruction");
         int total = 0;
         for (int frame = 0; frame < 180; ++frame) total += scraps.update(1.0f / 60.0f, {});
         require(total == Balance::DEBRIS_SCRAP_VALUES[type] && scraps.count() == 0, "All shards home and credit exactly once");
@@ -161,7 +161,7 @@ int runDebrisChecks(const std::string& artifactDirectory)
     single.advance(0, {500, 0});
     require(Vector2Distance(endpoint, single.getPosition()) == 0, "Zero dt freezes pickup");
     single.advance(0.001f, {500, 0});
-    require(Vector2Distance(endpoint, single.getPosition()) <= 0.091f, "Homing begins at exact scatter endpoint");
+    require(Vector2Distance(endpoint, single.getPosition()) <= Balance::SCRAP_MAGNET_SPEED * 0.001f + 0.001f, "Homing movement follows configured speed");
     single.advance(10, {});
     require(single.isCollected() && Vector2Length(single.getPosition()) == 0, "Large frame cannot overshoot player");
     clear();
@@ -243,7 +243,9 @@ int runDebrisChecks(const std::string& artifactDirectory)
         DrawText(DEBRIS_INFO[i].name, 45 + column * 320, 260 + row * 280, 20, WHITE);
     }
     const char* stages[] = {"DESTRUCTION", "LAST FLECKS", "GLOW HANDOFF", "ABSORB"};
-    const float times[] = {0.35f, 0.65f, 0.7f, 0.95f};
+    const float times[] = {3.5f * Theme::DEBRIS_DESTRUCT_FRAME_TIME,
+        (Theme::DEBRIS_LAST_VISIBLE_FRAME + 0.5f) * Theme::DEBRIS_DESTRUCT_FRAME_TIME,
+        Theme::SCRAP_HANDOFF_TIME, Theme::SCRAP_HANDOFF_TIME + Theme::SCRAP_ORB_HOLD_TIME + 0.1f};
     for (int phase = 0; phase < 4; ++phase) {
         scraps.reset();
         scraps.spawnDebris({}, 0, DEBRIS_WING, 48, true);

@@ -11,7 +11,7 @@ namespace Theme {
     // Centers of all 14 flecks in frame 7 (zero-based 6); frame 8 is blank.
     // Extraction notes: assets/source/debris/harvest-handoff.json.
     inline constexpr int DEBRIS_LAST_VISIBLE_FRAME = 6;
-    inline constexpr float DEBRIS_DESTRUCT_FRAME_TIME = 0.1f;
+    inline constexpr float DEBRIS_DESTRUCT_FRAME_TIME = 0.075f;
     inline constexpr float SCRAP_HANDOFF_TIME = (DEBRIS_LAST_VISIBLE_FRAME + 1) * DEBRIS_DESTRUCT_FRAME_TIME;
     inline constexpr std::array<Vector2, 14> SCRAP_EXIT_PIXELS = {{
         {31.5f, 15.0f}, {46.5f, 20.5f}, {61.5f, 20.0f}, {24.0f, 21.5f},
@@ -20,7 +20,7 @@ namespace Theme {
         {71.5f, 65.5f}, {38.0f, 73.5f}
     }};
     inline constexpr int SCRAP_FRAGMENTS = static_cast<int>(SCRAP_EXIT_PIXELS.size());
-    inline constexpr float SCRAP_ORB_SIZE = 4.0f, SCRAP_ORB_HOLD_TIME = 0.1f;
+    inline constexpr float SCRAP_ORB_SIZE = 2.5f, SCRAP_ORB_HOLD_TIME = 0.05f;
     inline constexpr Color COLOR_HARVEST = {255, 65, 75, 255};
     inline constexpr Vector2 SCRAP_HUD_POSITION = {220.0f, 390.0f};
     inline constexpr float SCRAP_HUD_SIZE = 64.0f;

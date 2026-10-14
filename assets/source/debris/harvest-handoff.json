@@ -9,7 +9,7 @@
   "frame_size": 96,
   "last_visible_frame_zero_based": 6,
   "blank_terminal_frame_zero_based": 7,
-  "handoff_seconds": 0.7,
+  "handoff_seconds": 0.525,
   "extraction": "All nonzero-alpha pixels, 8-connected components; arithmetic mean of pixel centers (x+0.5,y+0.5). Same complete destruction sheet for all variants and barricades. Rotate and scale local offsets exactly as DrawTexturePro; never cut intact debris.",
   "exit_pixel_centers": [
     [

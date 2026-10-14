@@ -13,7 +13,7 @@ namespace Balance {
     inline constexpr int DEBRIS_ANGLE_VARIATION = 30, DEBRIS_MAX_SPAWN_BATCH = 3;
     inline constexpr float DEBRIS_SPAWN_DISTANCE = 150.0f, DEBRIS_DESPAWN_DISTANCE = 150.0f;
     inline constexpr float DEBRIS_SPAWN_START = 1.5f, DEBRIS_SPAWN_MIN = 0.25f, DEBRIS_SPAWN_RAMP_TIME = 600.0f;
-    inline constexpr float SCRAP_MAGNET_SPEED = 90.0f;
+    inline constexpr float SCRAP_MAGNET_SPEED = 150.0f;
     inline constexpr float SCRAP_PICKUP_RADIUS = 2.0f, SCRAP_LIFETIME = 20.0f;
     inline constexpr int SCRAP_MAX_PICKUPS = 150;
     inline constexpr float DEBRIS_PREVIEW_RADIUS = 60.0f;

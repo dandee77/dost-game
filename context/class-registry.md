@@ -256,7 +256,7 @@ All use the same pattern: `static X& GetInstance()` with a function-local static
 - Status: implemented for debris harvesting (15 October); broader enemy-drop/cargo economy remains item 12.
 - Kind: Entity subclass owned by ScrapManager through unique_ptr.
 - API: advance(dt, target), update(), draw(), setAttractTarget(), isCollected(), isExpired(), getValue(), addValue(), getElapsed(). Constructor: ScrapPickup(worldPosition, value).
-- Each pickup draws the generated scrap_orb texture, including its continuous alpha halo. It starts at a saved final-frame fleck centroid, holds 0.1 s, then homes at 90 units/s. No sprite cutting, scatter simulation or concentric-circle drawing. Swept arrival prevents overshoot; credit is emitted once.
+- Each pickup draws the generated scrap_orb texture, including its continuous alpha halo. It starts at a saved final-frame fleck centroid, holds 0.05 s, then homes at 150 units/s. No sprite cutting, scatter simulation or concentric-circle drawing. Swept arrival prevents overshoot; credit is emitted once.
 - Orbs expire at 20 simulation seconds. Environmental explosions play without spawning pickups. Rendering changes no state and uses no Animator IDs.
 ### Dock (planned)
 - Files: src/Dock.hpp, src/Dock.cpp
@@ -445,7 +445,7 @@ All use the same pattern: `static X& GetInstance()` with a function-local static
 - Status: implemented for debris harvesting, 15 October.
 - Kind: run-state singleton; owns pending Destruction records and vector<unique_ptr<ScrapPickup>>.
 - API: spawnDebris(center, angle, kind, drawSize, harvestable), update(dt, playerPosition) returns newly collected value, draw(), reset(), count(), pendingValue(), getPickups(), destructionCount() (read-only inspection).
-- Plays all eight whole destruction frames. At 0.7 s it replaces the last visible frame's 14 flecks with glow-texture orbs using Theme::SCRAP_EXIT_PIXELS, scaled/rotated around the same origin. Pending value includes unfinished explosions. Limits active orbs to 150; overflow merges value only after the explosion. New orbs consume only residual dt. Reset clears explosions and pickups.
+- Plays all eight whole destruction frames. At 0.525 s it replaces the last visible frame's 14 flecks with glow-texture orbs using Theme::SCRAP_EXIT_PIXELS, scaled/rotated around the same origin. Pending value includes unfinished explosions. Limits active orbs to 150; overflow merges value only after the explosion. New orbs consume only residual dt. Reset clears explosions and pickups.
 - Game advances it only while running and alive, after collisions, and adds the result to harvestedScrap. No cargo limit for now (explicit user choice). Pause/console/augment freeze it; death, scene exit, destruction, restart and entry clear it. Deposit/shop/ordinary enemy drops remain planned.
 ---
 
