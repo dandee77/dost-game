@@ -174,6 +174,7 @@ Required for Form 03 (Asset and AI Usage Disclosure). Organizers may request pro
 | 2026-10-14 | Planning | Claude (Anthropic) | Context files, code review of Space Ablaze, build plan | Moderate | Team review pending |
 | 2026-10-14 | 01 (repository setup only) | Codex (OpenAI) | Initialize Git, prepare README, and upload the existing project documents to dandee77/dost-game | Minimal | Team review pending |
 | 2026-10-14 | 01 (baseline import and local build) | Codex (OpenAI) | Import Space Ablaze with history, resolve README, fix ignore patterns and MSVC build compatibility, verify build and launch, update documentation | Moderate | Team review pending |
+| 2026-10-14 | 01 (local build launcher) | Codex (OpenAI) | Repair build.bat, install a local build command in the existing user PATH, and verify compilation and game launch | Minimal | Team review pending |
 
 Asset generation is logged per file in `assets/ASSETS.md`.
 
@@ -197,6 +198,7 @@ Asset generation is logged per file in `assets/ASSETS.md`.
 
 ## Notes
 
+- 14 Oct: `build.bat` now discovers CMake from PATH or Visual Studio, configures and builds Debug, stops on failure, refreshes assets, and launches from the executable directory. `C:/Users/dande/.local/bin/build.cmd` forwards to this checkout, enabling plain `build` in PowerShell without changing execution policy or PATH. Verified the command compiled and launched a responsive game; the wrapper is machine-local and not tracked in Git.
 - 14 Oct: Imported the source and assets from Space Ablaze after the initial documentation upload. Local Debug build passed using Visual Studio's bundled CMake (not on PATH). Executable and copied assets are in `build/Debug/`; run from that directory. Launch smoke check stayed responsive for 8 seconds and closed normally; a game-over/restart playtest and other team machines remain unverified. Existing assets are retained for the item 02 provenance audit.
 - 14 Oct: Initialized the repository on `main` with origin `https://github.com/dandee77/dost-game.git`. This workspace currently contains project instructions and context documents only; no game source, assets, or CMake project are present, so a build cannot yet be verified. Item 01 remains incomplete.
 - 14 Oct: Code review findings: `CollisionSystem.*` and `Pause.*` are empty files; `SpatialGrid` is unused; collisions are brute-force loops in `Game::update`. Only Low and Mid enemies exist. `MainMenu` links to `Settings` and `Credits` scenes that do not exist. The game builds cleanly on Linux with Raylib 5.5 (checked 14 Oct).

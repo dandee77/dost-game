@@ -1,5 +1,7 @@
 # dost-game
 
+On this Windows machine, type `build` in the terminal to compile and launch the game. The local command forwards to this project's `build.bat`, which locates CMake, builds Debug, refreshes the assets, and runs from the executable's folder. On another machine, run `.\build.bat` from the project directory.
+
 Starting codebase: [Space Ablaze](https://github.com/dandee77/Space-Ablaze), imported with its Git history from commit `72361209c6afac24a2a0400a605124b38ca46420`.
 
 Development plans and project instructions are in [AGENTS.md](AGENTS.md) and [context/project-overview.md](context/project-overview.md). The original game documentation follows; it describes the starting game, not the planned DOST features.
