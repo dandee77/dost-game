@@ -1,14 +1,28 @@
 #pragma once
+#include <array>
 #include "raylib.h"
+#include "DebrisKind.hpp"
 
 // Item 04 introduces only the tokens needed by debug tools; item 03 migrates the rest.
 namespace Theme {
-    // The 96px asteroid frame has a roughly 36px body; account for transparent padding.
+    inline constexpr int DEBRIS_FRAME = 96;
+    inline constexpr Rectangle DEBRIS_BODY = {30.0f, 30.0f, 36.0f, 36.0f};
+    inline constexpr std::array<float, DEBRIS_KIND_COUNT> DEBRIS_DRAW_SIZES = {20.0f, 20.0f, 48.0f, 20.0f, 34.0f, 18.0f, 38.0f, 30.0f, 38.0f, 36.0f};
+    inline constexpr int SCRAP_COLUMNS = 8, SCRAP_ROWS = 1;
+    inline constexpr int SCRAP_FRAGMENTS = SCRAP_COLUMNS * SCRAP_ROWS;
+    inline constexpr float SCRAP_SPIN = 180.0f, SCRAP_GLOW_SIZE = 1.1f;
+    inline constexpr std::array<float, 3> SCRAP_GLOW_SCALES = {3.0f, 2.0f, 1.0f};
+    inline constexpr std::array<float, 3> SCRAP_GLOW_ALPHAS = {0.10f, 0.22f, 0.5f};
+    inline constexpr Color COLOR_HARVEST = {255, 65, 75, 255};
+    inline constexpr Color COLOR_HARVEST_CORE = {255, 195, 180, 255};
+    inline constexpr Vector2 SCRAP_HUD_POSITION = {220.0f, 390.0f};
+    inline constexpr float SCRAP_HUD_SIZE = 64.0f;
+    // The 96px debris frame has a roughly 36px body; account for transparent padding.
     inline constexpr float BARRICADE_DRAW_SIZE = 20.0f, BARRICADE_SPIN = 20.0f;
     inline constexpr float BARRICADE_IDLE_FRAME_TIME = 1.0f;
     inline constexpr float BARRICADE_DESTRUCT_FRAME_TIME = 0.1f;
-    inline constexpr int FRAMES_ASTEROID_DESTRUCT = 8;
-    inline constexpr int BARRICADE_DESTRUCT_FRAMES = FRAMES_ASTEROID_DESTRUCT;
+    inline constexpr int FRAMES_DEBRIS_DESTRUCT = 8;
+    inline constexpr int BARRICADE_DESTRUCT_FRAMES = FRAMES_DEBRIS_DESTRUCT;
     inline constexpr Vector2 BARRICADE_STATUS_POSITION = {1350.0f, 270.0f};
     inline constexpr float BARRICADE_STATUS_SIZE = 40.0f;
     inline constexpr float ORIGINAL_PLAYER_SIZE = 8.0f;

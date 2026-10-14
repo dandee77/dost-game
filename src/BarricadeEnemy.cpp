@@ -2,6 +2,7 @@
 #include "Animator.hpp"
 #include "Balance.hpp"
 #include "ResourceManager.hpp"
+#include "ScrapManager.hpp"
 #include "Theme.hpp"
 #include "raymath.h"
 #include <algorithm>
@@ -23,7 +24,7 @@ BarricadeEnemy::BarricadeEnemy(const std::string& id, Vector2 eventCenter, float
     origin = {spriteSize / 2.0f, spriteSize / 2.0f};
     rect = {position.x, position.y, spriteSize, spriteSize};
     hitbox = {position.x, position.y, Balance::BARRICADE_BODY_RADIUS, Balance::BARRICADE_BODY_RADIUS};
-    const auto& texture = ResourceManager::GetInstance().GetTextureRef("asteroid");
+    const auto& texture = ResourceManager::GetInstance().GetTextureRef("debris");
     auto& animator = Animator::GetInstance();
     animator.AddAnimation(enemyID, std::make_shared<Animation>(texture, texture.width, texture.height,
         Theme::BARRICADE_IDLE_FRAME_TIME, true, rect, false, WHITE));
@@ -58,13 +59,6 @@ void BarricadeEnemy::draw()
 
 void BarricadeEnemy::destruct()
 {
-    const auto& sheet = ResourceManager::GetInstance().GetTextureRef("asteroid_destruct");
-    if (sheet.id == 0) return;
-    auto& animator = Animator::GetInstance();
-    animator.Remove(enemyID);
-    animator.AddAnimation(enemyID, std::make_shared<Animation>(sheet, sheet.width / Theme::BARRICADE_DESTRUCT_FRAMES,
-        sheet.height, Theme::BARRICADE_DESTRUCT_FRAME_TIME, false, rect, false, WHITE));
-    animator.SetOrigin(enemyID, origin);
-    animator.SetRotation(enemyID, rotation);
-    animator.Play(enemyID);
+    Animator::GetInstance().Remove(enemyID);
+    ScrapManager::GetInstance().spawnDebris(position, rotation, DEBRIS_CLUMP, spriteSize, true);
 }

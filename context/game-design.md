@@ -211,6 +211,27 @@ Endless uses formulas instead of a table, with `w` = wave number starting at 1:
 
 ## Scrap and Economy
 
+**15 October debris prototype (explicit user request):** shootable floating junk is `Debris`, and harvested fragments are `ScrapPickup`. Harvested scrap accumulates without a cargo limit for now, as confirmed by the user; it is run-local and lost on death/restart. This prototype does not provide credits, deposits, upgrades, or normal-enemy drops. The planned cargo/dock rules below remain future work.
+
+Each destroyed debris object has eight continuous fragments: scatter for 0.8 s over a fixed 10-unit radial distance, turn red from 0.5 s, then home toward the ship from any distance at 90 units/s. Pickup radius is 2 units; lifetime is 20 simulation seconds. The same fragment objects continue from explosion into flight, with fixed exit headings rotated by the original object's angle. Pause, console and augment selection freeze all motion and timers. Only player weapon kills and destroyed barricade segments are harvestable; environmental breakup and offscreen despawn award nothing. At 150 live fragments, merge new value into the nearest collectible fragment rather than losing value.
+
+Fixed variant values (TUNE; never randomized):
+
+| Variant | Collision radius | Padded draw size | Harvest value |
+|---|---:|---:|---:|
+| Scrap clump | 3.75 | 20 | 3 |
+| Broken pipe | 3 | 20 | 2 |
+| Satellite wing | 8 | 48 | 8 |
+| Dented canister | 3.3 | 20 | 2 |
+| Antenna dish | 5.7 | 34 | 5 |
+| Cable coil | 3 | 18 | 2 |
+| Pressure tank | 6.8 | 38 | 6 |
+| Thruster bell | 5 | 30 | 4 |
+| Broken truss | 6 | 38 | 3 |
+| Hull panel | 6 | 36 | 5 |
+
+All source frames are 96 x 96 with at most a 36-pixel body, so visible width/height includes transparent padding. Existing circular collision predicates are retained. Debris movement uses speed 5-15 units/s and rotation 5-240 degrees/s; continuous spawns retain the 1.5-to-0.25 s ramp over 600 s, 1-3 objects per batch, 150-unit spawn/despawn distance. Variant selection replaces random scale. Debug gallery radius: 60 units.
+
 | Rule | Value |
 |---|---|
 | Drops | Enemy's scrap value, split into pickups of 10, 5 and 1 |

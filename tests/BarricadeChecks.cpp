@@ -25,7 +25,7 @@ int runBarricadeChecks(const std::string& artifactDirectory)
         event.reset();
         for (const auto& [id, enemy] : enemies) Animator::GetInstance().Remove(id);
         manager.reset();
-        testAsteroidManager().reset();
+        testDebrisManager().reset();
         BulletManager::GetInstance().reset();
         player.init(); player.position = {}; player.rotation = 0;
         game.gameState = GAME_RUNNING;
@@ -164,7 +164,7 @@ int runBarricadeChecks(const std::string& artifactDirectory)
     require(game.gameState == GAME_AUGMENT_SELECTION && !event.isActive(), "Two-minute augment transition freezes event until resume");
     game.gameState = GAME_RUNNING; game.augmentCards.clear(); game.gameTimer.setStartTime(121);
     manager.enemySpawnCooldown.lastUsedTime = -100;
-    testAsteroidManager().asteroidSpawnCooldown.startCooldown();
+    testDebrisManager().debrisSpawnCooldown.startCooldown();
     game.update();
     require(event.isContaining() && enemies.size() > Balance::BARRICADE_SEGMENTS, "Game starts event while normal enemy spawning continues");
     require(std::abs(Vector2Length(enemies.at("enemy_0")->getPosition()) - Lerp(startRadius, endRadius, event.getElapsed() / 30)) < 0.001f,
@@ -172,14 +172,14 @@ int runBarricadeChecks(const std::string& artifactDirectory)
     const auto hitPoint = enemies.at("enemy_0")->getPosition();
     Bullet legacy(hitPoint, {}, false, 1); legacy.setBulletSpeed(0);
     BulletManager::GetInstance().addBullet(legacy);
-    auto debris = std::make_unique<Asteroid>(Vector2{});
+    auto debris = std::make_unique<Debris>(Vector2{}, DEBRIS_CLUMP);
     debris->position = hitPoint; debris->velocity = {};
-    const auto debrisId = debris->getAsteroidID();
-    testAsteroidManager().getAsteroids()[debrisId] = std::move(debris);
+    const auto debrisId = debris->getDebrisID();
+    testDebrisManager().getDebris()[debrisId] = std::move(debris);
     game.update();
     require(enemies.contains("enemy_0") && enemies.at("enemy_0")->getHealth() < 120,
         "Original default bullet damages barricade in live update");
-    require(testAsteroidManager().getAsteroids().contains(debrisId), "Ordinary asteroid overlap cannot destroy event segment");
+    require(testDebrisManager().getDebris().contains(debrisId), "Ordinary debris overlap cannot destroy event segment");
     start();
     for (auto& [id, enemy] : enemies) enemy->takeDamage(Balance::BARRICADE_HEALTH);
     event.update(0, 0, {});

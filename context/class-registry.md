@@ -2,7 +2,7 @@
 
 Living document. It replaces the web project's UI registry: instead of components, it lists every **class**, what it owns, who owns it, its public API and its traps. Read it before creating or changing any class.
 
-Item 01 baseline import (14 October 2026): Asteroid, Button, GameTimer, MainMenu and Player use standard C++ brace initialization instead of C-style compound literals so MSVC can compile them. Public APIs, ownership and gameplay behavior are unchanged.
+Item 01 baseline import (14 October 2026): Debris, Button, GameTimer, MainMenu and Player use standard C++ brace initialization instead of C-style compound literals so MSVC can compile them. Public APIs, ownership and gameplay behavior are unchanged.
 
 Before creating a class:
 
@@ -61,7 +61,7 @@ Scene (abstract)
 
 Entity (abstract)
 ├── Player                              existing → modified (08)
-├── Asteroid                            existing → modified (15, reskinned as debris)
+├── Debris                            existing → modified (15, reskinned as debris)
 ├── Enemy (abstract)                    existing → modified (10)
 │   ├── LowLevelEnemy                   existing (homing swarmer)
 │   ├── MidLevelEnemy                   existing (strafing shooter)
@@ -83,7 +83,7 @@ All use the same pattern: `static X& GetInstance()` with a function-local static
 | `Animator` | Yes (animations keyed by ID) | Yes: `StopAll()` plus removal of run animations |
 | `EnemyManager` | Yes | Yes |
 | `BulletManager` | Yes | Yes |
-| `AsteroidManager` | Yes | Yes |
+| `DebrisManager` | Yes | Yes |
 | `DamageIndicatorManager` | Yes | Yes |
 | `DamageOverlay` | Yes | Yes |
 | `GameOverOverlay` | Yes | Yes |
@@ -139,18 +139,19 @@ All use the same pattern: `static X& GetInstance()` with a function-local static
 - Changed by: 22
 
 ### Game
+- P4: `resetRun()` now centralizes run-container resets (including ScrapManager) and clears the run-local `harvestedScrap` counter; both entry/restart call it. Running/alive simulation consumes ScrapManager collection results and displays SCRAP in the safe-area HUD. Death/exit/destruction clear pickups. Full player/timer/camera reset consolidation remains item 05.
 - P3: owns `BarricadeEvent barricadeEvent`; updates it only during running simulation and resolves wall contact after enemy movement. Private camera/contact helpers restore zoom and route lethal contact to normal game over. Reset event before manager resets, and on exit/death/destruction. Debug console receives the event owner only in an active run.
-- P1: private `resolveEquipmentAttacks()`, `damageEquipmentEnemy(const std::string&, int, Vector2, float)`, `destroyEquipmentAsteroid(const std::string&)`, `detonateRocket(Vector2, int, float)` integrate swept projectiles, beam ticks, splash, score and destruction before legacy snapshots. No public API change. Player draws its own layers and equipment HUD; shield interception precedes legacy enemy-bullet hull collisions.
+- P1: private `resolveEquipmentAttacks()`, `damageEquipmentEnemy(const std::string&, int, Vector2, float)`, `destroyEquipmentDebris(const std::string&)`, `detonateRocket(Vector2, int, float)` integrate swept projectiles, beam ticks, splash, score and destruction before legacy snapshots. No public API change. Player draws its own layers and equipment HUD; shield interception precedes legacy enemy-bullet hull collisions.
 - Files: src/Game.hpp, src/Game.cpp
 - Status: existing → modified in most items
 - Kind: scene (`"Game"`), the gameplay orchestrator
 - Owns (current): `Player playerEntity`, `KillCounter killCounter`, `GameTimer gameTimer`, `std::vector<Card> augmentCards`, `std::vector<BackgroundLayer> backgroundLayers` (4 parallax layers), `Music gameMusic`, `Button* restartButton`, `Button* mainMenuButton` (raw `new`), `std::array<Sound, 10> scoreSounds`, `DeathInfo deathInfo`, `GameState gameState`
 - Owns (target): adds `WaveDirector`, `CollisionSystem`, `HUD`, `Dock`, `UpgradeShop`, `DockShopUI`, `PauseOverlay`, `DebugTools`, run economy (credits, cargo)
 - Item 04: owns `DebugTools debugTools` only with `GAME_DEBUG`. Application routes console input before scene updates; Game skips controls and simulation while captured. Draws hitboxes after world sprites and diagnostics after the state UI. Both `onSwitch()` and `restartGame()` reset the tools.
-- Item 28 early performance subtask: owns `SpatialGrid enemyCollisionGrid`, `asteroidCollisionGrid`, and reusable non-owning `collisionEnemies` / `collisionAsteroids` vectors. Snapshots use manager iteration order. Bullet snapshots precede movement; asteroid snapshots are rebuilt after movement/spawning. Both current reset paths clear them; consolidate in item 05. Public API unchanged.
+- Item 28 early performance subtask: owns `SpatialGrid enemyCollisionGrid`, `debrisCollisionGrid`, and reusable non-owning `collisionEnemies` / `collisionDebris` vectors. Snapshots use manager iteration order. Bullet snapshots precede movement; debris snapshots are rebuilt after movement/spawning. Both current reset paths clear them; consolidate in item 05. Public API unchanged.
 - Public API: `update()`, `draw()`, `onSwitch()`, `onExit()` (Scene overrides). Private: `restartGame()`, `DrawParallaxBackground()`, `DrawLayer()`
 - Debug-only API: `bool updateDebugConsole(bool activeGame)`, `void drawDebugConsole() const`. Game owns DebugTools; `debugPausedTimer` remembers whether console capture paused the run timer, without changing GameState. Both reset paths clear it.
-- Enums in `Game.hpp`: `GameState : int { GAME_RUNNING, GAME_AUGMENT_SELECTION, GAME_PAUSED, GAME_OVER }` (explicit underlying type permits the debug header's forward declaration; target adds `GAME_DOCKED`, `GAME_VICTORY`), `KillerType { KILLER_ENEMY_BULLET, KILLER_ENEMY_COLLISION, KILLER_ASTEROID }`, struct `DeathInfo`
+- Enums in `Game.hpp`: `GameState : int { GAME_RUNNING, GAME_AUGMENT_SELECTION, GAME_PAUSED, GAME_OVER }` (explicit underlying type permits the debug header's forward declaration; target adds `GAME_DOCKED`, `GAME_VICTORY`), `KillerType { KILLER_ENEMY_BULLET, KILLER_ENEMY_COLLISION, KILLER_DEBRIS }`, struct `DeathInfo`
 - Gotchas:
   - File-level statics `prevGameTimer` and `gameOverTextStarted` survive between runs; `prevGameTimer` is never reset. Move them into the class during item 05.
   - `onSwitch()` loads 10 copies of `score_sound.wav` with `LoadSound` every time the scene starts and never unloads them (leak). Use `LoadSoundAlias` (item 05).
@@ -218,7 +219,7 @@ All use the same pattern: `static X& GetInstance()` with a function-local static
 - Kind: abstract base
 - Protected fields: `int health`, `int damage`, `float speed`, `Rectangle rect`, `float rotation`, `Vector2 velocity`, `Vector2 position`, `Vector2 origin`
 - Public API: `virtual void update() = 0`, `virtual void draw() = 0`, `getPosition()`, `getSize()` (rect width/height), `getRotation()`, `getVelocity()`, `getHealth()`
-- Gotchas: no virtual `getRadius()`; collision radii are read from class-specific methods (`getHitbox().width`, `getAsteroidSize()`). Item 10 adds `virtual float getCollisionRadius() const` with a default of `rect.width / 2`.
+- Gotchas: no virtual `getRadius()`; collision radii are read from class-specific methods (`getHitbox().width`, `getDebrisSize()`). Item 10 adds `virtual float getCollisionRadius() const` with a default of `rect.width / 2`.
 
 ### Player
 - P3: `resolveBarricadeContact(Vector2 correctedPosition, Vector2 normal, Vector2 source)` always corrects position/velocity for living players, but calls normal damage only in PLAYER_DEFAULT. Existing shields, debug invincibility, stun and iframe timers remain authoritative.
@@ -242,26 +243,21 @@ All use the same pattern: `static X& GetInstance()` with a function-local static
 - Fields: `int maxHealth`, `float damageMultiplier`, `float attackCooldown`, `float moveSpeed`, `float armor` (0 to 0.6 damage reduction), `float magnetRadius`, `int cargoCapacity`, `float iframeDuration`, `float rotationMultiplier`, `int burstCount`, `int scatterCount`, `int piercePower`, `float knockbackPower`
 - Rule: base values come from `Balance.hpp`. Augments and gear upgrades modify `PlayerStats` only through `Player` methods, never by poking fields from outside.
 
-### Asteroid
-- Files: src/Asteroid.hpp, src/Asteroid.cpp
-- Art update (14 October): orbital scrap replaces the static texture; destruction uses `Theme::FRAMES_ASTEROID_DESTRUCT` (8), shared with barricades. Each frame remains 96 x 96; original sprites archived in `assets/textures/legacy/`.
-- Status: existing → reskinned as "debris" (item 15)
-- Kind: entity
-- Inherits: `Entity`
-- Owned by: `AsteroidManager` (`std::unique_ptr` in a map keyed by ID)
-- Public API: `Asteroid(Vector2 playerPos)`, `update()`, `draw()` (direct `DrawTexturePro`, not the Animator), `getPlayerPosition(Vector2)` (a setter despite the name), `getAsteroidID()`, `getAsteroidSize()` (collision radius = `size * 2.5`), `destruct()` (plays `"asteroid_destruct"` through the Animator)
-- Gotchas: IDs come from a static `asteroidCounter` that never resets. Fine for uniqueness. Spawns 150 units away aimed at the player with ±30° spread.
-- Changed by: 12 (drops scrap), 15
-
-### ScrapPickup (planned)
-- Files: src/ScrapPickup.hpp, src/ScrapPickup.cpp
-- Status: planned (item 12)
-- Kind: entity
-- Inherits: `Entity`
-- Owned by: `ScrapManager`
-- Public API: `ScrapPickup(std::string id, Vector2 position, int value)`, `update()` (drift, slow down, lifetime countdown, blink in the last seconds, move toward the player when inside the magnet radius), `draw()` (direct draw, small sprite with gold tint), `getValue()`, `isExpired()`, `setAttractTarget(Vector2 playerPos, float magnetRadius)`
-- Gotchas: dropped scrap scatters with a small random burst velocity so a kill drops a visible spray, not one dot.
-
+### Debris
+- Files: src/Debris.hpp/.cpp, src/DebrisKind.hpp
+- Status: renamed from Asteroid and extended for the 15 October debris-harvesting request.
+- Kind: Entity subclass, owned by DebrisManager as unique_ptr values keyed by unique debris IDs.
+- Constructors: Debris(playerPos) chooses a variant; Debris(playerPos, DebrisKind) chooses a specific variant. Ten typed variants share behavior; no random scale.
+- API: update(), draw(), getDebrisID(), getDebrisSize() (fixed collision radius from Balance), getKind(), getTextureKey(), getDisplayName(), destruct(bool harvestable = false).
+- Draw dimensions come from Theme; collision radius and scrap yield come from Balance. Body remains centered within a 96 x 96 frame. Destruct creates the same eight actual texture fragments used for pickup flight; no separate disappearing animation.
+- IDs use a monotonic counter and are never reused. Collision circles are retained for all silhouettes. No new entity class per art variant.
+### ScrapPickup
+- Files: src/ScrapPickup.hpp/.cpp
+- Status: implemented for debris harvesting (15 October); broader enemy-drop/cargo economy remains item 12.
+- Kind: Entity subclass owned by ScrapManager through unique_ptr.
+- API: advance(dt, target), update(), draw(), setAttractTarget(), isCollected(), isExpired(), getValue(), addValue(), getElapsed(), getSource(), canHarvest().
+- Each pickup is a source rectangle cut from the destroyed object's texture. Eight pieces start assembled at the original rotation, follow fixed rotated scatter directions for 0.8 seconds, turn red from 0.5 seconds, then home at 90 units/s. The same objects and coordinates continue through the transition. Swept arrival prevents overshoot; credit is emitted once.
+- Environmental fragments fade at 0.8 seconds with zero value; collectible fragments expire at 20 simulation seconds. Rendering does not change state and uses no Animator IDs.
 ### Dock (planned)
 - Files: src/Dock.hpp, src/Dock.cpp
 - Status: planned (item 13)
@@ -327,8 +323,8 @@ All use the same pattern: `static X& GetInstance()` with a function-local static
 - Kind: final subclass of `Enemy`, owned by `EnemyManager`.
 - Constructor: `BarricadeEnemy(const std::string& id, Vector2 center, float angle)`.
 - Behavior: orbits a fixed center at 4 degrees/s while shrinking, then scatters straight along its release heading, using accumulated simulation time. `update()` delegates to deterministic `advance(float dt)`. Previous position supports relative swept contact.
-- Combat: normal enemy HP/damage/removal paths; cannot receive knockback or crowd separation. Never removed by ordinary kamikaze or asteroid contact. Gameplay values are `Balance::BARRICADE_*`.
-  - Drawing: orbital scrap texture registered as a one-frame WORLD animation under its unique enemy ID; eight-frame debris destruction uses the shared `Theme::FRAMES_ASTEROID_DESTRUCT` count. Flying enemies retain their top layer.
+- Combat: normal enemy HP/damage/removal paths; cannot receive knockback or crowd separation. Never removed by ordinary kamikaze or debris contact. Gameplay values are `Balance::BARRICADE_*`.
+  - Drawing: orbital scrap texture registered as a one-frame WORLD animation under its unique enemy ID; destruction removes its Animator entry and emits the same collectible fragments as DEBRIS_CLUMP. Flying enemies retain their top layer.
 
 ### BarricadeEvent
 - P3 follow-up queries: `getRadius() const`, `getAliveSegments() const`, `hasTriggeredAutomatically() const` provide live diagnostics without exposing mutable event state. Radius includes outward scatter; inactive radius is zero.
@@ -436,21 +432,21 @@ All use the same pattern: `static X& GetInstance()` with a function-local static
 - Public API: `update(Vector2 playerPos)` (moves bullets, removes those over 150 units from the player), `draw(const Texture2D& playerTex, const Texture2D& enemyTex)`, `addBullet(Bullet)`, `getBullets()`, `getBullet(int)`, `removeBullet(int)`, `clear()`, `reset()`
 - Gotchas: a `std::vector<Bullet>` with erase-by-index. Callers iterating while removing must decrement the index (existing code does `i--`). Item 17 may add a boss bullet texture; if so, add a third texture parameter rather than a new manager.
 
-### AsteroidManager
-- Files: src/AsteroidManager.hpp, src/AsteroidManager.cpp
-- Status: existing (reskinned as debris in item 15)
-- Kind: singleton
-- Public API: `update(Vector2 playerPos, const GameTimer&)`, `draw()`, `reset()`, `removeAsteroid(const std::string& id)` (plays destruct), `getAsteroids()`
-- Behavior: spawn cooldown from 1.5 s down to 0.25 s over 10 minutes, 1 to 3 per spawn; removes asteroids beyond 150 units **without** a destruct animation.
-- Changed by: 11 (debris rate follows the wave, not game time), 15
+### DebrisManager
+- Files: src/DebrisManager.hpp/.cpp
+- Status: renamed from AsteroidManager, 15 October.
+- Kind: run-state singleton; reset() is called by Game::resetRun().
+- API: update(playerPos, gameTimer), draw(), reset(), getDebris(), removeDebris(id, bool harvestable = false). Duplicate removal returns false safely.
+- Preserves the existing continuous spawn ramp and 150-unit despawn distance; natural spawns choose among ten variants. Player weapon paths pass harvestable=true; environmental collisions and offscreen removal award no scrap.
+- Debug-only spawnGallery(playerPos) places all ten types around a stationary 60-unit ring, via spawn debris all.
 
-### ScrapManager (planned)
-- Files: src/ScrapManager.hpp, src/ScrapManager.cpp
-- Status: planned (item 12)
-- Kind: singleton
-- Public API: `spawnScrap(Vector2 position, int totalValue)` (splits into pickups of value 1, 5 or 10), `update(Vector2 playerPos, float magnetRadius)`, `draw()`, `collect(Vector2 playerPos, float pickupRadius, int freeCargo)` returns the value collected, `reset()`, `count()`
-- Gotchas: cap the number of live pickups (`Balance::SCRAP_MAX_PICKUPS`); when exceeded, merge new value into the nearest pickup.
-
+### ScrapManager
+- Files: src/ScrapManager.hpp/.cpp
+- Status: implemented for debris harvesting, 15 October.
+- Kind: run-state singleton; owns vector<unique_ptr<ScrapPickup>>.
+- API: spawnDebris(center, angle, kind, drawSize, harvestable), update(dt, playerPosition) returns newly collected value, draw(), reset(), count(), pendingValue(), getPickups() (read-only inspection).
+- Breaks each texture into eight shared fragment exits and distributes the variant's total value exactly. Limits active pieces to 150; overflow removes cosmetic-only bursts first, then merges earned value into the nearest harvestable piece.
+- Game advances it only while running and alive, after collisions, and adds the result to harvestedScrap. No cargo limit for now (explicit user choice). Pause/console/augment freeze it; death, scene exit, destruction, restart and entry clear it. Deposit/shop/ordinary enemy drops remain planned.
 ---
 
 ## Gameplay Systems (planned)
@@ -485,8 +481,8 @@ All use the same pattern: `static X& GetInstance()` with a function-local static
   struct KillEvent { EnemyType type; Vector2 position; int scoreValue; int scrapValue; bool wasBoss; };
   struct CollisionReport {
       std::vector<KillEvent> kills;
-      int asteroidsDestroyedByPlayer = 0;
-      std::vector<Vector2> asteroidKillPositions;
+      int debrisDestroyedByPlayer = 0;
+      std::vector<Vector2> debrisKillPositions;
       bool playerHit = false;
       bool playerDied = false;
       DeathInfo killer;                 // valid when playerDied
@@ -582,9 +578,9 @@ All use the same pattern: `static X& GetInstance()` with a function-local static
 - Kind: value
 - Owned by: long-lived `Game` scene; `Application` routes console calls even outside a run
 - Public API: `void reset()`, `void update(Player* player, BarricadeEvent* barricade = nullptr)`, `void drawConsole() const`, `bool capturesInput() const`, `void drawWorld(const Player& player) const`, `void drawOverlay(const Player& player, GameState state, const BarricadeEvent& barricade) const`
-- Uses: `Player`, read-only enemy/asteroid/bullet containers, `ResourceManager`, `Theme`, `Config`
+- Uses: `Player`, read-only enemy/debris/bullet containers, `ResourceManager`, `Theme`, `Config`
 - Behavior: compiled only with `GAME_DEBUG`. F5 toggles the translucent terminal; vertical six-row suggestion dropdown with Up/Down or PageUp/PageDown navigation. Tab/Enter fills a selected row; Enter without a selection executes. Ctrl+Up/Down browses history (plain arrows also work with empty input). Editing/reset/execution clears suggestion selection/scroll state. Backspace edits and Escape closes. Metadata lookup dispatches enums for `help`, `hitbox`, `mute`, `invincible`, `credits`, `boss`, `wave`, `clear`, `close`. Toggle arguments are optional `on/off/toggle`. Pending systems report unavailable. A null player rejects gameplay commands outside a run.
-- Gotchas: capture includes opening/closing frames. Ship collision radius is `getHitbox().width`, asteroid radius is `getAsteroidSize()`, bullets are points. `drawWorld` uses the gameplay camera; diagnostics and console use canvas space. `reset()` clears run UI state but preserves mute/saved volume; `Player::init()` resets invincibility. Reset both paths until item 05. Input/history/output limits live in Config, layout/opacity in Theme.
+- Gotchas: capture includes opening/closing frames. Ship collision radius is `getHitbox().width`, debris radius is `getDebrisSize()`, bullets are points. `drawWorld` uses the gameplay camera; diagnostics and console use canvas space. `reset()` clears run UI state but preserves mute/saved volume; `Player::init()` resets invincibility. Reset both paths until item 05. Input/history/output limits live in Config, layout/opacity in Theme.
 - Changed by: 04
 
 ---
@@ -715,7 +711,7 @@ All use the same pattern: `static X& GetInstance()` with a function-local static
 ### SpatialGrid
 - Files: src/SpatialGrid.hpp, src/SpatialGrid.cpp
 - Status: modified (item 28 early performance subtask, 14 October)
-- Kind: value, owned by `Game` (one for enemies, one for asteroids) and `EnemyManager` (separate crowd snapshot)
+- Kind: value, owned by `Game` (one for enemies, one for debris) and `EnemyManager` (separate crowd snapshot)
 - Public API: `NO_HIT`, `clear()`, `reserve(std::size_t)`, `add(Vector2, float radius)`, `build()`, `deactivate(std::size_t)`, `isActive(std::size_t) const`, `firstHit(Vector2) const`, `firstWithin(Vector2, float radius, std::size_t exclude = NO_HIT) const`.
 - P2: `Vector2 separation(std::size_t index, float slide = 0.0f) const` returns soft overlap correction, using summed radii, deterministic opposite directions for coincident pairs and optional pair-symmetric lateral steering. Visits at most 24 entries per queried cell; at most 16 cells, otherwise bounded circular sampling. Dense neighborhoods are intentionally approximate. Combat first-hit APIs retain their exact ordering/predicates. No allocations in queries.
 - Uses: `Config.hpp` cell size / small-set threshold / bucket sizing, Raymath's original `Vector2Distance` narrow-phase predicate.

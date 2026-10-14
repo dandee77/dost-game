@@ -19,7 +19,7 @@ def main():
         if len(fields) > 8:
             deaths.add(fields[8])
     if deaths != {"0", "1", "2"}:
-        raise SystemExit("FAIL: missing enemy-bullet, enemy-contact or asteroid death coverage")
+        raise SystemExit("FAIL: missing enemy-bullet, enemy-contact or debris death coverage")
     print("PASS: 480 identical gameplay frames; all three killer types covered")
 
 

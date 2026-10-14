@@ -1,4 +1,5 @@
 #include "TestAccess.hpp"
+#include "raymath.h"
 
 namespace {
 using Clock = std::chrono::steady_clock;
@@ -86,7 +87,7 @@ public:
         game.playerEntity.health = 100;
         game.playerEntity.autoShoot = false;
         EnemyManager::GetInstance().enemySpawnCooldown.startCooldown();
-        testAsteroidManager().asteroidSpawnCooldown.startCooldown();
+        testDebrisManager().debrisSpawnCooldown.startCooldown();
         for (std::size_t i = 0; i < observers.size(); ++i) {
             observers[i]->position = positions[i];
             observers[i]->health = 1000000;

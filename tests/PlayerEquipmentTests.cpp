@@ -6,6 +6,7 @@
 #include <stdexcept>
 int runCrowdChecks(const std::string& artifactDirectory);
 int runBarricadeChecks(const std::string& artifactDirectory);
+int runDebrisChecks(const std::string& artifactDirectory);
 
 #ifdef _WIN32
 extern "C" __declspec(dllimport) int __stdcall PostMessageA(void*, unsigned int, unsigned long long, long long);
@@ -25,7 +26,7 @@ namespace {
     void clearWorld(Game& game)
     {
         EnemyManager::GetInstance().reset();
-        testAsteroidManager().reset();
+        testDebrisManager().reset();
         BulletManager::GetInstance().reset();
         DamageIndicatorManager::GetInstance().reset();
         game.playerEntity.init();
@@ -197,12 +198,12 @@ int main(int argc, char** argv)
         require(player.blasts.empty(), "Explosion expires in simulation time");
 
         clearWorld(game);
-        auto asteroid = std::make_unique<Asteroid>(Vector2{});
-        asteroid->position = {0, -20}; asteroid->velocity = {};
-        const std::string asteroidId = asteroid->getAsteroidID();
-        testAsteroidManager().getAsteroids()[asteroidId] = std::move(asteroid);
+        auto debris = std::make_unique<Debris>(Vector2{});
+        debris->position = {0, -20}; debris->velocity = {};
+        const std::string debrisId = debris->getDebrisID();
+        testDebrisManager().getDebris()[debrisId] = std::move(debris);
         player.setWeapon(WEAPON_LASER); EquipmentTestAccess::updateWeapon(player, 0.0f, true); EquipmentTestAccess::resolve(game);
-        require(testAsteroidManager().getAsteroids().empty() && player.getScore() == Balance::DEBRIS_SCORE, "Laser destroys debris and awards score");
+        require(testDebrisManager().getDebris().empty() && player.getScore() == Balance::DEBRIS_SCORE, "Laser destroys debris and awards score");
 
         clearWorld(game);
         player.setShield(SHIELD_FRONT);
@@ -392,7 +393,7 @@ int main(int argc, char** argv)
         player.autoShoot = true;
         enemy("live_beam", {0, -30});
         EnemyManager::GetInstance().enemySpawnCooldown.startCooldown();
-        testAsteroidManager().asteroidSpawnCooldown.startCooldown();
+        testDebrisManager().debrisSpawnCooldown.startCooldown();
         game.update();
         require(hp("live_beam") < 100 && player.isLaserActive(), "Game update fires and resolves the equipped laser");
 
@@ -403,7 +404,7 @@ int main(int argc, char** argv)
         incoming.setBulletSpeed(0);
         bm.addBullet(incoming);
         EnemyManager::GetInstance().enemySpawnCooldown.startCooldown();
-        testAsteroidManager().asteroidSpawnCooldown.startCooldown();
+        testDebrisManager().debrisSpawnCooldown.startCooldown();
         game.update();
         require(bm.getBullets().empty() && player.getHealth() == 100, "Game intercepts enemy bullet before the hull");
         near(player.getShieldCharge(), 20, "Actual interception drains shield capacity once");
@@ -457,6 +458,7 @@ int main(int argc, char** argv)
         UnloadImage(capture); UnloadRenderTexture(target);
         checks += runCrowdChecks(artifactDirectory);
         checks += runBarricadeChecks(artifactDirectory);
+        checks += runDebrisChecks(artifactDirectory);
         std::cout << "PASS: " << checks << " equipment, console, crowd and barricade checks\n";
     } catch (const std::exception& error) {
         std::cerr << "FAIL after " << checks << " checks: " << error.what() << '\n';

@@ -8,9 +8,11 @@ Why tokens became a header: in C++ the values must live in code. Writing them in
 
 ## Canvas and Window
 
-P3 event UI: a sky-blue `BARRICADE Ns - BREAK A GAP` countdown at Theme's safe-area status position, changing to `BARRICADE DISPERSING` on timeout. Orbital scrap art is a one-frame WORLD animation, with 20-unit draw size (including transparent sprite padding) and 20 degrees/s rotation; normal eight-frame debris destruction is reused. Camera zoom smoothly changes from 20 to 13 during containment, returning to 20 after scatter/escape/death.
+15 October debris harvesting update: ten fixed-size 96 x 96 pixel-art variants now use Debris/DebrisManager names and texture keys. The old eight-frame destruction sheet is retained as an art reference; live debris and barricade destruction cut the actual sprite into eight full-height strips and animate them through shared fixed radial exits. These same fragments turn red and fly to the player, eliminating a separate particle handoff. `Theme::DEBRIS_DRAW_SIZES`, `DEBRIS_BODY`, `SCRAP_*`, and `COLOR_HARVEST` define rendering. `SCRAP n` appears at (220,390), inside the safe area, below the kill counter. The user's red-glow request explicitly overrides the gold-only pickup/red-only-danger rule for harvested debris; homing motion and the SCRAP label provide additional cues.
 
-14 October user-requested debris reskin: muted lavender-gray plates, dented canister, broken panel, bent pipe and wiring replace the asteroid art. Preserve 96 x 96 transparent frames and the roughly 36-pixel centered body. Destruction now has eight horizontal frames (768 x 96), ending fully transparent, at the existing 0.1 seconds per frame. `Theme::FRAMES_ASTEROID_DESTRUCT` is shared by normal debris and barricades. Original seven-frame sheet and intact sprite are archived under `assets/textures/legacy/`. User's explicit eight-frame request supersedes the old seven-frame asset constraint.
+P3 event UI: a sky-blue `BARRICADE Ns - BREAK A GAP` countdown at Theme's safe-area status position, changing to `BARRICADE DISPERSING` on timeout. Orbital scrap art is a one-frame WORLD animation, with 20-unit draw size (including transparent sprite padding) and 20 degrees/s rotation; shared live breakup fragments are reused for harvesting. Camera zoom smoothly changes from 20 to 13 during containment, returning to 20 after scatter/escape/death.
+
+Historical 14 October reskin (destruction playback superseded by the 15 October continuous fragments): muted lavender-gray plates, dented canister, broken panel, bent pipe and wiring replace the debris art. Preserve 96 x 96 transparent frames and the roughly 36-pixel centered body. Destruction now has eight horizontal frames (768 x 96), ending fully transparent, at the existing 0.1 seconds per frame. `Theme::FRAMES_DEBRIS_DESTRUCT` is shared by normal debris and barricades. Original seven-frame sheet and intact sprite are archived under `assets/textures/legacy/`. User's explicit eight-frame request supersedes the old seven-frame asset constraint.
 
 | Item | Value | Where |
 |---|---|---|
@@ -86,7 +88,7 @@ To place screen UI over a world object, convert with `GetWorldToScreen2D(worldPo
 
 No other sizes. If a layout needs a new size, add a token first and record why.
 
-Item 04 adds `Theme::DEBUG_TEXT_WORLD_ID = 2` world units for compact debug IDs. Debug text uses `TEXT_CAPTION` (50 canvas pixels). The F5 terminal is `(220, 310, 2000, 720)` with 30-pixel padding and 64-pixel rows, keeping its first text below the cropped corner. Six recent output rows sit above the input and completion hint; overlong lines fit within the panel (input keeps its end visible). Diagnostics occupy `(220, 1060, 1700, 540)` below the console and the invincibility indicator sits at `(220, 1620)`. All tokens live in Theme. Hitboxes use player accent, enemy toxic and asteroid muted colors; bullets use crosses at their collision points.
+Item 04 adds `Theme::DEBUG_TEXT_WORLD_ID = 2` world units for compact debug IDs. Debug text uses `TEXT_CAPTION` (50 canvas pixels). The F5 terminal is `(220, 310, 2000, 720)` with 30-pixel padding and 64-pixel rows, keeping its first text below the cropped corner. Six recent output rows sit above the input and completion hint; overlong lines fit within the panel (input keeps its end visible). Diagnostics occupy `(220, 1060, 1700, 540)` below the console and the invincibility indicator sits at `(220, 1620)`. All tokens live in Theme. Hitboxes use player accent, enemy toxic and debris muted colors; bullets use crosses at their collision points.
 
 ---
 
@@ -201,8 +203,8 @@ Existing sheets (sizes measured from the current files). "Frame" is width x heig
 | `low_level_enemy3_destruct` | | 64 x 64 | 7 | 15 | |
 | `mid_level_enemy` | mid_level_enemy.png | 64 x 64 | 12 | 15 | Rogue Satellite (spinning panels) |
 | `mid_level_enemy_destruct` | | 64 x 64 | 7 | 15 | |
-| `asteroid` | asteroid.png | 96 x 96 | 1 | 15 / 25 / 30 | Debris chunk |
-| `asteroid_destruct` | asteroid_destruct.png | 96 x 96 | 8 | same | Scrap breakup; last frame transparent |
+| `debris` | debris.png | 96 x 96 | 1 | fixed by variant | Scrap clump plus nine variants |
+| `debris_destruct` | debris_destruct.png | 96 x 96 | 8 | reference only | Previous breakup sheet; live fragments now use intact art |
 | `background1` to `background4` | background1-4.png | 500 x 500 | 1 | tiled parallax | Orbit layers: far stars, Earth haze, debris field, near dust |
 | `health_bar`, `health` | healthBar.png, health.png | 128 x 16 | 1 | screen 1000 x 150 | Hull bar frame and fill |
 | `wasd_keys` | wasd_keys.png | 67 x 43 | 3 | world 16 x 10 | Keep |
@@ -411,7 +413,7 @@ inline constexpr int FRAMES_MID_ENEMY             = 12;
 inline constexpr int FRAMES_MID_ENEMY_DESTRUCT    = 7;
 inline constexpr int FRAMES_HIGH_ENEMY            = 6;    // planned
 inline constexpr int FRAMES_HIGH_ENEMY_DESTRUCT   = 8;    // planned
-inline constexpr int FRAMES_ASTEROID_DESTRUCT     = 7;
+inline constexpr int FRAMES_DEBRIS_DESTRUCT     = 7;
 inline constexpr int FRAMES_BOSS_HOARDER          = 6;    // planned
 inline constexpr int FRAMES_BOSS_HOARDER_DESTRUCT = 10;   // planned
 inline constexpr int FRAMES_BOSS_CORE             = 8;    // planned

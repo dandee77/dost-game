@@ -1,9 +1,23 @@
 #pragma once
 #include <array>
 #include "raylib.h"
+#include "DebrisKind.hpp"
 
 // Player equipment prototypes. TUNE in playtests before adding progression.
 namespace Balance {
+    // Fixed per-object sizes/rewards; no random scaling. TUNE in debris playtests.
+    inline constexpr std::array<float, DEBRIS_KIND_COUNT> DEBRIS_RADII = {3.75f, 3.0f, 8.0f, 3.3f, 5.7f, 3.0f, 6.8f, 5.0f, 6.0f, 6.0f};
+    inline constexpr std::array<int, DEBRIS_KIND_COUNT> DEBRIS_SCRAP_VALUES = {3, 2, 8, 2, 5, 2, 6, 4, 3, 5};
+    inline constexpr int DEBRIS_ROT_SPEED_MIN = 5, DEBRIS_ROT_SPEED_MAX = 240;
+    inline constexpr int DEBRIS_SPEED_MIN = 5, DEBRIS_SPEED_MAX = 15;
+    inline constexpr int DEBRIS_ANGLE_VARIATION = 30, DEBRIS_MAX_SPAWN_BATCH = 3;
+    inline constexpr float DEBRIS_SPAWN_DISTANCE = 150.0f, DEBRIS_DESPAWN_DISTANCE = 150.0f;
+    inline constexpr float DEBRIS_SPAWN_START = 1.5f, DEBRIS_SPAWN_MIN = 0.25f, DEBRIS_SPAWN_RAMP_TIME = 600.0f;
+    inline constexpr float SCRAP_SCATTER_TIME = 0.8f, SCRAP_GLOW_START = 0.5f;
+    inline constexpr float SCRAP_SCATTER_DISTANCE = 10.0f, SCRAP_MAGNET_SPEED = 90.0f;
+    inline constexpr float SCRAP_PICKUP_RADIUS = 2.0f, SCRAP_LIFETIME = 20.0f;
+    inline constexpr int SCRAP_MAX_PICKUPS = 150;
+    inline constexpr float DEBRIS_PREVIEW_RADIUS = 60.0f;
     // Barricade event prototype. TUNE after playtests.
     inline constexpr float BARRICADE_TRIGGER_TIME = 120.0f;
     inline constexpr float BARRICADE_DURATION = 30.0f, BARRICADE_SCATTER_TIME = 4.0f;

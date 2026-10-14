@@ -24,7 +24,7 @@ The imported baseline builds with Visual Studio 2022 (C++20, Raylib 5.5). Config
 
 ## 🌟 About
 
-**Space Ablaze** is an intense, fast-paced 2D space shooter that throws you into the heart of galactic warfare! Navigate through asteroid fields, battle diverse enemy fleets, and upgrade your ship's capabilities as you fight for survival in the vast cosmos.
+**Space Ablaze** is an intense, fast-paced 2D space shooter that throws you into the heart of galactic warfare! Navigate through debris fields, battle diverse enemy fleets, and upgrade your ship's capabilities as you fight for survival in the vast cosmos.
 
 ## 🚀 Gameplay Features
 
@@ -38,7 +38,7 @@ The imported baseline builds with Visual Studio 2022 (C++20, Raylib 5.5). Config
 
 - **Low-Level Enemies**: Fast, agile threats that swarm the player
 - **Mid-Level Enemies**: Ranged attackers with strategic behavior
-- **Asteroid Fields**: Environmental hazards that block movement
+- **Debris Fields**: Environmental hazards that block movement
 
 ### ⚡ **Augment System**
 

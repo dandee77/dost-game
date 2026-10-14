@@ -21,7 +21,7 @@ int main(int argc, char** argv)
     Game game;
     game.onSwitch();
     auto& em = EnemyManager::GetInstance();
-    auto& am = testAsteroidManager();
+    auto& am = testDebrisManager();
     auto& bm = BulletManager::GetInstance();
     std::ofstream output(argv[1]);
     std::mt19937 random(20261014);
@@ -46,7 +46,7 @@ int main(int argc, char** argv)
         game.playerEntity.maxDamage = 10;
         game.gameTimer.reset(); game.gameTimer.start();
         em.enemySpawnCooldown.startCooldown();
-        am.asteroidSpawnCooldown.startCooldown();
+        am.debrisSpawnCooldown.startCooldown();
         SetRandomSeed(static_cast<unsigned>(scenario));
         std::vector<Vector2> positions;
         const int count = scenario < 10 ? scenario : 90;
@@ -69,16 +69,16 @@ int main(int argc, char** argv)
             em.getEnemies()[id] = std::move(enemy);
         }
         for (int i = 0; i < count; ++i) {
-            auto asteroid = std::make_unique<Asteroid>(Vector2{250.0f, 250.0f});
-            asteroid->position = {250.0f + coordinate(random), 250.0f + coordinate(random)};
-            if (scenario % 4 == 1) asteroid->position = {280.0f, 250.0f};
-            if (i == 0 && scenario % 3 == 1) asteroid->position = {250.0f, 250.0f};
-            asteroid->velocity = {0.0f, 0.0f};
+            auto debris = std::make_unique<Debris>(Vector2{250.0f, 250.0f});
+            debris->position = {250.0f + coordinate(random), 250.0f + coordinate(random)};
+            if (scenario % 4 == 1) debris->position = {280.0f, 250.0f};
+            if (i == 0 && scenario % 3 == 1) debris->position = {250.0f, 250.0f};
+            debris->velocity = {0.0f, 0.0f};
             if (scenario % 9 == 0 && GetFrameTime() > 0.0f) {
-                asteroid->velocity.x = 5.0f / GetFrameTime();
+                debris->velocity.x = 5.0f / GetFrameTime();
             }
-            asteroid->size = i % 2 == 0 ? 1.5f : 3.0f;
-            am.getAsteroids()[asteroid->getAsteroidID()] = std::move(asteroid);
+            debris->kind = i % 2 == 0 ? DEBRIS_CLUMP : DEBRIS_WING;
+            am.getDebris()[debris->getDebrisID()] = std::move(debris);
         }
         for (int i = 0; i < count * 3 + 1; ++i) {
             Vector2 point = {250.0f + coordinate(random), 250.0f + coordinate(random)};
@@ -88,7 +88,7 @@ int main(int argc, char** argv)
         }
         // Three frames test persistent piercing and same-frame destruction.
         for (int frame = 0; frame < 3; ++frame) {
-            em.enemySpawnCooldown.startCooldown(); am.asteroidSpawnCooldown.startCooldown();
+            em.enemySpawnCooldown.startCooldown(); am.debrisSpawnCooldown.startCooldown();
             game.playerEntity.position = {250.0f, 250.0f};
             game.playerEntity.velocity = {0.0f, 0.0f};
             if (game.gameState == GAME_RUNNING) game.update();
@@ -99,10 +99,10 @@ int main(int argc, char** argv)
             std::map<std::string, int> health;
             for (const auto& [id, enemy] : em.getEnemies()) health[id] = enemy->getHealth();
             for (const auto& [id, hp] : health) output << '|' << id << '=' << hp;
-            std::vector<std::string> asteroids;
-            for (const auto& [id, asteroid] : am.getAsteroids()) asteroids.push_back(id);
-            std::sort(asteroids.begin(), asteroids.end());
-            for (const auto& id : asteroids) output << '|' << id;
+            std::vector<std::string> debris;
+            for (const auto& [id, item] : am.getDebris()) debris.push_back(id);
+            std::sort(debris.begin(), debris.end());
+            for (const auto& id : debris) output << '|' << id;
             for (const auto& bullet : bm.getBullets()) output << "|b=" << bullet.getPosition().x << ',' << bullet.getPosition().y << ',' << bullet.isEnemyBullet() << ',' << bullet.getPiercePower();
             output << '\n';
         }
@@ -118,14 +118,14 @@ int main(int argc, char** argv)
     game.update();
     PostMessageA(GetWindowHandle(), 0x202, 0, (553LL << 16) | 640);
     PollInputEvents();
-    if (!em.getEnemies().empty() || !am.getAsteroids().empty() || !bm.getBullets().empty() ||
+    if (!em.getEnemies().empty() || !am.getDebris().empty() || !bm.getBullets().empty() ||
         game.gameState != GAME_RUNNING || game.playerEntity.getHealth() != 100 ||
-        !game.collisionEnemies.empty() || !game.collisionAsteroids.empty()) return 3;
+        !game.collisionEnemies.empty() || !game.collisionDebris.empty()) return 3;
     std::printf("PASS: actual Restart button cleared run and collision observers.\n");
 #endif
     game.onExit();
     game.onSwitch();
-    if (!em.getEnemies().empty() || !am.getAsteroids().empty() || !bm.getBullets().empty() ||
+    if (!em.getEnemies().empty() || !am.getDebris().empty() || !bm.getBullets().empty() ||
         game.gameState != GAME_RUNNING || game.playerEntity.getHealth() != 100) return 2;
     std::printf("PASS: 480 real collision frames recorded; new-run reset cleared all managers.\n");
 }

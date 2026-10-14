@@ -25,10 +25,10 @@
 #define protected public
 #include "Application.hpp"
 #include "Game.hpp"
-#include "AsteroidManager.hpp"
+#include "DebrisManager.hpp"
 #include "LowLevelEnemy.hpp"
 #include "MidLevelEnemy.hpp"
 #undef protected
 #undef private
 
-AsteroidManager& testAsteroidManager();
+DebrisManager& testDebrisManager();

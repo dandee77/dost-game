@@ -1,8 +1,8 @@
-#include "AsteroidManager.hpp"
+#include "DebrisManager.hpp"
 
 // MSVC encodes constructor access in symbols. Keep singleton construction in
 // a translation unit that uses the production declaration.
-AsteroidManager& testAsteroidManager()
+DebrisManager& testDebrisManager()
 {
-    return AsteroidManager::GetInstance();
+    return DebrisManager::GetInstance();
 }

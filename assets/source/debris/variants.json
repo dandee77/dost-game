@@ -1,0 +1,79 @@
+{
+    "date":  "2026-10-15",
+    "tool":  "OpenAI built-in image_gen",
+    "variants":  [
+                     {
+                         "name":  "pipe",
+                         "subject":  "a single thin straight rectangular metal pipe, long narrow horizontal silhouette, dented ends and two collar bands, no piled junk",
+                         "prompt":  "Use case: stylized-concept. Asset: ONE transparent pixel-art game sprite. Reference is a style reference only. Create a single thin straight rectangular metal pipe, long narrow horizontal silhouette, dented ends and two collar bands, no piled junk. Match reference\u0027s low-resolution 2D pixel art, dusty mauve/lavender-gray metal, dark purple outlines/shadows and sparse muted warm copper highlights. Top-down three-quarter readable game view, lighting upper left. Crisp chunky square pixels, limited palette, no gradients, no antialiasing, no photorealism. Center ONE complete isolated object with generous transparent padding. All opaque artwork fits inside central 40% of square canvas; preserve requested distinct silhouette. Actual alpha transparency, no background/checkerboard, stars, text, labels, logos, watermark, border or secondary objects. Will be exported into a 96x96 PNG with an approximately 36px-wide body.",
+                         "generatedSource":  "C:\\Users\\dande\\.codex\\generated_images\\01a13aa6-55b9-72d3-bf7e-15ccc350b6e3\\exec-24159afd-0da8-4cae-896c-8e0bd7774721.png",
+                         "savedSource":  "variants/pipe.png",
+                         "runtimeAsset":  "../../textures/debris/pipe.png"
+                     },
+                     {
+                         "name":  "wing",
+                         "subject":  "a broken satellite solar wing, broad long rectangular dark violet solar-cell grid, bent lavender metal frame and one snapped mounting arm, visibly larger object",
+                         "prompt":  "Use case: stylized-concept. Asset: ONE transparent pixel-art game sprite. Reference is a style reference only. Create a broken satellite solar wing, broad long rectangular dark violet solar-cell grid, bent lavender metal frame and one snapped mounting arm, visibly larger object. Match reference\u0027s low-resolution 2D pixel art, dusty mauve/lavender-gray metal, dark purple outlines/shadows and sparse muted warm copper highlights. Top-down three-quarter readable game view, lighting upper left. Crisp chunky square pixels, limited palette, no gradients, no antialiasing, no photorealism. Center ONE complete isolated object with generous transparent padding. All opaque artwork fits inside central 40% of square canvas; preserve requested distinct silhouette. Actual alpha transparency, no background/checkerboard, stars, text, labels, logos, watermark, border or secondary objects. Will be exported into a 96x96 PNG with an approximately 36px-wide body.",
+                         "generatedSource":  "C:\\Users\\dande\\.codex\\generated_images\\01a13aa6-55b9-72d3-bf7e-15ccc350b6e3\\exec-82942901-3423-421a-b218-356182fd8589.png",
+                         "savedSource":  "variants/wing.png",
+                         "runtimeAsset":  "../../textures/debris/wing.png"
+                     },
+                     {
+                         "name":  "canister",
+                         "subject":  "one small dented cylindrical fuel canister, compact oblong silhouette, crumpled cap and a single loose wire",
+                         "prompt":  "Use case: stylized-concept. Asset: ONE transparent pixel-art game sprite. Reference is a style reference only. Create one small dented cylindrical fuel canister, compact oblong silhouette, crumpled cap and a single loose wire. Match reference\u0027s low-resolution 2D pixel art, dusty mauve/lavender-gray metal, dark purple outlines/shadows and sparse muted warm copper highlights. Top-down three-quarter readable game view, lighting upper left. Crisp chunky square pixels, limited palette, no gradients, no antialiasing, no photorealism. Center ONE complete isolated object with generous transparent padding. All opaque artwork fits inside central 40% of square canvas; preserve requested distinct silhouette. Actual alpha transparency, no background/checkerboard, stars, text, labels, logos, watermark, border or secondary objects. Will be exported into a 96x96 PNG with an approximately 36px-wide body.",
+                         "generatedSource":  "C:\\Users\\dande\\.codex\\generated_images\\01a13aa6-55b9-72d3-bf7e-15ccc350b6e3\\exec-89c6baeb-c11e-4584-b989-4a6912e91df4.png",
+                         "savedSource":  "variants/canister.png",
+                         "runtimeAsset":  "../../textures/debris/canister.png"
+                     },
+                     {
+                         "name":  "dish",
+                         "subject":  "a broken circular satellite antenna dish, shallow round metal bowl, dark concave center, snapped short receiver stalk",
+                         "prompt":  "Use case: stylized-concept. Asset: ONE transparent pixel-art game sprite. Reference is a style reference only. Create a broken circular satellite antenna dish, shallow round metal bowl, dark concave center, snapped short receiver stalk. Match reference\u0027s low-resolution 2D pixel art, dusty mauve/lavender-gray metal, dark purple outlines/shadows and sparse muted warm copper highlights. Top-down three-quarter readable game view, lighting upper left. Crisp chunky square pixels, limited palette, no gradients, no antialiasing, no photorealism. Center ONE complete isolated object with generous transparent padding. All opaque artwork fits inside central 40% of square canvas; preserve requested distinct silhouette. Actual alpha transparency, no background/checkerboard, stars, text, labels, logos, watermark, border or secondary objects. Will be exported into a 96x96 PNG with an approximately 36px-wide body.",
+                         "generatedSource":  "C:\\Users\\dande\\.codex\\generated_images\\01a13aa6-55b9-72d3-bf7e-15ccc350b6e3\\exec-c65fa71e-09c7-4908-9b0a-e30e9e2163e6.png",
+                         "savedSource":  "variants/dish.png",
+                         "runtimeAsset":  "../../textures/debris/dish.png"
+                     },
+                     {
+                         "name":  "coil",
+                         "subject":  "a compact round tangled cable coil with two disconnected plugs, recognizable hollow ring silhouette",
+                         "prompt":  "Use case: stylized-concept. Asset: ONE transparent pixel-art game sprite. Reference is a style reference only. Create a compact round tangled cable coil with two disconnected plugs, recognizable hollow ring silhouette. Match reference\u0027s low-resolution 2D pixel art, dusty mauve/lavender-gray metal, dark purple outlines/shadows and sparse muted warm copper highlights. Top-down three-quarter readable game view, lighting upper left. Crisp chunky square pixels, limited palette, no gradients, no antialiasing, no photorealism. Center ONE complete isolated object with generous transparent padding. All opaque artwork fits inside central 40% of square canvas; preserve requested distinct silhouette. Actual alpha transparency, no background/checkerboard, stars, text, labels, logos, watermark, border or secondary objects. Will be exported into a 96x96 PNG with an approximately 36px-wide body.",
+                         "generatedSource":  "C:\\Users\\dande\\.codex\\generated_images\\01a13aa6-55b9-72d3-bf7e-15ccc350b6e3\\exec-e62c3315-6f7f-4bf5-a394-e21f2ae96b84.png",
+                         "savedSource":  "variants/coil.png",
+                         "runtimeAsset":  "../../textures/debris/coil.png"
+                     },
+                     {
+                         "name":  "tank",
+                         "subject":  "a large discarded round pressure tank, battered spherical metal body with two short broken valves and riveted equatorial seam",
+                         "prompt":  "Use case: stylized-concept. Asset: ONE transparent pixel-art game sprite. Reference is a style reference only. Create a large discarded round pressure tank, battered spherical metal body with two short broken valves and riveted equatorial seam. Match reference\u0027s low-resolution 2D pixel art, dusty mauve/lavender-gray metal, dark purple outlines/shadows and sparse muted warm copper highlights. Top-down three-quarter readable game view, lighting upper left. Crisp chunky square pixels, limited palette, no gradients, no antialiasing, no photorealism. Center ONE complete isolated object with generous transparent padding. All opaque artwork fits inside central 40% of square canvas; preserve requested distinct silhouette. Actual alpha transparency, no background/checkerboard, stars, text, labels, logos, watermark, border or secondary objects. Will be exported into a 96x96 PNG with an approximately 36px-wide body.",
+                         "generatedSource":  "C:\\Users\\dande\\.codex\\generated_images\\01a13aa6-55b9-72d3-bf7e-15ccc350b6e3\\exec-f0c409f4-3679-478a-845b-154f491d27a0.png",
+                         "savedSource":  "variants/tank.png",
+                         "runtimeAsset":  "../../textures/debris/tank.png"
+                     },
+                     {
+                         "name":  "thruster",
+                         "subject":  "a broken rocket thruster bell, wide flared hollow nozzle opening and narrow torn neck, trapezoid silhouette",
+                         "prompt":  "Use case: stylized-concept. Asset: ONE transparent pixel-art game sprite. Reference is a style reference only. Create a broken rocket thruster bell, wide flared hollow nozzle opening and narrow torn neck, trapezoid silhouette. Match reference\u0027s low-resolution 2D pixel art, dusty mauve/lavender-gray metal, dark purple outlines/shadows and sparse muted warm copper highlights. Top-down three-quarter readable game view, lighting upper left. Crisp chunky square pixels, limited palette, no gradients, no antialiasing, no photorealism. Center ONE complete isolated object with generous transparent padding. All opaque artwork fits inside central 40% of square canvas; preserve requested distinct silhouette. Actual alpha transparency, no background/checkerboard, stars, text, labels, logos, watermark, border or secondary objects. Will be exported into a 96x96 PNG with an approximately 36px-wide body.",
+                         "generatedSource":  "C:\\Users\\dande\\.codex\\generated_images\\01a13aa6-55b9-72d3-bf7e-15ccc350b6e3\\exec-20584693-8cf7-4b25-a8a2-4e8fc57b442a.png",
+                         "savedSource":  "variants/thruster.png",
+                         "runtimeAsset":  "../../textures/debris/thruster.png"
+                     },
+                     {
+                         "name":  "beam",
+                         "subject":  "a long thin broken structural truss beam, rectangular lattice girder with triangular openings, very slender horizontal silhouette",
+                         "prompt":  "Use case: stylized-concept. Asset: ONE transparent pixel-art game sprite. Reference is a style reference only. Create a long thin broken structural truss beam, rectangular lattice girder with triangular openings, very slender horizontal silhouette. Match reference\u0027s low-resolution 2D pixel art, dusty mauve/lavender-gray metal, dark purple outlines/shadows and sparse muted warm copper highlights. Top-down three-quarter readable game view, lighting upper left. Crisp chunky square pixels, limited palette, no gradients, no antialiasing, no photorealism. Center ONE complete isolated object with generous transparent padding. All opaque artwork fits inside central 40% of square canvas; preserve requested distinct silhouette. Actual alpha transparency, no background/checkerboard, stars, text, labels, logos, watermark, border or secondary objects. Will be exported into a 96x96 PNG with an approximately 36px-wide body.",
+                         "generatedSource":  "C:\\Users\\dande\\.codex\\generated_images\\01a13aa6-55b9-72d3-bf7e-15ccc350b6e3\\exec-2e854021-35d1-49fa-a9d7-d77e2790cccb.png",
+                         "savedSource":  "variants/beam.png",
+                         "runtimeAsset":  "../../textures/debris/beam.png"
+                     },
+                     {
+                         "name":  "hull",
+                         "subject":  "a broad jagged torn spacecraft hull panel, flat asymmetric sheet with rivets, bent corner and a short cable hanging off",
+                         "prompt":  "Use case: stylized-concept. Asset: ONE transparent pixel-art game sprite. Reference is a style reference only. Create a broad jagged torn spacecraft hull panel, flat asymmetric sheet with rivets, bent corner and a short cable hanging off. Match reference\u0027s low-resolution 2D pixel art, dusty mauve/lavender-gray metal, dark purple outlines/shadows and sparse muted warm copper highlights. Top-down three-quarter readable game view, lighting upper left. Crisp chunky square pixels, limited palette, no gradients, no antialiasing, no photorealism. Center ONE complete isolated object with generous transparent padding. All opaque artwork fits inside central 40% of square canvas; preserve requested distinct silhouette. Actual alpha transparency, no background/checkerboard, stars, text, labels, logos, watermark, border or secondary objects. Will be exported into a 96x96 PNG with an approximately 36px-wide body.",
+                         "generatedSource":  "C:\\Users\\dande\\.codex\\generated_images\\01a13aa6-55b9-72d3-bf7e-15ccc350b6e3\\exec-bc4527dc-4b0a-49c3-81ab-2da64294135b.png",
+                         "savedSource":  "variants/hull.png",
+                         "runtimeAsset":  "../../textures/debris/hull.png"
+                     }
+                 ],
+    "export":  "Nearest-neighbor downsample of alpha\u003e=128 body bounds into a centered \u003c=36x36 silhouette on a 96x96 transparent canvas; binary alpha. Native preview: build/debris-harvest-preview.png. Eight full-height source strips share fixed radial exits in ScrapPickup."
+}

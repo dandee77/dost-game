@@ -1,5 +1,17 @@
 # Architecture
 
+## Current debris harvesting extension (15 October)
+
+`Asteroid`/`AsteroidManager` were renamed to `Debris`/`DebrisManager`, including source files, IDs, texture keys, collision observers, diagnostics, tests, and death labels. `DebrisKind` indexes ten entries; Theme owns fixed draw sizes, Balance owns fixed collision radii and yields. Circular collision search and deferred removal order remain unchanged.
+
+On player destruction, DebrisManager calls Debris::destruct(true), which asks ScrapManager to create eight ScrapPickup entities using rectangles from the destroyed texture. Environmental removal passes false; offscreen despawn creates no burst. BarricadeEnemy::destruct removes its Animator entry and emits the same harvestable clump fragments; timeout/escape cleanup does not call destruct and awards nothing.
+
+ScrapManager owns the complete breakup-to-homing lifecycle. No replacement particles are created at the phase boundary. Game calls update(dt, playerPosition) only when running and alive, after collisions; returned value increments Game::harvestedScrap exactly once on arrival. The user selected accumulation without a cargo cap. Credits, docking, cargo upgrades and ordinary enemy drops are deferred. The separate live-particle cap of 150 preserves earned value by merging overflow.
+
+Game::resetRun now centralizes the shared manager/container resets, including ScrapManager and harvestedScrap, and is called by onSwitch/restartGame. Player, timer, tutorial and camera initialization remain in those callers; full item 05 cleanup remains pending. Scene exit, death and Game destruction also clear pickups. Per-frame collision snapshots are still cleared and rebuilt in their original phases.
+
+Debug: `spawn debris all` places all ten variants around the player at a fixed 60-unit radius with zero translational velocity. It requires a living run, supports autocomplete, and is absent in release builds.
+
 How the game is put together: the runtime loop, scenes, coordinate systems, game states, collisions, singletons and rendering. The first half describes the **current** Space Ablaze code accurately. The second half describes the **target** design this sprint builds toward. When the two differ, the build plan says which item changes what.
 
 ---
@@ -40,8 +52,8 @@ The project keeps a **flat `src/` folder**. Moving files into subfolders would b
     ├── Application.*            # Window, render pipeline, scene loop
     ├── Scene.hpp                # Abstract screen base
     ├── LoadingScreen.*, MainMenu.*, Game.*            # Existing scenes
-    ├── Entity.hpp, Player.*, Enemy.*, LowLevelEnemy.*, MidLevelEnemy.*, Asteroid.*
-    ├── EnemyManager.*, AsteroidManager.*, BulletManager.*, Bullet.*
+    ├── Entity.hpp, Player.*, Enemy.*, LowLevelEnemy.*, MidLevelEnemy.*, Debris.*
+    ├── EnemyManager.*, DebrisManager.*, BulletManager.*, Bullet.*
     ├── ResourceManager.*, Animator.*, Animation.*
     ├── Timer.* (Cooldown), GameTimer.*, KillCounter.*
     ├── Card.*, Button.*, DamageIndicator*.*, DamageOverlay.*, GameOverOverlay.*
@@ -132,14 +144,14 @@ The gameplay camera zoom is **20** (it starts at 150 and eases down to 20 at the
 |---|---|---|
 | Player sprite | 8 x 8 (current collision radius 8, from `getHitbox().width`) | `Player::init`, `Game::CheckCollisions` |
 | Low and mid enemy sprite | 15 x 15 (hitbox width ~4.3) | Enemy constructors |
-| Asteroid draw size | 15, 25 or 30 | `Asteroid` (`size * 10`) |
+| Debris draw size | 15, 25 or 30 | `Debris` (`size * 10`) |
 | Bullet draw size | player 8 x 5, enemy 8 x 8 | `Bullet::draw` |
 | Player speed | 50 units/s, acceleration 400 | `Player.cpp` defines |
 | Player bullet speed | 200 units/s | `Bullet` default |
 | Enemy spawn ring | 150 from the player (just off screen) | `EnemyManager::spawnEnemy` |
 | Enemy despawn distance | 1000 from the player | `EnemyManager.cpp` |
 | Bullet despawn distance | 150 from the player | `BulletManager.hpp` |
-| Asteroid spawn and despawn | 150 from the player | `Asteroid.cpp`, `AsteroidManager.cpp` |
+| Debris spawn and despawn | 150 from the player | `Debris.cpp`, `DebrisManager.cpp` |
 | Damage number font | 4 units | `DamageIndicator` |
 
 Convert between spaces with `GetScreenToWorld2D(screenPos, utils::gameCamera)` and `GetWorldToScreen2D(worldPos, utils::gameCamera)`. The off-screen dock arrow is drawn in screen space from the dock's world position converted with `GetWorldToScreen2D`.
@@ -164,12 +176,12 @@ P2 spawn follow-up: `spawn lowlevel enemy <quantity>` parses a whole integer fro
 
 | State | What happens |
 |---|---|
-| `GAME_RUNNING` | Every 20 s of game time, show 3 augment cards. Ease camera zoom. Update player, bullets, damage numbers, confetti, damage overlay. Camera follows the player with velocity lead. Bullet collisions. Asteroids update. Enemies update and spawn. Entity collisions. Kill counter update |
+| `GAME_RUNNING` | Every 20 s of game time, show 3 augment cards. Ease camera zoom. Update player, bullets, damage numbers, confetti, damage overlay. Camera follows the player with velocity lead. Bullet collisions. Debris update. Enemies update and spawn. Entity collisions. Kill counter update |
 | `GAME_AUGMENT_SELECTION` | Game timer paused. Cards animate; the clicked card's **title string** decides which `Player::increase*()` runs |
 | `GAME_PAUSED` | Toggled with P. Nothing updates; no pause UI is drawn |
 | `GAME_OVER` | Explosion confetti, overlay slide-in, game-over text animation, Restart and Main Menu buttons |
 
-Spawning (`EnemyManager::update`) is a **continuous trickle**, not waves: the spawn cooldown shrinks from 1.25 s to 0.025 s over 250 s, 1 to 3 enemies per spawn, and mid-level enemies appear after 150 s with a chance rising toward 40%. Asteroids follow a similar ramp.
+Spawning (`EnemyManager::update`) is a **continuous trickle**, not waves: the spawn cooldown shrinks from 1.25 s to 0.025 s over 250 s, 1 to 3 enemies per spawn, and mid-level enemies appear after 150 s with a chance rising toward 40%. Debris follow a similar ramp.
 
 P3 adds a separate Game-owned `BarricadeEvent` alongside that trickle. It requests a complete set of `BarricadeEnemy` instances from EnemyManager, records their IDs and runs once at 2:00 (or via `spawn barricade event` in F5). On running frames: event scheduling/time and camera zoom, player/weapon simulation, normal enemy movement, relative swept barricade contact, distant/offscreen escape cleanup, then ordinary entity collisions. Barricades participate in all player weapon damage paths but skip ordinary enemy contact/debris removal and low-only crowd separation. Player contact correction is independent of vulnerability, so iframes cannot bypass solid segments. The existing augment transition now exits the running branch immediately, freezing event and player simulation on that transition frame too.
 
@@ -179,20 +191,20 @@ Each segment advances its shrink/scatter clock with the same simulation delta as
 
 P2 crowd pass (14 October): after enemy movement/despawning and before entity combat collisions, EnemyManager builds a separate SpatialGrid snapshot containing living low-level enemies only. Each query considers summed soft-body radii with a strict per-cell visit budget. Immutable frame positions avoid sequential update bias; deterministic opposing pair directions resolve exact overlaps and a small lateral component breaks collinear queues. Exponential response and a speed cap turn corrections into gradual pushes. Memory is reused; resets clear the grid and observers. Mid-level enemies do not enter this grid and retain their existing flight. Their live/destruction Animator registrations use FLYING, rendered in a second linear pass above WORLD without sorting or extra Update calls. See `crowd-performance.md` for measured costs. This intentionally changes low-enemy contact positions, superseding the earlier movement-parity promise for this scoped feature; combat search predicates remain unchanged.
 
-All checks retain the inclusive circle-versus-point predicate `Vector2Distance(a, b) <= radius`. Bullets are points. The supplied radius is usually the target's size value (`hitbox.width` for ships, `getAsteroidSize()` for asteroids); asteroid-versus-asteroid checks use the **outer/source asteroid's** radius, not summed radii. At the user's request on 14 October, `Game::update` now uses reusable `SpatialGrid` snapshots for repeated enemy/asteroid searches. Single-player checks remain linear. `CollisionSystem` extraction remains item 06.
+All checks retain the inclusive circle-versus-point predicate `Vector2Distance(a, b) <= radius`. Bullets are points. The supplied radius is usually the target's size value (`hitbox.width` for ships, `getDebrisSize()` for debris); debris-versus-debris checks use the **outer/source debris's** radius, not summed radii. At the user's request on 14 October, `Game::update` now uses reusable `SpatialGrid` snapshots for repeated enemy/debris searches. Single-player checks remain linear. `CollisionSystem` extraction remains item 06.
 
-The grid returns the lowest insertion index that passes the original predicate, preserving each manager's first-match iteration order. It is rebuilt before bullet collisions, then the asteroid index is rebuilt after asteroid/enemy movement and spawning. Bullet-phase kills deactivate indexed targets immediately, before the next bullet. Entity-phase removals remain deferred, including asteroids already marked by an enemy/player collision; only asteroid-pair matches deactivate during pair matching. This distinction preserves multiple enemies hitting the same asteroid in one frame. Both existing run-reset paths clear the indices and observers. See `collision-performance.md` for parity tests and rendered benchmarks.
+The grid returns the lowest insertion index that passes the original predicate, preserving each manager's first-match iteration order. It is rebuilt before bullet collisions, then the debris index is rebuilt after debris/enemy movement and spawning. Bullet-phase kills deactivate indexed targets immediately, before the next bullet. Entity-phase removals remain deferred, including debris already marked by an enemy/player collision; only debris-pair matches deactivate during pair matching. This distinction preserves multiple enemies hitting the same debris in one frame. Both existing run-reset paths clear the indices and observers. See `collision-performance.md` for parity tests and rendered benchmarks.
 
 | A | B | Result |
 |---|---|---|
 | Player bullet | Enemy | Random damage 7 to 12, optional knockback, damage number, pierce count decreases; on kill: score (low 10, mid 50), kill counter, sound, enemy removed |
-| Player bullet | Asteroid | Asteroid removed, score 5 (only if the bullet did not hit an enemy this frame) |
+| Player bullet | Debris | Debris removed, score 5 (only if the bullet did not hit an enemy this frame) |
 | Enemy bullet | Player | 10 damage if player is in `PLAYER_DEFAULT`; bullet removed |
-| Enemy bullet | Asteroid | Both removed |
+| Enemy bullet | Debris | Both removed |
 | Enemy | Player | 10 damage; **the enemy is removed** (kamikaze) |
-| Enemy | Asteroid | Both removed |
-| Player | Asteroid | 10 damage; asteroid removed |
-| Asteroid | Asteroid | Both removed |
+| Enemy | Debris | Both removed |
+| Player | Debris | 10 damage; debris removed |
+| Debris | Debris | Both removed |
 
 `Player::takeDamage` always subtracts 10, stuns for 0.2 s, then gives invincibility frames (0.8 s, flashing red). The health bar assumes a maximum of 100.
 
@@ -270,7 +282,7 @@ Run start: the player spawns at the dock and the director starts at wave 1, `WAV
 3. `player.update()`
 4. `waveDirector.update(dt, player)` — may spawn enemies
 5. `EnemyManager::update(playerPos)` — movement and firing only, no spawning
-6. `AsteroidManager::update(...)`, `BulletManager::update(...)`, `ScrapManager::update(playerPos, magnetRadius)`
+6. `DebrisManager::update(...)`, `BulletManager::update(...)`, `ScrapManager::update(playerPos, magnetRadius)`
 7. `CollisionSystem::run(...)` returns a `CollisionReport` (kills, scrap collected, damage taken, player died, killer info)
 8. `Game` applies the report: score, kill counter, sounds, game over or boss-dead transitions
 9. Wave phase reactions: augment selection on clear, docking check during `WAVE_RETURN`
@@ -283,7 +295,7 @@ BeginMode2D(utils::gameCamera)
   parallax background
   dock
   scrap pickups
-  debris (asteroids)
+  debris (debris)
   bullets
   Animator::Update() then Animator::Draw()   // ships, enemies, bosses, explosions (ONE update per frame)
   damage numbers, world-space telegraphs (boss rings), explosion confetti
@@ -317,13 +329,13 @@ State overlays: augment cards | dock shop | pause | game over | victory fade
 void Game::resetRun();   // called by onSwitch() and restart
 ```
 
-It resets, in order: every run singleton (`EnemyManager`, `AsteroidManager`, `BulletManager`, `ScrapManager`, `DamageIndicatorManager`, `ConfettiManager`, `ExplosionConfettiManager`, `GameOverOverlay`, `DamageOverlay`), the `Animator` run animations, `player.init()`, `waveDirector.reset(seed, mode)`, `UpgradeShop` levels, credits, cargo, kill counter, game timer, camera. **Any new singleton holding run state must be added here.**
+It resets, in order: every run singleton (`EnemyManager`, `DebrisManager`, `BulletManager`, `ScrapManager`, `DamageIndicatorManager`, `ConfettiManager`, `ExplosionConfettiManager`, `GameOverOverlay`, `DamageOverlay`), the `Animator` run animations, `player.init()`, `waveDirector.reset(seed, mode)`, `UpgradeShop` levels, credits, cargo, kill counter, game timer, camera. **Any new singleton holding run state must be added here.**
 
 ### Dependency rules
 
 | Code | May use | Must not use |
 |---|---|---|
-| Entities (`Player`, `Enemy` and subclasses, `Asteroid`, `ScrapPickup`, `Dock`) | `ResourceManager`, `Animator`, `BulletManager` (to fire), `Timer`, `Config`/`Balance`/`Theme`, `utils::gameCamera` | `Game`, scenes, `HUD`, other managers' internals |
+| Entities (`Player`, `Enemy` and subclasses, `Debris`, `ScrapPickup`, `Dock`) | `ResourceManager`, `Animator`, `BulletManager` (to fire), `Timer`, `Config`/`Balance`/`Theme`, `utils::gameCamera` | `Game`, scenes, `HUD`, other managers' internals |
 | Managers (`EnemyManager`, `ScrapManager`, ...) | Their entity classes, `ResourceManager`, `Animator` | `Game`, `HUD` |
 | `WaveDirector` | `EnemyManager` spawn API, `RunRng`, `Balance` | Drawing, sounds, `GameState` |
 | `CollisionSystem` | Managers, `Player`, `Dock` | Sounds, UI, `GameState` (it reports; `Game` decides) |

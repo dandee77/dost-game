@@ -9,7 +9,7 @@
 
 #include "Config.hpp"
 #include "Balance.hpp"
-#include "AsteroidManager.hpp"
+#include "DebrisManager.hpp"
 #include "BulletManager.hpp"
 #include "EnemyManager.hpp"
 #include "Game.hpp"
@@ -158,7 +158,7 @@ std::vector<std::string> DebugTools::completions() const
 {
     std::vector<std::string> matches;
     if (input.starts_with("spawn ")) {
-        for (const std::string prefix : {"spawn lowlevel enemy ", "spawn barricade event"})
+        for (const std::string prefix : {"spawn lowlevel enemy ", "spawn barricade event", "spawn debris all"})
             if (prefix.starts_with(input)) matches.push_back(prefix);
         return matches;
     }
@@ -258,6 +258,12 @@ void DebugTools::execute(Player* player, BarricadeEvent* barricade)
     case DEBUG_SPAWN: {
         std::string quantityText, trailing;
         stream >> quantityText >> trailing;
+        if (argument == "debris" && extra == "all" && quantityText.empty() && trailing.empty()) {
+            if (player->getHealth() <= 0) { addOutput("Restart the run before spawning debris."); break; }
+            DebrisManager::GetInstance().spawnGallery(player->getPosition());
+            addOutput("Spawned all 10 debris variants. Shoot them to harvest scrap.");
+            break;
+        }
         if (argument == "barricade" && extra == "event" && quantityText.empty() && trailing.empty()) {
             if (!barricade || player->getHealth() <= 0) { addOutput("Start a living run before spawning an event."); break; }
             if (barricade->isActive()) { addOutput("A barricade event is already active."); break; }
@@ -316,6 +322,7 @@ void DebugTools::execute(Player* player, BarricadeEvent* barricade)
         addOutput("player: builds, weapons, engines and shields");
         addOutput("spawn lowlevel enemy <quantity>");
         addOutput("spawn barricade event");
+        addOutput("spawn debris all");
         addOutput("credits / boss / wave: pending systems");
         addOutput("help / clear / close | Ctrl+Up/Down: history");
         break;
@@ -412,8 +419,8 @@ void DebugTools::drawWorld(const Player& player) const
     for (const auto& [id, enemy] : EnemyManager::GetInstance().getEnemies()) {
         drawHitbox(font, enemy->getPosition(), enemy->getHitbox().width, id.c_str(), Theme::COLOR_TOXIC);
     }
-    for (const auto& [id, asteroid] : AsteroidManager::GetInstance().getAsteroids()) {
-        drawHitbox(font, asteroid->getPosition(), asteroid->getAsteroidSize(), id.c_str(), Theme::COLOR_TEXT_MUTED);
+    for (const auto& [id, debris] : DebrisManager::GetInstance().getDebris()) {
+        drawHitbox(font, debris->getPosition(), debris->getDebrisSize(), id.c_str(), Theme::COLOR_TEXT_MUTED);
     }
     // Bullets collide as points. Crosses mark their centers without inventing a radius.
     for (const auto& bullet : BulletManager::GetInstance().getBullets()) {
@@ -456,9 +463,9 @@ void DebugTools::drawOverlay(const Player& player, GameState state, const Barric
     };
     drawLine(TextFormat("DEBUG | FPS %d | HP %d", GetFPS(), player.getHealth()));
     drawLine(stateName(state));
-    drawLine(TextFormat("Enemies %d | Asteroids %d",
+    drawLine(TextFormat("Enemies %d | Debris %d",
         static_cast<int>(EnemyManager::GetInstance().getEnemies().size()),
-        static_cast<int>(AsteroidManager::GetInstance().getAsteroids().size())));
+        static_cast<int>(DebrisManager::GetInstance().getDebris().size())));
     drawLine(TextFormat("Bullets: player %d | enemy %d", playerBullets, enemyBullets));
     drawLine(TextFormat("Invincibility: %s", player.isDebugInvincible() ? "ON" : "OFF"));
     const char* phase = barricade.isContaining() ? "CONTAINING" :

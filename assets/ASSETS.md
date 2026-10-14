@@ -1,13 +1,41 @@
 # Asset provenance
 
+## Ten debris variants and harvesting (15 October 2026)
+
+The accepted clump is now textures/debris.png; its previous destruction strip is textures/debris_destruct.png, retained as a reference. Live explosions slice each variant into the same eight full-height texture fragments, which scatter, glow red and home without replacing particles. Runtime harvesting visuals are drawn in code from these generated textures; no additional external art or licenses were introduced. Originals in textures/legacy remain byte-for-byte unchanged.
+
+Nine new variants plus the existing clump make ten. Exact prompts and original output paths are recorded in source/debris/variants.json; source images are preserved under source/debris/variants/. Built-in image tool used (underlying image model not exposed); no third-party pack added and no CC0 claim made. Team art review pending.
+
+| File | Resource key | Source / author | License | Edits | Date |
+|---|---|---|---|---|---|
+| textures/debris/pipe.png | debris_pipe | OpenAI built-in image_gen, user/Codex direction | AI-generated; supplied style reference audit pending | Nearest-neighbor 96 x 96 export, centered body at most 36 x 36, binary alpha | 2026-10-15 |
+| source/debris/variants/pipe.png | - | OpenAI built-in image_gen | AI-generated; supplied style reference audit pending | Unmodified generated source | 2026-10-15 |
+| textures/debris/wing.png | debris_wing | OpenAI built-in image_gen, user/Codex direction | AI-generated; supplied style reference audit pending | Nearest-neighbor 96 x 96 export, centered body at most 36 x 36, binary alpha | 2026-10-15 |
+| source/debris/variants/wing.png | - | OpenAI built-in image_gen | AI-generated; supplied style reference audit pending | Unmodified generated source | 2026-10-15 |
+| textures/debris/canister.png | debris_canister | OpenAI built-in image_gen, user/Codex direction | AI-generated; supplied style reference audit pending | Nearest-neighbor 96 x 96 export, centered body at most 36 x 36, binary alpha | 2026-10-15 |
+| source/debris/variants/canister.png | - | OpenAI built-in image_gen | AI-generated; supplied style reference audit pending | Unmodified generated source | 2026-10-15 |
+| textures/debris/dish.png | debris_dish | OpenAI built-in image_gen, user/Codex direction | AI-generated; supplied style reference audit pending | Nearest-neighbor 96 x 96 export, centered body at most 36 x 36, binary alpha | 2026-10-15 |
+| source/debris/variants/dish.png | - | OpenAI built-in image_gen | AI-generated; supplied style reference audit pending | Unmodified generated source | 2026-10-15 |
+| textures/debris/coil.png | debris_coil | OpenAI built-in image_gen, user/Codex direction | AI-generated; supplied style reference audit pending | Nearest-neighbor 96 x 96 export, centered body at most 36 x 36, binary alpha | 2026-10-15 |
+| source/debris/variants/coil.png | - | OpenAI built-in image_gen | AI-generated; supplied style reference audit pending | Unmodified generated source | 2026-10-15 |
+| textures/debris/tank.png | debris_tank | OpenAI built-in image_gen, user/Codex direction | AI-generated; supplied style reference audit pending | Nearest-neighbor 96 x 96 export, centered body at most 36 x 36, binary alpha | 2026-10-15 |
+| source/debris/variants/tank.png | - | OpenAI built-in image_gen | AI-generated; supplied style reference audit pending | Unmodified generated source | 2026-10-15 |
+| textures/debris/thruster.png | debris_thruster | OpenAI built-in image_gen, user/Codex direction | AI-generated; supplied style reference audit pending | Nearest-neighbor 96 x 96 export, centered body at most 36 x 36, binary alpha | 2026-10-15 |
+| source/debris/variants/thruster.png | - | OpenAI built-in image_gen | AI-generated; supplied style reference audit pending | Unmodified generated source | 2026-10-15 |
+| textures/debris/beam.png | debris_beam | OpenAI built-in image_gen, user/Codex direction | AI-generated; supplied style reference audit pending | Nearest-neighbor 96 x 96 export, centered body at most 36 x 36, binary alpha | 2026-10-15 |
+| source/debris/variants/beam.png | - | OpenAI built-in image_gen | AI-generated; supplied style reference audit pending | Unmodified generated source | 2026-10-15 |
+| textures/debris/hull.png | debris_hull | OpenAI built-in image_gen, user/Codex direction | AI-generated; supplied style reference audit pending | Nearest-neighbor 96 x 96 export, centered body at most 36 x 36, binary alpha | 2026-10-15 |
+| source/debris/variants/hull.png | - | OpenAI built-in image_gen | AI-generated; supplied style reference audit pending | Unmodified generated source | 2026-10-15 |
+
+
 ## Orbital scrap reskin (14 October 2026)
 
 User-requested replacement of the two asteroid textures. Original files are preserved byte-for-byte in `textures/legacy/` and are no longer loaded. New artwork was generated with OpenAI's built-in image tool using the supplied legacy sprites as style/layout references; no third-party asset pack was added. AI-generated output is not claimed as CC0; legacy reference provenance remains pending audit. Prompts and export notes: `source/debris/generation.json`. Human art review pending.
 
 | File | Resource key | Source / author | License | Edits | Date |
 |---|---|---|---|---|---|
-| `textures/asteroid.png` | `asteroid` | OpenAI image_gen, directed by user/Codex | AI-generated; legacy style reference audit pending | Nearest-neighbor export, binary transparency; 96 x 96 with centered 36 x 31 body | 2026-10-14 |
-| `textures/asteroid_destruct.png` | `asteroid_destruct` | OpenAI image_gen, directed by user/Codex | AI-generated; legacy style reference audit pending | Uniformly scaled/repacked from 4 x 2 grid to 768 x 96 strip; eight 96 x 96 frames, final frame transparent | 2026-10-14 |
+| `textures/debris.png` | `debris` | OpenAI image_gen, directed by user/Codex | AI-generated; legacy style reference audit pending | Nearest-neighbor export, binary transparency; 96 x 96 with centered 36 x 31 body | 2026-10-14 |
+| `textures/debris_destruct.png` | - (art reference) | OpenAI image_gen, directed by user/Codex | AI-generated; legacy style reference audit pending | Uniformly scaled/repacked from 4 x 2 grid to 768 x 96 strip; eight 96 x 96 frames, final frame transparent | 2026-10-14 |
 | `source/debris/scrap-generated.png` | - | OpenAI image_gen | AI-generated; legacy style reference audit pending | Unmodified generated intact source | 2026-10-14 |
 | `source/debris/scrap-destruct-generated.png` | - | OpenAI image_gen | AI-generated; legacy style reference audit pending | Unmodified generated destruction source | 2026-10-14 |
 

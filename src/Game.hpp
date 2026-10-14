@@ -6,7 +6,7 @@
 #include <vector>
 #include "Player.hpp"
 #include "EnemyManager.hpp"
-#include "Asteroid.hpp"
+#include "Debris.hpp"
 #include "KillCounter.hpp"
 #include "GameTimer.hpp"
 #include <array>
@@ -30,7 +30,7 @@ enum KillerType
 {
     KILLER_ENEMY_BULLET = 0,
     KILLER_ENEMY_COLLISION,
-    KILLER_ASTEROID
+    KILLER_DEBRIS
 };
 
 struct DeathInfo
@@ -72,19 +72,21 @@ private:
     };
 
     void restartGame();
+    void resetRun();
     void resolveEquipmentAttacks();
     void damageEquipmentEnemy(const std::string& id, int damage, Vector2 direction, float knockback);
-    void destroyEquipmentAsteroid(const std::string& id);
+    void destroyEquipmentDebris(const std::string& id);
     void detonateRocket(Vector2 center, int damage, float knockback);
     void updateCameraZoom(float dt);
     void resolveBarricadeContact(Vector2 previousPlayerPosition);
 
     GameState gameState;
+    int harvestedScrap = 0;
     BarricadeEvent barricadeEvent;
     SpatialGrid enemyCollisionGrid;
-    SpatialGrid asteroidCollisionGrid;
+    SpatialGrid debrisCollisionGrid;
     std::vector<Enemy*> collisionEnemies;
-    std::vector<Asteroid*> collisionAsteroids;
+    std::vector<Debris*> collisionDebris;
 #ifdef GAME_DEBUG
     DebugTools debugTools;
     bool debugPausedTimer = false;

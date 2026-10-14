@@ -8,7 +8,7 @@ Read this file first in every session. It defines what the game is, why it exist
 
 A 2D top-down space shooter with roguelike upgrades, built for the **DOST Level Up 3.0 Esports Game Dev Challenge** (Department of Science and Technology, Philippines). The finals are the Game Demonstration and Judging Day on 26 to 27 November 2026 at GMall of GenSan, General Santos City, during National Science and Technology Week.
 
-The game is built on top of **Space Ablaze**, a C++/Raylib shooter previously made by a team member. Space Ablaze already has the ship, shooting, two enemy types, asteroids, augment cards, a CRT shader and menus. This project changes its theme and adds the scrap economy, the dock, bosses, cutscenes and an endless mode.
+The game is built on top of **Space Ablaze**, a C++/Raylib shooter previously made by a team member. Space Ablaze already has the ship, shooting, two enemy types, debris, augment cards, a CRT shader and menus. This project changes its theme and adds the scrap economy, the dock, bosses, cutscenes and an endless mode.
 
 | Item | Value |
 |---|---|
@@ -145,7 +145,7 @@ Screen IDs are used in `build-plan.md`, `ui-rules.md` and `class-registry.md`.
 - Story mode with 10 waves, 2 bosses, intro and ending cutscenes
 - Endless mode with scaling waves and repeating bosses
 - Three enemy tiers with Space Ablaze behaviors (homing swarmer, strafing shooter, new charging tank) reskinned as contaminated junk
-- Debris hazards (the current asteroids, reskinned)
+- Debris hazards (the current debris, reskinned)
 - Scrap drops, magnet pickup, cargo limit, deposit at the dock
 - Dock shop with 7 gear upgrades (5 levels each) and a hull repair
 - Augment cards after each wave (the existing 9 augments)
