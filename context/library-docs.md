@@ -106,6 +106,12 @@ endif()
 
 ## Raylib 5.5 Patterns Used in This Project
 
+### Collision performance harness (14 October)
+
+The optional `GAME_COLLISION_TESTS` targets keep benchmarks separate from normal game builds. `CollisionBenchmark` wraps the real `Game` scene inside the unchanged `Application` render pipeline (including all 3840 x 2160 passes). It calls `ClearWindowState(FLAG_VSYNC_HINT)` and `SetTargetFPS(0)` only in the harness. Context7 verified the controls against official Raylib docs; local 5.5 `rcore.c` confirms FPS < 1 disables the CPU frame cap. Do not infer capacity from capped `GetFPS()`.
+
+Preserve `Vector2Distance(...) <= radius` for collision compatibility: squared comparisons can round differently at boundaries. Broad-phase bucket bounds are conservative; narrow-phase acceptance and target order remain unchanged. Regression fixtures must preserve the pre-movement bullet phase and post-movement entity phase. See `collision-performance.md` for commands, scenarios, limitations, and results.
+
 All signatures below were checked against the Raylib 5.5 `raylib.h` and `raymath.h`.
 
 ### Window, frame and time

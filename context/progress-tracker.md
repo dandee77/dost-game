@@ -9,6 +9,7 @@ Update this file after every completed build-plan item. Anyone reading it (teamm
 **Phase:** 0 (Foundation)
 **Last completed:** Item 04 debug tools (14 October 2026, branch `feat/04-debug-tools`); Debug ON and Release OFF builds and in-game smoke checks passed
 **Item 04 follow-up:** F1 text/IDs at 55% opacity, panel at 25%; F2 now toggles all audio in every scene and restores the prior volume (user request, 14 October)
+**Item 28 early performance subtask completed:** collision broad-phase optimization, regression validation and local capacity measurements (14 October, branch `perf/collision-grid`). See `collision-performance.md` and `tests/results/collision-2026-10-14.csv`. Full item 28 balance and demo-laptop checks remain pending.
 **In progress:** Item 01 (eligibility, other team machine builds, and full gameplay/restart checks pending)
 **Next:** Item 01 (eligibility question, repository, build on every machine) and item 02 (asset provenance)
 **Blocked:** Open Question 1 (may Space Ablaze code be reused under rule 7?) must be answered before the team depends on the old code for the final submission
@@ -136,12 +137,15 @@ Fill in during item 01.
 | 2026-10-14 | D18 | Make only the compatibility changes needed for the local MSVC baseline build | Replace 10 C-style compound literals with C++ brace initialization; select the CRT entry point for the existing `main()` in a windowed MSVC executable; enable compiler warnings and fix the optional PLATFORM condition | CMakeLists.txt, Asteroid.cpp, Button.cpp, GameTimer.cpp, MainMenu.cpp, Player.cpp |
 | 2026-10-14 | D19 | Implement item 04 ahead of item 03 at the user's explicit request, seeding only the required Theme tokens | Keep the requested debug scope small; Config/Balance migration and the rest of item 03 remain pending. Existing collision behavior is unchanged | Theme.hpp, DebugTools.*, Game.*, Player.*, Application.cpp |
 | 2026-10-14 | D20 | Default GAME_DEBUG to OFF; enable it in the Windows development launcher | Local `build` provides F1/F5 while release builds can omit every debug path. F2/F3/F4/F6 show unavailable explanations until their planned systems exist | CMakeLists.txt, build.bat, DebugTools.* |
+| 2026-10-14 | D21 | Bring forward only item 28's collision performance work at the user's explicit request; supersedes D11's deferral | Preserve point/circle predicate, first-target order, piercing, pre/post-movement phases and deferred removals; replace the unused grid with reusable ordered buckets and a small-set scan. Remove the synchronous per-frame spawn log. Item 06 extraction and other item 05 work remain pending | SpatialGrid.*, Game.*, Config.hpp, EnemyManager.cpp, CMakeLists.txt, tests/, context files |
 
 ---
 
 ## Open Questions
 
 Resolved instruction change (14 October): the user's F2 mute request supersedes the earlier clear-wave assignment in the architecture/build plan. Those documents now reserve F2 for audio; item 11 keeps F6 for advancing waves.
+
+Resolved scope instruction (14 October): the user's explicit collision optimization and capacity-report request supersedes D11 and the normal item-28 date for this performance subtask only. No gameplay values or hitbox radii changed. The optional native test fixtures expose private members with test-only macros to avoid adding gameplay/debug accessors to production classes; this is a scoped exception to the code-standards macro rule.
 
 | # | Question | Owner | Needed by | Answer |
 |---|---|---|---|---|
@@ -182,6 +186,7 @@ Required for Form 03 (Asset and AI Usage Disclosure). Organizers may request pro
 | 2026-10-14 | 01 (local build launcher) | Codex (OpenAI) | Repair build.bat, install a local build command in the existing user PATH, and verify compilation and game launch | Minimal | Team review pending |
 | 2026-10-14 | 04 | Codex (OpenAI, GPT-6) | Implement debug overlay and invincibility, build gating and launcher, verify Raylib docs with Context7, compile Debug/Release and exercise actual key events in a temporary native integration harness; update context files | Moderate | Team review pending |
 | 2026-10-14 | 04 follow-up | Codex (OpenAI, GPT-6) | Reduce debug text/panel opacity, replace F2 placeholder with session-wide master mute/unmute, update key contracts and validate builds/audio handling | Minimal | Team review pending |
+| 2026-10-14 | 28 early collision performance subtask | Codex (OpenAI, GPT-6) | Profile original collision loops, implement an ordered spatial hash grid, preserve existing collision semantics, add brute-force differential tests and rendered benchmark fixtures, verify Raylib timing controls through Context7/find-docs, measure local limits and update context | Heavy | Team review pending |
 
 Asset generation is logged per file in `assets/ASSETS.md`.
 
@@ -204,6 +209,8 @@ Asset generation is logged per file in `assets/ASSETS.md`.
 ---
 
 ## Notes
+
+- 14 Oct, user-requested collision performance subtask: replaced the unused string-based grid with a reusable ordered spatial hash; preserved original predicates, target order, collision phase timing and removal semantics. 600,000 differential queries and 480 real-game frame records matched brute force/original code, including moving asteroids and all killer types. Actual Restart button and new-run reset checks passed. Debug ON and Release OFF builds pass without new compiler warnings; CTest passed. On Ryzen 5 5600GT / RX590 GME with the complete 4K rendering pipeline, sustained 2,000 enemies + 8,000 bullets averaged 97.8 FPS (p99 12.45 ms; 2/6,000 frames above 16.67 ms); 2,500 + 10,000 averaged 83.1 FPS versus 8.7 FPS with the original collision loops. 3,500 + 14,000 regularly misses 60 FPS. Counts are controlled workload measurements, not a universal game cap. Full methodology, limitations, original-reference commit, commands and tracked CSV results are in `collision-performance.md`. Item 06 extraction, broader item 05 fixes, gameplay balance and other hardware remain pending.
 
 - 14 Oct, item 04 opacity/audio follow-up: Debug ON and Release OFF builds passed without new warnings. A temporary harness ran the actual `Application` loop with native key events: F2 muted on the menu, remained muted entering gameplay, restored a non-default master volume of 0.37, and toggled correctly while paused. Release ignored F1/F2 and kept its original volume. Inspected the F1 screenshot after the complete CRT pass (`build/debug-transparency.png`); text and panel allow the background/gameplay to show through. The initial harness timing missed events during asset initialization; rerunning with sufficient loading/scene-entry time passed all checks.
 - 14 Oct, item 04 follow-up QA: the native harness drove the real bullet-collision/game-over path, enabled F5 on game over, then clicked the actual Restart button. F1 was reset; reopening it showed `GAME_RUNNING`, HP 100, invincibility OFF and cleared enemies/bullets. Both full application executables also launched responsively and closed normally (exit 0). Release object inspection confirmed no `DrawFPS` reference in `Application` and no debug indicator text in the executable.

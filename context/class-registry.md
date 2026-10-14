@@ -144,6 +144,7 @@ All use the same pattern: `static X& GetInstance()` with a function-local static
 - Owns (current): `Player playerEntity`, `KillCounter killCounter`, `GameTimer gameTimer`, `std::vector<Card> augmentCards`, `std::vector<BackgroundLayer> backgroundLayers` (4 parallax layers), `Music gameMusic`, `Button* restartButton`, `Button* mainMenuButton` (raw `new`), `std::array<Sound, 10> scoreSounds`, `DeathInfo deathInfo`, `GameState gameState`
 - Owns (target): adds `WaveDirector`, `CollisionSystem`, `HUD`, `Dock`, `UpgradeShop`, `DockShopUI`, `PauseOverlay`, `DebugTools`, run economy (credits, cargo)
 - Item 04: owns `DebugTools debugTools` only with `GAME_DEBUG`. Handles debug input before the state switch; draws hitboxes after world sprites and diagnostics after the state UI. Both `onSwitch()` and `restartGame()` reset the tools.
+- Item 28 early performance subtask: owns `SpatialGrid enemyCollisionGrid`, `asteroidCollisionGrid`, and reusable non-owning `collisionEnemies` / `collisionAsteroids` vectors. Snapshots use manager iteration order. Bullet snapshots precede movement; asteroid snapshots are rebuilt after movement/spawning. Both current reset paths clear them; consolidate in item 05. Public API unchanged.
 - Public API: `update()`, `draw()`, `onSwitch()`, `onExit()` (Scene overrides). Private: `restartGame()`, `DrawParallaxBackground()`, `DrawLayer()`
 - Enums in `Game.hpp`: `GameState : int { GAME_RUNNING, GAME_AUGMENT_SELECTION, GAME_PAUSED, GAME_OVER }` (explicit underlying type permits the debug header's forward declaration; target adds `GAME_DOCKED`, `GAME_VICTORY`), `KillerType { KILLER_ENEMY_BULLET, KILLER_ENEMY_COLLISION, KILLER_ASTEROID }`, struct `DeathInfo`
 - Gotchas:
@@ -397,7 +398,7 @@ All use the same pattern: `static X& GetInstance()` with a function-local static
   void killAllNonBoss();                                   // debug F2
   ```
 - Gotchas:
-  - `update()` prints the spawn rate with `std::cout` **every frame**. Remove in item 05.
+  - The per-frame spawn-rate output was removed during the user-requested item 28 early performance subtask. Public API and spawn behavior are unchanged.
   - Enemies farther than 1000 units are removed **with** their destruct animation.
   - IDs are `"enemy_" + counter`. Bosses use `"boss_<name>"`.
 
@@ -678,5 +679,11 @@ All use the same pattern: `static X& GetInstance()` with a function-local static
 
 ### SpatialGrid
 - Files: src/SpatialGrid.hpp, src/SpatialGrid.cpp
-- Status: existing, **unused**
-- Notes: a hash grid that stores positions by string ID. Nothing calls it. Do not wire it in unless the item-28 performance check shows collisions are too slow with 80+ enemies; record the decision first.
+- Status: modified (item 28 early performance subtask, 14 October)
+- Kind: value, owned by `Game` (one for enemies, one for asteroids)
+- Public API: `NO_HIT`, `clear()`, `reserve(std::size_t)`, `add(Vector2, float radius)`, `build()`, `deactivate(std::size_t)`, `isActive(std::size_t) const`, `firstHit(Vector2) const`, `firstWithin(Vector2, float radius, std::size_t exclude = NO_HIT) const`.
+- Uses: `Config.hpp` cell size / small-set threshold / bucket sizing, Raymath's original `Vector2Distance` narrow-phase predicate.
+- Contract: clear/add/build before querying; returned index is insertion order, not distance order. `firstHit` uses each target's radius; `firstWithin` uses the caller's radius. Deactivation excludes a removed target immediately without invalidating other indices. No owning pointers or singleton state.
+- Storage: reusable flat entries and power-of-two hash buckets, linked by indices in ascending insertion order. Per-bucket center bounds reject dense near misses. Tiny sets and enormous/non-finite coordinates use an ordered linear fallback. Large query areas also fall back to scanning.
+- Gotchas: add/build snapshots do not follow movement automatically. Never dereference a deactivated observer. Retain deferred entity-phase removals until the existing end-of-phase commit; early deactivation there changes gameplay. `clear()` retains capacity for reuse.
+- Changed by: 28 (user explicitly requested this work ahead of the planned date); the previously unused string/position query API had no callers and was replaced.

@@ -163,7 +163,9 @@ Spawning (`EnemyManager::update`) is a **continuous trickle**, not waves: the sp
 
 ### Current collision matrix
 
-All checks are circle-versus-point: `Vector2Distance(a, b) <= radius`, where the radius is the **target's** size value (`hitbox.width` for ships, `getAsteroidSize()` for asteroids). Bullets are points. The loops are brute force in `Game::update`; `CollisionSystem` and `SpatialGrid` are not used.
+All checks retain the inclusive circle-versus-point predicate `Vector2Distance(a, b) <= radius`. Bullets are points. The supplied radius is usually the target's size value (`hitbox.width` for ships, `getAsteroidSize()` for asteroids); asteroid-versus-asteroid checks use the **outer/source asteroid's** radius, not summed radii. At the user's request on 14 October, `Game::update` now uses reusable `SpatialGrid` snapshots for repeated enemy/asteroid searches. Single-player checks remain linear. `CollisionSystem` extraction remains item 06.
+
+The grid returns the lowest insertion index that passes the original predicate, preserving each manager's first-match iteration order. It is rebuilt before bullet collisions, then the asteroid index is rebuilt after asteroid/enemy movement and spawning. Bullet-phase kills deactivate indexed targets immediately, before the next bullet. Entity-phase removals remain deferred, including asteroids already marked by an enemy/player collision; only asteroid-pair matches deactivate during pair matching. This distinction preserves multiple enemies hitting the same asteroid in one frame. Both existing run-reset paths clear the indices and observers. See `collision-performance.md` for parity tests and rendered benchmarks.
 
 | A | B | Result |
 |---|---|---|

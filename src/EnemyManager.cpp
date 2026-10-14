@@ -40,7 +40,7 @@ void EnemyManager::update(Vector2 playerPos, const GameTimer& gameTimer)
         removeEnemy(id);
     }
 
-    std::cout << "enemy spawn rate: " << newCooldown << std::endl;
+
 
     // print number of enemies
     // std::cout << "Number of enemies: " << enemies.size() << std::endl;

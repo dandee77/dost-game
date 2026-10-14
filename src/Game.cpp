@@ -48,6 +48,10 @@ void Game::onSwitch()
     debugTools.reset();
 #endif
     gameState = GAME_RUNNING;
+    enemyCollisionGrid.clear();
+    asteroidCollisionGrid.clear();
+    collisionEnemies.clear();
+    collisionAsteroids.clear();
     gameOverTextStarted = false;
     worldTileSize = 500.0f; 
     playerEntity = Player();
@@ -141,6 +145,10 @@ void Game::restartGame() { //ts kinda useless ngl
 #ifdef GAME_DEBUG
     debugTools.reset();
 #endif
+    enemyCollisionGrid.clear();
+    asteroidCollisionGrid.clear();
+    collisionEnemies.clear();
+    collisionAsteroids.clear();
     gameOverTextStarted = false;
     
     PlayMusicStream(gameMusic);
@@ -291,6 +299,24 @@ std::string Game::update()
 
 #pragma region UpdateBulletsCollision
 
+        // Snapshot before movement, matching the original bullet collision phase.
+        enemyCollisionGrid.clear();
+        collisionEnemies.clear();
+        enemyCollisionGrid.reserve(em.getEnemies().size());
+        for (auto& [id, enemy] : em.getEnemies()) {
+            enemyCollisionGrid.add(enemy->getPosition(), enemy->getHitbox().width);
+            collisionEnemies.push_back(enemy.get());
+        }
+        enemyCollisionGrid.build();
+        asteroidCollisionGrid.clear();
+        collisionAsteroids.clear();
+        asteroidCollisionGrid.reserve(am.getAsteroids().size());
+        for (auto& [id, asteroid] : am.getAsteroids()) {
+            asteroidCollisionGrid.add(asteroid->getPosition(), asteroid->getAsteroidSize());
+            collisionAsteroids.push_back(asteroid.get());
+        }
+        asteroidCollisionGrid.build();
+
 
         for (int i = 0; i < bm.getBullets().size(); i++) {
 
@@ -299,7 +325,10 @@ std::string Game::update()
                 std::vector<std::string> enemiesToRemove;
                 bool hitSomething = false;
                 
-                for (auto& [id, enemy] : em.getEnemies()) {
+                if (const auto target = enemyCollisionGrid.firstHit(bm.getBullets()[i].getPosition());
+                    target != SpatialGrid::NO_HIT) {
+                    auto* enemy = collisionEnemies[target];
+                    const auto id = enemy->getEnemyID();
                     if (CheckCollisions(bm.getBullets()[i].getPosition(), 
                                     enemy->getPosition(), 
                                     enemy->getHitbox().width)) {
@@ -337,17 +366,20 @@ std::string Game::update()
                                 break;
                             }
                             enemiesToRemove.push_back(id);
+                            enemyCollisionGrid.deactivate(target);
                         }
                         
                         hitSomething = true;
-                        break;
                     }
                 }
                 
                 // Player bullets vs asteroids
                 std::vector<std::string> asteroidsToRemove;
                 if (!hitSomething) {
-                    for (auto& [id, asteroid] : am.getAsteroids()) {
+                    if (const auto target = asteroidCollisionGrid.firstHit(bm.getBullets()[i].getPosition());
+                        target != SpatialGrid::NO_HIT) {
+                        auto* asteroid = collisionAsteroids[target];
+                        const auto id = asteroid->getAsteroidID();
                         if (CheckCollisions(bm.getBullets()[i].getPosition(),
                                         asteroid->getPosition(),
                                         asteroid->getAsteroidSize())) {
@@ -360,8 +392,8 @@ std::string Game::update()
                             killCounter.increment();
                             playerEntity.addScore(5);
                             asteroidsToRemove.push_back(id);
+                            asteroidCollisionGrid.deactivate(target);
                             hitSomething = true;
-                            break; 
                         }
                     }
                 }
@@ -410,12 +442,15 @@ std::string Game::update()
                 
                 // Enemy bullets vs asteroids
                 std::vector<std::string> asteroidsToRemove;
-                for (auto& [id, asteroid] : am.getAsteroids()) {
+                if (const auto target = asteroidCollisionGrid.firstHit(bm.getBullets()[i].getPosition());
+                    target != SpatialGrid::NO_HIT) {
+                    auto* asteroid = collisionAsteroids[target];
+                    const auto id = asteroid->getAsteroidID();
                     if (CheckCollisions(bm.getBullets()[i].getPosition(),
                                     asteroid->getPosition(),
                                     asteroid->getAsteroidSize())) {
                         asteroidsToRemove.push_back(id);
-                        break; 
+                        asteroidCollisionGrid.deactivate(target);
                     }
                 }
         
@@ -449,6 +484,15 @@ std::string Game::update()
 
 
 #pragma region UpdateEntitiesCollision
+
+        // Movement/spawning invalidates the earlier asteroid snapshot.
+        asteroidCollisionGrid.clear();
+        collisionAsteroids.clear();
+        for (auto& [id, asteroid] : am.getAsteroids()) {
+            asteroidCollisionGrid.add(asteroid->getPosition(), asteroid->getAsteroidSize());
+            collisionAsteroids.push_back(asteroid.get());
+        }
+        asteroidCollisionGrid.build();
 
         std::vector<std::string> enemiesToRemove;
         std::vector<std::string> asteroidsToRemove;
@@ -505,11 +549,13 @@ std::string Game::update()
             }
             
             // enemy to asteroid collision
-            for (auto& [asteroidId, asteroid] : AsteroidManager::GetInstance().getAsteroids()) {
+            if (const auto target = asteroidCollisionGrid.firstHit(enemy->getPosition());
+                target != SpatialGrid::NO_HIT) {
+                auto* asteroid = collisionAsteroids[target];
+                const auto asteroidId = asteroid->getAsteroidID();
                 if (CheckCollisions(enemy->getPosition(), asteroid->getPosition(), asteroid->getAsteroidSize())) {
                     enemiesToRemove.push_back(enemyId);
                     asteroidsToRemove.push_back(asteroidId);
-                    break; 
                 }
             }
         }
@@ -536,17 +582,17 @@ std::string Game::update()
         
         // asteroid to asteroid collision
         std::unordered_set<std::string> collidedAsteroids;
-        for (auto& [id1, asteroid1] : AsteroidManager::GetInstance().getAsteroids()) {
-            if (collidedAsteroids.count(id1)) continue; 
-            
-            for (auto& [id2, asteroid2] : AsteroidManager::GetInstance().getAsteroids()) {
-                if (id1 == id2 || collidedAsteroids.count(id2)) continue;
-                
-                if (CheckCollisions(asteroid1->getPosition(), asteroid2->getPosition(), asteroid1->getAsteroidSize())) {
-                    collidedAsteroids.insert(id1);
-                    collidedAsteroids.insert(id2);
-                    break; 
-                }
+        for (std::size_t index = 0; index < collisionAsteroids.size(); ++index) {
+            if (!asteroidCollisionGrid.isActive(index)) continue;
+            auto* asteroid = collisionAsteroids[index];
+            // This pair uses the SOURCE radius, not the target radius or sum.
+            const auto target = asteroidCollisionGrid.firstWithin(
+                asteroid->getPosition(), asteroid->getAsteroidSize(), index);
+            if (target != SpatialGrid::NO_HIT) {
+                collidedAsteroids.insert(asteroid->getAsteroidID());
+                collidedAsteroids.insert(collisionAsteroids[target]->getAsteroidID());
+                asteroidCollisionGrid.deactivate(index);
+                asteroidCollisionGrid.deactivate(target);
             }
         }
         

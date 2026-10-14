@@ -18,6 +18,7 @@
 #include "ExplosionConfettiManager.hpp"
 #include "GameOverOverlay.hpp"
 #include "Button.hpp"
+#include "SpatialGrid.hpp"
 #ifdef GAME_DEBUG
 #include "DebugTools.hpp"
 #endif
@@ -67,6 +68,10 @@ private:
     void restartGame();
 
     GameState gameState;
+    SpatialGrid enemyCollisionGrid;
+    SpatialGrid asteroidCollisionGrid;
+    std::vector<Enemy*> collisionEnemies;
+    std::vector<Asteroid*> collisionAsteroids;
 #ifdef GAME_DEBUG
     DebugTools debugTools;
 #endif

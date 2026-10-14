@@ -360,6 +360,8 @@ A1 ─> A2..A9 ─> 15, 26
 ### 28 Balance and performance pass
 **Owner:** Lead. **Date:** 22 Oct.
 
+**14 Oct user-requested early performance work:** replace the brute-force collision searches after baseline profiling, preserve current hit semantics, and measure rendered capacity. This is a scoped performance subtask; balance runs and slowest-team-laptop validation remain pending. See `collision-performance.md` for reproducible measurements. Item 06 extraction and item 05 reset consolidation are still separate tasks.
+
 - Two full Story runs and two Endless runs by different teammates. Adjust `// TUNE` values only.
 - Performance: 80 enemies plus heavy scatter shots at 60 FPS on the slowest team laptop. If not, profile first; only then consider `SpatialGrid`.
 
