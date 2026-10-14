@@ -8,7 +8,7 @@ namespace Balance {
     inline constexpr float BARRICADE_TRIGGER_TIME = 120.0f;
     inline constexpr float BARRICADE_DURATION = 30.0f, BARRICADE_SCATTER_TIME = 4.0f;
     inline constexpr int BARRICADE_SEGMENTS = 64, BARRICADE_HEALTH = 120;
-    inline constexpr float BARRICADE_START_RADIUS = 130.0f, BARRICADE_END_RADIUS = 90.0f;
+    inline constexpr float BARRICADE_START_RADIUS = 130.0f, BARRICADE_END_RADIUS = 45.0f;
     inline constexpr float BARRICADE_BODY_RADIUS = 3.5f, BARRICADE_SCATTER_SPEED = 55.0f;
     inline constexpr float BARRICADE_ORBIT_SPEED = 4.0f; // Degrees per simulation second.
     inline constexpr float BARRICADE_ESCAPE_MARGIN = 90.0f, BARRICADE_RESTITUTION = 0.2f;

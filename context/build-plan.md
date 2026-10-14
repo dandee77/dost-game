@@ -68,7 +68,7 @@ A1 ─> A2..A9 ─> 15, 26
 - Exclude event enemies from crowd separation and ordinary kamikaze/debris collision removal. Destroyed segments open real gaps.
 - Scatter survivors outward on timeout; remove them after four seconds. Clear early after distant/offscreen escape. Smoothly widen/restore camera zoom; pause/reset all event state correctly.
 - Add `spawn barricade event` to F5 help and autocomplete.
-- Follow-up: double the ring radius/shrink speed, use 64 smaller segments and a slow formation orbit. Separate `stats` from `hitbox`, include live event diagnostics and darken console/dropdown backgrounds.
+- Follow-up: double the starting radius while reaching the original radius 45 at 30 seconds, retain the original event zoom 13, and use 64 smaller segments with a slow formation orbit. Separate `stats` from `hitbox`, include live event diagnostics and darken console/dropdown backgrounds.
 
 **Done when:** automatic/manual triggers, combat, containment, escape, scatter, camera and reset checks pass in Debug/Release; native render inspected.
 **Test:** swept contact across every seam, boost and iframe checks, all weapon paths, pause/restart, capacity/command validation, timeout and early escape, frame-rate independent zoom. User request overrides numbered item order only for P3.

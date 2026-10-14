@@ -3,7 +3,7 @@
 
 namespace Config {
     inline constexpr float CAMERA_ZOOM_PLAY = 20.0f, CAMERA_ZOOM_INTRO = 150.0f;
-    inline constexpr float CAMERA_ZOOM_BARRICADE = 6.5f;
+    inline constexpr float CAMERA_ZOOM_BARRICADE = 13.0f;
     inline constexpr float CAMERA_INTRO_RESPONSE = 7.5f, CAMERA_EVENT_RESPONSE = 2.5f;
     inline constexpr int BARRICADE_CONTACT_PASSES = 8;
     inline constexpr float BARRICADE_CONTACT_SKIN = 0.01f;

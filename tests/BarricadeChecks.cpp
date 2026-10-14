@@ -79,8 +79,14 @@ int runBarricadeChecks(const std::string& artifactDirectory)
         }
         const Vector2 gapDirection = Vector2Normalize(enemies.at("enemy_0")->getPosition());
         enemies.at("enemy_0")->takeDamage(Balance::BARRICADE_HEALTH);
+        // As 64 rocks compress to the original small radius, neighboring bodies
+        // narrow a single opening. Clear the neighbors for a ship-sized late gap.
+        if (age > 0.0f) {
+            enemies.at("enemy_1")->takeDamage(Balance::BARRICADE_HEALTH);
+            enemies.at("enemy_63")->takeDamage(Balance::BARRICADE_HEALTH);
+        }
         player.position = Vector2Scale(gapDirection, radius + 80);
-        require(!event.constrainPlayer(player, {}), "One killed segment opens a traversable gap at both radii");
+        require(!event.constrainPlayer(player, {}), "Destroyed sections open traversable gaps at both radii");
         require(std::abs(Vector2Length(player.position) - radius - 80) < 0.001f, "No invisible circle blocks destroyed gap");
     }
 
@@ -92,7 +98,7 @@ int runBarricadeChecks(const std::string& artifactDirectory)
         require(std::abs(std::atan2(orbitPositions.back().y, orbitPositions.back().x) * RAD2DEG - 40) < 0.01f,
             "Whole ring orbits at four degrees per second");
         require(std::abs(event.getRadius() - (startRadius - (startRadius - endRadius) / 3)) < 0.001f,
-            "Larger ring shrinks at twice the original speed");
+            "Larger ring shrinks at the rate required to reach its endpoint in thirty seconds");
         for (int sample = 0; sample < 360; ++sample) {
             advance(1.0f / fps);
             const float angle = sample * DEG2RAD;
@@ -182,6 +188,12 @@ int runBarricadeChecks(const std::string& artifactDirectory)
     start(); low({});
     advance(30);
     require(event.getPhase() == BARRICADE_SCATTERING, "Thirty seconds ends containment");
+    require(std::abs(event.getRadius() - 45.0f) < 0.001f, "Thirty-second radius matches original compact barricade");
+    for (const auto& [id, enemy] : enemies) {
+        if (enemy->getEnemyType() == BARRICADE_ENEMY)
+            require(std::abs(Vector2Length(enemy->getPosition()) - 45.0f) < 0.001f,
+                "Every surviving segment reaches the original radius at thirty seconds");
+    }
     const auto releaseDirection = Vector2Normalize(enemies.at("enemy_0")->getPosition());
     player.position = {100, 0};
     require(!event.constrainPlayer(player, {}), "Scattering releases physical containment");
