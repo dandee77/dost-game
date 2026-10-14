@@ -32,12 +32,7 @@ void BarricadeEvent::update(float dt, float runTime, Vector2 playerPosition)
     }
     if (!isActive()) return;
     elapsed += std::max(0.0f, dt);
-    const auto& enemies = EnemyManager::GetInstance().getEnemies();
-    const bool anyAlive = std::any_of(segmentIds.begin(), segmentIds.end(), [&](const auto& id) {
-        const auto found = enemies.find(id);
-        return found != enemies.end() && !found->second->isDead();
-    });
-    if (!anyAlive || elapsed >= Balance::BARRICADE_DURATION + Balance::BARRICADE_SCATTER_TIME) {
+    if (getAliveSegments() == 0 || elapsed >= Balance::BARRICADE_DURATION + Balance::BARRICADE_SCATTER_TIME) {
         clearSegments();
         return;
     }
@@ -101,12 +96,10 @@ bool BarricadeEvent::constrainPlayer(Player& player, Vector2 previousPosition) c
 void BarricadeEvent::finishIfEscaped(Vector2 playerPosition, const Camera2D& camera)
 {
     if (!isActive()) return;
-    const float radius = Lerp(Balance::BARRICADE_START_RADIUS, Balance::BARRICADE_END_RADIUS,
-        std::min(1.0f, elapsed / Balance::BARRICADE_DURATION));
+    const float radius = getRadius();
     if (Vector2Distance(playerPosition, center) <= radius + Balance::BARRICADE_ESCAPE_MARGIN) return;
     // Require both distance and the whole ring to leave the view, not just one missing rock.
-    const float extent = (radius + Theme::BARRICADE_DRAW_SIZE / 2.0f +
-        std::max(0.0f, elapsed - Balance::BARRICADE_DURATION) * Balance::BARRICADE_SCATTER_SPEED) * camera.zoom;
+    const float extent = (radius + Theme::BARRICADE_DRAW_SIZE / 2.0f) * camera.zoom;
     const Vector2 screenCenter = GetWorldToScreen2D(center, camera);
     if (screenCenter.x + extent < 0.0f || screenCenter.x - extent > GAME_SCREEN_WIDTH ||
         screenCenter.y + extent < 0.0f || screenCenter.y - extent > GAME_SCREEN_HEIGHT) clearSegments();
@@ -138,4 +131,21 @@ void BarricadeEvent::drawStatus() const
         static_cast<int>(std::ceil(Balance::BARRICADE_DURATION - elapsed))) : "BARRICADE DISPERSING";
     DrawTextEx(ResourceManager::GetInstance().GetFont(Theme::FONT_PRIMARY), label,
         Theme::BARRICADE_STATUS_POSITION, Theme::BARRICADE_STATUS_SIZE, Theme::TEXT_SPACING, Theme::COLOR_ACCENT);
+}
+
+float BarricadeEvent::getRadius() const
+{
+    if (!isActive()) return 0.0f;
+    return Lerp(Balance::BARRICADE_START_RADIUS, Balance::BARRICADE_END_RADIUS,
+        std::min(1.0f, elapsed / Balance::BARRICADE_DURATION)) +
+        std::max(0.0f, elapsed - Balance::BARRICADE_DURATION) * Balance::BARRICADE_SCATTER_SPEED;
+}
+
+int BarricadeEvent::getAliveSegments() const
+{
+    const auto& enemies = EnemyManager::GetInstance().getEnemies();
+    return static_cast<int>(std::count_if(segmentIds.begin(), segmentIds.end(), [&](const auto& id) {
+        const auto found = enemies.find(id);
+        return found != enemies.end() && !found->second->isDead();
+    }));
 }

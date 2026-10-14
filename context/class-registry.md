@@ -325,11 +325,12 @@ All use the same pattern: `static X& GetInstance()` with a function-local static
 - Status: implemented, P3 user-requested prototype.
 - Kind: final subclass of `Enemy`, owned by `EnemyManager`.
 - Constructor: `BarricadeEnemy(const std::string& id, Vector2 center, float angle)`.
-- Behavior: fixed radial direction around a fixed event center, shrinks then scatters using accumulated simulation time. `update()` delegates to deterministic `advance(float dt)`. Previous position supports relative swept contact.
+- Behavior: orbits a fixed center at 4 degrees/s while shrinking, then scatters straight along its release heading, using accumulated simulation time. `update()` delegates to deterministic `advance(float dt)`. Previous position supports relative swept contact.
 - Combat: normal enemy HP/damage/removal paths; cannot receive knockback or crowd separation. Never removed by ordinary kamikaze or asteroid contact. Gameplay values are `Balance::BARRICADE_*`.
 - Drawing: existing static asteroid texture registered as a one-frame WORLD animation under its unique enemy ID; existing seven-frame asteroid destruction animation. Flying enemies retain their top layer.
 
 ### BarricadeEvent
+- P3 follow-up queries: `getRadius() const`, `getAliveSegments() const`, `hasTriggeredAutomatically() const` provide live diagnostics without exposing mutable event state. Radius includes outward scatter; inactive radius is zero.
 - Files: src/BarricadeEvent.hpp, src/BarricadeEvent.cpp
 - Status: implemented, P3; value owned by Game, not a singleton or replacement WaveDirector.
 - API: `start(Vector2)`, `update(float dt, float runTime, Vector2 playerPosition)`, `constrainPlayer(Player&, Vector2 previousPosition) const`, `finishIfEscaped(Vector2, const Camera2D&)`, `reset()`, `drawStatus() const`, phase/center/elapsed queries.
@@ -571,6 +572,7 @@ All use the same pattern: `static X& GetInstance()` with a function-local static
 - Behavior: dim overlay, "PAUSED", Resume and Quit to Menu buttons. Returns an action enum.
 
 ### DebugTools
+- P3 follow-up: independent `statsVisible` and collision-overlay flags, both cleared by reset. `hitbox` draws only world collision geometry; `stats` draws the panel and reads the current Game-owned BarricadeEvent. Each supports on/off/toggle and autocomplete. Console opacity is 92%, dropdown 95%; stats panel remains independently translucent.
 - P3: `spawn barricade event` starts the Game-owned event, with autocomplete/help, living-run guard, duplicate-event and capacity feedback. Console capture freezes the spawned event until closed.
 - P2 spawn follow-up: `spawn lowlevel enemy <quantity>` accepts integers 1–10,000, requires a living player, and reports actual count/capacity. Autocomplete fills the command prefix and leaves quantity editable. Enemy creation stays in EnemyManager; the command and batch API compile only with GAME_DEBUG.
 - P1: `player` command lists presets and individual weapon/engine/shield choices, with argument autocomplete. Typed metadata dispatch, strict argument validation and live-run guard. Public API unchanged; hitbox view adds swept projectile geometry, beam capsules and shield arcs.
@@ -578,7 +580,7 @@ All use the same pattern: `static X& GetInstance()` with a function-local static
 - Status: built (item 04, F5 console follow-up)
 - Kind: value
 - Owned by: long-lived `Game` scene; `Application` routes console calls even outside a run
-- Public API: `void reset()`, `void update(Player* player, BarricadeEvent* barricade = nullptr)`, `void drawConsole() const`, `bool capturesInput() const`, `void drawWorld(const Player& player) const`, `void drawOverlay(const Player& player, GameState state) const`
+- Public API: `void reset()`, `void update(Player* player, BarricadeEvent* barricade = nullptr)`, `void drawConsole() const`, `bool capturesInput() const`, `void drawWorld(const Player& player) const`, `void drawOverlay(const Player& player, GameState state, const BarricadeEvent& barricade) const`
 - Uses: `Player`, read-only enemy/asteroid/bullet containers, `ResourceManager`, `Theme`, `Config`
 - Behavior: compiled only with `GAME_DEBUG`. F5 toggles the translucent terminal; vertical six-row suggestion dropdown with Up/Down or PageUp/PageDown navigation. Tab/Enter fills a selected row; Enter without a selection executes. Ctrl+Up/Down browses history (plain arrows also work with empty input). Editing/reset/execution clears suggestion selection/scroll state. Backspace edits and Escape closes. Metadata lookup dispatches enums for `help`, `hitbox`, `mute`, `invincible`, `credits`, `boss`, `wave`, `clear`, `close`. Toggle arguments are optional `on/off/toggle`. Pending systems report unavailable. A null player rejects gameplay commands outside a run.
 - Gotchas: capture includes opening/closing frames. Ship collision radius is `getHitbox().width`, asteroid radius is `getAsteroidSize()`, bullets are points. `drawWorld` uses the gameplay camera; diagnostics and console use canvas space. `reset()` clears run UI state but preserves mute/saved volume; `Player::init()` resets invincibility. Reset both paths until item 05. Input/history/output limits live in Config, layout/opacity in Theme.

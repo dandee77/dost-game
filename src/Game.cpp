@@ -1081,7 +1081,7 @@ void Game::draw()
         DamageOverlay::GetInstance().draw();
     }
 #ifdef GAME_DEBUG
-    debugTools.drawOverlay(playerEntity, gameState);
+    debugTools.drawOverlay(playerEntity, gameState, barricadeEvent);
 #endif
 }
 

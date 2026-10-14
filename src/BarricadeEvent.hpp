@@ -21,6 +21,9 @@ public:
     BarricadePhase getPhase() const { return phase; }
     Vector2 getCenter() const { return center; }
     float getElapsed() const { return elapsed; }
+    float getRadius() const;
+    int getAliveSegments() const;
+    bool hasTriggeredAutomatically() const { return automaticTriggered; }
 private:
     void clearSegments();
     BarricadePhase phase = BARRICADE_IDLE;

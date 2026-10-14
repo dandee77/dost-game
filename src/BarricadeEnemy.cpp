@@ -41,7 +41,9 @@ void BarricadeEnemy::advance(float dt)
     const float fraction = std::min(1.0f, elapsed / Balance::BARRICADE_DURATION);
     const float radius = Lerp(Balance::BARRICADE_START_RADIUS, Balance::BARRICADE_END_RADIUS, fraction) +
         std::max(0.0f, elapsed - Balance::BARRICADE_DURATION) * Balance::BARRICADE_SCATTER_SPEED;
-    position = Vector2Add(center, Vector2Scale(radialDirection, radius));
+    // Freeze the orbit heading at release so scattered rocks travel straight out.
+    const float orbit = Balance::BARRICADE_ORBIT_SPEED * DEG2RAD * std::min(elapsed, Balance::BARRICADE_DURATION);
+    position = Vector2Add(center, Vector2Scale(Vector2Rotate(radialDirection, orbit), radius));
     rect.x = hitbox.x = position.x;
     rect.y = hitbox.y = position.y;
     rotation += Theme::BARRICADE_SPIN * dt;

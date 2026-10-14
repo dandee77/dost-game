@@ -7,6 +7,9 @@
 
 int runBarricadeChecks(const std::string& artifactDirectory)
 {
+    const float startRadius = Balance::BARRICADE_START_RADIUS;
+    const float endRadius = Balance::BARRICADE_END_RADIUS;
+    const float eventZoom = Config::CAMERA_ZOOM_BARRICADE;
     int checks = 0;
     const auto require = [&](bool condition, const char* message) {
         ++checks;
@@ -74,31 +77,53 @@ int runBarricadeChecks(const std::string& artifactDirectory)
             require(player.getHealth() == health && player.stateElapsed == 0.25f, "Physical blocking preserves iframe health and clock");
             require(Vector2DotProduct(player.getVelocity(), direction) <= 0, "Wall nudges boosted velocity inward");
         }
+        const Vector2 gapDirection = Vector2Normalize(enemies.at("enemy_0")->getPosition());
         enemies.at("enemy_0")->takeDamage(Balance::BARRICADE_HEALTH);
-        player.position = {radius + 80, 0};
+        player.position = Vector2Scale(gapDirection, radius + 80);
         require(!event.constrainPlayer(player, {}), "One killed segment opens a traversable gap at both radii");
-        require(player.position.x == radius + 80, "No invisible circle blocks destroyed gap");
+        require(std::abs(Vector2Length(player.position) - radius - 80) < 0.001f, "No invisible circle blocks destroyed gap");
     }
 
+    std::vector<Vector2> orbitPositions;
+    for (int fps : {30, 144}) {
+        start();
+        for (int frame = 0; frame < fps * 10; ++frame) advance(1.0f / fps);
+        orbitPositions.push_back(enemies.at("enemy_0")->getPosition());
+        require(std::abs(std::atan2(orbitPositions.back().y, orbitPositions.back().x) * RAD2DEG - 40) < 0.01f,
+            "Whole ring orbits at four degrees per second");
+        require(std::abs(event.getRadius() - (startRadius - (startRadius - endRadius) / 3)) < 0.001f,
+            "Larger ring shrinks at twice the original speed");
+        for (int sample = 0; sample < 360; ++sample) {
+            advance(1.0f / fps);
+            const float angle = sample * DEG2RAD;
+            const Vector2 direction = {std::cos(angle), std::sin(angle)};
+            player.position = Vector2Scale(direction, event.getRadius() + 40);
+            player.playerState = PLAYER_IFRAME;
+            require(event.constrainPlayer(player, {}) && Vector2Length(player.position) < event.getRadius(),
+                "Moving rotating ring blocks swept travel through every angle");
+        }
+    }
+    require(Vector2Distance(orbitPositions.front(), orbitPositions.back()) < 0.01f, "Orbit agrees at 30 and 144 FPS");
+
     start();
-    player.position = {80, 0};
+    player.position = {startRadius + 40, 0};
     require(event.constrainPlayer(player, {}) && player.getHealth() == 90, "First touch damages hull");
-    player.position = {80, 0};
+    player.position = {startRadius + 40, 0};
     require(event.constrainPlayer(player, {}) && player.getHealth() == 90, "Stunned contact blocks without repeated damage");
-    player.playerState = PLAYER_IFRAME; player.position = {80, 0};
+    player.playerState = PLAYER_IFRAME; player.position = {startRadius + 40, 0};
     event.constrainPlayer(player, {});
     require(player.getHealth() == 90, "Iframe contact causes no additional damage");
-    player.playerState = PLAYER_DEFAULT; player.position = {80, 0};
+    player.playerState = PLAYER_DEFAULT; player.position = {startRadius + 40, 0};
     event.constrainPlayer(player, {});
     require(player.getHealth() == 80, "Renewed vulnerability allows next contact damage");
     player.playerState = PLAYER_IFRAME; player.stateElapsed = player.iframeDuration;
-    player.velocity = {}; player.update(); player.position = {80, 0};
+    player.velocity = {}; player.update(); player.position = {startRadius + 40, 0};
     event.constrainPlayer(player, {});
     require(player.getHealth() == 70, "Actual player update expires iframe and enables wall damage again");
-    start(); player.setShield(SHIELD_ROUND); player.position = {80, 0};
-    require(event.constrainPlayer(player, {}) && player.getHealth() == 100 && player.position.x < 65,
+    start(); player.setShield(SHIELD_ROUND); player.position = {startRadius + 40, 0};
+    require(event.constrainPlayer(player, {}) && player.getHealth() == 100 && player.position.x < startRadius,
         "Shield protects health without bypassing containment");
-    start(); player.position = {54.6f, 0}; player.playerState = PLAYER_IFRAME;
+    start(); player.position = {startRadius - Balance::BARRICADE_BODY_RADIUS - Balance::PLAYER_RADIUS + 0.1f, 0}; player.playerState = PLAYER_IFRAME;
     const auto stationary = player.position;
     advance(1);
     require(event.constrainPlayer(player, stationary) && player.position.x < stationary.x, "Shrinking wall moves stationary player inward");
@@ -112,13 +137,13 @@ int runBarricadeChecks(const std::string& artifactDirectory)
     for (ProjectileKind kind : {PROJECTILE_CANNON, PROJECTILE_HEAVY, PROJECTILE_ROCKET}) {
         start();
         Bullet shot({}, {1, 0}, false, 1);
-        shot.configure(kind, 40, 1, 10); shot.position = {80, 0};
+        shot.configure(kind, 40, 1, 10); shot.position = {startRadius + 40, 0};
         BulletManager::GetInstance().addBullet(shot);
         EquipmentTestAccess::resolve(game);
         require(enemies.at("enemy_0")->getHealth() == 80, "Projectile weapon damages durable barricade");
         require(Vector2Length(enemies.at("enemy_0")->getVelocity()) == 0, "Equipment damage leaves ring anchored");
     }
-    start(); player.rotation = 90; player.setWeapon(WEAPON_LASER);
+    start(); player.position = {startRadius - 50, 0}; player.rotation = 90; player.setWeapon(WEAPON_LASER);
     EquipmentTestAccess::updateWeapon(player, 0, true); EquipmentTestAccess::resolve(game);
     require(enemies.at("enemy_0")->getHealth() == Balance::BARRICADE_HEALTH - Balance::LASER_DAMAGE, "Laser tick damages barricade");
     EquipmentTestAccess::resolve(game);
@@ -135,8 +160,8 @@ int runBarricadeChecks(const std::string& artifactDirectory)
     manager.enemySpawnCooldown.lastUsedTime = -100;
     testAsteroidManager().asteroidSpawnCooldown.startCooldown();
     game.update();
-    require(event.isContaining() && enemies.size() > 24, "Game starts event while normal enemy spawning continues");
-    require(std::abs(enemies.at("enemy_0")->getPosition().x - Lerp(65, 45, event.getElapsed() / 30)) < 0.001f,
+    require(event.isContaining() && enemies.size() > Balance::BARRICADE_SEGMENTS, "Game starts event while normal enemy spawning continues");
+    require(std::abs(Vector2Length(enemies.at("enemy_0")->getPosition()) - Lerp(startRadius, endRadius, event.getElapsed() / 30)) < 0.001f,
         "Game keeps event and segment clocks synchronized");
     const auto hitPoint = enemies.at("enemy_0")->getPosition();
     Bullet legacy(hitPoint, {}, false, 1); legacy.setBulletSpeed(0);
@@ -157,10 +182,13 @@ int runBarricadeChecks(const std::string& artifactDirectory)
     start(); low({});
     advance(30);
     require(event.getPhase() == BARRICADE_SCATTERING, "Thirty seconds ends containment");
+    const auto releaseDirection = Vector2Normalize(enemies.at("enemy_0")->getPosition());
     player.position = {100, 0};
     require(!event.constrainPlayer(player, {}), "Scattering releases physical containment");
     advance(1);
-    require(std::abs(enemies.at("enemy_0")->getPosition().x - 100) < 0.001f, "Surviving barricade scatters outward");
+    require(Vector2Distance(Vector2Normalize(enemies.at("enemy_0")->getPosition()), releaseDirection) < 0.001f,
+        "Scattering keeps release direction instead of continuing orbit");
+    require(std::abs(Vector2Length(enemies.at("enemy_0")->getPosition()) - (endRadius + Balance::BARRICADE_SCATTER_SPEED)) < 0.001f, "Surviving barricade scatters outward");
     require(Vector2Length(enemies.at("event_bystander")->getPosition()) == 0, "Event never scatters unrelated enemies");
     advance(3);
     require(!event.isActive() && enemies.size() == 1 && enemies.contains("event_bystander"), "Timeout removes only event enemies");
@@ -178,12 +206,12 @@ int runBarricadeChecks(const std::string& artifactDirectory)
     std::vector<float> zooms;
     for (int fps : {30, 144}) {
         start(); EquipmentTestAccess::camera(game, 1.0f / fps);
-        require(utils::gameCamera.zoom < 20 && utils::gameCamera.zoom > 13, "Zoom out begins smoothly");
+        require(utils::gameCamera.zoom < 20 && utils::gameCamera.zoom > eventZoom, "Zoom out begins smoothly");
         for (int frame = 1; frame < fps * 3; ++frame) EquipmentTestAccess::camera(game, 1.0f / fps);
         zooms.push_back(utils::gameCamera.zoom);
-        require(std::abs(utils::gameCamera.zoom - 13) < 0.01f, "Event zoom converges");
+        require(std::abs(utils::gameCamera.zoom - eventZoom) < 0.01f, "Event zoom converges");
         advance(30); EquipmentTestAccess::camera(game, 1.0f / fps);
-        require(utils::gameCamera.zoom > 13 && utils::gameCamera.zoom < 20, "Timeout smoothly restores zoom");
+        require(utils::gameCamera.zoom > eventZoom && utils::gameCamera.zoom < 20, "Timeout smoothly restores zoom");
         for (int frame = 1; frame < fps * 3; ++frame) EquipmentTestAccess::camera(game, 1.0f / fps);
         require(std::abs(utils::gameCamera.zoom - 20) < 0.01f, "Normal zoom restored");
     }
@@ -192,7 +220,7 @@ int runBarricadeChecks(const std::string& artifactDirectory)
     start();
     for (auto state : {GAME_PAUSED, GAME_AUGMENT_SELECTION}) {
         game.gameState = state; game.update();
-        require(event.getElapsed() == 0 && enemies.at("enemy_0")->getPosition().x == 65 && utils::gameCamera.zoom == 20,
+        require(event.getElapsed() == 0 && enemies.at("enemy_0")->getPosition().x == startRadius && utils::gameCamera.zoom == 20,
             "Pause and augment selection freeze event movement, time and zoom");
     }
 #ifdef GAME_DEBUG
@@ -211,9 +239,43 @@ int runBarricadeChecks(const std::string& artifactDirectory)
         require(!event.isActive(), "Malformed event command has no side effects");
     }
     debug.input = "spawn barricade event"; EquipmentTestAccess::execute(debug, &player, &event);
-    require(event.isActive() && enemies.size() == 24, "Command creates complete event");
+    require(event.isActive() && enemies.size() == Balance::BARRICADE_SEGMENTS, "Command creates complete event");
     debug.input = "spawn barricade event"; EquipmentTestAccess::execute(debug, &player, &event);
-    require(enemies.size() == 24, "Duplicate event command cannot stack rings");
+    require(enemies.size() == Balance::BARRICADE_SEGMENTS, "Duplicate event command cannot stack rings");
+    const auto command = [&](const std::string& text) {
+        debug.input = text; EquipmentTestAccess::execute(debug, &player, &event);
+    };
+    command("hitbox on");
+    require(debug.overlayVisible && !debug.statsVisible, "Hitbox command only enables collision drawing");
+    const auto debugTarget = LoadRenderTexture(3840, 2160);
+    BeginTextureMode(debugTarget); ClearBackground(BLANK); debug.drawOverlay(player, GAME_RUNNING, event); EndTextureMode();
+    Image hitboxOnly = LoadImageFromTexture(debugTarget.texture);
+    const auto* pixels = static_cast<const Color*>(hitboxOnly.data);
+    bool emptyOverlay = true;
+    for (int index = 0; index < hitboxOnly.width * hitboxOnly.height; ++index)
+        emptyOverlay = emptyOverlay && pixels[index].a == 0;
+    require(emptyOverlay, "Hitbox-only mode renders no statistics panel");
+    UnloadImage(hitboxOnly);
+    debug.input = "sta"; EquipmentTestAccess::complete(debug);
+    require(debug.input == "stats", "Stats command autocompletes");
+    command("stats on"); command("hitbox off");
+    require(debug.statsVisible && !debug.overlayVisible, "Stats and hitboxes toggle independently");
+    command("stats on"); command("stats invalid");
+    require(debug.statsVisible, "Stats on is idempotent and malformed arguments do not change state");
+    require(event.getAliveSegments() == Balance::BARRICADE_SEGMENTS && event.getRadius() == startRadius,
+        "Event diagnostics report live count and radius");
+    enemies.at("enemy_0")->takeDamage(Balance::BARRICADE_HEALTH);
+    require(event.getAliveSegments() == Balance::BARRICADE_SEGMENTS - 1, "Event diagnostics exclude destroyed segments");
+    BeginTextureMode(debugTarget); ClearBackground(BLACK); debug.drawOverlay(player, GAME_RUNNING, event); EndTextureMode();
+    Image statsCapture = LoadImageFromTexture(debugTarget.texture); ImageFlipVertical(&statsCapture);
+    require(ExportImage(statsCapture, (artifactDirectory + "/barricade-stats.png").c_str()), "Export event stats preview");
+    UnloadImage(statsCapture); UnloadRenderTexture(debugTarget);
+    command("stats"); require(!debug.statsVisible, "Stats without argument toggles off");
+    command("stats toggle"); command("stats off"); require(!debug.statsVisible, "Explicit stats toggle and off work");
+    command("stats on"); debug.reset();
+    require(!debug.statsVisible && !debug.overlayVisible, "Reset clears both diagnostic modes");
+    debug.input = "stats on"; EquipmentTestAccess::execute(debug, nullptr, &event);
+    require(!debug.statsVisible, "Stats rejects missing run");
     game.gameState = GAME_RUNNING; game.debugTools.inputCaptured = true; game.update();
     require(event.getElapsed() == 0, "Console freezes event");
     game.debugTools.reset();
@@ -221,7 +283,7 @@ int runBarricadeChecks(const std::string& artifactDirectory)
     require(!event.start({}) && enemies.size() == Balance::ENEMY_LIMIT - 1, "Insufficient capacity never spawns partial ring");
 #endif
 
-    start(); player.health = 10; player.position = {80, 0};
+    start(); player.health = 10; player.position = {startRadius + 40, 0};
     EquipmentTestAccess::barricadeContact(game, {});
     require(game.gameState == GAME_OVER && game.deathInfo.killerName == "Barricade", "Lethal wall contact reaches game over");
     game.update(); require(!event.isActive(), "Game over clears event");

@@ -16,7 +16,7 @@ public:
     void drawConsole() const;
     bool capturesInput() const { return inputCaptured; }
     void drawWorld(const Player& player) const;
-    void drawOverlay(const Player& player, GameState state) const;
+    void drawOverlay(const Player& player, GameState state, const BarricadeEvent& barricade) const;
 
 private:
     friend struct EquipmentTestAccess;
@@ -27,6 +27,7 @@ private:
     std::vector<std::string> completions() const;
 
     bool overlayVisible = false;
+    bool statsVisible = false;
     bool consoleVisible = false;
     bool inputCaptured = false;
     bool audioMuted = false;

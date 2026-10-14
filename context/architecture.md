@@ -358,7 +358,8 @@ F5 toggles a translucent console at the top left, inside the CRT safe area. Ente
 | Command | Action |
 |---|---|
 | `help` | Show commands and controls |
-| `hitbox [on/off/toggle]` | Collision circles, IDs, bullet point markers, counts, HP, FPS and GameState |
+| `hitbox [on/off/toggle]` | Collision outlines, IDs and weapon geometry only |
+| `stats [on/off/toggle]` | FPS, HP, GameState, entity/bullet counts, audio/invincibility, plus event phase, time remaining, living segments, radius, orbit speed and automatic-trigger state |
 | `mute [on/off/toggle]` | All music and effects, in every scene; restore previous volume when unmuting |
 | `invincible [on/off/toggle]` | Block player damage and its side effects; does not revive a dead run |
 | `spawn lowlevel enemy <quantity>` | Spawn real low enemies; integer 1–10,000, clamped to capacity |

@@ -4,7 +4,7 @@
 // Item 04 introduces only the tokens needed by debug tools; item 03 migrates the rest.
 namespace Theme {
     // The 96px asteroid frame has a roughly 36px body; account for transparent padding.
-    inline constexpr float BARRICADE_DRAW_SIZE = 36.0f, BARRICADE_SPIN = 20.0f;
+    inline constexpr float BARRICADE_DRAW_SIZE = 20.0f, BARRICADE_SPIN = 20.0f;
     inline constexpr float BARRICADE_IDLE_FRAME_TIME = 1.0f;
     inline constexpr float BARRICADE_DESTRUCT_FRAME_TIME = 0.1f;
     inline constexpr int BARRICADE_DESTRUCT_FRAMES = 7;
@@ -43,13 +43,14 @@ namespace Theme {
     inline constexpr float DEBUG_TEXT_OPACITY = 0.55f;
     inline constexpr float DEBUG_PANEL_OPACITY = 0.25f;
     inline constexpr Rectangle DEBUG_CONSOLE_PANEL = {220.0f, 310.0f, 2000.0f, 720.0f};
-    inline constexpr Rectangle DEBUG_PANEL = {220.0f, 1060.0f, 1700.0f, 540.0f};
-    inline constexpr Vector2 DEBUG_INVINCIBLE_POSITION = {220.0f, 1620.0f};
+    inline constexpr float DEBUG_CONSOLE_OPACITY = 0.92f;
+    inline constexpr Rectangle DEBUG_PANEL = {220.0f, 1060.0f, 1700.0f, 768.0f};
+    inline constexpr Vector2 DEBUG_INVINCIBLE_POSITION = {220.0f, 1850.0f};
     inline constexpr float DEBUG_CONSOLE_TEXT_OPACITY = 0.85f;
     inline constexpr float DEBUG_PADDING = 30.0f;
     inline constexpr float DEBUG_LINE_HEIGHT = 64.0f;
     inline constexpr int DEBUG_SUGGESTION_ROWS = 6;
-    inline constexpr float DEBUG_DROPDOWN_OPACITY = 0.85f;
+    inline constexpr float DEBUG_DROPDOWN_OPACITY = 0.95f;
     inline constexpr float DEBUG_SELECTION_OPACITY = 0.22f;
     inline constexpr float DEBUG_POINT_HALF_SIZE = 0.6f;
     inline constexpr int DEBUG_WINDOW_FPS_X = 10;

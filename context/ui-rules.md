@@ -8,7 +8,7 @@ Why tokens became a header: in C++ the values must live in code. Writing them in
 
 ## Canvas and Window
 
-P3 event UI: a sky-blue `BARRICADE Ns - BREAK A GAP` countdown at Theme's safe-area status position, changing to `BARRICADE DISPERSING` on timeout. Existing asteroid art is a one-frame WORLD animation, with 36-unit draw size (including transparent sprite padding) and 20 degrees/s rotation; normal seven-frame asteroid destruction is reused. Camera zoom smoothly changes from 20 to 13 during containment, returning to 20 after scatter/escape/death. No new art or font assets.
+P3 event UI: a sky-blue `BARRICADE Ns - BREAK A GAP` countdown at Theme's safe-area status position, changing to `BARRICADE DISPERSING` on timeout. Existing asteroid art is a one-frame WORLD animation, with 20-unit draw size (including transparent sprite padding) and 20 degrees/s rotation; normal seven-frame asteroid destruction is reused. Camera zoom smoothly changes from 20 to 6.5 during containment, returning to 20 after scatter/escape/death. No new art or font assets.
 
 | Item | Value | Where |
 |---|---|---|
@@ -37,6 +37,8 @@ The current HUD already respects this: the kill counter sits at (220, 220), the 
 ---
 
 ## Two Coordinate Spaces
+
+P3 follow-up: `hitbox` and `stats` independently toggle world collision geometry and canvas diagnostics. Stats adds event phase, remaining seconds, live segment count, radius, orbital speed and automatic-trigger state; its expanded panel remains within the safe area. Console background opacity is 0.92 and dropdown opacity 0.95. The stats panel keeps its existing separate 0.25 opacity.
 
 P2 console suggestions: draw a separate vertical dropdown immediately below the input. Show six rows at most, a range/count, and a highlighted keyboard selection. Up/Down and PageUp/PageDown keep the selected row visible. All five shield choices fit together. Theme owns row count, dimensions and opacity; the maximum panel bottom remains inside the canvas safe area. Ctrl+Up/Down preserves command-history navigation.
 

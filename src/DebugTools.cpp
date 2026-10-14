@@ -18,7 +18,7 @@
 #include "Theme.hpp"
 
 namespace {
-    enum DebugCommand { DEBUG_HELP, DEBUG_HITBOX, DEBUG_MUTE, DEBUG_INVINCIBLE,
+    enum DebugCommand { DEBUG_HELP, DEBUG_HITBOX, DEBUG_STATS, DEBUG_MUTE, DEBUG_INVINCIBLE,
                         DEBUG_CREDITS, DEBUG_BOSS, DEBUG_WAVE, DEBUG_CLEAR, DEBUG_CLOSE, DEBUG_PLAYER, DEBUG_SPAWN };
     enum EquipmentCommand { EQUIP_BUILD, EQUIP_WEAPON, EQUIP_ENGINE, EQUIP_SHIELD };
     struct EquipmentInfo { const char* text; EquipmentCommand command; int value; };
@@ -54,6 +54,7 @@ namespace {
         CommandInfo{"player", DEBUG_PLAYER, false, true},
         CommandInfo{"spawn", DEBUG_SPAWN, false, true},
         CommandInfo{"hitbox", DEBUG_HITBOX, true, true},
+        CommandInfo{"stats", DEBUG_STATS, true, true},
         CommandInfo{"mute", DEBUG_MUTE, true, false},
         CommandInfo{"invincible", DEBUG_INVINCIBLE, true, true},
         CommandInfo{"credits", DEBUG_CREDITS, false, true},
@@ -90,6 +91,7 @@ namespace {
 void DebugTools::reset()
 {
     overlayVisible = false;
+    statsVisible = false;
     consoleVisible = false;
     inputCaptured = false;
     input.clear();
@@ -310,7 +312,7 @@ void DebugTools::execute(Player* player, BarricadeEvent* barricade)
         break;
     }
     case DEBUG_HELP:
-        addOutput("hitbox / mute / invincible [on|off|toggle]");
+        addOutput("hitbox / stats / mute / invincible [on|off|toggle]");
         addOutput("player: builds, weapons, engines and shields");
         addOutput("spawn lowlevel enemy <quantity>");
         addOutput("spawn barricade event");
@@ -319,7 +321,11 @@ void DebugTools::execute(Player* player, BarricadeEvent* barricade)
         break;
     case DEBUG_HITBOX:
         overlayVisible = toggleValue(overlayVisible);
-        addOutput(std::string("Hitboxes and diagnostics: ") + (overlayVisible ? "ON" : "OFF"));
+        addOutput(std::string("Hitboxes: ") + (overlayVisible ? "ON" : "OFF"));
+        break;
+    case DEBUG_STATS:
+        statsVisible = toggleValue(statsVisible);
+        addOutput(std::string("Stats and event diagnostics: ") + (statsVisible ? "ON" : "OFF"));
         break;
     case DEBUG_MUTE: {
         const bool muted = toggleValue(audioMuted);
@@ -353,7 +359,7 @@ void DebugTools::drawConsole() const
     if (!consoleVisible) return;
     const Font font = ResourceManager::GetInstance().GetFont(Theme::FONT_PRIMARY);
     const Rectangle panel = Theme::DEBUG_CONSOLE_PANEL;
-    DrawRectangleRec(panel, Fade(Theme::COLOR_PANEL, Theme::DEBUG_PANEL_OPACITY));
+    DrawRectangleRec(panel, Fade(Theme::COLOR_PANEL, Theme::DEBUG_CONSOLE_OPACITY));
     Vector2 cursor = {panel.x + Theme::DEBUG_PADDING, panel.y + Theme::DEBUG_PADDING};
     const float availableWidth = panel.width - Theme::DEBUG_PADDING * 2.0f;
     const auto drawLine = [&](std::string text, Color color, bool keepEnd = false) {
@@ -423,16 +429,16 @@ void DebugTools::drawWorld(const Player& player) const
     }
 }
 
-void DebugTools::drawOverlay(const Player& player, GameState state) const
+void DebugTools::drawOverlay(const Player& player, GameState state, const BarricadeEvent& barricade) const
 {
-    if (!overlayVisible && !player.isDebugInvincible()) return;
+    if (!statsVisible && !player.isDebugInvincible()) return;
 
     const Font font = ResourceManager::GetInstance().GetFont(Theme::FONT_PRIMARY);
     if (player.isDebugInvincible()) {
         DrawTextEx(font, "INVINCIBLE", Theme::DEBUG_INVINCIBLE_POSITION,
                    Theme::TEXT_CAPTION, Theme::TEXT_SPACING, Theme::COLOR_ACCENT);
     }
-    if (!overlayVisible) return;
+    if (!statsVisible) return;
 
     int playerBullets = 0;
     int enemyBullets = 0;
@@ -455,8 +461,18 @@ void DebugTools::drawOverlay(const Player& player, GameState state) const
         static_cast<int>(AsteroidManager::GetInstance().getAsteroids().size())));
     drawLine(TextFormat("Bullets: player %d | enemy %d", playerBullets, enemyBullets));
     drawLine(TextFormat("Invincibility: %s", player.isDebugInvincible() ? "ON" : "OFF"));
-    drawLine("Wave / phase / budget: unavailable");
+    const char* phase = barricade.isContaining() ? "CONTAINING" :
+        barricade.isActive() ? "SCATTERING" : "IDLE";
+    drawLine(TextFormat("Event: BARRICADE | %s", phase));
+    const float duration = barricade.isContaining() ? Balance::BARRICADE_DURATION :
+        Balance::BARRICADE_DURATION + Balance::BARRICADE_SCATTER_TIME;
+    drawLine(TextFormat("Remaining %.1fs | Segments %d/%d",
+        barricade.isActive() ? std::max(0.0f, duration - barricade.getElapsed()) : 0.0f,
+        barricade.getAliveSegments(), Balance::BARRICADE_SEGMENTS));
+    drawLine(TextFormat("Radius %.1f | Orbit %.1f deg/s", barricade.getRadius(),
+        barricade.isContaining() ? Balance::BARRICADE_ORBIT_SPEED : 0.0f));
+    drawLine(barricade.hasTriggeredAutomatically() ? "Automatic event: triggered this run" : "Automatic event: at 2:00 run time");
     drawLine(TextFormat("Audio: %s", GetMasterVolume() == 0.0f ? "MUTED" : "ON"));
-    drawLine("F5: console | hitbox off: hide diagnostics");
+    drawLine("F5: console | stats off: hide diagnostics");
 }
 #endif
