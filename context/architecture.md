@@ -1,0 +1,347 @@
+# Architecture
+
+How the game is put together: the runtime loop, scenes, coordinate systems, game states, collisions, singletons and rendering. The first half describes the **current** Space Ablaze code accurately. The second half describes the **target** design this sprint builds toward. When the two differ, the build plan says which item changes what.
+
+---
+
+## Stack
+
+| Layer | Choice | Notes |
+|---|---|---|
+| Language | C++20 (`CMAKE_CXX_STANDARD 20`) | The README says C++17; CMake says 20. CMake is authoritative |
+| Framework | Raylib 5.5 | Fetched by CMake `FetchContent` if not installed |
+| Math | `raymath.h` (ships with Raylib) | Vector2 helpers, Clamp, Lerp |
+| Build | CMake 3.11+ | `file(GLOB_RECURSE SOURCES "src/*.cpp")`: new `.cpp` files in `src/` are picked up after re-running the configure step |
+| Compilers | MinGW-w64 GCC, MSVC 2022, GCC/Clang | Windows is the demo platform |
+| Shaders | GLSL 330 fragment shaders | `assets/shaders/shader.fs` (CRT), `barrel_distortion.fs` (border) |
+| Persistence | Plain text file next to the executable | Leaderboard only |
+| Third-party code | None besides Raylib | Adding a library requires a decision in `progress-tracker.md` |
+
+---
+
+## Folder Structure
+
+The project keeps a **flat `src/` folder**. Moving files into subfolders would break every `#include "X.hpp"` and is not worth it during the sprint.
+
+```
+/
+├── AGENTS.md, CLAUDE.md         # AI entry point
+├── CMakeLists.txt
+├── build.bat                    # Windows convenience: build and run
+├── context/                     # These docs
+├── assets/
+│   ├── ASSETS.md                # Provenance for every asset (planned, item 02)
+│   ├── fonts/                   # PerfectDOSVGA437.ttf, 3270-Regular.ttf
+│   ├── shaders/                 # shader.fs, barrel_distortion.fs
+│   ├── sounds/                  # SFX and music
+│   └── textures/                # Sprite sheets, backgrounds, UI images
+└── src/
+    ├── main.cpp                 # Creates Application, calls Run()
+    ├── Application.*            # Window, render pipeline, scene loop
+    ├── Scene.hpp                # Abstract screen base
+    ├── LoadingScreen.*, MainMenu.*, Game.*            # Existing scenes
+    ├── Entity.hpp, Player.*, Enemy.*, LowLevelEnemy.*, MidLevelEnemy.*, Asteroid.*
+    ├── EnemyManager.*, AsteroidManager.*, BulletManager.*, Bullet.*
+    ├── ResourceManager.*, Animator.*, Animation.*
+    ├── Timer.* (Cooldown), GameTimer.*, KillCounter.*
+    ├── Card.*, Button.*, DamageIndicator*.*, DamageOverlay.*, GameOverOverlay.*
+    ├── ConfettiManager.*, ConfettiParticle.*, ExplosionConfetti*.*
+    ├── Utils.*                  # gameCamera global, augment pool (being replaced)
+    ├── SpatialGrid.*            # Exists, NOT used anywhere
+    ├── CollisionSystem.*        # Empty files; filled in item 06
+    └── Pause.*                  # Empty files; filled in item 07
+```
+
+Planned new files are listed in **Target Architecture** below and in `class-registry.md`.
+
+---
+
+## Runtime Overview
+
+```
+main()
+ └─ Application()                         constructor
+     ├─ InitWindow(1280x720, resizable), InitAudioDevice, SetTargetFPS(60)
+     ├─ LoadRenderTexture(3840x2160)      the virtual canvas
+     ├─ ResourceManager: LoadShaders, LoadFonts, LoadMusics, LoadSounds (synchronous)
+     └─ m_sceneFactory = { "LoadingScreen", "MainMenu", "Game" }  (each scene constructed ONCE)
+ └─ Application::Run()                    while (!WindowShouldClose())
+     ├─ map mouse to virtual coordinates (SetMouseOffset / SetMouseScale)
+     ├─ BeginTextureMode(m_target)
+     │    next = scenes[current]->update()       returns the next scene's name
+     │    if next != current: current->onExit(); next->onSwitch()
+     │    scenes[current]->draw()
+     ├─ CRT shader pass into targetFinal
+     ├─ border texture + barrel-distortion pass into borderTargetFinal
+     └─ BeginDrawing: draw both, letterboxed and scaled to the window; DrawFPS
+```
+
+Textures load on worker threads inside `LoadingScreen` (`ResourceManager::LoadTextures` decodes images on threads; `ProcessLoadedTextures` uploads them to the GPU on the main thread every frame until progress reaches 100%).
+
+### Virtual resolution and mouse
+
+- Everything draws into a **3840 x 2160** render texture (`GAME_SCREEN_WIDTH`, `GAME_SCREEN_HEIGHT`), which is then scaled to the window with letterboxing.
+- `Application::Run` calls `SetMouseOffset` and `SetMouseScale` every frame, so **`GetMousePosition()` already returns virtual-canvas coordinates**. UI hit tests (`Button`, `Card`) compare against 3840 x 2160 rectangles directly.
+- The window starts at 1280 x 720 and is resizable. Do not use `GetScreenWidth()` for layout; use the virtual constants.
+
+### Render pipeline
+
+1. Scene draws into `m_target` (3840 x 2160, cleared to black).
+2. `m_target` is drawn through the CRT shader (`shader.fs`: curvature, chromatic offset, scanlines, vignette, `time` uniform) into `targetFinal`.
+3. The `border` texture is drawn through the barrel-distortion shader into `borderTargetFinal`.
+4. Both are drawn to the window. Render textures are flipped (negative source height) as usual in Raylib.
+
+The CRT curvature crops and bends the outer edges. UI must stay inside the safe area defined in `ui-rules.md`.
+
+---
+
+## Scene System
+
+```cpp
+class Scene {
+    virtual std::string update() = 0;   // returns the scene name to show next frame
+    virtual void draw() = 0;
+    virtual void onSwitch() = 0;        // called when this scene becomes active
+    virtual void onExit() = 0;          // called when leaving
+};
+```
+
+Rules that follow from how `Application` works:
+
+- Scenes are created **once** at startup and reused. `onSwitch()` must fully reset the scene; the constructor runs only once.
+- Returning an unknown name logs an error and falls back to `"MainMenu"`. `MainMenu` currently returns `"Settings"` and `"Credits"`, which do not exist.
+- Scenes cannot pass data to each other through `update()`. The target design adds the `RunContext` singleton for this (selected mode, run seed, last run result).
+- **Switching to `"Game"` resets the run** (`Game::onSwitch`). Never use a scene switch for the dock shop, pause or game over; those are `GameState`s inside `Game`.
+
+Scene names (string keys): current `"LoadingScreen"`, `"MainMenu"`, `"Game"`. Planned: `"Intro"`, `"Ending"`, `"Leaderboard"`, `"Credits"`. Register each in `Application::Application()`.
+
+---
+
+## World Scale and Coordinates
+
+There are two coordinate spaces. Mixing them is the most common bug.
+
+| Space | Used inside | Units | Example |
+|---|---|---|---|
+| **Screen (virtual)** | After `EndMode2D()` in `draw()` | Virtual pixels, 3840 x 2160 | HUD, cards, buttons, overlays |
+| **World** | Between `BeginMode2D(utils::gameCamera)` and `EndMode2D()` | World units | Player, enemies, bullets, scrap, dock |
+
+The gameplay camera zoom is **20** (it starts at 150 and eases down to 20 at the start of a run). One world unit is 20 virtual pixels, so the visible area is about **192 x 108 world units** (96 x 54 from the center to the edges).
+
+| Quantity | Current value (world units) | Where |
+|---|---|---|
+| Player sprite | 8 x 8 (hitbox width 4) | `Player::init` |
+| Low and mid enemy sprite | 15 x 15 (hitbox width ~4.3) | Enemy constructors |
+| Asteroid draw size | 15, 25 or 30 | `Asteroid` (`size * 10`) |
+| Bullet draw size | player 8 x 5, enemy 8 x 8 | `Bullet::draw` |
+| Player speed | 50 units/s, acceleration 400 | `Player.cpp` defines |
+| Player bullet speed | 200 units/s | `Bullet` default |
+| Enemy spawn ring | 150 from the player (just off screen) | `EnemyManager::spawnEnemy` |
+| Enemy despawn distance | 1000 from the player | `EnemyManager.cpp` |
+| Bullet despawn distance | 150 from the player | `BulletManager.hpp` |
+| Asteroid spawn and despawn | 150 from the player | `Asteroid.cpp`, `AsteroidManager.cpp` |
+| Damage number font | 4 units | `DamageIndicator` |
+
+Convert between spaces with `GetScreenToWorld2D(screenPos, utils::gameCamera)` and `GetWorldToScreen2D(worldPos, utils::gameCamera)`. The off-screen dock arrow is drawn in screen space from the dock's world position converted with `GetWorldToScreen2D`.
+
+`utils::gameCamera` (in `Utils.cpp`) is a global `Camera2D`. `Player::update` uses it to convert the mouse to a world position for aiming.
+
+---
+
+## Current Game Loop (Space Ablaze)
+
+`Game::update()` switches on `GameState`:
+
+| State | What happens |
+|---|---|
+| `GAME_RUNNING` | Every 20 s of game time, show 3 augment cards. Ease camera zoom. Update player, bullets, damage numbers, confetti, damage overlay. Camera follows the player with velocity lead. Bullet collisions. Asteroids update. Enemies update and spawn. Entity collisions. Kill counter update |
+| `GAME_AUGMENT_SELECTION` | Game timer paused. Cards animate; the clicked card's **title string** decides which `Player::increase*()` runs |
+| `GAME_PAUSED` | Toggled with P. Nothing updates; no pause UI is drawn |
+| `GAME_OVER` | Explosion confetti, overlay slide-in, game-over text animation, Restart and Main Menu buttons |
+
+Spawning (`EnemyManager::update`) is a **continuous trickle**, not waves: the spawn cooldown shrinks from 1.25 s to 0.025 s over 250 s, 1 to 3 enemies per spawn, and mid-level enemies appear after 150 s with a chance rising toward 40%. Asteroids follow a similar ramp.
+
+### Current collision matrix
+
+All checks are circle-versus-point: `Vector2Distance(a, b) <= radius`, where the radius is the **target's** size value (`hitbox.width` for ships, `getAsteroidSize()` for asteroids). Bullets are points. The loops are brute force in `Game::update`; `CollisionSystem` and `SpatialGrid` are not used.
+
+| A | B | Result |
+|---|---|---|
+| Player bullet | Enemy | Random damage 7 to 12, optional knockback, damage number, pierce count decreases; on kill: score (low 10, mid 50), kill counter, sound, enemy removed |
+| Player bullet | Asteroid | Asteroid removed, score 5 (only if the bullet did not hit an enemy this frame) |
+| Enemy bullet | Player | 10 damage if player is in `PLAYER_DEFAULT`; bullet removed |
+| Enemy bullet | Asteroid | Both removed |
+| Enemy | Player | 10 damage; **the enemy is removed** (kamikaze) |
+| Enemy | Asteroid | Both removed |
+| Player | Asteroid | 10 damage; asteroid removed |
+| Asteroid | Asteroid | Both removed |
+
+`Player::takeDamage` always subtracts 10, stuns for 0.2 s, then gives invincibility frames (0.8 s, flashing red). The health bar assumes a maximum of 100.
+
+---
+
+## Target Architecture
+
+### New and changed classes (summary)
+
+| Class | Kind | Replaces or extends |
+|---|---|---|
+| `Config.hpp` | constants | Duplicated `#define`s (`GAME_SCREEN_WIDTH` is defined in `Scene.hpp`, `Player.cpp` and `Application.cpp`) |
+| `Theme.hpp` | constants | Inline colors and font sizes |
+| `Balance.hpp` | constants | Inline gameplay numbers |
+| `RunContext` | singleton | Data passed between scenes: mode, seed, last result |
+| `RunRng` | value class | Seeded `std::mt19937` for wave composition |
+| `WaveDirector` | class owned by `Game` | The time-based spawn ramp in `EnemyManager::update` |
+| `CollisionSystem` | class owned by `Game` | Collision loops inside `Game::update` |
+| `HUD` | class owned by `Game` | HUD drawing inside `Game::draw` |
+| `PlayerStats` | struct inside `Player` | Loose stat fields; adds max HP, armor, magnet, cargo |
+| `Augment` | enum + table + `applyAugment()` | `utils::augmentPool` and the string if-chain |
+| `GearUpgrade`, `UpgradeShop` | data + logic | New |
+| `DockShopUI` | UI class owned by `Game` | New |
+| `ScrapPickup`, `ScrapManager` | entity + singleton | New |
+| `Dock` | entity owned by `Game` | New |
+| `HighLevelEnemy` | `Enemy` subclass | New (the `HIGH_LEVEL_ENEMY` enum value already exists) |
+| `Boss`, `HoarderBoss`, `CoreBoss` | `Enemy` subclasses | New (`BOSS_LEVEL_ENEMY` enum value already exists) |
+| `Cutscene`, `IntroCutscene`, `EndingCutscene` | `Scene` subclasses | New |
+| `Leaderboard`, `LeaderboardScene`, `NameEntry` | data + scene + UI | New |
+| `CreditsScene` | `Scene` | New |
+| `PauseOverlay` | UI class | Fills the empty `Pause.*` files |
+| `DebugTools` | class owned by `Game` | New, debug builds only |
+
+### Game states (target)
+
+`GameState` gains two values. Only `Game` changes `gameState`.
+
+```
+                    ┌──────────────────── P / Esc ───────────────────┐
+                    v                                                 │
+              GAME_PAUSED ─── resume ──> (previous state)             │
+                                                                      │
+ onSwitch ──> GAME_RUNNING ──(wave cleared)──> GAME_AUGMENT_SELECTION │
+                 ^   │                               │ card picked    │
+                 │   │                               v                │
+                 │   │                    GAME_RUNNING (return phase) ┘
+                 │   │                               │ player enters dock radius
+                 │   │                               v
+                 │   │                          GAME_DOCKED  (shop; launch button)
+                 │   │                               │ launch
+                 │   └───────────────────────────────┘ next wave
+                 │
+                 ├──(player HP <= 0)──> GAME_OVER ──> restart (resetRun) / main menu
+                 └──(story final boss dead)──> GAME_VICTORY ──(3 s)──> scene "Ending"
+```
+
+### Wave phases (owned by `WaveDirector`)
+
+`GAME_RUNNING` covers several wave phases. `Game` asks `WaveDirector` for the phase and reacts.
+
+| Phase | Spawning | Ends when | Then |
+|---|---|---|---|
+| `WAVE_LAUNCH` | None. Banner "WAVE N" for 2.5 s | Timer ends | `WAVE_ACTIVE` or `WAVE_BOSS` |
+| `WAVE_ACTIVE` | Spends the wave's point budget in groups at a fixed interval, respecting the alive cap | Budget spent and all wave enemies dead | `WAVE_CLEARED` |
+| `WAVE_BOSS` | Spawns the boss once; the boss may spawn adds | Boss dead | `WAVE_CLEARED` (or victory if it was the final boss in Story) |
+| `WAVE_CLEARED` | None | Same frame | `Game` enters `GAME_AUGMENT_SELECTION` |
+| `WAVE_RETURN` | None (debris may still drift) | Player is inside the dock radius | `Game` enters `GAME_DOCKED` |
+
+Run start: the player spawns at the dock and the director starts at wave 1, `WAVE_LAUNCH`. The first dock visit happens after wave 1.
+
+### Frame order inside `Game::update` (target, `GAME_RUNNING`)
+
+1. Debug keys (debug builds only)
+2. Camera zoom ease
+3. `player.update()`
+4. `waveDirector.update(dt, player)` — may spawn enemies
+5. `EnemyManager::update(playerPos)` — movement and firing only, no spawning
+6. `AsteroidManager::update(...)`, `BulletManager::update(...)`, `ScrapManager::update(playerPos, magnetRadius)`
+7. `CollisionSystem::run(...)` returns a `CollisionReport` (kills, scrap collected, damage taken, player died, killer info)
+8. `Game` applies the report: score, kill counter, sounds, game over or boss-dead transitions
+9. Wave phase reactions: augment selection on clear, docking check during `WAVE_RETURN`
+10. Effects updates (damage numbers, overlays), camera follow, `HUD::update`
+
+### Frame order inside `Game::draw` (target)
+
+```
+BeginMode2D(utils::gameCamera)
+  parallax background
+  dock
+  scrap pickups
+  debris (asteroids)
+  bullets
+  Animator::Update() then Animator::Draw()   // ships, enemies, bosses, explosions (ONE update per frame)
+  damage numbers, world-space telegraphs (boss rings), explosion confetti
+  debug overlay (hitboxes) when F1 is on
+EndMode2D()
+HUD (health, cargo, credits, wave, timer, boss bar, dock arrow, tutorial prompts)
+State overlays: augment cards | dock shop | pause | game over | victory fade
+```
+
+`Animator::Draw()` iterates an `unordered_map`, so the order **between** animated objects is undefined. If a boss must draw above enemies, draw its sprite directly in `Boss::draw()` instead of registering it with the Animator, or add a layer field to the Animator (decision recorded in `progress-tracker.md`).
+
+### Collision matrix (target additions)
+
+| A | B | Result |
+|---|---|---|
+| Player | Scrap pickup | Added to cargo if there is room; pickup removed |
+| Player | Dock (during `WAVE_RETURN` only) | `GAME_DOCKED` |
+| Enemy (non-boss) | Player | Player takes the enemy's `contactDamage`; enemy removed (kept from Space Ablaze) |
+| Boss | Player | Player takes the boss's `contactDamage` and is knocked back; **the boss is not removed** |
+| Player bullet | Boss | Damage; no knockback on bosses |
+| Any enemy killed | | `ScrapManager::spawnScrap(position, scrapValue)` |
+| Debris killed by the player | | Small scrap drop |
+
+`Player::takeDamage` gains an `amount` parameter. Armor upgrades reduce it; the minimum is 1.
+
+### Run reset protocol
+
+`Game::onSwitch()` and `Game::restartGame()` currently repeat the same reset list. The target design has one function:
+
+```cpp
+void Game::resetRun();   // called by onSwitch() and restart
+```
+
+It resets, in order: every run singleton (`EnemyManager`, `AsteroidManager`, `BulletManager`, `ScrapManager`, `DamageIndicatorManager`, `ConfettiManager`, `ExplosionConfettiManager`, `GameOverOverlay`, `DamageOverlay`), the `Animator` run animations, `player.init()`, `waveDirector.reset(seed, mode)`, `UpgradeShop` levels, credits, cargo, kill counter, game timer, camera. **Any new singleton holding run state must be added here.**
+
+### Dependency rules
+
+| Code | May use | Must not use |
+|---|---|---|
+| Entities (`Player`, `Enemy` and subclasses, `Asteroid`, `ScrapPickup`, `Dock`) | `ResourceManager`, `Animator`, `BulletManager` (to fire), `Timer`, `Config`/`Balance`/`Theme`, `utils::gameCamera` | `Game`, scenes, `HUD`, other managers' internals |
+| Managers (`EnemyManager`, `ScrapManager`, ...) | Their entity classes, `ResourceManager`, `Animator` | `Game`, `HUD` |
+| `WaveDirector` | `EnemyManager` spawn API, `RunRng`, `Balance` | Drawing, sounds, `GameState` |
+| `CollisionSystem` | Managers, `Player`, `Dock` | Sounds, UI, `GameState` (it reports; `Game` decides) |
+| `HUD`, `DockShopUI`, `PauseOverlay` | Read-only access to `Player`, `WaveDirector`, run data; `Theme` | Mutating gameplay state (the shop calls `UpgradeShop`, which mutates) |
+| `Game` | Everything above | Other scenes' internals |
+| Scenes | `RunContext`, their own UI | Each other |
+
+### Randomness and fairness
+
+- Wave composition, spawn angles and boss attack choices use `RunRng`, seeded from `RunContext` at run start (fixed seed per mode, in `Balance.hpp`). Two players see the same waves.
+- Visual randomness (confetti, damage-number jitter, enemy sprite variant) may keep using Raylib's `GetRandomValue`, because it does not affect fairness.
+- The current augment code uses `rand()`; the target uses `RunRng`, so augment offers are also deterministic per seed. Record the decision if the team prefers random offers.
+
+### Persistence
+
+`Leaderboard` reads and writes `leaderboard.txt` next to the executable, one entry per line:
+
+```
+mode,name,score,waves,seconds
+story,DANDEE,48210,10,812
+endless,ANNE,63150,17,1104
+```
+
+Names are 3 to 12 characters, A-Z, 0-9 and space only (no commas). The file is created on first save. A missing or malformed line is skipped with a `TraceLog(LOG_WARNING, ...)`. Keep the top 10 per mode.
+
+### Debug tools (debug builds only)
+
+Compiled only when CMake is configured with `-DGAME_DEBUG=ON` (adds the `GAME_DEBUG` define). Owned by `Game` through `DebugTools`.
+
+| Key | Action |
+|---|---|
+| F1 | Toggle overlay: hitbox circles, entity IDs, alive counts, wave phase, budget left, FPS |
+| F2 | Kill every non-boss enemy (clears the wave) |
+| F3 | Add 500 credits and fill cargo |
+| F4 | Skip to the next boss wave |
+| F5 | Toggle player invincibility |
+| F6 | Advance one wave |
+
+These keys exist to test items quickly and to record clean footage for the trailer. They must not exist in the submitted build.
