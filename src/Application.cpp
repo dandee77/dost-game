@@ -83,8 +83,26 @@ void Application::Run()
     SetTextureFilter(borderTarget.texture, TEXTURE_FILTER_BILINEAR);
     SetTextureFilter(borderTargetFinal.texture, TEXTURE_FILTER_BILINEAR);
 
+#ifdef GAME_DEBUG
+    // Audio is a session preference: keep it across scene changes and run restarts.
+    bool debugAudioMuted = false;
+    float volumeBeforeMute = GetMasterVolume();
+#endif
+
     while (!WindowShouldClose())
     {
+#ifdef GAME_DEBUG
+        if (IsKeyPressed(KEY_F2)) {
+            if (debugAudioMuted) {
+                SetMasterVolume(volumeBeforeMute);
+            } else {
+                volumeBeforeMute = GetMasterVolume();
+                SetMasterVolume(0.0f);
+            }
+            debugAudioMuted = !debugAudioMuted;
+            TraceLog(LOG_INFO, "[Application::Run] Audio %s", debugAudioMuted ? "muted" : "restored");
+        }
+#endif
 
         float time = GetTime();
         float resolution[2] = { (float)screenWidth, (float)screenHeight };

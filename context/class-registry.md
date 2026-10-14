@@ -107,6 +107,7 @@ All use the same pattern: `static X& GetInstance()` with a function-local static
   - Creates every scene once in `m_sceneFactory` (a `std::map<std::string, std::shared_ptr<Scene>>`). New scenes must be added there.
   - Defines its own `screenWidth = 3840`, `screenHeight = 2160` constants; replace with `Config.hpp` in item 03.
   - Calls `DrawFPS` on the real window (outside the CRT pass) only with `GAME_DEBUG`; coordinates come from `Theme`.
+  - Debug-only F2 handling lives in `Run()` before scene updates. Local session state remembers mute and the previous master volume, so music and effects stay muted across menus and restarts; unmuting restores that level. No new public API.
   - `SetExitKey(KEY_NULL)`: Esc does not close the window, so Esc is free for pause.
 - Changed by: 04; planned: 03, 20, 24, 25
 
@@ -550,7 +551,7 @@ All use the same pattern: `static X& GetInstance()` with a function-local static
 - Owned by: `Game`
 - Public API: `void reset()`, `void update(Player& player)`, `void drawWorld(const Player& player) const`, `void drawOverlay(const Player& player, GameState state) const`
 - Uses: `Player`, read-only iteration over existing enemy/asteroid/bullet containers, `ResourceManager`, `Theme`
-- Behavior: compiled only with `GAME_DEBUG`. F1 toggles collision circles, IDs, bullet point markers, entity counts, HP, FPS and `GameState`. F5 toggles `Player`'s debug invincibility; its indicator stays visible even with F1 off. F2/F3/F4/F6 display pending-system explanations until items 11/12/17.
+- Behavior: compiled only with `GAME_DEBUG`. F1 toggles collision circles, translucent IDs/panel/text, bullet point markers, entity counts, HP, FPS and `GameState`; its F2 row reads master audio status. `Application` owns the global F2 mute toggle. F5 toggles `Player`'s debug invincibility; its indicator stays visible even with F1 off. F3/F4/F6 display pending-system explanations until items 11/12/17.
 - Gotchas: ship collision radius is `getHitbox().width`, asteroid radius is `getAsteroidSize()`, bullets are points. Call `drawWorld` inside the gameplay camera and `drawOverlay` in canvas space. `reset()` clears overlay/message; `Player::init()` separately resets invincibility. When item 05 introduces `Game::resetRun()`, move both existing reset paths there. Wave phase/budget and magnet radius remain unavailable until their systems exist.
 - Changed by: 04
 

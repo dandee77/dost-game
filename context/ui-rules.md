@@ -82,6 +82,8 @@ Item 04 adds `Theme::DEBUG_TEXT_WORLD_ID = 2` world units for compact debug enti
 
 ## Colors
 
+F1 debug text (including world entity IDs) uses `Theme::DEBUG_TEXT_OPACITY = 0.55`; its panel uses `Theme::DEBUG_PANEL_OPACITY = 0.25`. This keeps gameplay visible under the diagnostics. Collision outlines and the F5 invincibility indicator retain their normal opacity. The F2 row reports master audio as ON or MUTED.
+
 Semantic colors make the action readable in a 3-second glance and in a trailer.
 
 | Token | Value | Meaning | Use only for |

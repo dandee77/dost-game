@@ -202,6 +202,8 @@ while (ch > 0) {
 
 ### Audio
 
+`GetMasterVolume()` and `SetMasterVolume(float)` are available in the installed Raylib 5.5 header and verified against official Raylib docs through Context7. Master volume applies to all music and sound effects, including active playback. For the debug F2 toggle, save the current master volume, set it to `0.0f`, then restore the saved value on the next press; do not stop/restart each sound or change its individual volume. Handle this once per frame in `Application` so every scene shares the same mute state.
+
 ```cpp
 // Overlapping instances of one sound (gunfire, kills): aliases share the sample data
 Sound base = ResourceManager::GetInstance().GetSound("player_shoot");

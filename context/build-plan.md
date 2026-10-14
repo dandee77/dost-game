@@ -98,7 +98,7 @@ A1 ─> A2..A9 ─> 15, 26
 **Owner:** Programmer 3. **Date:** 15 Oct. **Depends on:** 03.
 
 - `GAME_DEBUG` CMake option; `DebugTools` class owned by `Game`.
-- F1 overlay (hitbox circles, entity counts, FPS, current `GameState`), F5 invincibility. F2, F3, F4, F6 are stubbed and connected when their systems exist (items 11, 12, 17).
+- F1 translucent overlay (hitbox circles, entity counts, FPS, current `GameState`), F2 master audio mute/unmute, F5 invincibility. F3, F4, F6 are stubbed and connected when their systems exist (items 11, 12, 17). F2 is handled by `Application` so it also works in menus; user requested this replacement for clear-wave on 14 October.
 - `Application`'s `DrawFPS` only in debug builds.
 
 **Done when:** debug build shows the overlay; release build has no debug keys or FPS counter.
@@ -187,7 +187,7 @@ A1 ─> A2..A9 ─> 15, 26
 - Debris spawning follows the wave's `debris` flag and stops outside `WAVE_ACTIVE`.
 - Wave banner and wave label in `HUD`.
 - On `WAVE_CLEARED`, `Game` opens the augment cards (replacing the 20-second timer). After the pick, the director enters `WAVE_RETURN`; until item 13 exists, `WAVE_RETURN` immediately starts the next wave.
-- Debug: F2 (clear wave), F6 (advance wave).
+- Debug: F6 (advance wave). F2 is reserved for master audio mute/unmute (user request, 14 October); no clear-wave shortcut is currently assigned.
 
 **Done when:** waves 1 to 4 play in order with banners and augment picks between them; the same seed produces the same waves.
 **Test:** play waves 1 to 3 twice with the same seed; enemy counts per wave match (F1 overlay).

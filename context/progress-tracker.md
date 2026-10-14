@@ -8,6 +8,7 @@ Update this file after every completed build-plan item. Anyone reading it (teamm
 
 **Phase:** 0 (Foundation)
 **Last completed:** Item 04 debug tools (14 October 2026, branch `feat/04-debug-tools`); Debug ON and Release OFF builds and in-game smoke checks passed
+**Item 04 follow-up:** F1 text/IDs at 55% opacity, panel at 25%; F2 now toggles all audio in every scene and restores the prior volume (user request, 14 October)
 **In progress:** Item 01 (eligibility, other team machine builds, and full gameplay/restart checks pending)
 **Next:** Item 01 (eligibility question, repository, build on every machine) and item 02 (asset provenance)
 **Blocked:** Open Question 1 (may Space Ablaze code be reused under rule 7?) must be answered before the team depends on the old code for the final submission
@@ -140,6 +141,8 @@ Fill in during item 01.
 
 ## Open Questions
 
+Resolved instruction change (14 October): the user's F2 mute request supersedes the earlier clear-wave assignment in the architecture/build plan. Those documents now reserve F2 for audio; item 11 keeps F6 for advancing waves.
+
 | # | Question | Owner | Needed by | Answer |
 |---|---|---|---|---|
 | Q1 | The Space Ablaze main menu says "Equity Quest - 2024". Was it entered in a competition or published? If yes, rule 7 forbids its code ("code from previously published or submitted games in any other competition"). Ask the organizers in writing before relying on it. If the answer is no, the team may need to rewrite on a fresh codebase, using Space Ablaze only as a design reference | Producer | 16 Oct | |
@@ -178,6 +181,7 @@ Required for Form 03 (Asset and AI Usage Disclosure). Organizers may request pro
 | 2026-10-14 | 01 (baseline import and local build) | Codex (OpenAI) | Import Space Ablaze with history, resolve README, fix ignore patterns and MSVC build compatibility, verify build and launch, update documentation | Moderate | Team review pending |
 | 2026-10-14 | 01 (local build launcher) | Codex (OpenAI) | Repair build.bat, install a local build command in the existing user PATH, and verify compilation and game launch | Minimal | Team review pending |
 | 2026-10-14 | 04 | Codex (OpenAI, GPT-6) | Implement debug overlay and invincibility, build gating and launcher, verify Raylib docs with Context7, compile Debug/Release and exercise actual key events in a temporary native integration harness; update context files | Moderate | Team review pending |
+| 2026-10-14 | 04 follow-up | Codex (OpenAI, GPT-6) | Reduce debug text/panel opacity, replace F2 placeholder with session-wide master mute/unmute, update key contracts and validate builds/audio handling | Minimal | Team review pending |
 
 Asset generation is logged per file in `assets/ASSETS.md`.
 
@@ -201,6 +205,7 @@ Asset generation is logged per file in `assets/ASSETS.md`.
 
 ## Notes
 
+- 14 Oct, item 04 opacity/audio follow-up: Debug ON and Release OFF builds passed without new warnings. A temporary harness ran the actual `Application` loop with native key events: F2 muted on the menu, remained muted entering gameplay, restored a non-default master volume of 0.37, and toggled correctly while paused. Release ignored F1/F2 and kept its original volume. Inspected the F1 screenshot after the complete CRT pass (`build/debug-transparency.png`); text and panel allow the background/gameplay to show through. The initial harness timing missed events during asset initialization; rerunning with sufficient loading/scene-entry time passed all checks.
 - 14 Oct, item 04 follow-up QA: the native harness drove the real bullet-collision/game-over path, enabled F5 on game over, then clicked the actual Restart button. F1 was reset; reopening it showed `GAME_RUNNING`, HP 100, invincibility OFF and cleared enemies/bullets. Both full application executables also launched responsively and closed normally (exit 0). Release object inspection confirmed no `DrawFPS` reference in `Application` and no debug indicator text in the executable.
 - 14 Oct, item 04: MSVC Debug with `GAME_DEBUG=ON` and a fresh Release configure with `GAME_DEBUG=OFF` both built without compiler warnings (only the existing Raylib CMake deprecation notice). Temporary integration harness under ignored `build/` used actual Raylib rendering and Windows key events: F1 on/off with 35 real enemies, player/enemy bullet counts, F2/F3/F4/F6 explanations, F1 while paused, new-run overlay reset, F5 on/off, no health loss/stun/knockback while invincible, normal damage afterward, and `Player::init()` resetting invincibility. Disabled-build harness confirmed F1-F6 do not show debug UI. Screenshots and logs remain in `build/` for local review. This is a functional smoke test, not the item 28 sustained FPS benchmark; manual full gameplay/restart QA remains part of item 01.
 - 14 Oct, item 04: `Game::resetRun()` does not exist yet. Debug state is reset in both current paths (`onSwitch()` and `restartGame()`); consolidate in item 05. The F1 radius revealed an inaccurate architecture note: player collision uses width 8, not 4; corrected the note without changing gameplay. F5 leaves existing collision removal behavior intact.

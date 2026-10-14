@@ -25,7 +25,7 @@ namespace {
     {
         DrawCircleLinesV(position, radius, color);
         DrawTextEx(font, id, Vector2{position.x + radius, position.y},
-                   Theme::DEBUG_TEXT_WORLD_ID, Theme::TEXT_SPACING, color);
+                   Theme::DEBUG_TEXT_WORLD_ID, Theme::TEXT_SPACING, Fade(color, Theme::DEBUG_TEXT_OPACITY));
     }
 }
 
@@ -47,11 +47,6 @@ void DebugTools::update(Player& player)
     }
 
     // These hooks become gameplay actions in items 11, 12 and 17.
-    if (IsKeyPressed(KEY_F2)) {
-        statusMessage = "F2 unavailable: waves (item 11)";
-        overlayVisible = true;
-        TraceLog(LOG_INFO, "[DebugTools::update] %s", statusMessage);
-    }
     if (IsKeyPressed(KEY_F3)) {
         statusMessage = "F3 unavailable: scrap (item 12)";
         overlayVisible = true;
@@ -110,10 +105,11 @@ void DebugTools::drawOverlay(const Player& player, GameState state) const
         else ++playerBullets;
     }
 
-    DrawRectangleRec(Theme::DEBUG_PANEL, Theme::COLOR_PANEL);
+    DrawRectangleRec(Theme::DEBUG_PANEL, Fade(Theme::COLOR_PANEL, Theme::DEBUG_PANEL_OPACITY));
     Vector2 cursor = {Theme::DEBUG_PANEL.x + Theme::DEBUG_PADDING, Theme::DEBUG_PANEL.y + Theme::DEBUG_PADDING};
     const auto drawLine = [&](const char* text) {
-        DrawTextEx(font, text, cursor, Theme::TEXT_CAPTION, Theme::TEXT_SPACING, Theme::COLOR_TEXT);
+        DrawTextEx(font, text, cursor, Theme::TEXT_CAPTION, Theme::TEXT_SPACING,
+                   Fade(Theme::COLOR_TEXT, Theme::DEBUG_TEXT_OPACITY));
         cursor.y += Theme::DEBUG_LINE_HEIGHT;
     };
     drawLine(TextFormat("DEBUG | FPS %d | HP %d", GetFPS(), player.getHealth()));
@@ -124,7 +120,7 @@ void DebugTools::drawOverlay(const Player& player, GameState state) const
     drawLine(TextFormat("Bullets: player %d | enemy %d", playerBullets, enemyBullets));
     drawLine(TextFormat("F5 Invincibility: %s", player.isDebugInvincible() ? "ON" : "OFF"));
     drawLine("Wave / phase / budget: unavailable");
-    drawLine("F2 Clear wave: pending waves");
+    drawLine(TextFormat("F2 Audio: %s", GetMasterVolume() == 0.0f ? "MUTED" : "ON"));
     drawLine("F3 Credits / cargo: pending scrap");
     drawLine("F4 Next boss: pending bosses");
     drawLine("F6 Next wave: pending waves");

@@ -337,14 +337,14 @@ Compiled only when CMake is configured with `-DGAME_DEBUG=ON` (adds the `GAME_DE
 
 Item 04 implemented on 14 October: F1 shows collision circles, entity IDs, bullet point markers, enemy/asteroid/bullet counts, HP, FPS and the current `GameState`. F5 blocks damage and its side effects at `Player::takeDamage`; a visible indicator remains when F1 is off. Both toggles reset on restart and new runs through the existing reset paths. Debug input is handled in every game state, including pause and augment selection; F5 does not revive a dead player.
 
-The table below is the final target. F2/F3/F4/F6 currently show an unavailable explanation without changing gameplay: connect F2/F6 in item 11, F3 in item 12 and F4 in item 17. Wave phase/budget and magnet radius cannot be displayed until those systems exist. No planned wave/economy behavior is simulated by the stubs.
+F2 now toggles master audio mute/unmute at the user's request (14 October), replacing the planned clear-wave key. `Application::Run()` handles F2 before scene updates so it works in menus, gameplay and pause; the previous master volume is restored when unmuted. Mute persists across scene changes and run restarts as a session preference. F1 text/IDs use 55% opacity and its panel 25% to keep the world visible. F3/F4/F6 currently show an unavailable explanation: connect F6 in item 11, F3 in item 12 and F4 in item 17. Wave phase/budget and magnet radius remain unavailable until those systems exist.
 
 The CMake option defaults to OFF. The local Windows `build.bat` explicitly enables it; direct CMake release builds should use `-DGAME_DEBUG=OFF`. This removes debug input, invincibility state, overlays and the application's FPS counter at compile time.
 
 | Key | Action |
 |---|---|
 | F1 | Toggle overlay: hitbox circles, entity IDs, alive counts, wave phase, budget left, FPS |
-| F2 | Kill every non-boss enemy (clears the wave) |
+| F2 | Toggle all audio mute/unmute (music and sound effects, all scenes) |
 | F3 | Add 500 credits and fill cargo |
 | F4 | Skip to the next boss wave |
 | F5 | Toggle player invincibility |
