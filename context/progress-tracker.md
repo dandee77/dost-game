@@ -6,7 +6,9 @@ Update this file after every completed build-plan item. Anyone reading it (teamm
 
 ## Current Status
 
-**P1 follow-up:** Restored the original ship and original bullet as Default on new runs/restarts and `player default build`. The modular baseline is now `player starter build`, with help/autocomplete and native switch/reset/render checks. Debug/Release builds passed without new warnings; 132 debug and 112 release equipment checks passed, along with spatial-grid parity. Rendered Default and Starter presets inspected side by side.
+**P1 Gunner/shield follow-up:** Renamed the modular baseline to `player gunner build`, including help/autocomplete. All six presets now select no shield and clear shield charge, recharge delay and guard timers. Original Default art/bullets remain unchanged. Shields use separate supplied asset layers and remain available through explicit `player shield ...` commands for testing; future skill integration is deferred. Debug/Release builds passed without new warnings; 186 debug and 160 release equipment checks plus 600,000 spatial-grid parity queries passed. Inspected the native six-preset/four-hull-state render: no preset shield overlays. No asset files changed.
+
+**Earlier P1 default restoration:** Restored the original ship and original bullet as Default on new runs/restarts and `player default build`. The modular baseline was initially named Starter (now Gunner). Debug/Release builds passed without new warnings; 132 debug and 112 release equipment checks passed, along with spatial-grid parity. Rendered original and modular presets inspected side by side.
 
 **P1 user-requested equipment completed (14 October):** four weapons, four engines, four shields and hull damage art; five debug presets plus component commands, actual swept/beam/splash collision and damage, paused timers and reset cleanup. All 66 supplied files preserved; 28 runtime textures registered; todo removed. Debug ON: 124 native checks. Release OFF: 106 native checks plus 600,000 spatial-grid parity queries. Both builds pass without new compiler warnings; native preset/hull and laser render previews inspected. Both packaged executables launched from their asset directories, responded and exited cleanly (code 0). The existing 480-frame collision regression and actual Restart-button checks also passed.
 
@@ -148,7 +150,7 @@ Fill in during item 01.
 
 ## Open Questions
 
-Resolved P1 default correction: the user requested the pre-equipment player remain the default. Original ship/bullets are restored; the new baseline is named Starter. This supersedes the initial P1 default choice.
+Resolved P1 default correction: the user requested the pre-equipment player remain the default. Original ship/bullets are restored; the new baseline is named Gunner, superseding its initial Starter label. The user also requested shields be separate from weapon builds for future skill use: every preset is now shield-free, with shield prototypes accessible only through explicit component selection. This supersedes the initial P1 preset shield combinations.
 
 Resolved P1 scope instruction (14 October): user explicitly requested implementation of the supplied equipment pack now, debug commands only and no access conditions. This supersedes item ordering and the original post-submission extra-gear limit for P1 only. The supplied CC0 art/provenance also supersedes the original-only art wording and palette for these prototypes; originals remain byte-for-byte preserved. No shop/unlock/loot system was added. Balance remains prototype tuning, not a claim of competitive balance.
 
@@ -199,6 +201,7 @@ Required for Form 03 (Asset and AI Usage Disclosure). Organizers may request pro
 | 2026-10-14 | 04 F5 console follow-up | Codex (OpenAI, GPT-6) | Extend DebugTools with command parsing, autocomplete/history and translucent console; migrate hotkeys, protect underlying input and run timer, verify Raylib input with Context7/find-docs, run Debug/Release builds and native input/application smoke tests, update docs | Moderate | Team review pending |
 | 2026-10-14 | P1 player equipment prototypes | Codex (OpenAI, GPT-6) | Inspect/organize 66 supplied CC0 files; implement weapon damage, swept collisions, beam tick timing, rocket splash, engines, directional shields, cooldown skills and F5 presets; verify Raylib drawing via find-docs/Context7; native Debug/Release tests, rendered previews, docs and provenance | Heavy | Team review pending |
 | 2026-10-14 | P1 default restoration | Codex (OpenAI, GPT-6) | Restore original ship art/size/animation and bullet behavior, name modular baseline Starter, update console completion, native tests and project docs | Moderate | Team review pending |
+| 2026-10-14 | P1 Gunner and separate shields | Codex (OpenAI, GPT-6) | Rename modular baseline Gunner, remove automatic shields from all presets, verify active/passive shield cleanup and explicit shield commands, run Debug/Release builds and native tests, inspect shield-free renders, update project docs | Moderate | Team review pending |
 
 Asset generation is logged per file in `assets/ASSETS.md`.
 

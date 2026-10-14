@@ -90,13 +90,30 @@ int main(int argc, char** argv)
         near(Vector2Distance(bm.getBullets().front().getPosition(), player.getPosition()), 0.0f,
             "Original bullet spawns at the original ship position");
         bm.reset();
-        player.setBuild(BUILD_STARTER);
+        player.setBuild(BUILD_GUNNER);
         require(player.getWeapon() == WEAPON_CANNON && player.getEngine() == ENGINE_BASE && player.getShield() == SHIELD_NONE,
-            "Starter preserves the modular base loadout");
+            "Gunner preserves the modular base loadout");
         EquipmentTestAccess::updateWeapon(player, 0.0f, true);
-        require(bm.getBullets().front().getKind() == PROJECTILE_CANNON, "Starter fires modular cannon shots");
+        require(bm.getBullets().front().getKind() == PROJECTILE_CANNON, "Gunner fires modular cannon shots");
         player.setBuild(BUILD_DEFAULT);
         require(player.getWeapon() == WEAPON_DEFAULT && !player.isLaserActive(), "Default command restores original ship");
+
+        // Presets must remove both passive shields and an already active guard skill.
+        for (PlayerBuild build : {BUILD_DEFAULT, BUILD_GUNNER, BUILD_CANNON, BUILD_LASER, BUILD_ROCKETS, BUILD_HEAVY}) {
+            for (PlayerShield shield : {SHIELD_ROUND, SHIELD_INVINCIBILITY}) {
+                player.setShield(shield);
+                EquipmentTestAccess::updateEquipment(player, 0.0f, true);
+                require(player.tryBlockHit({0, -20}), "Explicit shield protects before preset change");
+                player.setBuild(build);
+                require(player.getShield() == SHIELD_NONE && player.getShieldCharge() == 0.0f,
+                    "Every preset clears equipped shield and charge");
+                require(player.invincibilityTime == 0.0f && player.invincibilityCooldown == 0.0f && player.shieldDelay == 0.0f,
+                    "Preset clears shield skill and recharge timers");
+                EquipmentTestAccess::updateEquipment(player, 1.0f, true);
+                require(!player.tryBlockHit({0, -20}) && !player.tryBlockHit({0, 20}),
+                    "Preset has no protection after regeneration time or skill press");
+            }
+        }
         near(Bullet::hitFraction({-10, 0}, {10, 0}, {0, 0}, 2), 0.4f, "Swept circle entry");
         require(Bullet::hitFraction({-10, 3}, {10, 3}, {0, 0}, 2) < 0, "Swept miss");
         near(Bullet::hitFraction({0, 0}, {0, 0}, {0, 0}, 2), 0, "Stationary overlap");
@@ -230,9 +247,11 @@ int main(int argc, char** argv)
         DebugTools debug;
         const auto command = [&](const std::string& text) { debug.input = text; EquipmentTestAccess::execute(debug, &player); };
         for (const auto& preset : std::vector<std::pair<std::string, PlayerWeapon>>{
-            {"default", WEAPON_DEFAULT}, {"starter", WEAPON_CANNON}, {"cannon", WEAPON_CANNON}, {"laser", WEAPON_LASER},
+            {"default", WEAPON_DEFAULT}, {"gunner", WEAPON_CANNON}, {"cannon", WEAPON_CANNON}, {"laser", WEAPON_LASER},
             {"rockets", WEAPON_ROCKETS}, {"heavy", WEAPON_HEAVY}}) {
+            command("player shield round");
             command("player " + preset.first + " build"); require(player.getWeapon() == preset.second, "Preset debug command");
+            require(player.getShield() == SHIELD_NONE, "Preset command removes separately equipped shield");
         }
         command("player engine supercharged"); require(player.getEngine() == ENGINE_SUPERCHARGED, "Engine debug command");
         command("player shield round"); require(player.getShield() == SHIELD_ROUND, "Shield debug command");
@@ -240,7 +259,7 @@ int main(int argc, char** argv)
         command("player weapon cannon extra"); require(player.getWeapon() == WEAPON_LASER, "Reject trailing tokens");
         command("player unknown build"); require(player.getWeapon() == WEAPON_LASER, "Reject unknown preset");
         debug.input = "player l"; EquipmentTestAccess::complete(debug); require(debug.input == "player laser build", "Preset autocomplete");
-        debug.input = "player st"; EquipmentTestAccess::complete(debug); require(debug.input == "player starter build", "Starter autocomplete");
+        debug.input = "player g"; EquipmentTestAccess::complete(debug); require(debug.input == "player gunner build", "Gunner autocomplete");
         debug.input = "player shield r"; EquipmentTestAccess::complete(debug); require(debug.input == "player shield round", "Shield autocomplete");
         debug.input = "player default build"; EquipmentTestAccess::execute(debug, nullptr);
         require(player.getWeapon() == WEAPON_LASER, "Commands reject missing run");
@@ -347,7 +366,7 @@ int main(int argc, char** argv)
         // Export a native render contact sheet for inspection of every preset and hull state.
         const auto target = LoadRenderTexture(1920, 1000);
         BeginTextureMode(target); ClearBackground(Color{18, 22, 32, 255});
-        const char* presetNames[] = {"DEFAULT", "CANNON", "LASER", "ROCKETS", "HEAVY", "STARTER"};
+        const char* presetNames[] = {"DEFAULT", "CANNON", "LASER", "ROCKETS", "HEAVY", "GUNNER"};
         for (int index = 0; index < 6; ++index) {
             player.setBuild(static_cast<PlayerBuild>(index));
             for (int row = 0; row < 4; ++row) {
@@ -356,7 +375,6 @@ int main(int argc, char** argv)
                 player.rotation = row == 1 ? 45.0f : row == 2 ? 90.0f : 0.0f;
                 player.playerAccelerating = row % 2 == 0;
                 player.animationTime = 0.2f;
-                player.invincibilityTime = 1.0f;
                 Camera2D camera = {{0, 0}, {0, 0}, 0, 10};
                 player.position = Vector2Scale(player.position, 0.1f);
                 BeginMode2D(camera); player.draw(); EndMode2D();

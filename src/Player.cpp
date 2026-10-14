@@ -72,11 +72,11 @@ void Player::setBuild(PlayerBuild build)
 {
     switch (build) {
     case BUILD_DEFAULT: setEngine(ENGINE_BASE); setShield(SHIELD_NONE); setWeapon(WEAPON_DEFAULT); break;
-    case BUILD_STARTER: setWeapon(WEAPON_CANNON); setEngine(ENGINE_BASE); setShield(SHIELD_NONE); break;
-    case BUILD_CANNON: setWeapon(WEAPON_CANNON); setEngine(ENGINE_PULSE); setShield(SHIELD_FRONT); break;
-    case BUILD_LASER: setWeapon(WEAPON_LASER); setEngine(ENGINE_SUPERCHARGED); setShield(SHIELD_SIDES); break;
-    case BUILD_ROCKETS: setWeapon(WEAPON_ROCKETS); setEngine(ENGINE_BURST); setShield(SHIELD_ROUND); break;
-    case BUILD_HEAVY: setWeapon(WEAPON_HEAVY); setEngine(ENGINE_PULSE); setShield(SHIELD_INVINCIBILITY); break;
+    case BUILD_GUNNER: setWeapon(WEAPON_CANNON); setEngine(ENGINE_BASE); setShield(SHIELD_NONE); break;
+    case BUILD_CANNON: setWeapon(WEAPON_CANNON); setEngine(ENGINE_PULSE); setShield(SHIELD_NONE); break;
+    case BUILD_LASER: setWeapon(WEAPON_LASER); setEngine(ENGINE_SUPERCHARGED); setShield(SHIELD_NONE); break;
+    case BUILD_ROCKETS: setWeapon(WEAPON_ROCKETS); setEngine(ENGINE_BURST); setShield(SHIELD_NONE); break;
+    case BUILD_HEAVY: setWeapon(WEAPON_HEAVY); setEngine(ENGINE_PULSE); setShield(SHIELD_NONE); break;
     }
     autoShoot = false;
 }
