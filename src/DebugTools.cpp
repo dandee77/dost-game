@@ -22,6 +22,7 @@ namespace {
     struct EquipmentInfo { const char* text; EquipmentCommand command; int value; };
     constexpr std::array equipmentCommands = {
         EquipmentInfo{"default build", EQUIP_BUILD, BUILD_DEFAULT},
+        EquipmentInfo{"starter build", EQUIP_BUILD, BUILD_STARTER},
         EquipmentInfo{"cannon build", EQUIP_BUILD, BUILD_CANNON},
         EquipmentInfo{"laser build", EQUIP_BUILD, BUILD_LASER},
         EquipmentInfo{"rockets build", EQUIP_BUILD, BUILD_ROCKETS},
@@ -212,7 +213,7 @@ void DebugTools::execute(Player* player)
         std::string trailing;
         stream >> trailing;
         if (argument.empty()) {
-            addOutput("player <default|cannon|laser|rockets|heavy> build");
+            addOutput("player <default|starter|cannon|laser|rockets|heavy> build");
             addOutput("player weapon <cannon|laser|rockets|heavy>");
             addOutput("player engine <base|pulse|burst|supercharged>");
             addOutput("player shield <none|front|sides|round|invincibility>");

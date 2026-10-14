@@ -3,6 +3,9 @@
 
 // Item 04 introduces only the tokens needed by debug tools; item 03 migrates the rest.
 namespace Theme {
+    inline constexpr float ORIGINAL_PLAYER_SIZE = 8.0f;
+    inline constexpr int ORIGINAL_PLAYER_FRAME = 32;
+    inline constexpr float ORIGINAL_PLAYER_FRAME_TIME = 0.1f;
     inline constexpr float PLAYER_LAYER_SIZE = 12.0f;
     inline constexpr float PLAYER_SHIELD_SIZE = 16.0f;
     inline constexpr int PLAYER_LAYER_FRAME = 48, PLAYER_SHIELD_FRAME = 64;

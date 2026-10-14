@@ -60,12 +60,12 @@ A1 ─> A2..A9 ─> 15, 26
 ## Phase 0: Foundation
 
 ### P1 Player equipment prototypes (user-requested scope, 14 Oct)
-**Status:** Complete on eat/player-equipment; Debug/Release builds, native tests and render inspection passed.
+**Status:** Complete on `feat/player-equipment`; Debug/Release builds, native tests and render inspection passed.
 **Classes:** Player, Bullet, Game, DebugTools, ResourceManager, LoadingScreen; Balance/Theme/Config tokens.
 
 - Organize the supplied modular ship pack, preserving PNGs, editable sources and CC0 notice.
 - Implement cannon, continuous laser, explosive rockets and piercing heavy shots; all four engines, four shields and hull damage art.
-- F5 presets (`player default build`, `player cannon build`, `player laser build`, `player rockets build`, `player heavy build`) and individual weapon/engine/shield commands. No unlocks, drops, prices or shop integration.
+- F5 presets (`player default build`, `player starter build`, `player cannon build`, `player laser build`, `player rockets build`, `player heavy build`) and individual weapon/engine/shield commands. No unlocks, drops, prices or shop integration.
 - Keep gameplay state in Player/Bullet; integrate hit resolution and rewards with the existing Game path. Both current reset paths reset equipment through Player::init.
 
 **Done when:** all variants have working combat/movement/protection, timers stop outside gameplay, switching and restarting leave no stale attacks, both Debug ON and Release OFF build, and `todo` is removed after verified asset relocation.

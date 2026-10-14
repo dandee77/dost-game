@@ -410,3 +410,5 @@ inline constexpr float FRAME_TIME                 = 0.1f; // SA
 
 } // namespace Theme
 ```
+
+P1 default restoration: Default uses the existing `player_acceleration` (4 frames) / `player_deacceleration` (3 frames) sheets at 32×32 pixels per frame, 8×8 world-unit draw size and 0.1 s per frame. The original `player_bullet` is retained. Starter names the modular cannon/base-engine/no-shield preset. No assets were changed.

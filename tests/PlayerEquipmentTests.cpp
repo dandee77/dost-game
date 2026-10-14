@@ -81,6 +81,22 @@ int main(int argc, char** argv)
                 require(resources.GetTexture(key).id != 0, "New texture failed to load");
         }
         require(resources.GetSound("player_shoot").stream.buffer != nullptr, "Managed shooting sound");
+        clearWorld(game);
+        require(player.getWeapon() == WEAPON_DEFAULT, "Original ship is the initial default");
+        player.shotCooldown = 0.0f;
+        EquipmentTestAccess::updateWeapon(player, 0.0f, true);
+        require(bm.getBullets().size() == 1 && bm.getBullets().front().getKind() == PROJECTILE_LEGACY,
+            "Default fires the original bullet and collision behavior");
+        near(Vector2Distance(bm.getBullets().front().getPosition(), player.getPosition()), 0.0f,
+            "Original bullet spawns at the original ship position");
+        bm.reset();
+        player.setBuild(BUILD_STARTER);
+        require(player.getWeapon() == WEAPON_CANNON && player.getEngine() == ENGINE_BASE && player.getShield() == SHIELD_NONE,
+            "Starter preserves the modular base loadout");
+        EquipmentTestAccess::updateWeapon(player, 0.0f, true);
+        require(bm.getBullets().front().getKind() == PROJECTILE_CANNON, "Starter fires modular cannon shots");
+        player.setBuild(BUILD_DEFAULT);
+        require(player.getWeapon() == WEAPON_DEFAULT && !player.isLaserActive(), "Default command restores original ship");
         near(Bullet::hitFraction({-10, 0}, {10, 0}, {0, 0}, 2), 0.4f, "Swept circle entry");
         require(Bullet::hitFraction({-10, 3}, {10, 3}, {0, 0}, 2) < 0, "Swept miss");
         near(Bullet::hitFraction({0, 0}, {0, 0}, {0, 0}, 2), 0, "Stationary overlap");
@@ -214,7 +230,7 @@ int main(int argc, char** argv)
         DebugTools debug;
         const auto command = [&](const std::string& text) { debug.input = text; EquipmentTestAccess::execute(debug, &player); };
         for (const auto& preset : std::vector<std::pair<std::string, PlayerWeapon>>{
-            {"default", WEAPON_CANNON}, {"cannon", WEAPON_CANNON}, {"laser", WEAPON_LASER},
+            {"default", WEAPON_DEFAULT}, {"starter", WEAPON_CANNON}, {"cannon", WEAPON_CANNON}, {"laser", WEAPON_LASER},
             {"rockets", WEAPON_ROCKETS}, {"heavy", WEAPON_HEAVY}}) {
             command("player " + preset.first + " build"); require(player.getWeapon() == preset.second, "Preset debug command");
         }
@@ -224,6 +240,7 @@ int main(int argc, char** argv)
         command("player weapon cannon extra"); require(player.getWeapon() == WEAPON_LASER, "Reject trailing tokens");
         command("player unknown build"); require(player.getWeapon() == WEAPON_LASER, "Reject unknown preset");
         debug.input = "player l"; EquipmentTestAccess::complete(debug); require(debug.input == "player laser build", "Preset autocomplete");
+        debug.input = "player st"; EquipmentTestAccess::complete(debug); require(debug.input == "player starter build", "Starter autocomplete");
         debug.input = "player shield r"; EquipmentTestAccess::complete(debug); require(debug.input == "player shield round", "Shield autocomplete");
         debug.input = "player default build"; EquipmentTestAccess::execute(debug, nullptr);
         require(player.getWeapon() == WEAPON_LASER, "Commands reject missing run");
@@ -256,13 +273,13 @@ int main(int argc, char** argv)
         near(player.shieldDelay, 1.0f, "Pause freezes shield recharge");
         player.addBlast({0, 0});
         EquipmentTestAccess::restart(game);
-        require(player.getWeapon() == WEAPON_CANNON && player.getEngine() == ENGINE_BASE && player.getShield() == SHIELD_NONE,
+        require(player.getWeapon() == WEAPON_DEFAULT && player.getEngine() == ENGINE_BASE && player.getShield() == SHIELD_NONE,
             "Restart restores default equipment");
         require(!player.isLaserActive() && player.consumeLaserTicks() == 0 && player.blasts.empty() && bm.getBullets().empty(),
             "Restart clears attacks and effects");
         near(player.boostCooldown, 0, "Restart clears cooldowns");
         player.setBuild(BUILD_HEAVY); game.onSwitch();
-        require(player.getWeapon() == WEAPON_CANNON && player.getShield() == SHIELD_NONE, "New run resets build");
+        require(player.getWeapon() == WEAPON_DEFAULT && player.getShield() == SHIELD_NONE, "New run resets build");
 
 #ifdef _WIN32
         SetTargetFPS(120);
@@ -328,9 +345,10 @@ int main(int argc, char** argv)
         UnloadImage(gameplayCapture); UnloadRenderTexture(gameplay);
 
         // Export a native render contact sheet for inspection of every preset and hull state.
-        const auto target = LoadRenderTexture(1600, 1000);
+        const auto target = LoadRenderTexture(1920, 1000);
         BeginTextureMode(target); ClearBackground(Color{18, 22, 32, 255});
-        for (int index = 0; index < 5; ++index) {
+        const char* presetNames[] = {"DEFAULT", "CANNON", "LASER", "ROCKETS", "HEAVY", "STARTER"};
+        for (int index = 0; index < 6; ++index) {
             player.setBuild(static_cast<PlayerBuild>(index));
             for (int row = 0; row < 4; ++row) {
                 player.health = 100 - row * 25;
@@ -343,7 +361,7 @@ int main(int argc, char** argv)
                 player.position = Vector2Scale(player.position, 0.1f);
                 BeginMode2D(camera); player.draw(); EndMode2D();
             }
-            DrawText(TextFormat("PRESET %d", index), 70 + index * 320, 15, 24, WHITE);
+            DrawText(presetNames[index], 70 + index * 320, 15, 24, WHITE);
         }
         EndTextureMode();
         Image capture = LoadImageFromTexture(target.texture); ImageFlipVertical(&capture);

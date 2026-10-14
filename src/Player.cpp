@@ -17,17 +17,17 @@ namespace {
         "player_engine_burst_engine", "player_engine_supercharged_engine"};
     constexpr const char* shieldKeys[] = {"", "player_shield_front_shield", "player_shield_front_and_side_shield",
         "player_shield_round_shield", "player_shield_invincibility_shield"};
-    constexpr const char* weaponNames[] = {"CANNON", "LASER", "ROCKETS", "HEAVY"};
+    constexpr const char* weaponNames[] = {"CANNON", "LASER", "ROCKETS", "HEAVY", "DEFAULT"};
     constexpr const char* engineNames[] = {"BASE", "PULSE", "BURST", "SUPERCHARGED"};
     constexpr const char* shieldNames[] = {"NONE", "FRONT", "SIDES", "ROUND", "INVINCIBILITY"};
 
     void drawLayer(const std::string& key, int frameSize, float size, Vector2 position,
-                   float rotation, float time, Color tint)
+                   float rotation, float time, Color tint, float frameTime = Theme::EQUIPMENT_FRAME_TIME)
     {
         const auto& sheet = ResourceManager::GetInstance().GetTextureRef(key);
         if (sheet.id == 0 || sheet.width < frameSize) return;
         const int frames = sheet.width / frameSize;
-        const int frame = static_cast<int>(time / Theme::EQUIPMENT_FRAME_TIME) % frames;
+        const int frame = static_cast<int>(time / frameTime) % frames;
         DrawTexturePro(sheet, {static_cast<float>(frame * frameSize), 0.0f,
             static_cast<float>(frameSize), static_cast<float>(frameSize)},
             {position.x, position.y, size, size}, {size / 2.0f, size / 2.0f}, rotation, tint);
@@ -71,7 +71,8 @@ void Player::init()
 void Player::setBuild(PlayerBuild build)
 {
     switch (build) {
-    case BUILD_DEFAULT: setWeapon(WEAPON_CANNON); setEngine(ENGINE_BASE); setShield(SHIELD_NONE); break;
+    case BUILD_DEFAULT: setEngine(ENGINE_BASE); setShield(SHIELD_NONE); setWeapon(WEAPON_DEFAULT); break;
+    case BUILD_STARTER: setWeapon(WEAPON_CANNON); setEngine(ENGINE_BASE); setShield(SHIELD_NONE); break;
     case BUILD_CANNON: setWeapon(WEAPON_CANNON); setEngine(ENGINE_PULSE); setShield(SHIELD_FRONT); break;
     case BUILD_LASER: setWeapon(WEAPON_LASER); setEngine(ENGINE_SUPERCHARGED); setShield(SHIELD_SIDES); break;
     case BUILD_ROCKETS: setWeapon(WEAPON_ROCKETS); setEngine(ENGINE_BURST); setShield(SHIELD_ROUND); break;
@@ -88,9 +89,15 @@ void Player::setWeapon(PlayerWeapon value)
     laserClock = shotCooldown = weaponAnimationTime = weaponFlash = 0.0f;
 }
 
-void Player::setEngine(PlayerEngine value) { engine = value; boostTime = boostCooldown = 0.0f; }
+void Player::setEngine(PlayerEngine value)
+{
+    if (weapon == WEAPON_DEFAULT) setWeapon(WEAPON_CANNON);
+    engine = value;
+    boostTime = boostCooldown = 0.0f;
+}
 void Player::setShield(PlayerShield value)
 {
+    if (weapon == WEAPON_DEFAULT) setWeapon(WEAPON_CANNON);
     shield = value;
     shieldCharge = static_cast<float>(Balance::SHIELD_CAPACITY[shield]);
     shieldDelay = invincibilityTime = invincibilityCooldown = 0.0f;
@@ -130,8 +137,9 @@ void Player::fireScatterBullets(Vector2 direction)
         int pierce = bulletPiercePower;
         if (weapon == WEAPON_HEAVY) pierce += Balance::HEAVY_PIERCE - 1;
         if (weapon == WEAPON_ROCKETS) pierce = 1;
-        Bullet bullet(getLaserStart(), shotDirection, false, pierce, knockbackPower);
+        Bullet bullet(weapon == WEAPON_DEFAULT ? position : getLaserStart(), shotDirection, false, pierce, knockbackPower);
         switch (weapon) {
+        case WEAPON_DEFAULT: break; // Original sprite and legacy collision/damage path.
         case WEAPON_HEAVY:
             bullet.configure(PROJECTILE_HEAVY, Balance::HEAVY_DAMAGE, Balance::HEAVY_RADIUS, Balance::HEAVY_SPEED); break;
         case WEAPON_ROCKETS:
@@ -142,8 +150,10 @@ void Player::fireScatterBullets(Vector2 direction)
         BulletManager::GetInstance().addBullet(bullet);
     }
     weaponAnimationTime = 0.0f;
-    const auto& sheet = ResourceManager::GetInstance().GetTextureRef(weaponKeys[weapon]);
-    weaponFlash = static_cast<float>(sheet.width / Theme::PLAYER_LAYER_FRAME) * Theme::EQUIPMENT_FRAME_TIME;
+    if (weapon != WEAPON_DEFAULT) {
+        const auto& sheet = ResourceManager::GetInstance().GetTextureRef(weaponKeys[weapon]);
+        weaponFlash = static_cast<float>(sheet.width / Theme::PLAYER_LAYER_FRAME) * Theme::EQUIPMENT_FRAME_TIME;
+    }
     PlaySound(ResourceManager::GetInstance().GetSound("player_shoot"));
 }
 
@@ -288,6 +298,12 @@ void Player::draw()
     }
     const bool hurt = playerState != PLAYER_DEFAULT && static_cast<int>(stateElapsed * Theme::HURT_FLASH_RATE) % 2 == 0;
     const Color tint = hurt ? Theme::COLOR_DANGER : WHITE;
+    if (weapon == WEAPON_DEFAULT) {
+        drawLayer(playerAccelerating ? "player_acceleration" : "player_deacceleration",
+            Theme::ORIGINAL_PLAYER_FRAME, Theme::ORIGINAL_PLAYER_SIZE, position, rotation,
+            animationTime, tint, Theme::ORIGINAL_PLAYER_FRAME_TIME);
+        return;
+    }
     drawLayer(std::string(engineKeys[engine]) + (playerAccelerating ? "_powering" : "_idle"),
         Theme::PLAYER_LAYER_FRAME, Theme::PLAYER_LAYER_SIZE, position, rotation, animationTime, WHITE);
     drawLayer(engineKeys[engine], Theme::PLAYER_LAYER_FRAME, Theme::PLAYER_LAYER_SIZE, position, rotation, 0.0f, tint);

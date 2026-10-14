@@ -19,7 +19,7 @@ Values marked **(SA)** are the current Space Ablaze values, kept so the game sti
 
 ### P1 equipment prototypes (14 October, user request)
 
-These are debug-selectable prototypes, with no acquisition conditions or progression integration. New runs use cannon/base engine/no shield. All values are in `Balance.hpp` and are TUNE. Switching equipment preserves health, score and earned augments; presets turn auto-fire off. Projectiles already in flight keep their original weapon, damage and piercing count. Beam/burst state and relevant cooldowns reset when replacing their equipment. Debug equipment changes refill the selected shield.
+These are debug-selectable prototypes, with no acquisition conditions or progression integration. New runs use the original ship, original bullet and base movement with no shield. `player default build` restores this original loadout; `player starter build` selects the newly added modular cannon/base-engine/no-shield loadout. All values are in `Balance.hpp` and are TUNE. Switching equipment preserves health, score and earned augments; presets turn auto-fire off. Projectiles already in flight keep their original weapon, damage and piercing count. Beam/burst state and relevant cooldowns reset when replacing their equipment. Debug equipment changes refill the selected shield.
 
 | Weapon | Behavior | Values |
 |---|---|---|
