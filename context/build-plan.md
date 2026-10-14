@@ -64,6 +64,7 @@ A1 ─> A2..A9 ─> 15, 26
 **Classes:** DebugTools, EnemyManager, Enemy, SpatialGrid, Animator, MidLevelEnemy; Theme/Balance/Config tokens.
 
 - Replace horizontal command suggestions with a bounded vertical dropdown, selection, scrolling and keyboard completion.
+- Follow-up: `spawn lowlevel enemy <quantity>` creates real low enemies around the player with autocomplete, strict quantity validation, capacity feedback and live-run guards.
 - Separate living low-level enemies with soft, time-scaled pushes and bounded spatial queries. Mid-level enemies overlap freely, preserve their flight logic and render above low-level enemies.
 - Reuse storage and clear crowd observers on existing run resets. Keep combat hitboxes, damage and spawn rules unchanged.
 - Record measured rendered FPS and isolated solver timings at increasing enemy counts.

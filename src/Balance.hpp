@@ -4,6 +4,8 @@
 
 // Player equipment prototypes. TUNE in playtests before adding progression.
 namespace Balance {
+    inline constexpr int ENEMY_LIMIT = 10'000;
+    inline constexpr float ENEMY_SPAWN_RADIUS = 150.0f;
     // Soft low-enemy body spacing; combat hitboxes remain unchanged. TUNE.
     inline constexpr float CROWD_RADIUS_SCALE = 1.5f;
     inline constexpr float CROWD_SLIDE = 0.25f;

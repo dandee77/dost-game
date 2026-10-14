@@ -158,6 +158,8 @@ Debug commands: `player` lists syntax. `player <default|gunner|cannon|laser|rock
 
 P2 console dropdown: at most six suggestions appear vertically under the input, with a visible range/count and highlighted selection. Up/Down scrolls through candidates; PageUp/PageDown skips rows; Tab/Enter fills a selected candidate without executing it. Enter with no selection executes. Ctrl+Up/Down recalls history; empty input also supports plain-arrow history. Selection and scroll reset when editing/executing/resetting. The existing input-capture contract still prevents clicks/keys reaching gameplay on opening/closing frames.
 
+P2 spawn follow-up: `spawn lowlevel enemy <quantity>` parses a whole integer from 1 to Balance::ENEMY_LIMIT (10,000); malformed/trailing tokens, overflow, no active run or a dead player produce feedback without spawning. EnemyManager::spawnLowEnemies returns the number actually added, clamped to remaining capacity. Enemies are real LowLevelEnemy instances evenly spaced around the existing 150-unit ring centered on the player's current position, with normal health, animation IDs, movement, separation and combat. The console keeps simulation paused until closed. The batch method and command are debug-only; the normal ID counter and existing reset paths handle cleanup.
+
 `Game::update()` switches on `GameState`:
 
 | State | What happens |

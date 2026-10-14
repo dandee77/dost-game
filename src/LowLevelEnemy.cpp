@@ -22,6 +22,7 @@ LowLevelEnemy::LowLevelEnemy(std::string enemyID, EnemyType type, Vector2 spawnP
     speed = GetRandomValue(15, 30);
     turnSpeed = 5;
     currentDirection = {0, 0};
+    rotation = 0.0f; // Debug spawning can draw before the first simulation update.
     rect = {position.x, position.y, spriteSize, spriteSize};
     hitbox = {position.x, position.y, spriteSize, spriteSize};
     

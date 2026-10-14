@@ -23,6 +23,8 @@ Living low-level enemies softly separate after their normal chase movement. Body
 
 Mid-level enemies retain their original flight/steering and can overlap all enemies. They are neither pushed nor treated as separation obstacles, and their sprites/destruction draw above low enemies. No new access conditions or progression mechanics are added.
 
+Debug crowd spawning: `spawn lowlevel enemy <quantity>` accepts 1–10,000 and adds up to the remaining capacity of the existing 10,000-enemy limit. Enemies appear evenly around the existing 150-unit spawn ring and use ordinary low-enemy stats/combat. These unchanged values are now `Balance::ENEMY_LIMIT` and `Balance::ENEMY_SPAWN_RADIUS`; normal spawns also enforce the cap on each insertion.
+
 ### P1 equipment prototypes (14 October, user request)
 
 These are debug-selectable prototypes, with no acquisition conditions or progression integration. New runs use the original ship, original bullet and base movement with no shield. `player default build` restores this original loadout; `player gunner build` selects the newly added modular cannon/base-engine/no-shield loadout. Every build preset is shield-free; shields are selected separately with `player shield ...` for testing, with future skill integration deferred. All values are in `Balance.hpp` and are TUNE. Switching equipment preserves health, score and earned augments; presets turn auto-fire off. Projectiles already in flight keep their original weapon, damage and piercing count. Beam/burst state and relevant cooldowns reset when replacing their equipment. Explicit shield selection refills the selected shield; presets clear shield charge and active guard/recharge timers.

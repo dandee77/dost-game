@@ -247,6 +247,45 @@ int main(int argc, char** argv)
 #ifdef GAME_DEBUG
         DebugTools debug;
         const auto command = [&](const std::string& text) { debug.input = text; EquipmentTestAccess::execute(debug, &player); };
+        clearWorld(game);
+        auto& spawnManager = EnemyManager::GetInstance();
+        for (const std::string text : {"spawn", "spawn lowlevel enemy", "spawn lowlevel enemy 0",
+            "spawn lowlevel enemy -1", "spawn lowlevel enemy 1.5", "spawn lowlevel enemy 2000oops",
+            "spawn lowlevel enemy 99999999999999999999999", "spawn lowlevel enemy 10001",
+            "spawn midlevel enemy 2", "spawn lowlevel enemy 2 extra"}) {
+            command(text);
+            require(spawnManager.getEnemies().empty(), "Invalid spawn command has no side effects");
+        }
+        debug.input = "spawn lowlevel enemy 2000"; EquipmentTestAccess::execute(debug, nullptr);
+        require(spawnManager.getEnemies().empty(), "Spawn rejects missing run");
+        player.health = 0; command("spawn lowlevel enemy 2000");
+        require(spawnManager.getEnemies().empty(), "Spawn rejects dead player");
+        player.health = Balance::PLAYER_MAX_HEALTH;
+        debug.input = "spa"; EquipmentTestAccess::complete(debug);
+        require(debug.input == "spawn", "Spawn command autocomplete");
+        debug.input = "spawn l"; EquipmentTestAccess::complete(debug);
+        require(debug.input == "spawn lowlevel enemy ", "Spawn argument autocomplete leaves quantity editable");
+        command("spawn lowlevel enemy 2000");
+        require(spawnManager.getEnemies().size() == 2000, "Spawn creates requested 2000 real enemies");
+        bool validSpawns = true;
+        for (const auto& [id, value] : spawnManager.getEnemies()) {
+            validSpawns = validSpawns && value->getEnemyType() == LOW_LEVEL_ENEMY && value->getHealth() > 0 &&
+                std::isfinite(value->getRotation()) && Animator::GetInstance().animations.at(id).isActive &&
+                std::abs(Vector2Distance(value->getPosition(), player.getPosition()) - Balance::ENEMY_SPAWN_RADIUS) < 0.001f;
+        }
+        require(validSpawns, "Spawned enemies are alive, animated and on the spawn ring");
+        command("spawn lowlevel enemy 2000");
+        require(spawnManager.getEnemies().size() == 4000, "Repeated spawn uses unique IDs");
+        command("spawn lowlevel enemy 10000");
+        require(spawnManager.getEnemies().size() == Balance::ENEMY_LIMIT, "Spawn clamps to available enemy capacity");
+        require(debug.output.back() == "Enemy limit reached: 10000.", "Partial spawn reports capacity limit");
+        command("spawn lowlevel enemy 1");
+        require(spawnManager.getEnemies().size() == Balance::ENEMY_LIMIT, "Full capacity rejects further spawns");
+        EquipmentTestAccess::restart(game);
+        require(spawnManager.getEnemies().empty() && spawnManager.enemyCounter == 0, "Restart clears debug-spawned enemies and IDs");
+        command("spawn lowlevel enemy 1");
+        require(spawnManager.getEnemies().contains("enemy_0"), "Spawn works after restart");
+        EquipmentTestAccess::restart(game);
         for (const auto& preset : std::vector<std::pair<std::string, PlayerWeapon>>{
             {"default", WEAPON_DEFAULT}, {"gunner", WEAPON_CANNON}, {"cannon", WEAPON_CANNON}, {"laser", WEAPON_LASER},
             {"rockets", WEAPON_ROCKETS}, {"heavy", WEAPON_HEAVY}}) {

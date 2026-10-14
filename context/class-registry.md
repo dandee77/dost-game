@@ -312,6 +312,7 @@ All use the same pattern: `static X& GetInstance()` with a function-local static
 - Kind: derived
 - Inherits: `Enemy`
 - In-game name: Junk Swarmer
+- Debug-spawn support: rotation initializes to zero so drawing while the console pauses simulation is defined before the first update.
 - Behavior: homing. Each frame it lerps its direction toward the player (`turnSpeed` 5) and moves at 15 to 30 units/s. Kamikaze on contact. HP 30.
 - Sprites: picks one of three variants at random: `low_level_enemy1` (10 frames), `low_level_enemy2` (5), `low_level_enemy3` (5); destruct `*_destruct` (8, 8, 7 frames). All frames 64 x 64 px.
 - Gotchas: the constructor initializes `textureName` with one random roll and the animation with a second, separate roll; `textureName` is unused for drawing. Harmless; do not rely on `textureName`.
@@ -387,7 +388,8 @@ All use the same pattern: `static X& GetInstance()` with a function-local static
 - Status: existing → modified (items 10, 11)
 - Kind: singleton
 - Public API (current): `update(Vector2 playerPos, const GameTimer&)`, `draw()`, `getEnemies()` (map reference), `removeEnemy(const std::string& id)` (calls `destruct()` then erases), `reset()`
-- Private: `spawnEnemy(Vector2 playerPos, float elapsed)`, `enemyCounter`, `enemySpawnCooldown`, `maxEnemies` (10,000)
+- Private: `spawnEnemy(Vector2 playerPos, float elapsed)`, `enemyCounter`, `enemySpawnCooldown`. Existing 10,000-enemy limit and 150-unit spawn radius now live in Balance.
+- Debug-only API: `int spawnLowEnemies(Vector2 playerPos, int quantity)` evenly distributes new LowLevelEnemy instances around the existing spawn ring, sharing the normal ID counter. Returns the actual count, clamped to remaining capacity. Natural spawns also respect the limit per insertion.
 - P2: public `separateEnemies(float dt)` runs after movement/despawning. A reusable `crowdGrid` and non-owning `crowdEnemies` snapshot include only living LOW_LEVEL_ENEMY objects. Compute corrections from immutable positions, then apply gradual speed-limited pushes. `reset()` clears both containers; no observers survive use across frames. Gameplay tuning is in Balance, query budgets in Config.
 - Target API (item 11):
   ```cpp
@@ -548,6 +550,7 @@ All use the same pattern: `static X& GetInstance()` with a function-local static
 - Behavior: dim overlay, "PAUSED", Resume and Quit to Menu buttons. Returns an action enum.
 
 ### DebugTools
+- P2 spawn follow-up: `spawn lowlevel enemy <quantity>` accepts integers 1–10,000, requires a living player, and reports actual count/capacity. Autocomplete fills the command prefix and leaves quantity editable. Enemy creation stays in EnemyManager; the command and batch API compile only with GAME_DEBUG.
 - P1: `player` command lists presets and individual weapon/engine/shield choices, with argument autocomplete. Typed metadata dispatch, strict argument validation and live-run guard. Public API unchanged; hitbox view adds swept projectile geometry, beam capsules and shield arcs.
 - Files: src/DebugTools.hpp, src/DebugTools.cpp
 - Status: built (item 04, F5 console follow-up)

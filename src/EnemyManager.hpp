@@ -27,6 +27,9 @@ public:
     void removeEnemy(const std::string& id);
     void reset();
     void separateEnemies(float dt);
+#ifdef GAME_DEBUG
+    int spawnLowEnemies(Vector2 playerPos, int quantity);
+#endif
 private:
 
     EnemyManager() = default;
@@ -35,7 +38,6 @@ private:
     int enemyCounter = 0; 
     std::unordered_map<std::string, std::unique_ptr<Enemy>> enemies; 
     Cooldown enemySpawnCooldown{0.5f}; 
-    const int maxEnemies = 10'000;
     SpatialGrid crowdGrid;
     std::vector<Enemy*> crowdEnemies;
 };

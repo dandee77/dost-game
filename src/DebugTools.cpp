@@ -4,9 +4,11 @@
 #include <algorithm>
 #include <array>
 #include <cctype>
+#include <charconv>
 #include <sstream>
 
 #include "Config.hpp"
+#include "Balance.hpp"
 #include "AsteroidManager.hpp"
 #include "BulletManager.hpp"
 #include "EnemyManager.hpp"
@@ -17,7 +19,7 @@
 
 namespace {
     enum DebugCommand { DEBUG_HELP, DEBUG_HITBOX, DEBUG_MUTE, DEBUG_INVINCIBLE,
-                        DEBUG_CREDITS, DEBUG_BOSS, DEBUG_WAVE, DEBUG_CLEAR, DEBUG_CLOSE, DEBUG_PLAYER };
+                        DEBUG_CREDITS, DEBUG_BOSS, DEBUG_WAVE, DEBUG_CLEAR, DEBUG_CLOSE, DEBUG_PLAYER, DEBUG_SPAWN };
     enum EquipmentCommand { EQUIP_BUILD, EQUIP_WEAPON, EQUIP_ENGINE, EQUIP_SHIELD };
     struct EquipmentInfo { const char* text; EquipmentCommand command; int value; };
     constexpr std::array equipmentCommands = {
@@ -50,6 +52,7 @@ namespace {
     constexpr std::array commands = {
         CommandInfo{"help", DEBUG_HELP, false, false},
         CommandInfo{"player", DEBUG_PLAYER, false, true},
+        CommandInfo{"spawn", DEBUG_SPAWN, false, true},
         CommandInfo{"hitbox", DEBUG_HITBOX, true, true},
         CommandInfo{"mute", DEBUG_MUTE, true, false},
         CommandInfo{"invincible", DEBUG_INVINCIBLE, true, true},
@@ -152,6 +155,11 @@ void DebugTools::addOutput(const std::string& line)
 std::vector<std::string> DebugTools::completions() const
 {
     std::vector<std::string> matches;
+    if (input.starts_with("spawn ")) {
+        const std::string prefix = "spawn lowlevel enemy ";
+        if (prefix.starts_with(input)) matches.push_back(prefix);
+        return matches;
+    }
     if (input.starts_with("player ")) {
         for (const auto& option : equipmentCommands) {
             const std::string candidate = std::string("player ") + option.text;
@@ -230,7 +238,7 @@ void DebugTools::execute(Player* player)
         addOutput("Unknown command. Type help or press Tab.");
         return;
     }
-    if (found->command != DEBUG_PLAYER && (!extra.empty() || (!found->toggle && !argument.empty()) ||
+    if (found->command != DEBUG_PLAYER && found->command != DEBUG_SPAWN && (!extra.empty() || (!found->toggle && !argument.empty()) ||
         (found->toggle && !argument.empty() && argument != "on" && argument != "off" && argument != "toggle"))) {
         addOutput("Usage: " + name + (found->toggle ? " [on|off|toggle]" : ""));
         return;
@@ -245,6 +253,25 @@ void DebugTools::execute(Player* player)
         return !current;
     };
     switch (found->command) {
+    case DEBUG_SPAWN: {
+        std::string quantityText, trailing;
+        stream >> quantityText >> trailing;
+        int quantity = 0;
+        const auto parsed = std::from_chars(quantityText.data(), quantityText.data() + quantityText.size(), quantity);
+        if (argument != "lowlevel" || extra != "enemy" || !trailing.empty() ||
+            parsed.ec != std::errc{} || parsed.ptr != quantityText.data() + quantityText.size() ||
+            quantity <= 0 || quantity > Balance::ENEMY_LIMIT) {
+            addOutput("Usage: spawn lowlevel enemy <quantity>");
+            addOutput("Quantity: whole number from 1 to " + std::to_string(Balance::ENEMY_LIMIT) + ".");
+            break;
+        }
+        if (player->getHealth() <= 0) { addOutput("Restart the run before spawning enemies."); break; }
+        auto& manager = EnemyManager::GetInstance();
+        const int spawned = manager.spawnLowEnemies(player->getPosition(), quantity);
+        addOutput("Spawned " + std::to_string(spawned) + " low-level enemies. Total: " + std::to_string(manager.getEnemies().size()) + ".");
+        if (spawned < quantity) addOutput("Enemy limit reached: " + std::to_string(Balance::ENEMY_LIMIT) + ".");
+        break;
+    }
     case DEBUG_PLAYER: {
         std::string trailing;
         stream >> trailing;
@@ -277,6 +304,7 @@ void DebugTools::execute(Player* player)
     case DEBUG_HELP:
         addOutput("hitbox / mute / invincible [on|off|toggle]");
         addOutput("player: builds, weapons, engines and shields");
+        addOutput("spawn lowlevel enemy <quantity>");
         addOutput("credits / boss / wave: pending systems");
         addOutput("help / clear / close | Ctrl+Up/Down: history");
         break;
@@ -336,6 +364,10 @@ void DebugTools::drawConsole() const
         static_cast<float>(Config::DEBUG_OUTPUT_LINES + 2);
     drawLine("> " + input + "_", Theme::COLOR_ACCENT, true);
     if (input.empty()) { drawLine("Type a command to see completions.", Theme::COLOR_TEXT); return; }
+    if (input.starts_with("spawn lowlevel enemy ")) {
+        drawLine("Quantity: 1-" + std::to_string(Balance::ENEMY_LIMIT) + " | Enter: spawn", Theme::COLOR_TEXT);
+        return;
+    }
     const auto matches = completions();
     if (matches.empty()) { drawLine("No matching commands.", Theme::COLOR_TEXT); return; }
     const int count = static_cast<int>(matches.size());

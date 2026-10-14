@@ -6,6 +6,7 @@
 #include <iostream>
 #include "Balance.hpp"
 #include <cmath>
+#include <algorithm>
 
 
 #define ENEMY_MAX_DISTANCE 1000.0f
@@ -19,7 +20,7 @@ void EnemyManager::update(Vector2 playerPos, const GameTimer& gameTimer)
     float newCooldown = std::max(0.025f, 1.25f - (elapsed / 250.0f) * 1.25f);
     enemySpawnCooldown.updateCooldownDuration(newCooldown);
 
-    if (enemies.size() < maxEnemies && !enemySpawnCooldown.isOnCooldown()) {
+    if (enemies.size() < Balance::ENEMY_LIMIT && !enemySpawnCooldown.isOnCooldown()) {
         int spawns = 1 + GetRandomValue(0, 2);
         for (int i = 0; i < spawns; i++) {
             spawnEnemy(playerPos, elapsed);
@@ -79,7 +80,8 @@ void EnemyManager::draw()
 
 void EnemyManager::spawnEnemy(Vector2 playerPos, float elapsed)
 {
-    Vector2 offset = {150.0f, 0.0f};
+    if (enemies.size() >= Balance::ENEMY_LIMIT) return;
+    Vector2 offset = {Balance::ENEMY_SPAWN_RADIUS, 0.0f};
     float angle = DEG2RAD * (float)GetRandomValue(0, 359);
     offset = Vector2Rotate(offset, angle);
     Vector2 spawnPos = Vector2Add(playerPos, offset);
@@ -144,3 +146,20 @@ void EnemyManager::reset()
     enemies.clear();
     enemyCounter = 0;
 }
+
+#ifdef GAME_DEBUG
+int EnemyManager::spawnLowEnemies(Vector2 playerPos, int quantity)
+{
+    const int available = std::max(0, Balance::ENEMY_LIMIT - static_cast<int>(enemies.size()));
+    const int count = std::clamp(quantity, 0, available);
+    if (count == 0) return 0;
+    enemies.reserve(enemies.size() + static_cast<std::size_t>(count));
+    for (int index = 0; index < count; ++index) {
+        const float angle = 2.0f * PI * static_cast<float>(index) / static_cast<float>(count);
+        const Vector2 position = Vector2Add(playerPos, Vector2Rotate({Balance::ENEMY_SPAWN_RADIUS, 0.0f}, angle));
+        const std::string id = "enemy_" + std::to_string(enemyCounter++);
+        enemies.emplace(id, std::make_unique<LowLevelEnemy>(id, LOW_LEVEL_ENEMY, position, playerPos));
+    }
+    return count;
+}
+#endif
