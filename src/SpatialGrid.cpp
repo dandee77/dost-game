@@ -87,6 +87,74 @@ std::size_t SpatialGrid::firstWithin(Vector2 point, float radius, std::size_t ex
     return find(point, radius, false, exclude);
 }
 
+Vector2 SpatialGrid::separation(std::size_t index, float slide) const
+{
+    if (index >= entries.size() || !entries[index].active) return {};
+    const auto& self = entries[index];
+    if (!std::isfinite(self.position.x) || !std::isfinite(self.position.y)) return {};
+    Vector2 correction = {};
+    const auto accumulate = [&](std::size_t other) {
+        if (other == index || !entries[other].active) return;
+        const auto& target = entries[other];
+        Vector2 delta = Vector2Subtract(self.position, target.position);
+        const float squared = Vector2LengthSqr(delta);
+        const float spacing = self.radius + target.radius;
+        if (!std::isfinite(squared) || !std::isfinite(spacing) || spacing <= 0.0f || squared >= spacing * spacing) return;
+        const auto a = static_cast<std::uint32_t>(std::min(index, other));
+        const auto b = static_cast<std::uint32_t>(std::max(index, other));
+        const auto hash = (a * 0x8da6b343U) ^ (b * 0xd8163841U);
+        const float distance = std::sqrt(squared);
+        if (distance > Config::CROWD_DIRECTION_EPSILON) delta = Vector2Scale(delta, 1.0f / distance);
+        else {
+            // Stable antisymmetric direction: exact overlaps must not stay stuck.
+            const float angle = static_cast<float>(hash & 0xffffU) * (2.0f * PI / 65536.0f);
+            delta = {std::cos(angle), std::sin(angle)};
+            if (index > other) delta = Vector2Negate(delta);
+        }
+        // Small, pair-symmetric side step breaks perfectly collinear queues.
+        // Unlike random per-frame noise it does not consume the gameplay RNG.
+        const float side = (hash & 1U) == 0 ? slide : -slide;
+        delta = Vector2Add(delta, Vector2Scale(Vector2{-delta.y, delta.x}, side));
+        correction = Vector2Add(correction, Vector2Scale(delta, (spacing - distance) * 0.5f));
+    };
+    const auto scan = [&]() {
+        // Only tiny sets use this path in gameplay. Bound even invalid-coordinate fallbacks.
+        const auto count = std::min(entries.size(), Config::CROWD_CANDIDATES_PER_CELL);
+        for (std::size_t n = 1; n <= count; ++n) accumulate((index + n) % entries.size());
+        return correction;
+    };
+    if (linear) return scan();
+    const float radius = self.radius + maxRadius;
+    const double minX = std::floor((static_cast<double>(self.position.x) - radius) / Config::COLLISION_CELL_SIZE);
+    const double maxX = std::floor((static_cast<double>(self.position.x) + radius) / Config::COLLISION_CELL_SIZE);
+    const double minY = std::floor((static_cast<double>(self.position.y) - radius) / Config::COLLISION_CELL_SIZE);
+    const double maxY = std::floor((static_cast<double>(self.position.y) + radius) / Config::COLLISION_CELL_SIZE);
+    if (!std::isfinite(minX + maxX + minY + maxY) ||
+        minX <= std::numeric_limits<int>::min() || maxX >= std::numeric_limits<int>::max() ||
+        minY <= std::numeric_limits<int>::min() || maxY >= std::numeric_limits<int>::max() ||
+        (maxX - minX + 1) * (maxY - minY + 1) > Config::CROWD_MAX_QUERY_CELLS) return scan();
+    const int left = static_cast<int>(minX), right = static_cast<int>(maxX);
+    const int top = static_cast<int>(minY), bottom = static_cast<int>(maxY);
+    for (int y = top; y <= bottom; ++y) {
+        for (int x = left; x <= right; ++x) {
+            const auto head = buckets[bucket(x, y)].head;
+            if (head == NO_HIT) continue;
+            // Start after ourselves in our bucket, rather than sampling the same
+            // first few ships for every member of a dense pile.
+            auto start = head;
+            if (x == self.cellX && y == self.cellY) start = self.next == NO_HIT ? head : self.next;
+            auto current = start;
+            for (std::size_t visited = 0; visited < Config::CROWD_CANDIDATES_PER_CELL; ++visited) {
+                const auto& target = entries[current];
+                if (target.cellX == x && target.cellY == y) accumulate(current);
+                current = target.next == NO_HIT ? head : target.next;
+                if (current == start) break;
+            }
+        }
+    }
+    return correction;
+}
+
 std::size_t SpatialGrid::find(Vector2 point, float radius, bool targetRadius, std::size_t exclude) const
 {
     // Retain sqrt and inclusive comparison for identical boundary rounding.

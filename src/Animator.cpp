@@ -7,8 +7,8 @@ Animator& Animator::GetInstance() {
 }
 
 void Animator::AddAnimation(const std::string& name, 
-                          std::shared_ptr<Animation> animation) {
-    animations[name] = {animation, false};
+                          std::shared_ptr<Animation> animation, AnimationLayer layer) {
+    animations[name] = {animation, false, layer};
 }
 
 #include <iostream>
@@ -44,9 +44,11 @@ void Animator::Update() {
 }
 
 void Animator::Draw() {
-    for (auto& [name, data] : animations) {
-        if (data.isActive) {
-            data.animation->Draw();
+    for (AnimationLayer layer : {ANIMATION_WORLD, ANIMATION_FLYING}) {
+        for (auto& [name, data] : animations) {
+            if (data.isActive && data.layer == layer) {
+                data.animation->Draw();
+            }
         }
     }
 }

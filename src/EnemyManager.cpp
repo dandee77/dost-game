@@ -4,6 +4,8 @@
 #include "LowLevelEnemy.hpp"
 #include "MidLevelEnemy.hpp"
 #include <iostream>
+#include "Balance.hpp"
+#include <cmath>
 
 
 #define ENEMY_MAX_DISTANCE 1000.0f
@@ -39,11 +41,31 @@ void EnemyManager::update(Vector2 playerPos, const GameTimer& gameTimer)
     for (const auto& id : toRemove) {
         removeEnemy(id);
     }
+    separateEnemies(GetFrameTime());
+}
 
-
-
-    // print number of enemies
-    // std::cout << "Number of enemies: " << enemies.size() << std::endl;
+void EnemyManager::separateEnemies(float dt)
+{
+    if (dt <= 0.0f || !std::isfinite(dt)) return;
+    crowdGrid.clear();
+    crowdEnemies.clear();
+    crowdGrid.reserve(enemies.size());
+    for (const auto& [id, enemy] : enemies) {
+        // Flying enemies overlap freely and do not participate as obstacles.
+        if (enemy->getEnemyType() != LOW_LEVEL_ENEMY || enemy->isDead()) continue;
+        crowdEnemies.push_back(enemy.get());
+        crowdGrid.add(enemy->getPosition(), enemy->getHitbox().width * Balance::CROWD_RADIUS_SCALE);
+    }
+    crowdGrid.build();
+    const float step = std::min(dt, Balance::CROWD_MAX_STEP_TIME);
+    const float response = 1.0f - std::exp(-Balance::CROWD_RESPONSE * step);
+    const float maxPush = Balance::CROWD_MAX_PUSH_SPEED * step;
+    for (std::size_t index = 0; index < crowdEnemies.size(); ++index) {
+        Vector2 correction = Vector2Scale(crowdGrid.separation(index, Balance::CROWD_SLIDE), response);
+        const float length = Vector2Length(correction);
+        if (length > maxPush) correction = Vector2Scale(correction, maxPush / length);
+        crowdEnemies[index]->applySeparation(correction);
+    }
 }
 
 
@@ -117,6 +139,8 @@ void EnemyManager::removeEnemy(const std::string& id)
 
 void EnemyManager::reset()
 {
+    crowdGrid.clear();
+    crowdEnemies.clear();
     enemies.clear();
     enemyCounter = 0;
 }

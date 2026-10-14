@@ -59,6 +59,18 @@ A1 ─> A2..A9 ─> 15, 26
 
 ## Phase 0: Foundation
 
+### P2 Console dropdown and enemy crowd separation (user-requested scope, 14 Oct)
+**Status:** Complete; Debug/Release builds, native checks, render inspection and sequential performance measurements passed. See `crowd-performance.md`.
+**Classes:** DebugTools, EnemyManager, Enemy, SpatialGrid, Animator, MidLevelEnemy; Theme/Balance/Config tokens.
+
+- Replace horizontal command suggestions with a bounded vertical dropdown, selection, scrolling and keyboard completion.
+- Separate living low-level enemies with soft, time-scaled pushes and bounded spatial queries. Mid-level enemies overlap freely, preserve their flight logic and render above low-level enemies.
+- Reuse storage and clear crowd observers on existing run resets. Keep combat hitboxes, damage and spawn rules unchanged.
+- Record measured rendered FPS and isolated solver timings at increasing enemy counts.
+
+**Done when:** every suggestion is reachable, line/pile fixtures spread, flying enemies remain unaffected and draw on top, Debug/Release checks pass, and measured performance is documented.
+**Test:** native console keys and renders; crowd pair/line/pile, frame-rate, reset and flying-layer checks; SpatialGrid parity; sequential Release rendered benchmarks. This user request overrides numbered item order only for P2.
+
 ### P1 Player equipment prototypes (user-requested scope, 14 Oct)
 **Status:** Complete on `feat/player-equipment`; Debug/Release builds, native tests and render inspection passed.
 **Classes:** Player, Bullet, Game, DebugTools, ResourceManager, LoadingScreen; Balance/Theme/Config tokens.

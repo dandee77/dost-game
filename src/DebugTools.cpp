@@ -93,6 +93,8 @@ void DebugTools::reset()
     historyDraft.clear();
     history.clear();
     historyIndex = 0;
+    selectedSuggestion = -1;
+    suggestionOffset = 0;
     output.clear();
     // Master audio is a session preference and survives new runs.
 }
@@ -106,6 +108,7 @@ void DebugTools::update(Player* player)
     if (!inputCaptured) return;
 
     if (IsKeyPressed(KEY_ESCAPE)) consoleVisible = false;
+    const std::string previousInput = input;
     for (int character = GetCharPressed(); character != 0; character = GetCharPressed()) {
         // The command language is ASCII. Drain unsupported characters as well.
         if (consoleVisible && character >= ' ' && character <= '~' && input.size() < Config::DEBUG_INPUT_LIMIT) {
@@ -115,16 +118,29 @@ void DebugTools::update(Player* player)
     if (!consoleVisible) return;
 
     if (pressedOrRepeated(KEY_BACKSPACE) && !input.empty()) input.pop_back();
-    if (IsKeyPressed(KEY_UP) && historyIndex > 0) {
+    if (input != previousInput) { selectedSuggestion = -1; suggestionOffset = 0; }
+    const bool browsingHistory = input.empty() || IsKeyDown(KEY_LEFT_CONTROL) || IsKeyDown(KEY_RIGHT_CONTROL);
+    if (!browsingHistory && !completions().empty()) {
+        if (pressedOrRepeated(KEY_UP)) moveSuggestion(-1);
+        if (pressedOrRepeated(KEY_DOWN)) moveSuggestion(1);
+        if (pressedOrRepeated(KEY_PAGE_UP)) moveSuggestion(-Theme::DEBUG_SUGGESTION_ROWS);
+        if (pressedOrRepeated(KEY_PAGE_DOWN)) moveSuggestion(Theme::DEBUG_SUGGESTION_ROWS);
+    }
+    if (browsingHistory && IsKeyPressed(KEY_UP) && historyIndex > 0) {
         if (historyIndex == history.size()) historyDraft = input;
         input = history[--historyIndex];
+        selectedSuggestion = -1; suggestionOffset = 0;
     }
-    if (IsKeyPressed(KEY_DOWN) && historyIndex < history.size()) {
+    if (browsingHistory && IsKeyPressed(KEY_DOWN) && historyIndex < history.size()) {
         ++historyIndex;
         input = historyIndex == history.size() ? historyDraft : history[historyIndex];
+        selectedSuggestion = -1; suggestionOffset = 0;
     }
     if (IsKeyPressed(KEY_TAB)) complete();
-    if (IsKeyPressed(KEY_ENTER) || IsKeyPressed(KEY_KP_ENTER)) execute(player);
+    if (IsKeyPressed(KEY_ENTER) || IsKeyPressed(KEY_KP_ENTER)) {
+        if (selectedSuggestion >= 0) complete();
+        else execute(player);
+    }
 }
 
 void DebugTools::addOutput(const std::string& line)
@@ -160,15 +176,35 @@ void DebugTools::complete()
 {
     const auto matches = completions();
     if (matches.empty()) return;
+    if (selectedSuggestion >= 0 && selectedSuggestion < static_cast<int>(matches.size())) {
+        input = matches[selectedSuggestion];
+        selectedSuggestion = -1;
+        suggestionOffset = 0;
+        return;
+    }
     std::string prefix = matches.front();
     for (const auto& match : matches) {
         while (!match.starts_with(prefix)) prefix.pop_back();
     }
-    if (prefix.size() > input.size()) input = prefix;
+    if (prefix.size() > input.size()) { input = prefix; suggestionOffset = 0; }
+    else moveSuggestion(1);
+}
+
+void DebugTools::moveSuggestion(int direction)
+{
+    const int count = static_cast<int>(completions().size());
+    if (count == 0) { selectedSuggestion = -1; suggestionOffset = 0; return; }
+    if (selectedSuggestion < 0) selectedSuggestion = direction < 0 ? count - 1 : 0;
+    else selectedSuggestion = ((selectedSuggestion + direction) % count + count) % count;
+    if (selectedSuggestion < suggestionOffset) suggestionOffset = selectedSuggestion;
+    if (selectedSuggestion >= suggestionOffset + Theme::DEBUG_SUGGESTION_ROWS)
+        suggestionOffset = selectedSuggestion - Theme::DEBUG_SUGGESTION_ROWS + 1;
 }
 
 void DebugTools::execute(Player* player)
 {
+    selectedSuggestion = -1;
+    suggestionOffset = 0;
     std::istringstream stream(input);
     std::string name;
     std::string argument;
@@ -242,7 +278,7 @@ void DebugTools::execute(Player* player)
         addOutput("hitbox / mute / invincible [on|off|toggle]");
         addOutput("player: builds, weapons, engines and shields");
         addOutput("credits / boss / wave: pending systems");
-        addOutput("help / clear / close | Up/Down: history");
+        addOutput("help / clear / close | Ctrl+Up/Down: history");
         break;
     case DEBUG_HITBOX:
         overlayVisible = toggleValue(overlayVisible);
@@ -294,20 +330,28 @@ void DebugTools::drawConsole() const
         cursor.y += Theme::DEBUG_LINE_HEIGHT;
     };
     drawLine("DEBUG CONSOLE | F5 / Esc: close", Theme::COLOR_ACCENT);
-    drawLine("Enter: run | Tab: complete | help: commands", Theme::COLOR_TEXT);
+    drawLine("Enter: run | Tab: fill | Ctrl+Up/Down: history", Theme::COLOR_TEXT);
     for (const auto& line : output) drawLine(line, Theme::COLOR_TEXT);
     cursor.y = panel.y + Theme::DEBUG_PADDING + Theme::DEBUG_LINE_HEIGHT *
         static_cast<float>(Config::DEBUG_OUTPUT_LINES + 2);
     drawLine("> " + input + "_", Theme::COLOR_ACCENT, true);
-    std::string suggestions = "Type a command to see completions.";
-    if (!input.empty()) {
-        suggestions = "Tab: ";
-        for (const auto& match : completions()) {
-            if (suggestions != "Tab: ") suggestions += "  ";
-            suggestions += match;
-        }
+    if (input.empty()) { drawLine("Type a command to see completions.", Theme::COLOR_TEXT); return; }
+    const auto matches = completions();
+    if (matches.empty()) { drawLine("No matching commands.", Theme::COLOR_TEXT); return; }
+    const int count = static_cast<int>(matches.size());
+    const int first = std::clamp(suggestionOffset, 0, std::max(0, count - Theme::DEBUG_SUGGESTION_ROWS));
+    const int last = std::min(count, first + Theme::DEBUG_SUGGESTION_ROWS);
+    const Rectangle dropdown = {panel.x, cursor.y, panel.width,
+        Theme::DEBUG_PADDING * 2.0f + Theme::DEBUG_LINE_HEIGHT * static_cast<float>(last - first + 1)};
+    DrawRectangleRec(dropdown, Fade(Theme::COLOR_PANEL, Theme::DEBUG_DROPDOWN_OPACITY));
+    cursor.y += Theme::DEBUG_PADDING;
+    drawLine(TextFormat("Up/Down: choose | Tab/Enter: fill | %d-%d of %d", first + 1, last, count), Theme::COLOR_TEXT);
+    for (int index = first; index < last; ++index) {
+        const bool selected = index == selectedSuggestion;
+        if (selected) DrawRectangleRec({cursor.x, cursor.y, availableWidth, Theme::DEBUG_LINE_HEIGHT},
+            Fade(Theme::COLOR_ACCENT, Theme::DEBUG_SELECTION_OPACITY));
+        drawLine(std::string(selected ? "> " : "  ") + matches[index], selected ? Theme::COLOR_ACCENT : Theme::COLOR_TEXT);
     }
-    drawLine(suggestions, Theme::COLOR_TEXT);
 }
 
 void DebugTools::drawWorld(const Player& player) const

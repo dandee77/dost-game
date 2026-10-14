@@ -59,5 +59,31 @@ int main()
             }
         }
     }
-    std::printf("PASS: %zu ordered queries match brute force, including resets/removals/boundaries/clusters/large radii.\n", checks);
+    for (int scene = 0; scene < 50; ++scene) {
+        grid.clear();
+        std::vector<Vector2> positions;
+        for (int index = 0; index < 200; ++index) {
+            Vector2 point = {static_cast<float>(index % 20) * 10.0f - 100.0f,
+                             static_cast<float>(index / 20) * 10.0f - 50.0f};
+            point.x += coordinate(random) * 0.001f;
+            point.y += coordinate(random) * 0.001f;
+            positions.push_back(point); grid.add(point, 6.0f);
+        }
+        grid.build();
+        for (std::size_t index = 0; index < positions.size(); ++index) {
+            Vector2 expected = {};
+            for (std::size_t other = 0; other < positions.size(); ++other) {
+                if (index == other) continue;
+                const Vector2 delta = Vector2Subtract(positions[index], positions[other]);
+                const float distance = Vector2Length(delta);
+                if (distance < 12.0f) expected = Vector2Add(expected, Vector2Scale(delta, (12.0f - distance) * 0.5f / distance));
+            }
+            if (Vector2Distance(expected, grid.separation(index)) > 0.001f) {
+                std::fprintf(stderr, "Crowd neighborhood mismatch scene=%d index=%zu\n", scene, index);
+                return 1;
+            }
+            ++checks;
+        }
+    }
+    std::printf("PASS: %zu ordered/crowd queries match brute force, including resets/removals/boundaries/clusters/large radii.\n", checks);
 }

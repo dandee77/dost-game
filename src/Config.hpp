@@ -10,4 +10,8 @@ namespace Config {
     inline constexpr float COLLISION_CELL_SIZE = 16.0f;
     inline constexpr std::size_t COLLISION_LINEAR_THRESHOLD = 32;
     inline constexpr std::size_t COLLISION_BUCKETS_PER_TARGET = 2;
+    // Hard bound per queried hash cell, including hash collisions.
+    inline constexpr std::size_t CROWD_CANDIDATES_PER_CELL = 24;
+    inline constexpr float CROWD_DIRECTION_EPSILON = 0.0001f;
+    inline constexpr double CROWD_MAX_QUERY_CELLS = 16.0;
 }

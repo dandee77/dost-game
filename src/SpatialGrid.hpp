@@ -18,6 +18,8 @@ public:
     bool isActive(std::size_t index) const;
     std::size_t firstHit(Vector2 point) const;
     std::size_t firstWithin(Vector2 point, float radius, std::size_t exclude = NO_HIT) const;
+    // Soft overlap correction, with bounded work even for coincident crowds.
+    Vector2 separation(std::size_t index, float slide = 0.0f) const;
 
 private:
     struct Entry {

@@ -36,6 +36,10 @@ The current HUD already respects this: the kill counter sits at (220, 220), the 
 
 ## Two Coordinate Spaces
 
+P2 console suggestions: draw a separate vertical dropdown immediately below the input. Show six rows at most, a range/count, and a highlighted keyboard selection. Up/Down and PageUp/PageDown keep the selected row visible. All five shield choices fit together. Theme owns row count, dimensions and opacity; the maximum panel bottom remains inside the canvas safe area. Ctrl+Up/Down preserves command-history navigation.
+
+P2 enemy layering: Animator draws WORLD then FLYING; mid-level ships and their destruction effects use FLYING so low-level crowd sprites never cover them. This changes draw order only, preserving their flight and overlap behavior.
+
 | Draw in | When | Units | Examples |
 |---|---|---|---|
 | **World space** (between `BeginMode2D(utils::gameCamera)` and `EndMode2D()`) | The object exists in the game world and moves with the camera | World units; camera zoom 20 means 1 unit = 20 canvas px | Ships, bullets, scrap, dock, debris, damage numbers, boss telegraph rings |

@@ -1,6 +1,13 @@
 #include "Enemy.hpp"
 #include "raymath.h"
 
+void Enemy::applySeparation(Vector2 displacement)
+{
+    position = Vector2Add(position, displacement);
+    rect.x = hitbox.x = position.x;
+    rect.y = hitbox.y = position.y;
+}
+
 void Enemy::takeDamage(int damage) {
     health -= damage;
     if (health < 0) {

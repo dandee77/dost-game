@@ -21,6 +21,7 @@ private:
     friend struct EquipmentTestAccess;
     void execute(Player* player);
     void complete();
+    void moveSuggestion(int direction);
     void addOutput(const std::string& line);
     std::vector<std::string> completions() const;
 
@@ -34,5 +35,7 @@ private:
     std::vector<std::string> history;
     std::vector<std::string> output;
     std::size_t historyIndex = 0;
+    int selectedSuggestion = -1;
+    int suggestionOffset = 0;
 };
 #endif

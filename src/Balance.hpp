@@ -4,6 +4,12 @@
 
 // Player equipment prototypes. TUNE in playtests before adding progression.
 namespace Balance {
+    // Soft low-enemy body spacing; combat hitboxes remain unchanged. TUNE.
+    inline constexpr float CROWD_RADIUS_SCALE = 1.5f;
+    inline constexpr float CROWD_SLIDE = 0.25f;
+    inline constexpr float CROWD_RESPONSE = 12.0f;
+    inline constexpr float CROWD_MAX_PUSH_SPEED = 60.0f;
+    inline constexpr float CROWD_MAX_STEP_TIME = 0.05f;
     inline constexpr Vector2 PLAYER_SPAWN = {250.0f, 250.0f};
     inline constexpr float PLAYER_RADIUS = 4.0f;
     inline constexpr float PLAYER_TURN_BASE = 4.0f, PLAYER_TURN_SPEED_BONUS = 4.0f;

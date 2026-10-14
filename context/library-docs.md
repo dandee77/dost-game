@@ -6,6 +6,8 @@ How to use Raylib, raymath, CMake and the compilers correctly in this project, p
 
 ## Authority Order
 
+Native Windows input fixture note (P2): arrow-key PostMessage events need their scan code and extended-key bit. Key-up lParam must also carry bits 30/31; merely using WM_KEYUP with a zero lParam can be interpreted as another press/repeat by GLFW. For Down use scan code 0x50 and bit 24; Enter uses scan code 0x1c. PollInputEvents between press/release frames. This is test-fixture behavior, not an application input workaround.
+
 When information conflicts, trust sources in this order:
 
 1. **The installed header.** After the first configure, Raylib's headers are in `build/_deps/raylib-src/src/raylib.h` and `raymath.h` (when CMake fetched it). Search them before using any function you have not used in this repo: if the signature is not there, the function does not exist in this version.

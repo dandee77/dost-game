@@ -13,5 +13,6 @@ struct EquipmentTestAccess {
 #ifdef GAME_DEBUG
     static void execute(DebugTools& debug, Player* player);
     static void complete(DebugTools& debug);
+    static void moveSuggestion(DebugTools& debug, int direction);
 #endif
 };

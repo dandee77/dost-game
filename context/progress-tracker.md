@@ -6,6 +6,8 @@ Update this file after every completed build-plan item. Anyone reading it (teamm
 
 ## Current Status
 
+**P2 complete (14 October):** Vertical console dropdown with six visible suggestions, keyboard selection/scrolling, Tab/Enter fill and Ctrl+Up/Down history. Living low enemies now separate using bounded SpatialGrid queries and time-scaled soft pushes; mid enemies overlap freely with unchanged flight logic and draw above low enemies. Reset clears crowd observers. Debug/Release builds passed with no new compiler warnings; 713 Debug and 679 Release native checks plus 610,000 spatial query checks passed. Native dropdown/crowd renders inspected, and a pixel test verifies flying-over-low order. Release rendered averages: 1k/2k/3k/5k/7.5k enemies = 247/173/120/86/57 FPS; 2k enemies + 8k injected bullets = 104 FPS over 3,600 frames. Conditions, p99 timings and limits: `crowd-performance.md`.
+
 **P1 Gunner/shield follow-up:** Renamed the modular baseline to `player gunner build`, including help/autocomplete. All six presets now select no shield and clear shield charge, recharge delay and guard timers. Original Default art/bullets remain unchanged. Shields use separate supplied asset layers and remain available through explicit `player shield ...` commands for testing; future skill integration is deferred. Debug/Release builds passed without new warnings; 186 debug and 160 release equipment checks plus 600,000 spatial-grid parity queries passed. Inspected the native six-preset/four-hull-state render: no preset shield overlays. No asset files changed.
 
 **Earlier P1 default restoration:** Restored the original ship and original bullet as Default on new runs/restarts and `player default build`. The modular baseline was initially named Starter (now Gunner). Debug/Release builds passed without new warnings; 132 debug and 112 release equipment checks passed, along with spatial-grid parity. Rendered original and modular presets inspected side by side.
@@ -150,6 +152,8 @@ Fill in during item 01.
 
 ## Open Questions
 
+Resolved P2 scope instruction (14 October): the user requested dropdown suggestions and optimized enemy separation ahead of numbered item order. Their follow-up explicitly exempts mid enemies from separation and requires them to draw on top. Only living low enemies participate in crowd pushing; mid movement code is unchanged. This intentionally supersedes movement parity for the earlier collision optimization, while preserving its exact combat-query behavior. No spawn, unlock, damage or combat-radius changes.
+
 Resolved P1 default correction: the user requested the pre-equipment player remain the default. Original ship/bullets are restored; the new baseline is named Gunner, superseding its initial Starter label. The user also requested shields be separate from weapon builds for future skill use: every preset is now shield-free, with shield prototypes accessible only through explicit component selection. This supersedes the initial P1 preset shield combinations.
 
 Resolved P1 scope instruction (14 October): user explicitly requested implementation of the supplied equipment pack now, debug commands only and no access conditions. This supersedes item ordering and the original post-submission extra-gear limit for P1 only. The supplied CC0 art/provenance also supersedes the original-only art wording and palette for these prototypes; originals remain byte-for-byte preserved. No shop/unlock/loot system was added. Balance remains prototype tuning, not a claim of competitive balance.
@@ -202,6 +206,7 @@ Required for Form 03 (Asset and AI Usage Disclosure). Organizers may request pro
 | 2026-10-14 | P1 player equipment prototypes | Codex (OpenAI, GPT-6) | Inspect/organize 66 supplied CC0 files; implement weapon damage, swept collisions, beam tick timing, rocket splash, engines, directional shields, cooldown skills and F5 presets; verify Raylib drawing via find-docs/Context7; native Debug/Release tests, rendered previews, docs and provenance | Heavy | Team review pending |
 | 2026-10-14 | P1 default restoration | Codex (OpenAI, GPT-6) | Restore original ship art/size/animation and bullet behavior, name modular baseline Starter, update console completion, native tests and project docs | Moderate | Team review pending |
 | 2026-10-14 | P1 Gunner and separate shields | Codex (OpenAI, GPT-6) | Rename modular baseline Gunner, remove automatic shields from all presets, verify active/passive shield cleanup and explicit shield commands, run Debug/Release builds and native tests, inspect shield-free renders, update project docs | Moderate | Team review pending |
+| 2026-10-14 | P2 dropdown and enemy crowd separation | Codex (OpenAI, GPT-6) | Add vertical scrollable suggestions and native input checks; extend SpatialGrid for bounded soft separation of low enemies; preserve mid flight and add explicit top animation layer; verify frame-rate/reset/dense-crowd/render behavior, measure real Release FPS and solver timings, update docs | Heavy | Team review pending |
 
 Asset generation is logged per file in `assets/ASSETS.md`.
 

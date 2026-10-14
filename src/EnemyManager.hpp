@@ -9,6 +9,7 @@
 #include <string>
 #include "Animator.hpp"
 #include "GameTimer.hpp"
+#include "SpatialGrid.hpp"
 
 class EnemyManager
 {
@@ -25,6 +26,7 @@ public:
     std::unordered_map<std::string, std::unique_ptr<Enemy>>& getEnemies() { return enemies; };
     void removeEnemy(const std::string& id);
     void reset();
+    void separateEnemies(float dt);
 private:
 
     EnemyManager() = default;
@@ -34,4 +36,6 @@ private:
     std::unordered_map<std::string, std::unique_ptr<Enemy>> enemies; 
     Cooldown enemySpawnCooldown{0.5f}; 
     const int maxEnemies = 10'000;
+    SpatialGrid crowdGrid;
+    std::vector<Enemy*> crowdEnemies;
 };

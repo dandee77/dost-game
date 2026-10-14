@@ -6,6 +6,8 @@
 #include <functional>
 #include "Animation.hpp"
 
+enum AnimationLayer { ANIMATION_WORLD, ANIMATION_FLYING };
+
 class Animator {
 public:
    
@@ -17,7 +19,7 @@ public:
 
    
     void AddAnimation(const std::string& name, 
-                     std::shared_ptr<Animation> animation);
+                     std::shared_ptr<Animation> animation, AnimationLayer layer = ANIMATION_WORLD);
 
  
     void Play(const std::string& name);
@@ -45,6 +47,7 @@ private:
     struct AnimationData {
         std::shared_ptr<Animation> animation;
         bool isActive;
+        AnimationLayer layer;
     };
 
     std::unordered_map<std::string, AnimationData> animations;

@@ -280,6 +280,7 @@ All use the same pattern: `static X& GetInstance()` with a function-local static
 - Owned by: `EnemyManager` (map `std::unordered_map<std::string, std::unique_ptr<Enemy>>`)
 - Constructor: `Enemy(std::string enemyID, EnemyType type, Vector2 spawnPos, Vector2 playerPos)`
 - Public API (current): `getPlayerPositionForEnemy(Vector2)` (a setter), `getEnemyType()`, `getHitbox()`, `getEnemyID()`, `virtual void destruct() = 0`, `takeDamage(int)`, `isDead()`, `applyKnockback(Vector2 direction, float force)`, `canReceiveKnockback()`
+- P2: `applySeparation(Vector2 displacement)` updates position and rect/hitbox origins without changing velocity, steering, knockback or combat radius.
 - Protected (current): `enemyID`, `enemyType`, `viewDirection`, `playerPosition`, `hitbox`, `speed`, `spriteSize`, `knockbackVelocity`, `knockbackDecay`, `knockbackCooldown` (`ENEMY_KNOCKBACK_COOLDOWN` 0.5 s)
 - Enum: `EnemyType { LOW_LEVEL_ENEMY, MID_LEVEL_ENEMY, HIGH_LEVEL_ENEMY, BOSS_LEVEL_ENEMY }` (the last two are not used yet)
 - Planned additions (item 10):
@@ -321,6 +322,7 @@ All use the same pattern: `static X& GetInstance()` with a function-local static
 - Kind: derived
 - Inherits: `Enemy`
 - In-game name: Rogue Satellite
+- P2: excluded from crowd separation/obstacles. Both live and destruction animations use `ANIMATION_FLYING`, drawn after ordinary world animations. Movement/shooting logic is unchanged.
 - Behavior: steers toward the player with a slower turn (1.5 to 2.5) and higher speed (25 to 50), producing circling and strafing passes. Fires a bullet along its **view direction** when it is roughly facing the player (`fireRange` 1.85 on the sum-of-directions test), within 100 units, on a 0.5 to 1.25 s cooldown. Bullet speed 120 to 150. HP 50.
 - Sprites: `mid_level_enemy` (12 frames), `mid_level_enemy_destruct` (7 frames), 64 x 64 px.
 
@@ -386,6 +388,7 @@ All use the same pattern: `static X& GetInstance()` with a function-local static
 - Kind: singleton
 - Public API (current): `update(Vector2 playerPos, const GameTimer&)`, `draw()`, `getEnemies()` (map reference), `removeEnemy(const std::string& id)` (calls `destruct()` then erases), `reset()`
 - Private: `spawnEnemy(Vector2 playerPos, float elapsed)`, `enemyCounter`, `enemySpawnCooldown`, `maxEnemies` (10,000)
+- P2: public `separateEnemies(float dt)` runs after movement/despawning. A reusable `crowdGrid` and non-owning `crowdEnemies` snapshot include only living LOW_LEVEL_ENEMY objects. Compute corrections from immutable positions, then apply gradual speed-limited pushes. `reset()` clears both containers; no observers survive use across frames. Gameplay tuning is in Balance, query budgets in Config.
 - Target API (item 11):
   ```cpp
   void update(Vector2 playerPos);                         // move/fire only, no spawning
@@ -552,7 +555,7 @@ All use the same pattern: `static X& GetInstance()` with a function-local static
 - Owned by: long-lived `Game` scene; `Application` routes console calls even outside a run
 - Public API: `void reset()`, `void update(Player* player)`, `void drawConsole() const`, `bool capturesInput() const`, `void drawWorld(const Player& player) const`, `void drawOverlay(const Player& player, GameState state) const`
 - Uses: `Player`, read-only enemy/asteroid/bullet containers, `ResourceManager`, `Theme`, `Config`
-- Behavior: compiled only with `GAME_DEBUG`. F5 toggles the translucent terminal; Tab completion, Up/Down history, Enter execution, Backspace editing and Escape closing. Metadata lookup dispatches enums for `help`, `hitbox`, `mute`, `invincible`, `credits`, `boss`, `wave`, `clear`, `close`. Toggle arguments are optional `on/off/toggle`. Pending systems report unavailable. A null player rejects gameplay commands outside a run.
+- Behavior: compiled only with `GAME_DEBUG`. F5 toggles the translucent terminal; vertical six-row suggestion dropdown with Up/Down or PageUp/PageDown navigation. Tab/Enter fills a selected row; Enter without a selection executes. Ctrl+Up/Down browses history (plain arrows also work with empty input). Editing/reset/execution clears suggestion selection/scroll state. Backspace edits and Escape closes. Metadata lookup dispatches enums for `help`, `hitbox`, `mute`, `invincible`, `credits`, `boss`, `wave`, `clear`, `close`. Toggle arguments are optional `on/off/toggle`. Pending systems report unavailable. A null player rejects gameplay commands outside a run.
 - Gotchas: capture includes opening/closing frames. Ship collision radius is `getHitbox().width`, asteroid radius is `getAsteroidSize()`, bullets are points. `drawWorld` uses the gameplay camera; diagnostics and console use canvas space. `reset()` clears run UI state but preserves mute/saved volume; `Player::init()` resets invincibility. Reset both paths until item 05. Input/history/output limits live in Config, layout/opacity in Theme.
 - Changed by: 04
 
@@ -574,8 +577,8 @@ All use the same pattern: `static X& GetInstance()` with a function-local static
 - Files: src/Animator.hpp, src/Animator.cpp
 - Status: existing
 - Kind: singleton
-- Public API: `AddAnimation(name, std::shared_ptr<Animation>)` (replaces any existing entry with that name), `Play(name)` (resets and starts), `Stop(name)`, `Pause(name)`, `StopAll()`, `PauseAll()`, `Remove(name)`, `Update()`, `Draw()`, `IsCompleted(name)`, `SetRotation`, `SetOrigin`, `SetTint`, `SetPosition`
-- Behavior: `Update()` advances active animations and **erases** any non-looping animation that completed. `Draw()` draws every active animation in map order (undefined).
+- Public API: `AddAnimation(name, std::shared_ptr<Animation>, AnimationLayer layer = ANIMATION_WORLD)` (replaces any existing entry with that name), `Play(name)` (resets and starts), `Stop(name)`, `Pause(name)`, `StopAll()`, `PauseAll()`, `Remove(name)`, `Update()`, `Draw()`, `IsCompleted(name)`, `SetRotation`, `SetOrigin`, `SetTint`, `SetPosition`
+- Behavior: `Update()` advances active animations and **erases** any non-looping animation that completed. `Draw()` traverses WORLD then FLYING, drawing each active animation once. Within each layer, map order remains unspecified. No per-frame sorting or extra animation updates. Mid-level ships and their destruction effects use FLYING.
 - Gotchas:
   - `IsCompleted(name)` does not check that `name` exists; calling it after the animation was erased is undefined behavior. Check with a new `has(name)` method first (item 05).
   - Shared by all scenes. Scenes call `StopAll()` in `onExit()`.
@@ -684,8 +687,9 @@ All use the same pattern: `static X& GetInstance()` with a function-local static
 ### SpatialGrid
 - Files: src/SpatialGrid.hpp, src/SpatialGrid.cpp
 - Status: modified (item 28 early performance subtask, 14 October)
-- Kind: value, owned by `Game` (one for enemies, one for asteroids)
+- Kind: value, owned by `Game` (one for enemies, one for asteroids) and `EnemyManager` (separate crowd snapshot)
 - Public API: `NO_HIT`, `clear()`, `reserve(std::size_t)`, `add(Vector2, float radius)`, `build()`, `deactivate(std::size_t)`, `isActive(std::size_t) const`, `firstHit(Vector2) const`, `firstWithin(Vector2, float radius, std::size_t exclude = NO_HIT) const`.
+- P2: `Vector2 separation(std::size_t index, float slide = 0.0f) const` returns soft overlap correction, using summed radii, deterministic opposite directions for coincident pairs and optional pair-symmetric lateral steering. Visits at most 24 entries per queried cell; at most 16 cells, otherwise bounded circular sampling. Dense neighborhoods are intentionally approximate. Combat first-hit APIs retain their exact ordering/predicates. No allocations in queries.
 - Uses: `Config.hpp` cell size / small-set threshold / bucket sizing, Raymath's original `Vector2Distance` narrow-phase predicate.
 - Contract: clear/add/build before querying; returned index is insertion order, not distance order. `firstHit` uses each target's radius; `firstWithin` uses the caller's radius. Deactivation excludes a removed target immediately without invalidating other indices. No owning pointers or singleton state.
 - Storage: reusable flat entries and power-of-two hash buckets, linked by indices in ascending insertion order. Per-bucket center bounds reject dense near misses. Tiny sets and enormous/non-finite coordinates use an ordered linear fallback. Large query areas also fall back to scanning.

@@ -8,4 +8,5 @@ void EquipmentTestAccess::restart(Game& game) { game.restartGame(); }
 #ifdef GAME_DEBUG
 void EquipmentTestAccess::execute(DebugTools& debug, Player* player) { debug.execute(player); }
 void EquipmentTestAccess::complete(DebugTools& debug) { debug.complete(); }
+void EquipmentTestAccess::moveSuggestion(DebugTools& debug, int direction) { debug.moveSuggestion(direction); }
 #endif

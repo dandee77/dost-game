@@ -156,6 +156,8 @@ The modular player draws directly in a fixed effect/engine/hull/weapon/shield or
 
 Debug commands: `player` lists syntax. `player <default|gunner|cannon|laser|rockets|heavy> build` selects presets. `player weapon <cannon|laser|rockets|heavy>`, `player engine <base|pulse|burst|supercharged>`, and `player shield <none|front|sides|round|invincibility>` mix components. Tab completes every argument; invalid/extra arguments are rejected without changes. Commands require a live run and do not revive dead players. All command registration remains under GAME_DEBUG.
 
+P2 console dropdown: at most six suggestions appear vertically under the input, with a visible range/count and highlighted selection. Up/Down scrolls through candidates; PageUp/PageDown skips rows; Tab/Enter fills a selected candidate without executing it. Enter with no selection executes. Ctrl+Up/Down recalls history; empty input also supports plain-arrow history. Selection and scroll reset when editing/executing/resetting. The existing input-capture contract still prevents clicks/keys reaching gameplay on opening/closing frames.
+
 `Game::update()` switches on `GameState`:
 
 | State | What happens |
@@ -168,6 +170,8 @@ Debug commands: `player` lists syntax. `player <default|gunner|cannon|laser|rock
 Spawning (`EnemyManager::update`) is a **continuous trickle**, not waves: the spawn cooldown shrinks from 1.25 s to 0.025 s over 250 s, 1 to 3 enemies per spawn, and mid-level enemies appear after 150 s with a chance rising toward 40%. Asteroids follow a similar ramp.
 
 ### Current collision matrix
+
+P2 crowd pass (14 October): after enemy movement/despawning and before entity combat collisions, EnemyManager builds a separate SpatialGrid snapshot containing living low-level enemies only. Each query considers summed soft-body radii with a strict per-cell visit budget. Immutable frame positions avoid sequential update bias; deterministic opposing pair directions resolve exact overlaps and a small lateral component breaks collinear queues. Exponential response and a speed cap turn corrections into gradual pushes. Memory is reused; resets clear the grid and observers. Mid-level enemies do not enter this grid and retain their existing flight. Their live/destruction Animator registrations use FLYING, rendered in a second linear pass above WORLD without sorting or extra Update calls. See `crowd-performance.md` for measured costs. This intentionally changes low-enemy contact positions, superseding the earlier movement-parity promise for this scoped feature; combat search predicates remain unchanged.
 
 All checks retain the inclusive circle-versus-point predicate `Vector2Distance(a, b) <= radius`. Bullets are points. The supplied radius is usually the target's size value (`hitbox.width` for ships, `getAsteroidSize()` for asteroids); asteroid-versus-asteroid checks use the **outer/source asteroid's** radius, not summed radii. At the user's request on 14 October, `Game::update` now uses reusable `SpatialGrid` snapshots for repeated enemy/asteroid searches. Single-player checks remain linear. `CollisionSystem` extraction remains item 06.
 

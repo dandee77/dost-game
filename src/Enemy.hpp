@@ -41,6 +41,7 @@ public:
     bool isDead() const { return health <= 0; }
     void applyKnockback(Vector2 direction, float force);
     bool canReceiveKnockback() const;
+    void applySeparation(Vector2 displacement);
 
 protected:
 

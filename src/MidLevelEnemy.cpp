@@ -35,7 +35,7 @@ MidLevelEnemy::MidLevelEnemy(std::string enemyID, EnemyType type, Vector2 spawnP
         rect,
         false,
         WHITE
-    ));
+    ), ANIMATION_FLYING);
     Animator::GetInstance().SetOrigin(enemyID, origin);
     Animator::GetInstance().Play(enemyID);
     hitbox = {position.x, position.y, spriteSize / 3.5f, spriteSize / 3.5f};
@@ -109,7 +109,7 @@ void MidLevelEnemy::destruct()
         rect,
         false,
         WHITE
-    ));
+    ), ANIMATION_FLYING);
     Animator::GetInstance().SetOrigin(enemyID, origin);
     Animator::GetInstance().SetPosition(enemyID, position);
     Animator::GetInstance().SetRotation(enemyID, rotation);

@@ -17,6 +17,12 @@ Values marked **(SA)** are the current Space Ablaze values, kept so the game sti
 
 ## Player
 
+### P2 low-enemy crowd motion (14 October, user request)
+
+Living low-level enemies softly separate after their normal chase movement. Body radius is 1.5 times the combat hitbox radius (about 6.43 units), with response 12/s, maximum push speed 60 units/s, and a 0.05 s maximum correction step after a stall. A pair-symmetric side-step coefficient of 0.25 lets collinear queues widen rather than remain a single-file train. All values are prototype TUNE constants in Balance. This does not alter combat hitboxes or apply damage. Extremely crowded groups may remain compressed while settling; this is soft separation, not rigid-body physics.
+
+Mid-level enemies retain their original flight/steering and can overlap all enemies. They are neither pushed nor treated as separation obstacles, and their sprites/destruction draw above low enemies. No new access conditions or progression mechanics are added.
+
 ### P1 equipment prototypes (14 October, user request)
 
 These are debug-selectable prototypes, with no acquisition conditions or progression integration. New runs use the original ship, original bullet and base movement with no shield. `player default build` restores this original loadout; `player gunner build` selects the newly added modular cannon/base-engine/no-shield loadout. Every build preset is shield-free; shields are selected separately with `player shield ...` for testing, with future skill integration deferred. All values are in `Balance.hpp` and are TUNE. Switching equipment preserves health, score and earned augments; presets turn auto-fire off. Projectiles already in flight keep their original weapon, damage and piercing count. Beam/burst state and relevant cooldowns reset when replacing their equipment. Explicit shield selection refills the selected shield; presets clear shield charge and active guard/recharge timers.

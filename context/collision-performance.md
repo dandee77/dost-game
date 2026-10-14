@@ -1,5 +1,7 @@
 # Collision performance — 14 October 2026
 
+Historical baseline before crowd separation. For the subsequent low-enemy push behavior, preserved mid-level flight/layering, and current measurements, see [crowd-performance.md](crowd-performance.md).
+
 The collision searches now use a reusable spatial hash grid. On this machine, **2,000 enemies plus 8,000 injected bullets** is a conservative tested operating point: 97.8 FPS average over 6,000 uncapped combat frames, 12.45 ms at the 99th percentile, and 2 frames above the 16.67 ms budget. **2,500 enemies plus 10,000 bullets** also has substantial headroom on average, but occasional slow frames make it a less conservative choice. These are controlled stress-test results, not a universal gameplay cap.
 
 The existing 80-enemy project target comfortably passes, including a rapid-hit workload. No spawn caps, damage values, hitbox sizes, movement, graphics settings, or gameplay rules were changed.

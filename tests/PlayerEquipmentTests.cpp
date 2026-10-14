@@ -4,6 +4,7 @@
 #include "Theme.hpp"
 #include "raymath.h"
 #include <stdexcept>
+int runCrowdChecks(const std::string& artifactDirectory);
 
 #ifdef _WIN32
 extern "C" __declspec(dllimport) int __stdcall PostMessageA(void*, unsigned int, unsigned long long, long long);
@@ -261,6 +262,35 @@ int main(int argc, char** argv)
         debug.input = "player l"; EquipmentTestAccess::complete(debug); require(debug.input == "player laser build", "Preset autocomplete");
         debug.input = "player g"; EquipmentTestAccess::complete(debug); require(debug.input == "player gunner build", "Gunner autocomplete");
         debug.input = "player shield r"; EquipmentTestAccess::complete(debug); require(debug.input == "player shield round", "Shield autocomplete");
+        debug.input = "player ";
+        for (int index = 0; index < 19; ++index) EquipmentTestAccess::moveSuggestion(debug, 1);
+        require(debug.selectedSuggestion == 18 && debug.suggestionOffset == 13, "Dropdown scroll reaches the last equipment command");
+        EquipmentTestAccess::complete(debug);
+        require(debug.input == "player shield invincibility" && debug.selectedSuggestion == -1, "Dropdown accepts last suggestion without executing");
+        debug.input = "player shield ";
+        EquipmentTestAccess::moveSuggestion(debug, -1);
+        require(debug.selectedSuggestion == 4, "Dropdown wraps upward to last shield");
+        EquipmentTestAccess::moveSuggestion(debug, -Theme::DEBUG_SUGGESTION_ROWS);
+        require(debug.selectedSuggestion >= 0 && debug.selectedSuggestion < 5, "Page navigation handles short lists");
+        debug.consoleVisible = true;
+        const auto consoleTarget = LoadRenderTexture(3840, 2160);
+        BeginTextureMode(consoleTarget); ClearBackground(Color{18, 22, 32, 255}); debug.drawConsole(); EndTextureMode();
+        Image consoleCapture = LoadImageFromTexture(consoleTarget.texture); ImageFlipVertical(&consoleCapture);
+        require(ExportImage(consoleCapture, (artifactDirectory + "/console-dropdown.png").c_str()), "Export dropdown preview");
+        UnloadImage(consoleCapture); UnloadRenderTexture(consoleTarget);
+        debug.reset();
+        require(debug.selectedSuggestion == -1 && debug.suggestionOffset == 0, "Dropdown reset clears navigation state");
+#ifdef _WIN32
+        debug.consoleVisible = true;
+        debug.input = "player shield ";
+        PostMessageA(GetWindowHandle(), 0x100, 0x28, (1LL << 24) | (0x50LL << 16)); PollInputEvents(); debug.update(&player);
+        require(debug.selectedSuggestion == 0, "Native Down selects first dropdown row");
+        PostMessageA(GetWindowHandle(), 0x101, 0x28, (1LL << 31) | (1LL << 30) | (1LL << 24) | (0x50LL << 16)); PollInputEvents(); debug.update(&player);
+        PostMessageA(GetWindowHandle(), 0x100, 0x0d, 0x1cLL << 16); PollInputEvents(); debug.update(&player);
+        require(debug.input == "player shield none" && debug.selectedSuggestion == -1, "Native Enter fills selected command");
+        PostMessageA(GetWindowHandle(), 0x101, 0x0d, (1LL << 31) | (1LL << 30) | (0x1cLL << 16)); PollInputEvents(); debug.update(&player);
+        debug.reset();
+#endif
         debug.input = "player default build"; EquipmentTestAccess::execute(debug, nullptr);
         require(player.getWeapon() == WEAPON_LASER, "Commands reject missing run");
         player.health = 0; command("player default build");
@@ -385,7 +415,8 @@ int main(int argc, char** argv)
         Image capture = LoadImageFromTexture(target.texture); ImageFlipVertical(&capture);
         require(ExportImage(capture, (artifactDirectory + "/player-equipment-preview.png").c_str()), "Export render preview");
         UnloadImage(capture); UnloadRenderTexture(target);
-        std::cout << "PASS: " << checks << " equipment checks\n";
+        checks += runCrowdChecks(artifactDirectory);
+        std::cout << "PASS: " << checks << " equipment, console and crowd checks\n";
     } catch (const std::exception& error) {
         std::cerr << "FAIL after " << checks << " checks: " << error.what() << '\n';
         return 1;

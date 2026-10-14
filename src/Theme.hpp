@@ -41,6 +41,9 @@ namespace Theme {
     inline constexpr float DEBUG_CONSOLE_TEXT_OPACITY = 0.85f;
     inline constexpr float DEBUG_PADDING = 30.0f;
     inline constexpr float DEBUG_LINE_HEIGHT = 64.0f;
+    inline constexpr int DEBUG_SUGGESTION_ROWS = 6;
+    inline constexpr float DEBUG_DROPDOWN_OPACITY = 0.85f;
+    inline constexpr float DEBUG_SELECTION_OPACITY = 0.22f;
     inline constexpr float DEBUG_POINT_HALF_SIZE = 0.6f;
     inline constexpr int DEBUG_WINDOW_FPS_X = 10;
     inline constexpr int DEBUG_WINDOW_FPS_Y = 10;
