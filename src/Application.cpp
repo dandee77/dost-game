@@ -84,24 +84,14 @@ void Application::Run()
     SetTextureFilter(borderTargetFinal.texture, TEXTURE_FILTER_BILINEAR);
 
 #ifdef GAME_DEBUG
-    // Audio is a session preference: keep it across scene changes and run restarts.
-    bool debugAudioMuted = false;
-    float volumeBeforeMute = GetMasterVolume();
+    // The Game scene lives for the application lifetime, including on the menu.
+    const auto debugGame = std::static_pointer_cast<Game>(m_sceneFactory.at("Game"));
 #endif
 
     while (!WindowShouldClose())
     {
 #ifdef GAME_DEBUG
-        if (IsKeyPressed(KEY_F2)) {
-            if (debugAudioMuted) {
-                SetMasterVolume(volumeBeforeMute);
-            } else {
-                volumeBeforeMute = GetMasterVolume();
-                SetMasterVolume(0.0f);
-            }
-            debugAudioMuted = !debugAudioMuted;
-            TraceLog(LOG_INFO, "[Application::Run] Audio %s", debugAudioMuted ? "muted" : "restored");
-        }
+        const bool debugCapturesInput = debugGame->updateDebugConsole(m_currentScene == "Game");
 #endif
 
         float time = GetTime();
@@ -133,7 +123,15 @@ void Application::Run()
             ClearBackground(BLACK);
             if (m_sceneFactory.find(m_currentScene) != m_sceneFactory.end())
             {
-                std::string nextScene = m_sceneFactory[m_currentScene]->update();
+                std::string nextScene = m_currentScene;
+#ifdef GAME_DEBUG
+                if (debugCapturesInput && m_currentScene == "MainMenu") {
+                    UpdateMusicStream(resourceManager.GetMusic("home_music"));
+                } else
+#endif
+                {
+                    nextScene = m_sceneFactory[m_currentScene]->update();
+                }
                 if (m_currentScene != nextScene)
                 {
                     if (m_sceneFactory.find(nextScene) != m_sceneFactory.end())
@@ -152,6 +150,9 @@ void Application::Run()
                 m_currentScene = nextScene;
             }
             m_sceneFactory[m_currentScene]->draw();
+#ifdef GAME_DEBUG
+            debugGame->drawDebugConsole();
+#endif
         EndTextureMode();
 
     

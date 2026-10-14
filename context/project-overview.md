@@ -114,7 +114,7 @@ Launch from the dock
 | P or Esc | Pause |
 | Mouse click | Menus, augment cards, shop |
 | Space / Enter / click | Skip cutscene slide |
-| F1 to F6 | Debug keys, debug builds only (see `architecture.md`) |
+| F5 | Debug console with autocomplete, debug builds only (see `architecture.md`) |
 
 ---
 
@@ -153,7 +153,7 @@ Screen IDs are used in `build-plan.md`, `ui-rules.md` and `class-registry.md`.
 - In-game tutorial prompts for the first wave
 - Credits screen with AI and asset disclosure
 - All art and audio original (team-made or AI-generated) with provenance recorded
-- Debug keys and overlay for testing and recording the videos
+- Debug console and overlay for testing and recording the videos
 
 ## Features Out of Scope
 

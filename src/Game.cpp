@@ -46,6 +46,7 @@ void Game::onSwitch()
 {
 #ifdef GAME_DEBUG
     debugTools.reset();
+    debugPausedTimer = false;
 #endif
     gameState = GAME_RUNNING;
     enemyCollisionGrid.clear();
@@ -144,6 +145,7 @@ void Game::onSwitch()
 void Game::restartGame() { //ts kinda useless ngl
 #ifdef GAME_DEBUG
     debugTools.reset();
+    debugPausedTimer = false;
 #endif
     enemyCollisionGrid.clear();
     asteroidCollisionGrid.clear();
@@ -186,7 +188,17 @@ std::string Game::update()
     UpdateMusicStream(gameMusic);
 
 #ifdef GAME_DEBUG
-    debugTools.update(playerEntity);
+    if (debugTools.capturesInput()) {
+        if (gameTimer.isRunning()) {
+            gameTimer.pause();
+            debugPausedTimer = true;
+        }
+        return "Game";
+    }
+    if (debugPausedTimer) {
+        gameTimer.unpause();
+        debugPausedTimer = false;
+    }
 #endif
 
     if (IsKeyPressed(KEY_P)) {
@@ -918,3 +930,16 @@ void Game::onExit()
     Animator::GetInstance().Remove("killer_display"); // Clean up killer animation
     StopMusicStream(gameMusic);
 }
+
+#ifdef GAME_DEBUG
+bool Game::updateDebugConsole(bool activeGame)
+{
+    debugTools.update(activeGame ? &playerEntity : nullptr);
+    return debugTools.capturesInput();
+}
+
+void Game::drawDebugConsole() const
+{
+    debugTools.drawConsole();
+}
+#endif

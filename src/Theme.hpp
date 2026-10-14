@@ -16,8 +16,10 @@ namespace Theme {
     inline constexpr Color COLOR_PANEL = {20, 20, 30, 255};
     inline constexpr float DEBUG_TEXT_OPACITY = 0.55f;
     inline constexpr float DEBUG_PANEL_OPACITY = 0.25f;
-    inline constexpr Rectangle DEBUG_PANEL = {220.0f, 450.0f, 1480.0f, 800.0f};
-    inline constexpr Vector2 DEBUG_INVINCIBLE_POSITION = {220.0f, 360.0f};
+    inline constexpr Rectangle DEBUG_CONSOLE_PANEL = {220.0f, 310.0f, 2000.0f, 720.0f};
+    inline constexpr Rectangle DEBUG_PANEL = {220.0f, 1060.0f, 1700.0f, 540.0f};
+    inline constexpr Vector2 DEBUG_INVINCIBLE_POSITION = {220.0f, 1620.0f};
+    inline constexpr float DEBUG_CONSOLE_TEXT_OPACITY = 0.85f;
     inline constexpr float DEBUG_PADDING = 30.0f;
     inline constexpr float DEBUG_LINE_HEIGHT = 64.0f;
     inline constexpr float DEBUG_POINT_HALF_SIZE = 0.6f;

@@ -57,6 +57,10 @@ public:
     void draw() override;
     void onSwitch() override;
     void onExit() override;
+#ifdef GAME_DEBUG
+    bool updateDebugConsole(bool activeGame);
+    void drawDebugConsole() const;
+#endif
 
 private:        
     struct BackgroundLayer {
@@ -74,6 +78,7 @@ private:
     std::vector<Asteroid*> collisionAsteroids;
 #ifdef GAME_DEBUG
     DebugTools debugTools;
+    bool debugPausedTimer = false;
 #endif
 
     std::vector<BackgroundLayer> backgroundLayers;

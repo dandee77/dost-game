@@ -17,7 +17,7 @@ Second principle: **scope down, not quality down.** If the schedule slips, cut f
 | Date | Phase | Items | Checkpoint |
 |---|---|---|---|
 | Wed 14 Oct | 0 Foundation | 01, 02 (start), A1 | Everyone builds and runs the game; eligibility question sent |
-| Thu 15 Oct | 0 Foundation | 02, 03, 04, 05 | Same gameplay as Space Ablaze, with debug keys and clean resets |
+| Thu 15 Oct | 0 Foundation | 02, 03, 04, 05 | Same gameplay as Space Ablaze, with debug console and clean resets |
 | Fri 16 Oct | 1 Core refactor | 06, 07, 08, 09, 10 | Same gameplay; collisions, HUD, stats and augments restructured |
 | Sat 17 Oct | 2 Loop | 11, 12 | Waves with banners; enemies drop scrap |
 | Sun 18 Oct | 2 Loop | 13, 14 | **Full core loop**: wave, scrap, return, dock shop, next wave |
@@ -98,11 +98,13 @@ A1 ─> A2..A9 ─> 15, 26
 **Owner:** Programmer 3. **Date:** 15 Oct. **Depends on:** 03.
 
 - `GAME_DEBUG` CMake option; `DebugTools` class owned by `Game`.
-- F1 translucent overlay (hitbox circles, entity counts, FPS, current `GameState`), F2 master audio mute/unmute, F5 invincibility. F3, F4, F6 are stubbed and connected when their systems exist (items 11, 12, 17). F2 is handled by `Application` so it also works in menus; user requested this replacement for clear-wave on 14 October.
-- `Application`'s `DrawFPS` only in debug builds.
+- F5 opens/closes a translucent terminal at the top left. Extend the existing `DebugTools`; `Application` routes console input and rendering in every scene.
+- Commands: `hitbox`, `mute`, `invincible` with optional `on`, `off`, or `toggle`; `help`, `clear`, `close`. `credits`, `boss`, and `wave` explain their pending systems (items 12, 17, 11).
+- Tab completes command names/arguments; Up/Down recalls history. Console focus blocks underlying controls and pauses the running game timer; closing restores the prior state. Mute remains session-wide and restores the previous volume.
+- `Application`'s `DrawFPS` only in debug builds. Old F1/F2/F3/F4/F6 actions are removed.
 
-**Done when:** debug build shows the overlay; release build has no debug keys or FPS counter.
-**Test:** toggle F1 in a run with 30+ enemies; build with `-DGAME_DEBUG=OFF` and confirm F1 does nothing.
+**Done when:** debug build supports the console and existing debug actions; release has no debug console or FPS counter.
+**Test:** F5, `hitbox on` in a run with 30+ enemies; test Tab, history, mute, invincibility, pause/augment/game-over focus and restart. Build with `-DGAME_DEBUG=OFF` and confirm F5 does nothing.
 
 ### 05 Run reset, RunContext, RunRng and leak fixes
 **Owner:** Lead. **Date:** 15 Oct. **Depends on:** 03.
@@ -116,7 +118,7 @@ A1 ─> A2..A9 ─> 15, 26
 - Create `RunContext` (mode, seed, last result) and `RunRng`.
 
 **Done when:** restarting 10 times in a row leaves no leftover enemies, bullets or animations, and memory does not grow.
-**Test:** debug build, restart 10 times from game over; watch the F1 counts return to zero and the process memory in Task Manager stay flat.
+**Test:** debug build, restart 10 times from game over; watch the `hitbox` counts return to zero and the process memory in Task Manager stay flat.
 
 ---
 
@@ -187,10 +189,10 @@ A1 ─> A2..A9 ─> 15, 26
 - Debris spawning follows the wave's `debris` flag and stops outside `WAVE_ACTIVE`.
 - Wave banner and wave label in `HUD`.
 - On `WAVE_CLEARED`, `Game` opens the augment cards (replacing the 20-second timer). After the pick, the director enters `WAVE_RETURN`; until item 13 exists, `WAVE_RETURN` immediately starts the next wave.
-- Debug: F6 (advance wave). F2 is reserved for master audio mute/unmute (user request, 14 October); no clear-wave shortcut is currently assigned.
+- Debug: connect the `wave` console command (advance wave). `mute` controls master audio; no clear-wave command is currently assigned.
 
 **Done when:** waves 1 to 4 play in order with banners and augment picks between them; the same seed produces the same waves.
-**Test:** play waves 1 to 3 twice with the same seed; enemy counts per wave match (F1 overlay).
+**Test:** play waves 1 to 3 twice with the same seed; enemy counts per wave match (`hitbox` overlay).
 
 ### 12 Scrap pickups and cargo
 **Owner:** Lead. **Date:** 17 Oct. **Depends on:** 10, 11.
@@ -199,7 +201,7 @@ A1 ─> A2..A9 ─> 15, 26
 - Magnet attraction, pickup radius, lifetime and blink.
 - Cargo in the run state; `CARGO FULL` handling; cargo lost on death.
 - HUD cargo counter; pickup sound (placeholder allowed).
-- Debug: F3 adds credits and fills cargo.
+- Debug: `credits` adds credits and fills cargo.
 
 **Done when:** kills spray gold scrap that flies to the ship and fills cargo.
 **Test:** collect until cargo is full; confirm further pickups stay on the ground and expire; die and confirm cargo resets.
@@ -224,7 +226,7 @@ A1 ─> A2..A9 ─> 15, 26
 - Upgrade levels reset in `resetRun()`.
 
 **Done when:** all 7 upgrades can be bought to level 5 and their effects are visible.
-**Test:** debug F3 for credits; buy every upgrade to max; check speed, damage numbers, magnet radius (F1 shows it), cargo capacity and max HP on the HUD.
+**Test:** debug `credits` command; buy every upgrade to max; check speed, damage numbers, magnet radius (`hitbox` shows it), cargo capacity and max HP on the HUD.
 
 ---
 
@@ -257,10 +259,10 @@ A1 ─> A2..A9 ─> 15, 26
 - `EnemyManager::spawnBoss`, `getBoss`, `hasBoss`.
 - `WaveDirector` spawns bosses on boss waves. HUD boss bar with name and phase ticks. Boss music switch. Background tint during bosses.
 - Decide and record how bosses draw above other enemies.
-- Debug: F4 jumps to the next boss wave.
+- Debug: `boss` jumps to the next boss wave.
 
 **Done when:** a test boss (Hoarder with only its ring attack) spawns on wave 5, shows a bar and can be killed.
-**Test:** F4, kill the boss, confirm the wave clears and augment cards appear.
+**Test:** `boss`, kill the boss, confirm the wave clears and augment cards appear.
 
 ### 18 The Hoarder
 **Owner:** Programmer 2. **Date:** 20 Oct. **Depends on:** 17.
@@ -277,7 +279,7 @@ A1 ─> A2..A9 ─> 15, 26
 - In Story, its death sets `GAME_VICTORY`: stop spawns, explosion, 3 s hold, fill `RunContext::lastResult`, switch to `"Ending"` (until item 21, return to `"MainMenu"`).
 
 **Done when:** The Core can be beaten and Story ends cleanly.
-**Test:** F4 twice to wave 10; win; confirm the transition and that a new run starts clean.
+**Test:** `boss` twice to wave 10; win; confirm the transition and that a new run starts clean.
 
 ---
 
@@ -299,7 +301,7 @@ A1 ─> A2..A9 ─> 15, 26
 - `EndingCutscene` slides, run stats card, then `"Leaderboard"` or `"MainMenu"`.
 
 **Done when:** winning Story plays the ending.
-**Test:** debug win (F4 to wave 10, F5 invincibility); ending plays and returns correctly.
+**Test:** debug win (`boss` to wave 10, `invincible on`); ending plays and returns correctly.
 
 ### 22 Main menu with modes
 **Owner:** Programmer 3. **Date:** 21 Oct. **Depends on:** 05.
@@ -317,7 +319,7 @@ A1 ─> A2..A9 ─> 15, 26
 - `WaveDirector` formulas for Endless; repeating bosses with HP scaling; The Core does not end the run.
 
 **Done when:** Endless runs to wave 15 without errors.
-**Test:** debug build, F5 + F6 to wave 15; watch counts and FPS; then play waves 1 to 5 normally.
+**Test:** debug build, `invincible on` + `wave` to wave 15; watch counts and FPS; then play waves 1 to 5 normally.
 
 ### 24 Leaderboard and name entry
 **Owner:** Programmer 3. **Date:** 21 Oct. **Depends on:** 22.

@@ -67,7 +67,7 @@ The executable must run from the build folder because asset paths are relative (
 2. Look up every class it touches in `class-registry.md`.
 3. Make the change, following the matching template in `code-standards.md`.
 4. Build. Fix every error and new warning.
-5. Run the game and perform the item's **Test** steps. Use the debug keys (F1 to F6, see `architecture.md`) to reach the state quickly.
+5. Run the game and perform the item's **Test** steps. Use the F5 debug console commands (see `architecture.md`) to reach the state quickly.
 6. Update `class-registry.md`, `progress-tracker.md` (status, decisions, AI usage) and any other context file the item changed.
 7. Commit with a conventional message: `feat(waves): wave director with budgets`.
 

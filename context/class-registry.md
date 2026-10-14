@@ -107,7 +107,7 @@ All use the same pattern: `static X& GetInstance()` with a function-local static
   - Creates every scene once in `m_sceneFactory` (a `std::map<std::string, std::shared_ptr<Scene>>`). New scenes must be added there.
   - Defines its own `screenWidth = 3840`, `screenHeight = 2160` constants; replace with `Config.hpp` in item 03.
   - Calls `DrawFPS` on the real window (outside the CRT pass) only with `GAME_DEBUG`; coordinates come from `Theme`.
-  - Debug-only F2 handling lives in `Run()` before scene updates. Local session state remembers mute and the previous master volume, so music and effects stay muted across menus and restarts; unmuting restores that level. No new public API.
+  - Routes the long-lived Game scene's debug console before scene updates and draws it after the scene. While captured, main-menu controls stop but menu music continues. DebugTools stores the session mute preference; Application's public API is unchanged.
   - `SetExitKey(KEY_NULL)`: Esc does not close the window, so Esc is free for pause.
 - Changed by: 04; planned: 03, 20, 24, 25
 
@@ -143,9 +143,10 @@ All use the same pattern: `static X& GetInstance()` with a function-local static
 - Kind: scene (`"Game"`), the gameplay orchestrator
 - Owns (current): `Player playerEntity`, `KillCounter killCounter`, `GameTimer gameTimer`, `std::vector<Card> augmentCards`, `std::vector<BackgroundLayer> backgroundLayers` (4 parallax layers), `Music gameMusic`, `Button* restartButton`, `Button* mainMenuButton` (raw `new`), `std::array<Sound, 10> scoreSounds`, `DeathInfo deathInfo`, `GameState gameState`
 - Owns (target): adds `WaveDirector`, `CollisionSystem`, `HUD`, `Dock`, `UpgradeShop`, `DockShopUI`, `PauseOverlay`, `DebugTools`, run economy (credits, cargo)
-- Item 04: owns `DebugTools debugTools` only with `GAME_DEBUG`. Handles debug input before the state switch; draws hitboxes after world sprites and diagnostics after the state UI. Both `onSwitch()` and `restartGame()` reset the tools.
+- Item 04: owns `DebugTools debugTools` only with `GAME_DEBUG`. Application routes console input before scene updates; Game skips controls and simulation while captured. Draws hitboxes after world sprites and diagnostics after the state UI. Both `onSwitch()` and `restartGame()` reset the tools.
 - Item 28 early performance subtask: owns `SpatialGrid enemyCollisionGrid`, `asteroidCollisionGrid`, and reusable non-owning `collisionEnemies` / `collisionAsteroids` vectors. Snapshots use manager iteration order. Bullet snapshots precede movement; asteroid snapshots are rebuilt after movement/spawning. Both current reset paths clear them; consolidate in item 05. Public API unchanged.
 - Public API: `update()`, `draw()`, `onSwitch()`, `onExit()` (Scene overrides). Private: `restartGame()`, `DrawParallaxBackground()`, `DrawLayer()`
+- Debug-only API: `bool updateDebugConsole(bool activeGame)`, `void drawDebugConsole() const`. Game owns DebugTools; `debugPausedTimer` remembers whether console capture paused the run timer, without changing GameState. Both reset paths clear it.
 - Enums in `Game.hpp`: `GameState : int { GAME_RUNNING, GAME_AUGMENT_SELECTION, GAME_PAUSED, GAME_OVER }` (explicit underlying type permits the debug header's forward declaration; target adds `GAME_DOCKED`, `GAME_VICTORY`), `KillerType { KILLER_ENEMY_BULLET, KILLER_ENEMY_COLLISION, KILLER_ASTEROID }`, struct `DeathInfo`
 - Gotchas:
   - File-level statics `prevGameTimer` and `gameOverTextStarted` survive between runs; `prevGameTimer` is never reset. Move them into the class during item 05.
@@ -224,7 +225,7 @@ All use the same pattern: `static X& GetInstance()` with a function-local static
 - Owned by: `Game` (value member `playerEntity`)
 - Public API (current): `init()` (resets everything, registers animations), `update()`, `draw()` (empty; the Animator draws the ship), `getHitbox()`, `takeDamage(float timeStateEntered, Vector2 entityPosition, float entitySize)`, `getPlayerState()`, `addScore(int)`, `getScore()`, `addDamageDealt(int)`, `getTotalDamageDealt()`, `getRandomDamage()`, `getMinDamage()`, `getMaxDamage()`, `getKnockbackPower()`, and nine augment methods: `increasePlayerAttackSpeed()`, `increasePlayerHealth()`, `increasePlayerMovementSpeed()`, `increasePlayerIframeDuration()`, `increasePlayerRotationSpeed()`, `increaseTriggerHappyBurst()`, `increaseScatterShot()`, `increasePiercingRounds()`, `increaseInertiaImpact()`
 - Enum: `PlayerState { PLAYER_DEFAULT, PLAYER_STUNNED, PLAYER_IFRAME, PLAYER_DEAD }`
-- Debug-only API (item 04): `void setDebugInvincible(bool enabled)`, `bool isDebugInvincible() const`. `init()` resets the flag; `takeDamage()` returns before health, stun, knockback, audio or overlay effects when enabled. Contact still consumes colliding bullets/enemies/asteroids normally. F5 does not revive a dead run or clear an existing stun.
+- Debug-only API (item 04): `void setDebugInvincible(bool enabled)`, `bool isDebugInvincible() const`. `init()` resets the flag; `takeDamage()` returns before health, stun, knockback, audio or overlay effects when enabled. Contact still consumes colliding bullets/enemies/asteroids normally. The `invincible` command does not revive a dead run or clear an existing stun.
 - Behavior: 8-direction WASD movement with acceleration; the ship rotates toward the mouse (rotation speed scales with velocity); shooting fires along the **facing** direction, not straight at the cursor. Burst fire (Trigger Happy) and scatter fan (30° steps). Animations `"accelerating"` (4 frames) and `"deaccelerating"` (3 frames) are registered in the Animator under those fixed IDs.
 - Gotchas:
   - `takeDamage` always subtracts 10 and ignores its arguments for the amount. Item 08 changes the signature to `takeDamage(int amount, Vector2 sourcePosition, float knockbackScale)`.
@@ -395,7 +396,7 @@ All use the same pattern: `static X& GetInstance()` with a function-local static
   int aliveCount() const;                                  // excludes bosses
   bool hasBoss() const;
   Boss* getBoss();                                         // nullptr if none
-  void killAllNonBoss();                                   // debug F2
+  void killAllNonBoss();                                   // future clear-wave support (no command currently assigned)
   ```
 - Gotchas:
   - The per-frame spawn-rate output was removed during the user-requested item 28 early performance subtask. Public API and spawn behavior are unchanged.
@@ -547,13 +548,13 @@ All use the same pattern: `static X& GetInstance()` with a function-local static
 
 ### DebugTools
 - Files: src/DebugTools.hpp, src/DebugTools.cpp
-- Status: built (item 04)
+- Status: built (item 04, F5 console follow-up)
 - Kind: value
-- Owned by: `Game`
-- Public API: `void reset()`, `void update(Player& player)`, `void drawWorld(const Player& player) const`, `void drawOverlay(const Player& player, GameState state) const`
-- Uses: `Player`, read-only iteration over existing enemy/asteroid/bullet containers, `ResourceManager`, `Theme`
-- Behavior: compiled only with `GAME_DEBUG`. F1 toggles collision circles, translucent IDs/panel/text, bullet point markers, entity counts, HP, FPS and `GameState`; its F2 row reads master audio status. `Application` owns the global F2 mute toggle. F5 toggles `Player`'s debug invincibility; its indicator stays visible even with F1 off. F3/F4/F6 display pending-system explanations until items 11/12/17.
-- Gotchas: ship collision radius is `getHitbox().width`, asteroid radius is `getAsteroidSize()`, bullets are points. Call `drawWorld` inside the gameplay camera and `drawOverlay` in canvas space. `reset()` clears overlay/message; `Player::init()` separately resets invincibility. When item 05 introduces `Game::resetRun()`, move both existing reset paths there. Wave phase/budget and magnet radius remain unavailable until their systems exist.
+- Owned by: long-lived `Game` scene; `Application` routes console calls even outside a run
+- Public API: `void reset()`, `void update(Player* player)`, `void drawConsole() const`, `bool capturesInput() const`, `void drawWorld(const Player& player) const`, `void drawOverlay(const Player& player, GameState state) const`
+- Uses: `Player`, read-only enemy/asteroid/bullet containers, `ResourceManager`, `Theme`, `Config`
+- Behavior: compiled only with `GAME_DEBUG`. F5 toggles the translucent terminal; Tab completion, Up/Down history, Enter execution, Backspace editing and Escape closing. Metadata lookup dispatches enums for `help`, `hitbox`, `mute`, `invincible`, `credits`, `boss`, `wave`, `clear`, `close`. Toggle arguments are optional `on/off/toggle`. Pending systems report unavailable. A null player rejects gameplay commands outside a run.
+- Gotchas: capture includes opening/closing frames. Ship collision radius is `getHitbox().width`, asteroid radius is `getAsteroidSize()`, bullets are points. `drawWorld` uses the gameplay camera; diagnostics and console use canvas space. `reset()` clears run UI state but preserves mute/saved volume; `Player::init()` resets invincibility. Reset both paths until item 05. Input/history/output limits live in Config, layout/opacity in Theme.
 - Changed by: 04
 
 ---

@@ -208,7 +208,7 @@ while (ch > 0) {
 
 ### Audio
 
-`GetMasterVolume()` and `SetMasterVolume(float)` are available in the installed Raylib 5.5 header and verified against official Raylib docs through Context7. Master volume applies to all music and sound effects, including active playback. For the debug F2 toggle, save the current master volume, set it to `0.0f`, then restore the saved value on the next press; do not stop/restart each sound or change its individual volume. Handle this once per frame in `Application` so every scene shares the same mute state.
+`GetMasterVolume()` and `SetMasterVolume(float)` are available in the installed Raylib 5.5 header and verified against official Raylib docs through Context7. Master volume applies to all music and sound effects, including active playback. For the debug `mute` command, save the current master volume, set it to `0.0f`, then restore the saved value when unmuting; do not stop/restart each sound or change its individual volume. Keep the saved volume in `DebugTools`; Application routes the console before scene updates so every scene shares the same mute state. Repeated `mute on` must not overwrite the saved volume with zero.
 
 ```cpp
 // Overlapping instances of one sound (gunfire, kills): aliases share the sample data
@@ -345,3 +345,7 @@ Add a short section here whenever an item establishes a reusable pattern or disc
 ### Item NN: short title (date)
 What was verified, where, and the rule that follows from it.
 ```
+
+### Item 04: F5 console input (14 October 2026)
+
+Verified `GetCharPressed()` and `IsKeyPressedRepeat()` through Context7's official Raylib repository documentation and the installed 5.5 header. Drain the character queue until zero, including unsupported characters. Commands accept ASCII and normalize to lowercase; Backspace handles both first press and repeat. `IsKeyPressed` does not consume a key for other callers: explicitly capture console opening/open/closing frames before gameplay or menu controls. Escape already cannot exit because Application sets `KEY_NULL`. Use `GameTimer::pause/unpause` only if this console paused the timer; preserve existing GameState. Draw into the virtual canvas before the CRT pass and fit long input/output text with `MeasureTextEx`.

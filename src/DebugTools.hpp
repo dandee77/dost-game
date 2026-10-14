@@ -1,6 +1,9 @@
 #pragma once
 
 #ifdef GAME_DEBUG
+#include <string>
+#include <vector>
+
 class Player;
 enum GameState : int;
 
@@ -8,12 +11,27 @@ class DebugTools
 {
 public:
     void reset();
-    void update(Player& player);
+    void update(Player* player);
+    void drawConsole() const;
+    bool capturesInput() const { return inputCaptured; }
     void drawWorld(const Player& player) const;
     void drawOverlay(const Player& player, GameState state) const;
 
 private:
+    void execute(Player* player);
+    void complete();
+    void addOutput(const std::string& line);
+    std::vector<std::string> completions() const;
+
     bool overlayVisible = false;
-    const char* statusMessage = "F1: hitboxes and diagnostics";
+    bool consoleVisible = false;
+    bool inputCaptured = false;
+    bool audioMuted = false;
+    float volumeBeforeMute = 1.0f;
+    std::string input;
+    std::string historyDraft;
+    std::vector<std::string> history;
+    std::vector<std::string> output;
+    std::size_t historyIndex = 0;
 };
 #endif

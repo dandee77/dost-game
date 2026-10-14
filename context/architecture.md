@@ -271,7 +271,7 @@ BeginMode2D(utils::gameCamera)
   bullets
   Animator::Update() then Animator::Draw()   // ships, enemies, bosses, explosions (ONE update per frame)
   damage numbers, world-space telegraphs (boss rings), explosion confetti
-  debug overlay (hitboxes) when F1 is on
+  debug overlay (hitboxes) when `hitbox on` is enabled
 EndMode2D()
 HUD (health, cargo, credits, wave, timer, boss bar, dock arrow, tutorial prompts)
 State overlays: augment cards | dock shop | pause | game over | victory fade
@@ -335,21 +335,26 @@ Names are 3 to 12 characters, A-Z, 0-9 and space only (no commas). The file is c
 
 ### Debug tools (debug builds only)
 
-Compiled only when CMake is configured with `-DGAME_DEBUG=ON` (adds the `GAME_DEBUG` define). Owned by `Game` through `DebugTools`.
+Compiled only with `-DGAME_DEBUG=ON`. The existing `DebugTools` remains owned by the long-lived `Game` scene. `Application::Run()` calls `Game::updateDebugConsole(activeGame)` before scene updates and `drawDebugConsole()` after scene drawing, so the same terminal and audio preference work on the menu and during runs. Gameplay commands receive no player outside the active Game scene.
 
-Item 04 implemented on 14 October: F1 shows collision circles, entity IDs, bullet point markers, enemy/asteroid/bullet counts, HP, FPS and the current `GameState`. F5 blocks damage and its side effects at `Player::takeDamage`; a visible indicator remains when F1 is off. Both toggles reset on restart and new runs through the existing reset paths. Debug input is handled in every game state, including pause and augment selection; F5 does not revive a dead player.
+F5 toggles a translucent console at the top left, inside the CRT safe area. Enter runs the typed command, Tab completes command names and arguments (or their common prefix), Up/Down navigates command history and restores a draft, Backspace edits, and Escape closes. The console shows matching completions and recent results. Commands are looked up in one metadata table and dispatched by enum. Input/history/output are bounded by `Config`.
 
-F2 now toggles master audio mute/unmute at the user's request (14 October), replacing the planned clear-wave key. `Application::Run()` handles F2 before scene updates so it works in menus, gameplay and pause; the previous master volume is restored when unmuted. Mute persists across scene changes and run restarts as a session preference. F1 text/IDs use 55% opacity and its panel 25% to keep the world visible. F3/F4/F6 currently show an unavailable explanation: connect F6 in item 11, F3 in item 12 and F4 in item 17. Wave phase/budget and magnet radius remain unavailable until those systems exist.
-
-The CMake option defaults to OFF. The local Windows `build.bat` explicitly enables it; direct CMake release builds should use `-DGAME_DEBUG=OFF`. This removes debug input, invincibility state, overlays and the application's FPS counter at compile time.
-
-| Key | Action |
+| Command | Action |
 |---|---|
-| F1 | Toggle overlay: hitbox circles, entity IDs, alive counts, wave phase, budget left, FPS |
-| F2 | Toggle all audio mute/unmute (music and sound effects, all scenes) |
-| F3 | Add 500 credits and fill cargo |
-| F4 | Skip to the next boss wave |
-| F5 | Toggle player invincibility |
-| F6 | Advance one wave |
+| `help` | Show commands and controls |
+| `hitbox [on/off/toggle]` | Collision circles, IDs, bullet point markers, counts, HP, FPS and GameState |
+| `mute [on/off/toggle]` | All music and effects, in every scene; restore previous volume when unmuting |
+| `invincible [on/off/toggle]` | Block player damage and its side effects; does not revive a dead run |
+| `credits` | Pending scrap/cargo system (item 12); later add credits and fill cargo |
+| `boss` | Pending boss system (item 17); later skip to next boss wave |
+| `wave` | Pending wave system (item 11); later advance one wave |
+| `clear` | Clear console output |
+| `close` | Close the console |
 
-These keys exist to test items quickly and to record clean footage for the trailer. They must not exist in the submitted build.
+Omitting a toggle argument toggles the current value. Gameplay commands require an active run. Old F1/F2/F3/F4/F6 actions are removed; F5 now controls only the console.
+
+Console focus captures opening, open and closing frames. Main-menu updates are suspended while its music stream continues; loading continues normally. `Game::update()` keeps music streaming but skips gameplay and controls, pausing only a previously running game timer. Closing resumes that timer without changing `GameState`; an existing pause, augment selection or game over stays in place. Existing animation rendering and wall-clock cooldown semantics remain unchanged.
+
+New runs and restarts reset console input/history/output, visibility, hitboxes and the timer-resume flag. `Player::init()` resets invincibility. Master mute and its saved volume persist as a session preference. Consolidate these resets into `Game::resetRun()` in item 05. Wave phase/budget and magnet radius remain unavailable until their systems exist.
+
+The CMake option defaults to OFF. `build.bat` enables it for local development. `-DGAME_DEBUG=OFF` removes console input/rendering, invincibility state, diagnostics and the window FPS counter from the submitted build.

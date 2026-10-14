@@ -1,6 +1,12 @@
 #include "DebugTools.hpp"
 
 #ifdef GAME_DEBUG
+#include <algorithm>
+#include <array>
+#include <cctype>
+#include <sstream>
+
+#include "Config.hpp"
 #include "AsteroidManager.hpp"
 #include "BulletManager.hpp"
 #include "EnemyManager.hpp"
@@ -10,6 +16,31 @@
 #include "Theme.hpp"
 
 namespace {
+    enum DebugCommand { DEBUG_HELP, DEBUG_HITBOX, DEBUG_MUTE, DEBUG_INVINCIBLE,
+                        DEBUG_CREDITS, DEBUG_BOSS, DEBUG_WAVE, DEBUG_CLEAR, DEBUG_CLOSE };
+    struct CommandInfo {
+        const char* name;
+        DebugCommand command;
+        bool toggle;
+        bool requiresPlayer;
+    };
+    constexpr std::array commands = {
+        CommandInfo{"help", DEBUG_HELP, false, false},
+        CommandInfo{"hitbox", DEBUG_HITBOX, true, true},
+        CommandInfo{"mute", DEBUG_MUTE, true, false},
+        CommandInfo{"invincible", DEBUG_INVINCIBLE, true, true},
+        CommandInfo{"credits", DEBUG_CREDITS, false, true},
+        CommandInfo{"boss", DEBUG_BOSS, false, true},
+        CommandInfo{"wave", DEBUG_WAVE, false, true},
+        CommandInfo{"clear", DEBUG_CLEAR, false, false},
+        CommandInfo{"close", DEBUG_CLOSE, false, false}
+    };
+
+    bool pressedOrRepeated(int key)
+    {
+        return IsKeyPressed(key) || IsKeyPressedRepeat(key);
+    }
+
     const char* stateName(GameState state)
     {
         switch (state) {
@@ -32,36 +63,190 @@ namespace {
 void DebugTools::reset()
 {
     overlayVisible = false;
-    statusMessage = "F1: hitboxes and diagnostics";
+    consoleVisible = false;
+    inputCaptured = false;
+    input.clear();
+    historyDraft.clear();
+    history.clear();
+    historyIndex = 0;
+    output.clear();
+    // Master audio is a session preference and survives new runs.
 }
 
-void DebugTools::update(Player& player)
+void DebugTools::update(Player* player)
 {
-    if (IsKeyPressed(KEY_F1)) {
-        overlayVisible = !overlayVisible;
-        TraceLog(LOG_INFO, "[DebugTools::update] Overlay %s", overlayVisible ? "on" : "off");
-    }
-    if (IsKeyPressed(KEY_F5)) {
-        player.setDebugInvincible(!player.isDebugInvincible());
-        TraceLog(LOG_INFO, "[DebugTools::update] Invincibility %s", player.isDebugInvincible() ? "on" : "off");
-    }
+    // Capture the closing frame too: Escape, Enter and mouse clicks must not leak.
+    inputCaptured = consoleVisible;
+    if (IsKeyPressed(KEY_F5)) consoleVisible = !consoleVisible;
+    inputCaptured = inputCaptured || consoleVisible;
+    if (!inputCaptured) return;
 
-    // These hooks become gameplay actions in items 11, 12 and 17.
-    if (IsKeyPressed(KEY_F3)) {
-        statusMessage = "F3 unavailable: scrap (item 12)";
-        overlayVisible = true;
-        TraceLog(LOG_INFO, "[DebugTools::update] %s", statusMessage);
+    if (IsKeyPressed(KEY_ESCAPE)) consoleVisible = false;
+    for (int character = GetCharPressed(); character != 0; character = GetCharPressed()) {
+        // The command language is ASCII. Drain unsupported characters as well.
+        if (consoleVisible && character >= ' ' && character <= '~' && input.size() < Config::DEBUG_INPUT_LIMIT) {
+            input += static_cast<char>(std::tolower(static_cast<unsigned char>(character)));
+        }
     }
-    if (IsKeyPressed(KEY_F4)) {
-        statusMessage = "F4 unavailable: bosses (item 17)";
-        overlayVisible = true;
-        TraceLog(LOG_INFO, "[DebugTools::update] %s", statusMessage);
+    if (!consoleVisible) return;
+
+    if (pressedOrRepeated(KEY_BACKSPACE) && !input.empty()) input.pop_back();
+    if (IsKeyPressed(KEY_UP) && historyIndex > 0) {
+        if (historyIndex == history.size()) historyDraft = input;
+        input = history[--historyIndex];
     }
-    if (IsKeyPressed(KEY_F6)) {
-        statusMessage = "F6 unavailable: waves (item 11)";
-        overlayVisible = true;
-        TraceLog(LOG_INFO, "[DebugTools::update] %s", statusMessage);
+    if (IsKeyPressed(KEY_DOWN) && historyIndex < history.size()) {
+        ++historyIndex;
+        input = historyIndex == history.size() ? historyDraft : history[historyIndex];
     }
+    if (IsKeyPressed(KEY_TAB)) complete();
+    if (IsKeyPressed(KEY_ENTER) || IsKeyPressed(KEY_KP_ENTER)) execute(player);
+}
+
+void DebugTools::addOutput(const std::string& line)
+{
+    if (output.size() == Config::DEBUG_OUTPUT_LINES) output.erase(output.begin());
+    output.push_back(line);
+}
+
+std::vector<std::string> DebugTools::completions() const
+{
+    std::vector<std::string> matches;
+    for (const auto& command : commands) {
+        const std::string name = command.name;
+        if (name.starts_with(input)) matches.push_back(name);
+        if (command.toggle && input.starts_with(name + " ")) {
+            for (const char* value : {"on", "off", "toggle"}) {
+                const std::string candidate = name + " " + value;
+                if (candidate.starts_with(input)) matches.push_back(candidate);
+            }
+        }
+    }
+    return matches;
+}
+
+void DebugTools::complete()
+{
+    const auto matches = completions();
+    if (matches.empty()) return;
+    std::string prefix = matches.front();
+    for (const auto& match : matches) {
+        while (!match.starts_with(prefix)) prefix.pop_back();
+    }
+    if (prefix.size() > input.size()) input = prefix;
+}
+
+void DebugTools::execute(Player* player)
+{
+    std::istringstream stream(input);
+    std::string name;
+    std::string argument;
+    std::string extra;
+    stream >> name >> argument >> extra;
+    if (name.empty()) {
+        input.clear();
+        return;
+    }
+    addOutput("> " + input);
+    if (history.empty() || history.back() != input) {
+        if (history.size() == Config::DEBUG_HISTORY_LIMIT) history.erase(history.begin());
+        history.push_back(input);
+    }
+    historyIndex = history.size();
+    historyDraft.clear();
+    input.clear();
+
+    const auto found = std::find_if(commands.begin(), commands.end(), [&](const CommandInfo& command) {
+        return name == command.name;
+    });
+    if (found == commands.end()) {
+        addOutput("Unknown command. Type help or press Tab.");
+        return;
+    }
+    if (!extra.empty() || (!found->toggle && !argument.empty()) ||
+        (found->toggle && !argument.empty() && argument != "on" && argument != "off" && argument != "toggle")) {
+        addOutput("Usage: " + name + (found->toggle ? " [on|off|toggle]" : ""));
+        return;
+    }
+    if (found->requiresPlayer && player == nullptr) {
+        addOutput("Start a run to use " + name + ".");
+        return;
+    }
+    const auto toggleValue = [&](bool current) {
+        if (argument == "on") return true;
+        if (argument == "off") return false;
+        return !current;
+    };
+    switch (found->command) {
+    case DEBUG_HELP:
+        addOutput("hitbox / mute / invincible [on|off|toggle]");
+        addOutput("credits / boss / wave: pending systems");
+        addOutput("help / clear / close | Up/Down: history");
+        break;
+    case DEBUG_HITBOX:
+        overlayVisible = toggleValue(overlayVisible);
+        addOutput(std::string("Hitboxes and diagnostics: ") + (overlayVisible ? "ON" : "OFF"));
+        break;
+    case DEBUG_MUTE: {
+        const bool muted = toggleValue(audioMuted);
+        if (muted != audioMuted) {
+            if (muted) {
+                volumeBeforeMute = GetMasterVolume();
+                SetMasterVolume(0.0f);
+            } else {
+                SetMasterVolume(volumeBeforeMute);
+            }
+            audioMuted = muted;
+        }
+        addOutput(std::string("Audio: ") + (audioMuted ? "MUTED" : "RESTORED"));
+        break;
+    }
+    case DEBUG_INVINCIBLE:
+        player->setDebugInvincible(toggleValue(player->isDebugInvincible()));
+        addOutput(std::string("Invincibility: ") + (player->isDebugInvincible() ? "ON" : "OFF"));
+        break;
+    case DEBUG_CREDITS: addOutput("Unavailable: scrap and cargo (item 12)."); break;
+    case DEBUG_BOSS: addOutput("Unavailable: bosses (item 17)."); break;
+    case DEBUG_WAVE: addOutput("Unavailable: waves (item 11)."); break;
+    case DEBUG_CLEAR: output.clear(); break;
+    case DEBUG_CLOSE: consoleVisible = false; break;
+    }
+    TraceLog(LOG_INFO, "[DebugTools::execute] %s %s", name.c_str(), argument.c_str());
+}
+
+void DebugTools::drawConsole() const
+{
+    if (!consoleVisible) return;
+    const Font font = ResourceManager::GetInstance().GetFont(Theme::FONT_PRIMARY);
+    const Rectangle panel = Theme::DEBUG_CONSOLE_PANEL;
+    DrawRectangleRec(panel, Fade(Theme::COLOR_PANEL, Theme::DEBUG_PANEL_OPACITY));
+    Vector2 cursor = {panel.x + Theme::DEBUG_PADDING, panel.y + Theme::DEBUG_PADDING};
+    const float availableWidth = panel.width - Theme::DEBUG_PADDING * 2.0f;
+    const auto drawLine = [&](std::string text, Color color, bool keepEnd = false) {
+        // Fit to the panel at the virtual canvas size, including long history lines.
+        while (!text.empty() && MeasureTextEx(font, text.c_str(), Theme::TEXT_CAPTION, Theme::TEXT_SPACING).x > availableWidth) {
+            if (keepEnd) text.erase(text.begin());
+            else text.pop_back();
+        }
+        DrawTextEx(font, text.c_str(), cursor, Theme::TEXT_CAPTION, Theme::TEXT_SPACING,
+                   Fade(color, Theme::DEBUG_CONSOLE_TEXT_OPACITY));
+        cursor.y += Theme::DEBUG_LINE_HEIGHT;
+    };
+    drawLine("DEBUG CONSOLE | F5 / Esc: close", Theme::COLOR_ACCENT);
+    drawLine("Enter: run | Tab: complete | help: commands", Theme::COLOR_TEXT);
+    for (const auto& line : output) drawLine(line, Theme::COLOR_TEXT);
+    cursor.y = panel.y + Theme::DEBUG_PADDING + Theme::DEBUG_LINE_HEIGHT *
+        static_cast<float>(Config::DEBUG_OUTPUT_LINES + 2);
+    drawLine("> " + input + "_", Theme::COLOR_ACCENT, true);
+    std::string suggestions = "Type a command to see completions.";
+    if (!input.empty()) {
+        suggestions = "Tab: ";
+        for (const auto& match : completions()) {
+            if (suggestions != "Tab: ") suggestions += "  ";
+            suggestions += match;
+        }
+    }
+    drawLine(suggestions, Theme::COLOR_TEXT);
 }
 
 void DebugTools::drawWorld(const Player& player) const
@@ -93,7 +278,7 @@ void DebugTools::drawOverlay(const Player& player, GameState state) const
 
     const Font font = ResourceManager::GetInstance().GetFont(Theme::FONT_PRIMARY);
     if (player.isDebugInvincible()) {
-        DrawTextEx(font, "F5 INVINCIBLE", Theme::DEBUG_INVINCIBLE_POSITION,
+        DrawTextEx(font, "INVINCIBLE", Theme::DEBUG_INVINCIBLE_POSITION,
                    Theme::TEXT_CAPTION, Theme::TEXT_SPACING, Theme::COLOR_ACCENT);
     }
     if (!overlayVisible) return;
@@ -118,13 +303,9 @@ void DebugTools::drawOverlay(const Player& player, GameState state) const
         static_cast<int>(EnemyManager::GetInstance().getEnemies().size()),
         static_cast<int>(AsteroidManager::GetInstance().getAsteroids().size())));
     drawLine(TextFormat("Bullets: player %d | enemy %d", playerBullets, enemyBullets));
-    drawLine(TextFormat("F5 Invincibility: %s", player.isDebugInvincible() ? "ON" : "OFF"));
+    drawLine(TextFormat("Invincibility: %s", player.isDebugInvincible() ? "ON" : "OFF"));
     drawLine("Wave / phase / budget: unavailable");
-    drawLine(TextFormat("F2 Audio: %s", GetMasterVolume() == 0.0f ? "MUTED" : "ON"));
-    drawLine("F3 Credits / cargo: pending scrap");
-    drawLine("F4 Next boss: pending bosses");
-    drawLine("F6 Next wave: pending waves");
-    drawLine("Bullets: point markers");
-    drawLine(statusMessage);
+    drawLine(TextFormat("Audio: %s", GetMasterVolume() == 0.0f ? "MUTED" : "ON"));
+    drawLine("F5: console | hitbox off: hide diagnostics");
 }
 #endif

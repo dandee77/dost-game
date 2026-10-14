@@ -8,7 +8,7 @@ Update this file after every completed build-plan item. Anyone reading it (teamm
 
 **Phase:** 0 (Foundation)
 **Last completed:** Item 04 debug tools (14 October 2026, branch `feat/04-debug-tools`); Debug ON and Release OFF builds and in-game smoke checks passed
-**Item 04 follow-up:** F1 text/IDs at 55% opacity, panel at 25%; F2 now toggles all audio in every scene and restores the prior volume (user request, 14 October)
+**Item 04 follow-up:** F5 translucent console with Tab autocomplete, history and command feedback; `hitbox`, `mute`, `invincible` replace debug shortcuts. Focus pauses gameplay/timer and captures controls. Debug ON / Release OFF builds and native input checks passed (user request, 14 October, `dev`).
 **Item 28 early performance subtask completed:** collision broad-phase optimization, regression validation and local capacity measurements (14 October, branch `perf/collision-grid`). See `collision-performance.md` and `tests/results/collision-2026-10-14.csv`. Full item 28 balance and demo-laptop checks remain pending.
 **In progress:** Item 01 (eligibility, other team machine builds, and full gameplay/restart checks pending)
 **Next:** Item 01 (eligibility question, repository, build on every machine) and item 02 (asset provenance)
@@ -138,12 +138,13 @@ Fill in during item 01.
 | 2026-10-14 | D19 | Implement item 04 ahead of item 03 at the user's explicit request, seeding only the required Theme tokens | Keep the requested debug scope small; Config/Balance migration and the rest of item 03 remain pending. Existing collision behavior is unchanged | Theme.hpp, DebugTools.*, Game.*, Player.*, Application.cpp |
 | 2026-10-14 | D20 | Default GAME_DEBUG to OFF; enable it in the Windows development launcher | Local `build` provides F1/F5 while release builds can omit every debug path. F2/F3/F4/F6 show unavailable explanations until their planned systems exist | CMakeLists.txt, build.bat, DebugTools.* |
 | 2026-10-14 | D21 | Bring forward only item 28's collision performance work at the user's explicit request; supersedes D11's deferral | Preserve point/circle predicate, first-target order, piercing, pre/post-movement phases and deferred removals; replace the unused grid with reusable ordered buckets and a small-set scan. Remove the synchronous per-frame spawn log. Item 06 extraction and other item 05 work remain pending | SpatialGrid.*, Game.*, Config.hpp, EnemyManager.cpp, CMakeLists.txt, tests/, context files |
+| 2026-10-14 | D22 | Replace debug shortcuts with an F5 console as an item 04 follow-up on dev | User requested terminal/autocomplete and a dev commit. Extend DebugTools, route it from Application in every scene, capture underlying controls, preserve pause state and session mute. No additional gameplay systems | DebugTools.*, Game.*, Application.cpp, Theme.hpp, Config.hpp, context and usage docs |
 
 ---
 
 ## Open Questions
 
-Resolved instruction change (14 October): the user's F2 mute request supersedes the earlier clear-wave assignment in the architecture/build plan. Those documents now reserve F2 for audio; item 11 keeps F6 for advancing waves.
+Resolved instruction change (14 October): the user's F5 console request supersedes the earlier F1-F6 debug-key assignments and the prior F2 mute follow-up. This is scoped to item 04 while item 01 remains in progress. Current contracts now use `hitbox`, `mute`, `invincible`, and pending `credits`/`boss`/`wave` commands; historical logs below retain their original key names.
 
 Resolved scope instruction (14 October): the user's explicit collision optimization and capacity-report request supersedes D11 and the normal item-28 date for this performance subtask only. No gameplay values or hitbox radii changed. The optional native test fixtures expose private members with test-only macros to avoid adding gameplay/debug accessors to production classes; this is a scoped exception to the code-standards macro rule.
 
@@ -187,6 +188,7 @@ Required for Form 03 (Asset and AI Usage Disclosure). Organizers may request pro
 | 2026-10-14 | 04 | Codex (OpenAI, GPT-6) | Implement debug overlay and invincibility, build gating and launcher, verify Raylib docs with Context7, compile Debug/Release and exercise actual key events in a temporary native integration harness; update context files | Moderate | Team review pending |
 | 2026-10-14 | 04 follow-up | Codex (OpenAI, GPT-6) | Reduce debug text/panel opacity, replace F2 placeholder with session-wide master mute/unmute, update key contracts and validate builds/audio handling | Minimal | Team review pending |
 | 2026-10-14 | 28 early collision performance subtask | Codex (OpenAI, GPT-6) | Profile original collision loops, implement an ordered spatial hash grid, preserve existing collision semantics, add brute-force differential tests and rendered benchmark fixtures, verify Raylib timing controls through Context7/find-docs, measure local limits and update context | Heavy | Team review pending |
+| 2026-10-14 | 04 F5 console follow-up | Codex (OpenAI, GPT-6) | Extend DebugTools with command parsing, autocomplete/history and translucent console; migrate hotkeys, protect underlying input and run timer, verify Raylib input with Context7/find-docs, run Debug/Release builds and native input/application smoke tests, update docs | Moderate | Team review pending |
 
 Asset generation is logged per file in `assets/ASSETS.md`.
 
@@ -209,6 +211,8 @@ Asset generation is logged per file in `assets/ASSETS.md`.
 ---
 
 ## Notes
+
+- 14 Oct, item 04 console follow-up: Debug ON and Release OFF compile without new warnings. Temporary native Windows input fixtures under ignored `build/` exercise F5, Tab command/argument completion, history/draft restoration, Backspace, unknown/invalid commands, all migrated actions and placeholders, bounded text input, 35+ enemy diagnostics, mute idempotence/restoration to 0.37, damage protection, timer/input capture, closing-frame capture, existing pause/augment/game-over preservation, and the actual Restart button. Full Application loop verified a blocked menu Play click, mute across menu/gameplay, command execution and normal close; Release ignores console input. Existing CTest SpatialGridParity also passed. Inspected CRT screenshots at 1280x720 and letterboxed 1000x800 (`build/console-*-crt.png`). Initial fixture issues were synthetic movement text left in the input, missing extended-key flags for arrows, and short scene-entry waits; correcting the fixture made checks pass. The console preserves existing wall-clock cooldown and draw-time animation semantics; it suspends gameplay updates and the run timer.
 
 - 14 Oct, user-requested collision performance subtask: replaced the unused string-based grid with a reusable ordered spatial hash; preserved original predicates, target order, collision phase timing and removal semantics. 600,000 differential queries and 480 real-game frame records matched brute force/original code, including moving asteroids and all killer types. Actual Restart button and new-run reset checks passed. Debug ON and Release OFF builds pass without new compiler warnings; CTest passed. On Ryzen 5 5600GT / RX590 GME with the complete 4K rendering pipeline, sustained 2,000 enemies + 8,000 bullets averaged 97.8 FPS (p99 12.45 ms; 2/6,000 frames above 16.67 ms); 2,500 + 10,000 averaged 83.1 FPS versus 8.7 FPS with the original collision loops. 3,500 + 14,000 regularly misses 60 FPS. Counts are controlled workload measurements, not a universal game cap. Full methodology, limitations, original-reference commit, commands and tracked CSV results are in `collision-performance.md`. Item 06 extraction, broader item 05 fixes, gameplay balance and other hardware remain pending.
 

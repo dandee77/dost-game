@@ -76,13 +76,13 @@ To place screen UI over a world object, convert with `GetWorldToScreen2D(worldPo
 
 No other sizes. If a layout needs a new size, add a token first and record why.
 
-Item 04 adds `Theme::DEBUG_TEXT_WORLD_ID = 2` world units for compact debug entity IDs; the normal 5-unit tutorial labels overlap in the 30+ enemy test. Debug panel text uses `TEXT_CAPTION` (50 canvas pixels). The panel is `(220, 450, 1480, 800)`, with 30-pixel padding and 64-pixel rows; the F5 indicator sits at `(220, 360)`. All debug UI tokens live in the initial `Theme.hpp`; item 03 still needs to migrate the other UI values. Hitbox circles use player accent, enemy toxic and asteroid muted colors; bullets use colored crosses at their collision points.
+Item 04 adds `Theme::DEBUG_TEXT_WORLD_ID = 2` world units for compact debug IDs. Debug text uses `TEXT_CAPTION` (50 canvas pixels). The F5 terminal is `(220, 310, 2000, 720)` with 30-pixel padding and 64-pixel rows, keeping its first text below the cropped corner. Six recent output rows sit above the input and completion hint; overlong lines fit within the panel (input keeps its end visible). Diagnostics occupy `(220, 1060, 1700, 540)` below the console and the invincibility indicator sits at `(220, 1620)`. All tokens live in Theme. Hitboxes use player accent, enemy toxic and asteroid muted colors; bullets use crosses at their collision points.
 
 ---
 
 ## Colors
 
-F1 debug text (including world entity IDs) uses `Theme::DEBUG_TEXT_OPACITY = 0.55`; its panel uses `Theme::DEBUG_PANEL_OPACITY = 0.25`. This keeps gameplay visible under the diagnostics. Collision outlines and the F5 invincibility indicator retain their normal opacity. The F2 row reports master audio as ON or MUTED.
+Debug diagnostic text/IDs use 55% opacity, console text 85%, and both panels 25%. World outlines and the invincibility indicator retain normal opacity. The audio status row reports ON or MUTED; use the console's `mute` command to change it.
 
 Semantic colors make the action readable in a 3-second glance and in a trailer.
 
