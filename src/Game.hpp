@@ -19,6 +19,7 @@
 #include "GameOverOverlay.hpp"
 #include "Button.hpp"
 #include "SpatialGrid.hpp"
+#include "BarricadeEvent.hpp"
 #ifdef GAME_DEBUG
 #include "DebugTools.hpp"
 #endif
@@ -75,8 +76,11 @@ private:
     void damageEquipmentEnemy(const std::string& id, int damage, Vector2 direction, float knockback);
     void destroyEquipmentAsteroid(const std::string& id);
     void detonateRocket(Vector2 center, int damage, float knockback);
+    void updateCameraZoom(float dt);
+    void resolveBarricadeContact(Vector2 previousPlayerPosition);
 
     GameState gameState;
+    BarricadeEvent barricadeEvent;
     SpatialGrid enemyCollisionGrid;
     SpatialGrid asteroidCollisionGrid;
     std::vector<Enemy*> collisionEnemies;

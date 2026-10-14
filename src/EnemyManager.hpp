@@ -27,6 +27,7 @@ public:
     void removeEnemy(const std::string& id);
     void reset();
     void separateEnemies(float dt);
+    std::vector<std::string> spawnBarricade(Vector2 center);
 #ifdef GAME_DEBUG
     int spawnLowEnemies(Vector2 playerPos, int quantity);
 #endif

@@ -171,6 +171,10 @@ P2 spawn follow-up: `spawn lowlevel enemy <quantity>` parses a whole integer fro
 
 Spawning (`EnemyManager::update`) is a **continuous trickle**, not waves: the spawn cooldown shrinks from 1.25 s to 0.025 s over 250 s, 1 to 3 enemies per spawn, and mid-level enemies appear after 150 s with a chance rising toward 40%. Asteroids follow a similar ramp.
 
+P3 adds a separate Game-owned `BarricadeEvent` alongside that trickle. It requests a complete set of `BarricadeEnemy` instances from EnemyManager, records their IDs and runs once at 2:00 (or via `spawn barricade event` in F5). On running frames: event scheduling/time and camera zoom, player/weapon simulation, normal enemy movement, relative swept barricade contact, distant/offscreen escape cleanup, then ordinary entity collisions. Barricades participate in all player weapon damage paths but skip ordinary enemy contact/debris removal and low-only crowd separation. Player contact correction is independent of vulnerability, so iframes cannot bypass solid segments. The existing augment transition now exits the running branch immediately, freezing event and player simulation on that transition frame too.
+
+Each segment advances its shrink/scatter clock with the same simulation delta as its coordinator. Pause/console/augment paths advance neither. Event expiry removes only tracked IDs and animations; no rewards or destruction effects on despawn. Restart/entry reset the event before manager IDs are reused; scene exit and death clear it and restore camera behavior. This is a scoped event prototype, not the planned WaveDirector or full run-reset refactor.
+
 ### Current collision matrix
 
 P2 crowd pass (14 October): after enemy movement/despawning and before entity combat collisions, EnemyManager builds a separate SpatialGrid snapshot containing living low-level enemies only. Each query considers summed soft-body radii with a strict per-cell visit budget. Immutable frame positions avoid sequential update bias; deterministic opposing pair directions resolve exact overlaps and a small lateral component breaks collinear queues. Exponential response and a speed cap turn corrections into gradual pushes. Memory is reused; resets clear the grid and observers. Mid-level enemies do not enter this grid and retain their existing flight. Their live/destruction Animator registrations use FLYING, rendered in a second linear pass above WORLD without sorting or extra Update calls. See `crowd-performance.md` for measured costs. This intentionally changes low-enemy contact positions, superseding the earlier movement-parity promise for this scoped feature; combat search predicates remain unchanged.
@@ -357,6 +361,8 @@ F5 toggles a translucent console at the top left, inside the CRT safe area. Ente
 | `hitbox [on/off/toggle]` | Collision circles, IDs, bullet point markers, counts, HP, FPS and GameState |
 | `mute [on/off/toggle]` | All music and effects, in every scene; restore previous volume when unmuting |
 | `invincible [on/off/toggle]` | Block player damage and its side effects; does not revive a dead run |
+| `spawn lowlevel enemy <quantity>` | Spawn real low enemies; integer 1–10,000, clamped to capacity |
+| `spawn barricade event` | Start a durable shrinking ring event around the living player; rejects duplicate active events |
 | `credits` | Pending scrap/cargo system (item 12); later add credits and fill cargo |
 | `boss` | Pending boss system (item 17); later skip to next boss wave |
 | `wave` | Pending wave system (item 11); later advance one wave |

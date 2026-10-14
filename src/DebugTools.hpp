@@ -5,13 +5,14 @@
 #include <vector>
 
 class Player;
+class BarricadeEvent;
 enum GameState : int;
 
 class DebugTools
 {
 public:
     void reset();
-    void update(Player* player);
+    void update(Player* player, BarricadeEvent* barricade = nullptr);
     void drawConsole() const;
     bool capturesInput() const { return inputCaptured; }
     void drawWorld(const Player& player) const;
@@ -19,7 +20,7 @@ public:
 
 private:
     friend struct EquipmentTestAccess;
-    void execute(Player* player);
+    void execute(Player* player, BarricadeEvent* barricade = nullptr);
     void complete();
     void moveSuggestion(int direction);
     void addOutput(const std::string& line);

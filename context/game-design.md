@@ -17,6 +17,14 @@ Values marked **(SA)** are the current Space Ablaze values, kept so the game sti
 
 ## Player
 
+### P3 barricade event (14 October, user request)
+
+Once per run at 120 seconds of active gameplay, 24 durable event enemies surround the player's current position. The center stays fixed. Existing augment selection at 2:00 pauses play; the event starts when play resumes. Ordinary enemy spawning and combat continue. `spawn barricade event` starts the same event immediately for testing; an active event cannot stack. At the population cap, creation waits until all 24 slots are available.
+
+Prototype TUNE values in Balance: 120 HP per segment; radius shrinks continuously from 65 to 45 world units over 30 simulation seconds; segment collision radius 6.5. With the player's existing radius 4, intact neighboring segments block passage, and one destroyed segment creates a usable gap even at the smallest radius. Contact deals the existing 10 damage only when vulnerable, respects shields/debug invincibility, and physically blocks during stun/iframes too. Bounce restitution is 0.2. Segments ignore knockback and crowd separation; other enemies may overlap them freely. Each destroyed segment uses the existing debris reward (5 score) and normal kill count.
+
+At 30 seconds, survivors release containment and scatter radially at 55 units/s for four seconds, then despawn without rewards. Early escape requires distance greater than the current ring radius plus 90 units AND the entire ring outside the camera viewport. Killing every segment also ends the event. Smooth zoom targets 13 during containment and the normal 20 after escape/scatter/death; exponential response is 2.5/s. All event clocks and zoom freeze during pause, console capture and augment selection. Restart clears the event and rearms its automatic trigger. No equipment access/progression conditions are introduced.
+
 ### P2 low-enemy crowd motion (14 October, user request)
 
 Living low-level enemies softly separate after their normal chase movement. Body radius is 1.5 times the combat hitbox radius (about 6.43 units), with response 12/s, maximum push speed 60 units/s, and a 0.05 s maximum correction step after a stall. A pair-symmetric side-step coefficient of 0.25 lets collinear queues widen rather than remain a single-file train. All values are prototype TUNE constants in Balance. This does not alter combat hitboxes or apply damage. Extremely crowded groups may remain compressed while settling; this is soft separation, not rigid-body physics.

@@ -13,7 +13,8 @@ enum EnemyType
     LOW_LEVEL_ENEMY = 0,
     MID_LEVEL_ENEMY,
     HIGH_LEVEL_ENEMY,
-    BOSS_LEVEL_ENEMY
+    BOSS_LEVEL_ENEMY,
+    BARRICADE_ENEMY
 };
 
 
@@ -40,7 +41,8 @@ public:
     void takeDamage(int damage);
     bool isDead() const { return health <= 0; }
     void applyKnockback(Vector2 direction, float force);
-    bool canReceiveKnockback() const;
+    virtual bool canReceiveKnockback() const;
+    virtual Vector2 getPreviousPosition() const { return position; }
     void applySeparation(Vector2 displacement);
 
 protected:

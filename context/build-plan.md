@@ -59,6 +59,19 @@ A1 ─> A2..A9 ─> 15, 26
 
 ## Phase 0: Foundation
 
+### P3 Shrinking barricade event (user-requested scope, 14 Oct)
+**Status:** Complete; Debug/Release builds and native integration checks pass; rendered asteroid ring inspected.
+**Classes:** BarricadeEnemy (Enemy subclass), BarricadeEvent (Game-owned coordinator), EnemyManager, Game, Player, DebugTools; Balance/Config/Theme tokens.
+
+- At 2:00, create a durable asteroid-art ring centered on the player's current location while ordinary enemy spawning continues.
+- Shrink for 30 seconds. Individual segments take normal weapon damage; surviving segments physically block and bounce the player even during iframes, while damage respects vulnerability.
+- Exclude event enemies from crowd separation and ordinary kamikaze/debris collision removal. Destroyed segments open real gaps.
+- Scatter survivors outward on timeout; remove them after four seconds. Clear early after distant/offscreen escape. Smoothly widen/restore camera zoom; pause/reset all event state correctly.
+- Add `spawn barricade event` to F5 help and autocomplete.
+
+**Done when:** automatic/manual triggers, combat, containment, escape, scatter, camera and reset checks pass in Debug/Release; native render inspected.
+**Test:** swept contact across every seam, boost and iframe checks, all weapon paths, pause/restart, capacity/command validation, timeout and early escape, frame-rate independent zoom. User request overrides numbered item order only for P3.
+
 ### P2 Console dropdown and enemy crowd separation (user-requested scope, 14 Oct)
 **Status:** Complete; Debug/Release builds, native checks, render inspection and sequential performance measurements passed. See `crowd-performance.md`.
 **Classes:** DebugTools, EnemyManager, Enemy, SpatialGrid, Animator, MidLevelEnemy; Theme/Balance/Config tokens.

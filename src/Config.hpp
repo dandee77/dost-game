@@ -2,6 +2,11 @@
 #include <cstddef>
 
 namespace Config {
+    inline constexpr float CAMERA_ZOOM_PLAY = 20.0f, CAMERA_ZOOM_INTRO = 150.0f;
+    inline constexpr float CAMERA_ZOOM_BARRICADE = 13.0f;
+    inline constexpr float CAMERA_INTRO_RESPONSE = 7.5f, CAMERA_EVENT_RESPONSE = 2.5f;
+    inline constexpr int BARRICADE_CONTACT_PASSES = 8;
+    inline constexpr float BARRICADE_CONTACT_SKIN = 0.01f;
     inline constexpr float TIMER_EPSILON = 0.00001f;
     inline constexpr std::size_t DEBUG_INPUT_LIMIT = 80;
     inline constexpr std::size_t DEBUG_HISTORY_LIMIT = 32;

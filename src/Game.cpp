@@ -39,12 +39,14 @@ Game::Game()
 
 Game::~Game()
 {
+    barricadeEvent.reset();
     if (restartButton) delete restartButton;
     if (mainMenuButton) delete mainMenuButton;
 }
 
 void Game::onSwitch()
 {
+    barricadeEvent.reset();
 #ifdef GAME_DEBUG
     debugTools.reset();
     debugPausedTimer = false;
@@ -62,7 +64,7 @@ void Game::onSwitch()
     utils::gameCamera.target = { playerEntity.getPosition().x, playerEntity.getPosition().y };
     utils::gameCamera.offset = {GAME_SCREEN_WIDTH/2.0f, GAME_SCREEN_HEIGHT/2.0f};
     utils::gameCamera.rotation = 0.0f;
-    utils::gameCamera.zoom = 150.0f;
+    utils::gameCamera.zoom = Config::CAMERA_ZOOM_INTRO;
 
     backgroundLayers = {
         {ResourceManager::GetInstance().GetTexture("background1"), 0.2f, worldTileSize},  // 0.2
@@ -144,6 +146,7 @@ void Game::onSwitch()
 
 
 void Game::restartGame() { //ts kinda useless ngl
+    barricadeEvent.reset();
 #ifdef GAME_DEBUG
     debugTools.reset();
     debugPausedTimer = false;
@@ -170,6 +173,8 @@ void Game::restartGame() { //ts kinda useless ngl
     Animator::GetInstance().Remove("killer_display");
 
     playerEntity.init();
+    utils::gameCamera.zoom = Config::CAMERA_ZOOM_PLAY;
+    utils::gameCamera.target = playerEntity.getPosition();
     
     killCounter.reset();
     gameTimer.reset();
@@ -291,6 +296,28 @@ void Game::resolveEquipmentAttacks()
     });
 }
 
+void Game::updateCameraZoom(float dt)
+{
+    const float target = barricadeEvent.isContaining() ? Config::CAMERA_ZOOM_BARRICADE : Config::CAMERA_ZOOM_PLAY;
+    const float response = !barricadeEvent.isContaining() && utils::gameCamera.zoom > Config::CAMERA_ZOOM_PLAY ?
+        Config::CAMERA_INTRO_RESPONSE : Config::CAMERA_EVENT_RESPONSE;
+    utils::gameCamera.zoom += (target - utils::gameCamera.zoom) * (1.0f - std::exp(-response * dt));
+}
+
+void Game::resolveBarricadeContact(Vector2 previousPlayerPosition)
+{
+    if (!barricadeEvent.constrainPlayer(playerEntity, previousPlayerPosition) || playerEntity.getHealth() > 0) return;
+    deathInfo.killerType = KILLER_ASTEROID;
+    deathInfo.killerID = "barricade";
+    deathInfo.killerName = "Barricade";
+    deathInfo.killerTexture = ResourceManager::GetInstance().GetTexture("asteroid");
+    gameState = GAME_OVER;
+    ExplosionConfettiManager::GetInstance().startExplosion(playerEntity.getPosition());
+    GameOverOverlay::GetInstance().startOverlay();
+    PlaySound(ResourceManager::GetInstance().GetSound("game_over"));
+    StopMusicStream(gameMusic);
+}
+
 std::string Game::update() 
 {
     // if (IsKeyPressed(KEY_ENTER)) return "MainMenu"; 
@@ -373,11 +400,13 @@ std::string Game::update()
 
 #pragma endregion AugmentSelection
 
+        if (gameState != GAME_RUNNING) break;
+
 #pragma region StartAnimation
 
-        float zoomLerpSpeed = 7.5f; // Higher = faster decay
         float deltaTime = GetFrameTime();
-        utils::gameCamera.zoom += (20.0f - utils::gameCamera.zoom) * (1.0f - expf(-zoomLerpSpeed * deltaTime));
+        barricadeEvent.update(deltaTime, gameTimer.getElapsedTime(), playerEntity.getPosition());
+        updateCameraZoom(deltaTime);
 
 #pragma endregion
 
@@ -385,6 +414,7 @@ std::string Game::update()
 
 #pragma region UpdatePlayer
 
+        const Vector2 previousPlayerPosition = playerEntity.getPosition();
         playerEntity.update();
         // ?  the enemies bullet shares the same bullet max range since it is relative to the player
         BulletManager::GetInstance().update(playerEntity.getPosition()); // ?  it only gets player position to calculate the distance to the bullets
@@ -614,6 +644,9 @@ std::string Game::update()
 
         EnemyManager::GetInstance().update(playerEntity.getPosition(), gameTimer); //! <<***********************
 
+        resolveBarricadeContact(previousPlayerPosition);
+        barricadeEvent.finishIfEscaped(playerEntity.getPosition(), utils::gameCamera);
+
 
 
 #pragma region UpdateEntitiesCollision
@@ -631,6 +664,8 @@ std::string Game::update()
         std::vector<std::string> asteroidsToRemove;
     
         for (auto& [enemyId, enemy] : EnemyManager::GetInstance().getEnemies()) {   
+            // Event segments use persistent swept contact; debris cannot delete them.
+            if (enemy->getEnemyType() == BARRICADE_ENEMY) continue;
             
             // player to enemy collision
             if (CheckCollisions(enemy->getPosition(), playerEntity.getPosition(), playerEntity.getHitbox().width)
@@ -806,6 +841,8 @@ std::string Game::update()
     
     case GAME_OVER:
     {
+        barricadeEvent.reset();
+        updateCameraZoom(GetFrameTime());
         //TODO: STOP THE GAME OVER SOUND AFTER CLICKING THE BUTTON
         gameTimer.pause();
         ExplosionConfettiManager::GetInstance().update();
@@ -1039,6 +1076,7 @@ void Game::draw()
 
         killCounter.draw();
         gameTimer.draw(GAME_SCREEN_WIDTH);
+        barricadeEvent.drawStatus();
         
         DamageOverlay::GetInstance().draw();
     }
@@ -1049,6 +1087,8 @@ void Game::draw()
 
 void Game::onExit()
 {
+    barricadeEvent.reset();
+    utils::gameCamera.zoom = Config::CAMERA_ZOOM_PLAY;
     Animator::GetInstance().StopAll();
     Animator::GetInstance().Remove("killer_display"); // Clean up killer animation
     StopMusicStream(gameMusic);
@@ -1057,7 +1097,7 @@ void Game::onExit()
 #ifdef GAME_DEBUG
 bool Game::updateDebugConsole(bool activeGame)
 {
-    debugTools.update(activeGame ? &playerEntity : nullptr);
+    debugTools.update(activeGame ? &playerEntity : nullptr, activeGame ? &barricadeEvent : nullptr);
     return debugTools.capturesInput();
 }
 

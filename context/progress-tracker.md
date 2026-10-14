@@ -6,6 +6,8 @@ Update this file after every completed build-plan item. Anyone reading it (teamm
 
 ## Current Status
 
+**P3 barricade event complete (14 October):** Added a distinct durable asteroid-art enemy and Game-owned shrinking-ring event, automatically triggered once at 2:00 and manually with `spawn barricade event`. Twenty-four 120-HP segments shrink for 30 simulation seconds, then scatter for four seconds. Swept contact and bounded seam correction block boosts/iframes, damage respects vulnerability, killed segments open real gaps, and normal enemies overlap freely. Distant/offscreen escape clears only the event; camera zoom smoothly widens/restores. Pause/console/augment/death/restart/scene-exit paths covered. Debug/Release builds pass without new compiler warnings; 6,628 Debug and 6,561 Release equipment/console/crowd/event checks plus 610,000 spatial queries passed. Inspected `build/barricade-event.png` from native rendering. Gameplay tuning remains prototype values for later balance playtests.
+
 **P2 spawn command follow-up (14 October):** Added `spawn lowlevel enemy <quantity>` with prefix autocomplete and quantity guidance. Creates real low enemies around the existing 150-unit ring, shares normal IDs, accepts 1–10,000 and reports partial spawns at the existing population cap. Requires a living player in a run. Normal spawns now enforce the cap per insertion; low-enemy rotation initializes before paused-console drawing. Debug/Release builds passed without new warnings; 735 Debug and 679 Release integration checks plus 610,000 spatial queries passed. Tests exercise actual 2,000-enemy creation, repeat IDs, malformed/overflow quantities, capacity, live-run guards and restart cleanup.
 
 **P2 complete (14 October):** Vertical console dropdown with six visible suggestions, keyboard selection/scrolling, Tab/Enter fill and Ctrl+Up/Down history. Living low enemies now separate using bounded SpatialGrid queries and time-scaled soft pushes; mid enemies overlap freely with unchanged flight logic and draw above low enemies. Reset clears crowd observers. Debug/Release builds passed with no new compiler warnings; 713 Debug and 679 Release native checks plus 610,000 spatial query checks passed. Native dropdown/crowd renders inspected, and a pixel test verifies flying-over-low order. Release rendered averages: 1k/2k/3k/5k/7.5k enemies = 247/173/120/86/57 FPS; 2k enemies + 8k injected bullets = 104 FPS over 3,600 frames. Conditions, p99 timings and limits: `crowd-performance.md`.
@@ -143,6 +145,7 @@ Fill in during item 01.
 
 | Date | # | Decision | Reason | Files changed |
 |---|---|---|---|---|
+| 2026-10-14 | D23 | Add user-requested P3 barricade as a Game-owned coordinator and Enemy subclass alongside the existing spawner | Keep normal combat/crowd behavior, avoid a premature WaveDirector refactor, use per-segment contact so destroyed gaps remain traversable, and use simulation time for pause correctness | BarricadeEvent.*, BarricadeEnemy.*, Game.*, Enemy*, Player.*, DebugTools.*, tokens, tests and context |
 | 2026-10-14 | D17 | Import Space Ablaze main at `72361209c6afac24a2a0400a605124b38ca46420`, preserving all 113 upstream commits | User selected the existing game as the starting point; keep `origin` pointing to dost-game and `space-ablaze` pointing to the reference repository | Source, assets, README, build files |
 | 2026-10-14 | D18 | Make only the compatibility changes needed for the local MSVC baseline build | Replace 10 C-style compound literals with C++ brace initialization; select the CRT entry point for the existing `main()` in a windowed MSVC executable; enable compiler warnings and fix the optional PLATFORM condition | CMakeLists.txt, Asteroid.cpp, Button.cpp, GameTimer.cpp, MainMenu.cpp, Player.cpp |
 | 2026-10-14 | D19 | Implement item 04 ahead of item 03 at the user's explicit request, seeding only the required Theme tokens | Keep the requested debug scope small; Config/Balance migration and the rest of item 03 remain pending. Existing collision behavior is unchanged | Theme.hpp, DebugTools.*, Game.*, Player.*, Application.cpp |
@@ -153,6 +156,8 @@ Fill in during item 01.
 ---
 
 ## Open Questions
+
+Resolved P3 scope instruction (14 October): user explicitly requested an automatic 2:00 barricade event and immediate debug trigger ahead of numbered item order. Implement only this event alongside the current continuous spawner; planned WaveDirector, unlock conditions and the general reset refactor remain deferred. Reuse existing asteroid art as a placeholder; record its pending legacy provenance without claiming a new license.
 
 Resolved P2 scope instruction (14 October): the user requested dropdown suggestions and optimized enemy separation ahead of numbered item order. Their follow-up explicitly exempts mid enemies from separation and requires them to draw on top. Only living low enemies participate in crowd pushing; mid movement code is unchanged. This intentionally supersedes movement parity for the earlier collision optimization, while preserving its exact combat-query behavior. No spawn, unlock, damage or combat-radius changes.
 
@@ -197,6 +202,7 @@ Required for Form 03 (Asset and AI Usage Disclosure). Organizers may request pro
 
 | Date | Item | Tool and model | Used for | Extent (Minimal / Moderate / Heavy) | Human review |
 |---|---|---|---|---|---|
+| 2026-10-14 | P3 barricade event | Codex (OpenAI, GPT-6) | Implement event enemy/coordinator, automatic/debug triggers, swept containment and iframe damage separation, weapon integration, camera/cleanup/reset logic; run Debug/Release native checks and inspect rendered preview; document reuse of existing art and update project context | Heavy | Team review pending |
 | 2026-10-14 | Planning | Claude (Anthropic) | Context files, code review of Space Ablaze, build plan | Moderate | Team review pending |
 | 2026-10-14 | 01 (repository setup only) | Codex (OpenAI) | Initialize Git, prepare README, and upload the existing project documents to dandee77/dost-game | Minimal | Team review pending |
 | 2026-10-14 | 01 (baseline import and local build) | Codex (OpenAI) | Import Space Ablaze with history, resolve README, fix ignore patterns and MSVC build compatibility, verify build and launch, update documentation | Moderate | Team review pending |
@@ -232,6 +238,8 @@ Asset generation is logged per file in `assets/ASSETS.md`.
 ---
 
 ## Notes
+
+- 14 Oct, P3: Tested 720 radial approaches at both full and minimum ring size, including boosted long sweeps during iframes, inward seam bounces and single-segment escape gaps. Native Game update verifies automatic triggering after the 2:00 augment transition, ongoing ordinary spawning, synchronized event/segment clocks, original bullets and asteroid overlap. Cannon/heavy/rocket/laser damage, tick consumption, lethal contact, shields, iframe expiry, timeout-only scatter, distance-plus-offscreen cleanup, pause/reset guards and 30/144 FPS zoom convergence pass. Render inspection corrected asteroid transparent-padding scale (36-unit frame yields approximately 13-unit visible body). All event queries are limited to its 24 IDs; ordinary crowd solver and flying behavior are unchanged. No new sustained FPS claim was measured for this feature.
 
 - 14 Oct, item 04 console follow-up: Debug ON and Release OFF compile without new warnings. Temporary native Windows input fixtures under ignored `build/` exercise F5, Tab command/argument completion, history/draft restoration, Backspace, unknown/invalid commands, all migrated actions and placeholders, bounded text input, 35+ enemy diagnostics, mute idempotence/restoration to 0.37, damage protection, timer/input capture, closing-frame capture, existing pause/augment/game-over preservation, and the actual Restart button. Full Application loop verified a blocked menu Play click, mute across menu/gameplay, command execution and normal close; Release ignores console input. Existing CTest SpatialGridParity also passed. Inspected CRT screenshots at 1280x720 and letterboxed 1000x800 (`build/console-*-crt.png`). Initial fixture issues were synthetic movement text left in the input, missing extended-key flags for arrows, and short scene-entry waits; correcting the fixture made checks pass. The console preserves existing wall-clock cooldown and draw-time animation semantics; it suspends gameplay updates and the run timer.
 

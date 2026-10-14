@@ -274,6 +274,18 @@ void Player::takeDamage(float entered, Vector2 source, float entitySize)
 
 void Player::addBlast(Vector2 center) { blasts.push_back({center, Theme::EXPLOSION_TIME}); }
 
+void Player::resolveBarricadeContact(Vector2 correctedPosition, Vector2 normal, Vector2 source)
+{
+    if (playerState == PLAYER_DEAD) return;
+    if (playerState == PLAYER_DEFAULT) takeDamage(0.0f, source, 1.0f);
+    position = correctedPosition;
+    rect.x = position.x - rect.width / 2.0f;
+    rect.y = position.y - rect.height / 2.0f;
+    const float intoWall = Vector2DotProduct(velocity, normal);
+    if (intoWall < 0.0f)
+        velocity = Vector2Subtract(velocity, Vector2Scale(normal, (1.0f + Balance::BARRICADE_RESTITUTION) * intoWall));
+}
+
 void Player::draw()
 {
     for (const auto& blast : blasts) {

@@ -17,6 +17,7 @@ public:
     void drawEquipmentStatus() const;
     Rectangle getHitbox() const { return rect; }
     void takeDamage(float timeStateEntered, Vector2 entityPosition, float entitySize);
+    void resolveBarricadeContact(Vector2 correctedPosition, Vector2 normal, Vector2 source);
     PlayerState getPlayerState() const { return playerState; }
     void addScore(int score) { playerScore += score; }
     int getScore() const { return playerScore; }

@@ -8,6 +8,8 @@ Why tokens became a header: in C++ the values must live in code. Writing them in
 
 ## Canvas and Window
 
+P3 event UI: a sky-blue `BARRICADE Ns - BREAK A GAP` countdown at Theme's safe-area status position, changing to `BARRICADE DISPERSING` on timeout. Existing asteroid art is a one-frame WORLD animation, with 36-unit draw size (including transparent sprite padding) and 20 degrees/s rotation; normal seven-frame asteroid destruction is reused. Camera zoom smoothly changes from 20 to 13 during containment, returning to 20 after scatter/escape/death. No new art or font assets.
+
 | Item | Value | Where |
 |---|---|---|
 | Virtual canvas | 3840 x 2160 | `GAME_SCREEN_WIDTH`, `GAME_SCREEN_HEIGHT` (moving to `Config.hpp`) |

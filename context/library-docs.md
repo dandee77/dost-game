@@ -341,6 +341,10 @@ Each was found by reading the Space Ablaze source. The build-plan item that fixe
 
 ## Patterns Established During the Sprint
 
+### P3: physical containment and event clocks (14 October 2026)
+
+Do not gate physical contact correction on player vulnerability: call damage only in PLAYER_DEFAULT, but resolve wall position and incoming velocity during stun/iframes as well. Sweep the player relative to each segment's previous/current positions to catch both boosted travel and a shrinking wall. Resolve only surviving segments, so destroyed gaps are physically real. Barricade clocks use the running simulation delta, never wall-clock Cooldown; reset tracked IDs before manager counters are reused. Existing asteroid frames contain substantial transparent padding: their draw rectangle is not their visible body or collision radius. Reuse the existing Animator WORLD layer so flying enemies remain on top.
+
 ### Item 04: collision overlays and debug build gating (14 October 2026)
 
 Verified `DrawCircleLinesV(Vector2 center, float radius, Color color)` and `DrawLineV` with Context7's official Raylib repository documentation and the locally fetched Raylib 5.5 header. Draw collision circles inside `BeginMode2D`; use the exact radii consumed by collision checks (`getHitbox().width`, `getAsteroidSize()`), not visual sprite bounds. Bullets are point collisions, represented by crosses. Draw diagnostics after `EndMode2D` using `Theme` canvas coordinates. `GAME_DEBUG` guards both input/rendering and the player invincibility flag, including its damage early return; disabling the option removes every debug path. Keep `Player::init()` and `DebugTools::reset()` in both reset paths until item 05 consolidates them.

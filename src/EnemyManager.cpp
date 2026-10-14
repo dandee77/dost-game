@@ -3,6 +3,7 @@
 #include "raymath.h"
 #include "LowLevelEnemy.hpp"
 #include "MidLevelEnemy.hpp"
+#include "BarricadeEnemy.hpp"
 #include <iostream>
 #include "Balance.hpp"
 #include <cmath>
@@ -145,6 +146,20 @@ void EnemyManager::reset()
     crowdEnemies.clear();
     enemies.clear();
     enemyCounter = 0;
+}
+
+std::vector<std::string> EnemyManager::spawnBarricade(Vector2 center)
+{
+    if (enemies.size() + Balance::BARRICADE_SEGMENTS > Balance::ENEMY_LIMIT) return {};
+    std::vector<std::string> ids;
+    ids.reserve(Balance::BARRICADE_SEGMENTS);
+    for (int index = 0; index < Balance::BARRICADE_SEGMENTS; ++index) {
+        const std::string id = "enemy_" + std::to_string(enemyCounter++);
+        const float angle = 2.0f * PI * static_cast<float>(index) / Balance::BARRICADE_SEGMENTS;
+        enemies.emplace(id, std::make_unique<BarricadeEnemy>(id, center, angle));
+        ids.push_back(id);
+    }
+    return ids;
 }
 
 #ifdef GAME_DEBUG

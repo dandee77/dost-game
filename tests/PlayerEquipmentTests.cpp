@@ -5,6 +5,7 @@
 #include "raymath.h"
 #include <stdexcept>
 int runCrowdChecks(const std::string& artifactDirectory);
+int runBarricadeChecks(const std::string& artifactDirectory);
 
 #ifdef _WIN32
 extern "C" __declspec(dllimport) int __stdcall PostMessageA(void*, unsigned int, unsigned long long, long long);
@@ -455,7 +456,8 @@ int main(int argc, char** argv)
         require(ExportImage(capture, (artifactDirectory + "/player-equipment-preview.png").c_str()), "Export render preview");
         UnloadImage(capture); UnloadRenderTexture(target);
         checks += runCrowdChecks(artifactDirectory);
-        std::cout << "PASS: " << checks << " equipment, console and crowd checks\n";
+        checks += runBarricadeChecks(artifactDirectory);
+        std::cout << "PASS: " << checks << " equipment, console, crowd and barricade checks\n";
     } catch (const std::exception& error) {
         std::cerr << "FAIL after " << checks << " checks: " << error.what() << '\n';
         return 1;

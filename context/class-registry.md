@@ -139,6 +139,7 @@ All use the same pattern: `static X& GetInstance()` with a function-local static
 - Changed by: 22
 
 ### Game
+- P3: owns `BarricadeEvent barricadeEvent`; updates it only during running simulation and resolves wall contact after enemy movement. Private camera/contact helpers restore zoom and route lethal contact to normal game over. Reset event before manager resets, and on exit/death/destruction. Debug console receives the event owner only in an active run.
 - P1: private `resolveEquipmentAttacks()`, `damageEquipmentEnemy(const std::string&, int, Vector2, float)`, `destroyEquipmentAsteroid(const std::string&)`, `detonateRocket(Vector2, int, float)` integrate swept projectiles, beam ticks, splash, score and destruction before legacy snapshots. No public API change. Player draws its own layers and equipment HUD; shield interception precedes legacy enemy-bullet hull collisions.
 - Files: src/Game.hpp, src/Game.cpp
 - Status: existing → modified in most items
@@ -220,6 +221,7 @@ All use the same pattern: `static X& GetInstance()` with a function-local static
 - Gotchas: no virtual `getRadius()`; collision radii are read from class-specific methods (`getHitbox().width`, `getAsteroidSize()`). Item 10 adds `virtual float getCollisionRadius() const` with a default of `rect.width / 2`.
 
 ### Player
+- P3: `resolveBarricadeContact(Vector2 correctedPosition, Vector2 normal, Vector2 source)` always corrects position/velocity for living players, but calls normal damage only in PLAYER_DEFAULT. Existing shields, debug invincibility, stun and iframe timers remain authoritative.
 - Files: src/Player.hpp, src/Player.cpp
 - Status: modified (P1 equipment prototypes, 14 October; PlayerStats refactor remains item 08)
 - Kind: entity; inherits Entity; owned by Game as a value.
@@ -273,6 +275,7 @@ All use the same pattern: `static X& GetInstance()` with a function-local static
 ## Enemies
 
 ### Enemy
+- P3: `canReceiveKnockback() const` is virtual; `getPreviousPosition() const` defaults to current position and is overridden for moving barricade sweeps. `BARRICADE_ENEMY` appended to EnemyType.
 - Files: src/Enemy.hpp, src/Enemy.cpp
 - Status: existing → modified (item 10)
 - Kind: abstract base
@@ -282,7 +285,7 @@ All use the same pattern: `static X& GetInstance()` with a function-local static
 - Public API (current): `getPlayerPositionForEnemy(Vector2)` (a setter), `getEnemyType()`, `getHitbox()`, `getEnemyID()`, `virtual void destruct() = 0`, `takeDamage(int)`, `isDead()`, `applyKnockback(Vector2 direction, float force)`, `canReceiveKnockback()`
 - P2: `applySeparation(Vector2 displacement)` updates position and rect/hitbox origins without changing velocity, steering, knockback or combat radius.
 - Protected (current): `enemyID`, `enemyType`, `viewDirection`, `playerPosition`, `hitbox`, `speed`, `spriteSize`, `knockbackVelocity`, `knockbackDecay`, `knockbackCooldown` (`ENEMY_KNOCKBACK_COOLDOWN` 0.5 s)
-- Enum: `EnemyType { LOW_LEVEL_ENEMY, MID_LEVEL_ENEMY, HIGH_LEVEL_ENEMY, BOSS_LEVEL_ENEMY }` (the last two are not used yet)
+- Enum: `EnemyType { LOW_LEVEL_ENEMY, MID_LEVEL_ENEMY, HIGH_LEVEL_ENEMY, BOSS_LEVEL_ENEMY, BARRICADE_ENEMY }` (high and boss are not used yet)
 - Planned additions (item 10):
   ```cpp
   protected:
@@ -316,6 +319,23 @@ All use the same pattern: `static X& GetInstance()` with a function-local static
 - Behavior: homing. Each frame it lerps its direction toward the player (`turnSpeed` 5) and moves at 15 to 30 units/s. Kamikaze on contact. HP 30.
 - Sprites: picks one of three variants at random: `low_level_enemy1` (10 frames), `low_level_enemy2` (5), `low_level_enemy3` (5); destruct `*_destruct` (8, 8, 7 frames). All frames 64 x 64 px.
 - Gotchas: the constructor initializes `textureName` with one random roll and the animation with a second, separate roll; `textureName` is unused for drawing. Harmless; do not rely on `textureName`.
+
+### BarricadeEnemy
+- Files: src/BarricadeEnemy.hpp, src/BarricadeEnemy.cpp
+- Status: implemented, P3 user-requested prototype.
+- Kind: final subclass of `Enemy`, owned by `EnemyManager`.
+- Constructor: `BarricadeEnemy(const std::string& id, Vector2 center, float angle)`.
+- Behavior: fixed radial direction around a fixed event center, shrinks then scatters using accumulated simulation time. `update()` delegates to deterministic `advance(float dt)`. Previous position supports relative swept contact.
+- Combat: normal enemy HP/damage/removal paths; cannot receive knockback or crowd separation. Never removed by ordinary kamikaze or asteroid contact. Gameplay values are `Balance::BARRICADE_*`.
+- Drawing: existing static asteroid texture registered as a one-frame WORLD animation under its unique enemy ID; existing seven-frame asteroid destruction animation. Flying enemies retain their top layer.
+
+### BarricadeEvent
+- Files: src/BarricadeEvent.hpp, src/BarricadeEvent.cpp
+- Status: implemented, P3; value owned by Game, not a singleton or replacement WaveDirector.
+- API: `start(Vector2)`, `update(float dt, float runTime, Vector2 playerPosition)`, `constrainPlayer(Player&, Vector2 previousPosition) const`, `finishIfEscaped(Vector2, const Camera2D&)`, `reset()`, `drawStatus() const`, phase/center/elapsed queries.
+- Owns only tracked segment IDs, center, simulation elapsed time, phase and once-per-run automatic trigger flag. EnemyManager owns all segment objects. Resolves IDs on every use; no persistent enemy pointers.
+- Full-ring spawn or no spawn at capacity. Relative circle sweeps catch boost and moving-wall contacts; bounded neighboring-disk projections resolve seams. Interior bounce points into the arena. Player handles vulnerability and shield damage rules separately.
+- Cleanup erases only tracked IDs and their animations without kill rewards. Reset before EnemyManager resets/reuses IDs. Game calls reset on restart, scene entry/exit, death and destruction.
 
 ### MidLevelEnemy
 - Files: src/MidLevelEnemy.hpp, src/MidLevelEnemy.cpp
@@ -384,6 +404,7 @@ All use the same pattern: `static X& GetInstance()` with a function-local static
 ## Managers
 
 ### EnemyManager
+- P3: `std::vector<std::string> spawnBarricade(Vector2 center)` creates all event segments using the shared enemy ID counter, or none if capacity is insufficient. Returns IDs to the Game-owned event; no new singleton state. Crowd separation still accepts only LOW_LEVEL_ENEMY.
 - Files: src/EnemyManager.hpp, src/EnemyManager.cpp
 - Status: existing → modified (items 10, 11)
 - Kind: singleton
@@ -550,13 +571,14 @@ All use the same pattern: `static X& GetInstance()` with a function-local static
 - Behavior: dim overlay, "PAUSED", Resume and Quit to Menu buttons. Returns an action enum.
 
 ### DebugTools
+- P3: `spawn barricade event` starts the Game-owned event, with autocomplete/help, living-run guard, duplicate-event and capacity feedback. Console capture freezes the spawned event until closed.
 - P2 spawn follow-up: `spawn lowlevel enemy <quantity>` accepts integers 1–10,000, requires a living player, and reports actual count/capacity. Autocomplete fills the command prefix and leaves quantity editable. Enemy creation stays in EnemyManager; the command and batch API compile only with GAME_DEBUG.
 - P1: `player` command lists presets and individual weapon/engine/shield choices, with argument autocomplete. Typed metadata dispatch, strict argument validation and live-run guard. Public API unchanged; hitbox view adds swept projectile geometry, beam capsules and shield arcs.
 - Files: src/DebugTools.hpp, src/DebugTools.cpp
 - Status: built (item 04, F5 console follow-up)
 - Kind: value
 - Owned by: long-lived `Game` scene; `Application` routes console calls even outside a run
-- Public API: `void reset()`, `void update(Player* player)`, `void drawConsole() const`, `bool capturesInput() const`, `void drawWorld(const Player& player) const`, `void drawOverlay(const Player& player, GameState state) const`
+- Public API: `void reset()`, `void update(Player* player, BarricadeEvent* barricade = nullptr)`, `void drawConsole() const`, `bool capturesInput() const`, `void drawWorld(const Player& player) const`, `void drawOverlay(const Player& player, GameState state) const`
 - Uses: `Player`, read-only enemy/asteroid/bullet containers, `ResourceManager`, `Theme`, `Config`
 - Behavior: compiled only with `GAME_DEBUG`. F5 toggles the translucent terminal; vertical six-row suggestion dropdown with Up/Down or PageUp/PageDown navigation. Tab/Enter fills a selected row; Enter without a selection executes. Ctrl+Up/Down browses history (plain arrows also work with empty input). Editing/reset/execution clears suggestion selection/scroll state. Backspace edits and Escape closes. Metadata lookup dispatches enums for `help`, `hitbox`, `mute`, `invincible`, `credits`, `boss`, `wave`, `clear`, `close`. Toggle arguments are optional `on/off/toggle`. Pending systems report unavailable. A null player rejects gameplay commands outside a run.
 - Gotchas: capture includes opening/closing frames. Ship collision radius is `getHitbox().width`, asteroid radius is `getAsteroidSize()`, bullets are points. `drawWorld` uses the gameplay camera; diagnostics and console use canvas space. `reset()` clears run UI state but preserves mute/saved volume; `Player::init()` resets invincibility. Reset both paths until item 05. Input/history/output limits live in Config, layout/opacity in Theme.

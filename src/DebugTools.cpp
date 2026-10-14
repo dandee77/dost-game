@@ -102,7 +102,7 @@ void DebugTools::reset()
     // Master audio is a session preference and survives new runs.
 }
 
-void DebugTools::update(Player* player)
+void DebugTools::update(Player* player, BarricadeEvent* barricade)
 {
     // Capture the closing frame too: Escape, Enter and mouse clicks must not leak.
     inputCaptured = consoleVisible;
@@ -142,7 +142,7 @@ void DebugTools::update(Player* player)
     if (IsKeyPressed(KEY_TAB)) complete();
     if (IsKeyPressed(KEY_ENTER) || IsKeyPressed(KEY_KP_ENTER)) {
         if (selectedSuggestion >= 0) complete();
-        else execute(player);
+        else execute(player, barricade);
     }
 }
 
@@ -156,8 +156,8 @@ std::vector<std::string> DebugTools::completions() const
 {
     std::vector<std::string> matches;
     if (input.starts_with("spawn ")) {
-        const std::string prefix = "spawn lowlevel enemy ";
-        if (prefix.starts_with(input)) matches.push_back(prefix);
+        for (const std::string prefix : {"spawn lowlevel enemy ", "spawn barricade event"})
+            if (prefix.starts_with(input)) matches.push_back(prefix);
         return matches;
     }
     if (input.starts_with("player ")) {
@@ -209,7 +209,7 @@ void DebugTools::moveSuggestion(int direction)
         suggestionOffset = selectedSuggestion - Theme::DEBUG_SUGGESTION_ROWS + 1;
 }
 
-void DebugTools::execute(Player* player)
+void DebugTools::execute(Player* player, BarricadeEvent* barricade)
 {
     selectedSuggestion = -1;
     suggestionOffset = 0;
@@ -256,12 +256,20 @@ void DebugTools::execute(Player* player)
     case DEBUG_SPAWN: {
         std::string quantityText, trailing;
         stream >> quantityText >> trailing;
+        if (argument == "barricade" && extra == "event" && quantityText.empty() && trailing.empty()) {
+            if (!barricade || player->getHealth() <= 0) { addOutput("Start a living run before spawning an event."); break; }
+            if (barricade->isActive()) { addOutput("A barricade event is already active."); break; }
+            addOutput(barricade->start(player->getPosition()) ? "Barricade started. Break a gap or survive 30 seconds." :
+                "Not enough enemy capacity for a complete barricade.");
+            break;
+        }
         int quantity = 0;
         const auto parsed = std::from_chars(quantityText.data(), quantityText.data() + quantityText.size(), quantity);
         if (argument != "lowlevel" || extra != "enemy" || !trailing.empty() ||
             parsed.ec != std::errc{} || parsed.ptr != quantityText.data() + quantityText.size() ||
             quantity <= 0 || quantity > Balance::ENEMY_LIMIT) {
             addOutput("Usage: spawn lowlevel enemy <quantity>");
+            addOutput("Or: spawn barricade event");
             addOutput("Quantity: whole number from 1 to " + std::to_string(Balance::ENEMY_LIMIT) + ".");
             break;
         }
@@ -305,6 +313,7 @@ void DebugTools::execute(Player* player)
         addOutput("hitbox / mute / invincible [on|off|toggle]");
         addOutput("player: builds, weapons, engines and shields");
         addOutput("spawn lowlevel enemy <quantity>");
+        addOutput("spawn barricade event");
         addOutput("credits / boss / wave: pending systems");
         addOutput("help / clear / close | Ctrl+Up/Down: history");
         break;

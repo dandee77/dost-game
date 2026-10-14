@@ -1,5 +1,14 @@
 # Asset provenance
 
+## Barricade placeholder reuse (14 October 2026)
+
+Existing repository textures reused at the user's request; no new external assets or image edits. Legacy provenance verification remains item 02.
+
+| File | Resource key | Source / author | License | Edits | Date |
+|---|---|---|---|---|---|
+| `textures/asteroid.png` | `asteroid` | Existing Space Ablaze repository; original author pending audit | Pending legacy audit | None; reused for event enemy | 2026-10-14 |
+| `textures/asteroid_destruct.png` | `asteroid_destruct` | Existing Space Ablaze repository; original author pending audit | Pending legacy audit | None; reused for event enemy destruction | 2026-10-14 |
+
 ## Player equipment pack (14 October 2026)
 
 User-supplied Void Main Ship 1.0, commissioned from Baldur and distributed by Foozle. CC0, per the original `source/player/readme.txt`, retained verbatim. Files renamed/organized only; image pixels and editable sources preserved with SHA-256 verification. No AI art generated. Existing legacy asset audit remains item 02.

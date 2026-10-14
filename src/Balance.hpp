@@ -4,6 +4,13 @@
 
 // Player equipment prototypes. TUNE in playtests before adding progression.
 namespace Balance {
+    // Barricade event prototype. TUNE after playtests.
+    inline constexpr float BARRICADE_TRIGGER_TIME = 120.0f;
+    inline constexpr float BARRICADE_DURATION = 30.0f, BARRICADE_SCATTER_TIME = 4.0f;
+    inline constexpr int BARRICADE_SEGMENTS = 24, BARRICADE_HEALTH = 120;
+    inline constexpr float BARRICADE_START_RADIUS = 65.0f, BARRICADE_END_RADIUS = 45.0f;
+    inline constexpr float BARRICADE_BODY_RADIUS = 6.5f, BARRICADE_SCATTER_SPEED = 55.0f;
+    inline constexpr float BARRICADE_ESCAPE_MARGIN = 90.0f, BARRICADE_RESTITUTION = 0.2f;
     inline constexpr int ENEMY_LIMIT = 10'000;
     inline constexpr float ENEMY_SPAWN_RADIUS = 150.0f;
     // Soft low-enemy body spacing; combat hitboxes remain unchanged. TUNE.
