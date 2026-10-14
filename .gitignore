@@ -1,5 +1,6 @@
 build/
 build-*/
+.tools/
 *.exe
 .vscode/
 leaderboard.txt

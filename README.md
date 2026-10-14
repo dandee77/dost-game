@@ -2,6 +2,17 @@
 
 On this Windows machine, type `build` in the terminal to compile and launch the game. The local command forwards to this project's `build.bat`, which locates CMake, builds Debug, refreshes the assets, and runs from the executable's folder. On another machine, run `.\build.bat` from the project directory.
 
+## Windows quick start (this checkout)
+
+- Double-click `run.bat` to play the built game.
+- Double-click `build.bat` to rebuild and play, or run `.\build.bat --build-only` from PowerShell to build without launching.
+- Portable CMake 3.31.12 and w64devkit 2.10.1 (GCC 16.2.0) live in the ignored `.tools/` folder. The build script finds them automatically; no system PATH changes are needed. This checkout also has Raylib 5.5 cached in `.tools/raylib-5.5`, so rebuilding works offline. Other checkouts download Raylib through CMake on the first configure.
+- The local Release executable is `build/SpaceAblaze.exe`. Keep its `assets/` folder beside it; `run.bat` selects the correct working directory.
+- Controls: WASD to move, mouse to aim, left click to shoot, E for auto-fire, P to pause.
+- This is the original playable baseline. Settings and Credits are placeholders; the planned DOST modes and features are tracked in `context/build-plan.md`.
+
+For a fresh checkout on another machine, install CMake and a C++20 compiler using the setup instructions below, then run `build.bat`. Portable tools and build outputs are local and are not committed.
+
 Starting codebase: [Space Ablaze](https://github.com/dandee77/Space-Ablaze), imported with its Git history from commit `72361209c6afac24a2a0400a605124b38ca46420`.
 
 Development plans and project instructions are in [AGENTS.md](AGENTS.md) and [context/project-overview.md](context/project-overview.md). The original game documentation follows; it describes the starting game, not the planned DOST features.

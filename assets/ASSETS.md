@@ -1,0 +1,10 @@
+# Asset provenance
+
+This initial log covers the new trash asteroid candidates. The existing baseline assets still require the full item 02 provenance audit.
+
+| File | Key / status | Source | Author or prompt | License / review | Edits | Date |
+|---|---|---|---|---|---|---|
+| textures/asteroid-trash-v1.png | Candidate; not wired into the game | AI, OpenAI built-in image generation; model ID not exposed | [Exact prompt](prompts/trash-asteroid-v1.md), user-provided asteroid reference | AI output; team review and reference provenance audit pending | Nearest-neighbor export, original 38x33 footprint on 96x96 canvas, five-color source palette, binary alpha | 2026-10-14 |
+| textures/asteroid-trash-v1-destruct.png | Candidate; not wired into the game | AI, OpenAI built-in image generation; model ID not exposed | [Exact prompt](prompts/trash-asteroid-v1.md), matching intact sprite and original destruction reference | AI output; team review and reference provenance audit pending | Seven aligned 96x96 frames in 672x96 strip, original per-frame palette and footprint, binary alpha, empty final frame | 2026-10-14 |
+| textures/asteroid-trash-v2.png | Candidate; not wired into the game | AI, OpenAI built-in image generation; model ID not exposed | [Exact prompts](prompts/trash-asteroid-v2.md), v1 style reference and v2 revision | AI output; team review and reference provenance audit pending | Shortened panel stubs; proportional fit within 40x36 on 96x96 canvas, five-color palette, binary alpha; revised with one combined-atlas call | 2026-10-14 |
+| textures/asteroid-trash-v2-destruct.png | Candidate; not wired into the game | AI, OpenAI built-in image generation; model ID not exposed | [Exact prompt](prompts/trash-asteroid-v2.md), compact satellite and original destruction style | AI output; team review and reference provenance audit pending | Matching compact satellite breakup; seven 96x96 frames in 672x96 strip, centered proportional fit, per-frame original palette, hard alpha, empty terminal frame | 2026-10-14 |

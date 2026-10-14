@@ -47,6 +47,12 @@ The first configure downloads Raylib 5.5 from GitHub into `build/_deps`. It need
 
 With the Visual Studio generator, the default Debug executable and copied assets are in `build/Debug/`. Run from that folder. On the current Windows machine, CMake is bundled at `C:/Program Files (x86)/Microsoft Visual Studio/2022/BuildTools/Common7/IDE/CommonExtensions/Microsoft/CMake/CMake/bin/cmake.exe` and is not on PATH.
 
+### Portable Windows checkout (14 October 2026)
+
+The `diond` checkout uses `.tools/cmake-3.31.12-windows-x86_64` and `.tools/w64devkit` 2.10.1 (GCC 16.2.0). Both archives came from the projects' official GitHub releases and their SHA-256 hashes matched the release asset metadata. `.tools/raylib-5.5` caches the downloaded Raylib source; `build.bat` supplies `FETCHCONTENT_SOURCE_DIR_RAYLIB` when this directory exists. All of `.tools/` is ignored by Git.
+
+Run `build.bat --build-only` to configure and build Release, `build.bat` to build and play, or `run.bat` to play the existing build. The scripts set their working directory from their own location and put the portable tools on PATH only for the build process. Put the actual CMake directory ahead of w64devkit's CMake shim. The MinGW executable is `build/SpaceAblaze.exe`; its imports are standard Windows DLLs, with no separate GCC runtime DLLs required.
+
 ### Release build for the finals
 
 ```bash

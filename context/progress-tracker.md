@@ -37,6 +37,7 @@ Fill in during item 01.
 | Machine | Owner | OS | Compiler and version | CMake | Builds? | 60 FPS at 80 enemies? |
 |---|---|---|---|---|---|---|
 | Local development machine | dandee77 | Windows 11 | MSVC 19.44.35229.0 (VS 2022) | 3.31.6-msvc6 | Yes, Debug | Not tested |
+| diond checkout | diond | Windows 11, build 26200 | GCC 16.2.0, w64devkit 2.10.1 | 3.31.12 | Yes, Release | Not tested at 80 enemies; captured gameplay at 60 FPS |
 | Demo laptop (finals) | | | | | | |
 
 | Dependency | Version | Notes |
@@ -138,6 +139,7 @@ Fill in during item 01.
 | 2026-10-14 | D19 | Implement item 04 ahead of item 03 at the user's explicit request, seeding only the required Theme tokens | Keep the requested debug scope small; Config/Balance migration and the rest of item 03 remain pending. Existing collision behavior is unchanged | Theme.hpp, DebugTools.*, Game.*, Player.*, Application.cpp |
 | 2026-10-14 | D20 | Default GAME_DEBUG to OFF; enable it in the Windows development launcher | Local `build` provides F1/F5 while release builds can omit every debug path. F2/F3/F4/F6 show unavailable explanations until their planned systems exist | CMakeLists.txt, build.bat, DebugTools.* |
 | 2026-10-14 | D21 | Bring forward only item 28's collision performance work at the user's explicit request; supersedes D11's deferral | Preserve point/circle predicate, first-target order, piercing, pre/post-movement phases and deferred removals; replace the unused grid with reusable ordered buckets and a small-set scan. Remove the synchronous per-frame spawn log. Item 06 extraction and other item 05 work remain pending | SpatialGrid.*, Game.*, Config.hpp, EnemyManager.cpp, CMakeLists.txt, tests/, context files |
+| 2026-10-14 | D22 | Keep project-local portable CMake and GCC available on diond's machine; cache Raylib source for offline rebuilds | No C++ toolchain was installed; keep setup self-contained while retaining the dev debug launcher | .gitignore, build.bat, run.bat, README.md, library-docs.md |
 
 ---
 
@@ -169,6 +171,7 @@ Record compiler warnings present after item 01 here, so new warnings are easy to
 | File | Warning | Status |
 |---|---|---|
 | Raylib 5.5 CMakeLists.txt | CMake deprecation warning for compatibility with CMake older than 3.10 | Existing dependency warning; no game compiler warnings in the MSVC build |
+| GCC 16.2.0 baseline | Missing-field-initializers (primarily raymath.h), reorder, sign-compare, unused-variable; Raylib jar_mod.h stringop-overflow warnings | Existing source/dependency warnings in the first MinGW Release build; no gameplay source changed during machine setup. Build succeeds; full log in local .tools/build.log |
 
 Known bugs from the code review are in `library-docs.md`, Known Pitfalls.
 
@@ -187,6 +190,10 @@ Required for Form 03 (Asset and AI Usage Disclosure). Organizers may request pro
 | 2026-10-14 | 04 | Codex (OpenAI, GPT-6) | Implement debug overlay and invincibility, build gating and launcher, verify Raylib docs with Context7, compile Debug/Release and exercise actual key events in a temporary native integration harness; update context files | Moderate | Team review pending |
 | 2026-10-14 | 04 follow-up | Codex (OpenAI, GPT-6) | Reduce debug text/panel opacity, replace F2 placeholder with session-wide master mute/unmute, update key contracts and validate builds/audio handling | Minimal | Team review pending |
 | 2026-10-14 | 28 early collision performance subtask | Codex (OpenAI, GPT-6) | Profile original collision loops, implement an ordered spatial hash grid, preserve existing collision semantics, add brute-force differential tests and rendered benchmark fixtures, verify Raylib timing controls through Context7/find-docs, measure local limits and update context | Heavy | Team review pending |
+| 2026-10-14 | 01 (diond machine setup) | Codex (OpenAI) | Clone repository; download and verify portable build tools; cache Raylib; build Release; add build/run shortcuts; check asset copies, startup logs, menu and gameplay captures | Moderate | Team review pending |
+| 2026-10-14 | A5 (one trash asteroid candidate, user requested) | Codex + OpenAI built-in image generation (image model ID not exposed) | Generate one scrap-clump asteroid and matching seven-frame destruction; export at original pixel dimensions and palettes; preserve original assets | Moderate | Awaiting user art review |
+| 2026-10-14 | A5 (second trash variation, user requested) | Codex + OpenAI built-in image generation (image model ID not exposed) | One generation call for an irregular satellite wreck; export one 96x96 intact sprite, preview and reusable source; no new animation generation | Minimal | Awaiting user art review |
+| 2026-10-14 | A5 (satellite revision and breakup, user requested) | Codex + OpenAI built-in image generation (image model ID not exposed) | One combined-atlas call to shorten satellite panels and generate a matching seven-frame destruction; export native-size sprites and previews | Minimal | Awaiting user art review |
 
 Asset generation is logged per file in `assets/ASSETS.md`.
 
@@ -218,6 +225,7 @@ Asset generation is logged per file in `assets/ASSETS.md`.
 - 14 Oct, item 04: `Game::resetRun()` does not exist yet. Debug state is reset in both current paths (`onSwitch()` and `restartGame()`); consolidate in item 05. The F1 radius revealed an inaccurate architecture note: player collision uses width 8, not 4; corrected the note without changing gameplay. F5 leaves existing collision removal behavior intact.
 
 - 14 Oct: `build.bat` now discovers CMake from PATH or Visual Studio, configures and builds Debug, stops on failure, refreshes assets, and launches from the executable directory. `C:/Users/dande/.local/bin/build.cmd` forwards to this checkout, enabling plain `build` in PowerShell without changing execution policy or PATH. Verified the command compiled and launched a responsive game; the wrapper is machine-local and not tracked in Git.
+- 14 Oct (diond machine): Release build and incremental rebuild passed with portable GCC 16.2.0 and CMake 3.31.12. All 46 copied assets match their originals. Runtime logs confirm OpenGL 3.3 on AMD Radeon(TM) Graphics, audio, shaders, fonts and textures initialized with no WARNING/ERROR entries. Window captures show menu, active gameplay and augment selection at approximately 60 FPS. Settings/Credits remain baseline placeholders. Game-over/restart and the 80-enemy performance target are not yet verified on this machine. Local logs and captures are in ignored `.tools/`; launch with `run.bat`.
 - 14 Oct: Imported the source and assets from Space Ablaze after the initial documentation upload. Local Debug build passed using Visual Studio's bundled CMake (not on PATH). Executable and copied assets are in `build/Debug/`; run from that directory. Launch smoke check stayed responsive for 8 seconds and closed normally; a game-over/restart playtest and other team machines remain unverified. Existing assets are retained for the item 02 provenance audit.
 - 14 Oct: Initialized the repository on `main` with origin `https://github.com/dandee77/dost-game.git`. This workspace currently contains project instructions and context documents only; no game source, assets, or CMake project are present, so a build cannot yet be verified. Item 01 remains incomplete.
 - 14 Oct: Code review findings: `CollisionSystem.*` and `Pause.*` are empty files; `SpatialGrid` is unused; collisions are brute-force loops in `Game::update`. Only Low and Mid enemies exist. `MainMenu` links to `Settings` and `Credits` scenes that do not exist. The game builds cleanly on Linux with Raylib 5.5 (checked 14 Oct).
