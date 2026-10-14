@@ -44,6 +44,9 @@ Game::~Game()
 
 void Game::onSwitch()
 {
+#ifdef GAME_DEBUG
+    debugTools.reset();
+#endif
     gameState = GAME_RUNNING;
     gameOverTextStarted = false;
     worldTileSize = 500.0f; 
@@ -135,6 +138,9 @@ void Game::onSwitch()
 
 
 void Game::restartGame() { //ts kinda useless ngl
+#ifdef GAME_DEBUG
+    debugTools.reset();
+#endif
     gameOverTextStarted = false;
     
     PlayMusicStream(gameMusic);
@@ -170,6 +176,10 @@ std::string Game::update()
 {
     // if (IsKeyPressed(KEY_ENTER)) return "MainMenu"; 
     UpdateMusicStream(gameMusic);
+
+#ifdef GAME_DEBUG
+    debugTools.update(playerEntity);
+#endif
 
     if (IsKeyPressed(KEY_P)) {
         if (gameState == GAME_RUNNING) {
@@ -756,6 +766,10 @@ void Game::draw()
         // std::cout << "Player Position: (" << playerEntity.getPosition().x << ", " << playerEntity.getPosition().y << ")" << std::endl;
         if(gameState == GAME_OVER) ExplosionConfettiManager::GetInstance().draw();
 
+#ifdef GAME_DEBUG
+        debugTools.drawWorld(playerEntity);
+#endif
+
     EndMode2D();
 
     if(gameState == GAME_AUGMENT_SELECTION) ConfettiManager::GetInstance().draw();
@@ -847,6 +861,9 @@ void Game::draw()
         
         DamageOverlay::GetInstance().draw();
     }
+#ifdef GAME_DEBUG
+    debugTools.drawOverlay(playerEntity, gameState);
+#endif
 }
 
 void Game::onExit()

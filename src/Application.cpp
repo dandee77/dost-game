@@ -4,6 +4,9 @@
 #include <memory>
 #include "ResourceManager.hpp"
 #include <iostream>
+#ifdef GAME_DEBUG
+#include "Theme.hpp"
+#endif
 
 // scnenes
 #include "LoadingScreen.hpp"
@@ -187,7 +190,9 @@ void Application::Run()
                 0.0f,
                 WHITE);
                     
-            DrawFPS(10, 10);
+#ifdef GAME_DEBUG
+            DrawFPS(Theme::DEBUG_WINDOW_FPS_X, Theme::DEBUG_WINDOW_FPS_Y);
+#endif
             
         EndDrawing();
     }

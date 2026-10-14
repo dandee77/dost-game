@@ -36,6 +36,9 @@ Player::Player() : playerState(PLAYER_DEFAULT), timeStateEntered(0.0f) {};
 
 void Player::init() 
 {   
+#ifdef GAME_DEBUG
+    debugInvincible = false;
+#endif
     playerScore = 0;
     totalDamageDealt = 0;
     rect = {250, 250, 8, 8};
@@ -400,6 +403,9 @@ void Player::update() {
 
 void Player::takeDamage(float timeStateEntered, Vector2 entityPosition, float entitySize) 
 {
+#ifdef GAME_DEBUG
+    if (debugInvincible) return;
+#endif
     health -= 10; 
     playerState = PLAYER_STUNNED;
     this->timeStateEntered = timeStateEntered;

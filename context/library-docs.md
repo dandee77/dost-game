@@ -63,7 +63,7 @@ Copy the whole output folder (executable plus `assets/`) to the demo laptop. Tes
 cmake -B build -S . -DGAME_DEBUG=ON
 ```
 
-Item 04 adds to `CMakeLists.txt`:
+Item 04 added to `CMakeLists.txt` (default OFF; `build.bat` opts in for local development):
 
 ```cmake
 option(GAME_DEBUG "Enable debug keys and overlay" OFF)
@@ -317,7 +317,7 @@ Each was found by reading the Space Ablaze source. The build-plan item that fixe
 | `Game` holds `Button*` created with `new` | Manual memory management | Values (07) |
 | `CollisionSystem.*` and `Pause.*` are empty; `SpatialGrid` is unused | Misleading names | Fill (06, 07); leave `SpatialGrid` unused |
 | `Cooldown` uses wall-clock `GetTime()` and `isOnCooldown()` ignores pause | Cooldowns elapse while paused or docked | Accepted; do not rely on `Cooldown` for pause-aware timers |
-| `Application` calls `DrawFPS` on the real window | FPS counter appears in recorded videos | Guard with `GAME_DEBUG` (04) |
+| `Application` calls `DrawFPS` on the real window | FPS counter appears in recorded videos if debug tools are enabled | Fixed (04): guarded with `GAME_DEBUG`; release with the option OFF |
 | `rand()` used for augment offers | Not seeded per run | `RunRng` (09) |
 | `MainMenu` calls `exit(0)` after the exit animation | Skips cleanup; acceptable for a game | Leave |
 | Enemy IDs (`"enemy_" + counter`) are also Animator keys | A second object with the same ID overwrites the first's animation | Use distinct prefixes per kind (`scrap_`, `boss_`) |
@@ -326,6 +326,10 @@ Each was found by reading the Space Ablaze source. The build-plan item that fixe
 ---
 
 ## Patterns Established During the Sprint
+
+### Item 04: collision overlays and debug build gating (14 October 2026)
+
+Verified `DrawCircleLinesV(Vector2 center, float radius, Color color)` and `DrawLineV` with Context7's official Raylib repository documentation and the locally fetched Raylib 5.5 header. Draw collision circles inside `BeginMode2D`; use the exact radii consumed by collision checks (`getHitbox().width`, `getAsteroidSize()`), not visual sprite bounds. Bullets are point collisions, represented by crosses. Draw diagnostics after `EndMode2D` using `Theme` canvas coordinates. `GAME_DEBUG` guards both input/rendering and the player invincibility flag, including its damage early return; disabling the option removes every debug path. Keep `Player::init()` and `DebugTools::reset()` in both reset paths until item 05 consolidates them.
 
 Add a short section here whenever an item establishes a reusable pattern or discovers a new trap. Format:
 

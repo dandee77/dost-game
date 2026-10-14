@@ -7,7 +7,7 @@ Update this file after every completed build-plan item. Anyone reading it (teamm
 ## Current Status
 
 **Phase:** 0 (Foundation)
-**Last completed:** Space Ablaze baseline imported with history; local MSVC build and launch smoke check passed (14 October 2026)
+**Last completed:** Item 04 debug tools (14 October 2026, branch `feat/04-debug-tools`); Debug ON and Release OFF builds and in-game smoke checks passed
 **In progress:** Item 01 (eligibility, other team machine builds, and full gameplay/restart checks pending)
 **Next:** Item 01 (eligibility question, repository, build on every machine) and item 02 (asset provenance)
 **Blocked:** Open Question 1 (may Space Ablaze code be reused under rule 7?) must be answered before the team depends on the old code for the final submission
@@ -51,7 +51,7 @@ Fill in during item 01.
 - [ ] 01 Eligibility, repository and build on every machine
 - [ ] 02 Asset purge and provenance file
 - [ ] 03 Config, Theme and Balance headers
-- [ ] 04 Debug tools
+- [x] 04 Debug tools (2026-10-14, `feat/04-debug-tools`)
 - [ ] 05 Run reset, RunContext, RunRng and leak fixes
 
 ### Phase 1: Core Refactor
@@ -133,6 +133,8 @@ Fill in during item 01.
 |---|---|---|---|---|
 | 2026-10-14 | D17 | Import Space Ablaze main at `72361209c6afac24a2a0400a605124b38ca46420`, preserving all 113 upstream commits | User selected the existing game as the starting point; keep `origin` pointing to dost-game and `space-ablaze` pointing to the reference repository | Source, assets, README, build files |
 | 2026-10-14 | D18 | Make only the compatibility changes needed for the local MSVC baseline build | Replace 10 C-style compound literals with C++ brace initialization; select the CRT entry point for the existing `main()` in a windowed MSVC executable; enable compiler warnings and fix the optional PLATFORM condition | CMakeLists.txt, Asteroid.cpp, Button.cpp, GameTimer.cpp, MainMenu.cpp, Player.cpp |
+| 2026-10-14 | D19 | Implement item 04 ahead of item 03 at the user's explicit request, seeding only the required Theme tokens | Keep the requested debug scope small; Config/Balance migration and the rest of item 03 remain pending. Existing collision behavior is unchanged | Theme.hpp, DebugTools.*, Game.*, Player.*, Application.cpp |
+| 2026-10-14 | D20 | Default GAME_DEBUG to OFF; enable it in the Windows development launcher | Local `build` provides F1/F5 while release builds can omit every debug path. F2/F3/F4/F6 show unavailable explanations until their planned systems exist | CMakeLists.txt, build.bat, DebugTools.* |
 
 ---
 
@@ -175,6 +177,7 @@ Required for Form 03 (Asset and AI Usage Disclosure). Organizers may request pro
 | 2026-10-14 | 01 (repository setup only) | Codex (OpenAI) | Initialize Git, prepare README, and upload the existing project documents to dandee77/dost-game | Minimal | Team review pending |
 | 2026-10-14 | 01 (baseline import and local build) | Codex (OpenAI) | Import Space Ablaze with history, resolve README, fix ignore patterns and MSVC build compatibility, verify build and launch, update documentation | Moderate | Team review pending |
 | 2026-10-14 | 01 (local build launcher) | Codex (OpenAI) | Repair build.bat, install a local build command in the existing user PATH, and verify compilation and game launch | Minimal | Team review pending |
+| 2026-10-14 | 04 | Codex (OpenAI, GPT-6) | Implement debug overlay and invincibility, build gating and launcher, verify Raylib docs with Context7, compile Debug/Release and exercise actual key events in a temporary native integration harness; update context files | Moderate | Team review pending |
 
 Asset generation is logged per file in `assets/ASSETS.md`.
 
@@ -197,6 +200,10 @@ Asset generation is logged per file in `assets/ASSETS.md`.
 ---
 
 ## Notes
+
+- 14 Oct, item 04 follow-up QA: the native harness drove the real bullet-collision/game-over path, enabled F5 on game over, then clicked the actual Restart button. F1 was reset; reopening it showed `GAME_RUNNING`, HP 100, invincibility OFF and cleared enemies/bullets. Both full application executables also launched responsively and closed normally (exit 0). Release object inspection confirmed no `DrawFPS` reference in `Application` and no debug indicator text in the executable.
+- 14 Oct, item 04: MSVC Debug with `GAME_DEBUG=ON` and a fresh Release configure with `GAME_DEBUG=OFF` both built without compiler warnings (only the existing Raylib CMake deprecation notice). Temporary integration harness under ignored `build/` used actual Raylib rendering and Windows key events: F1 on/off with 35 real enemies, player/enemy bullet counts, F2/F3/F4/F6 explanations, F1 while paused, new-run overlay reset, F5 on/off, no health loss/stun/knockback while invincible, normal damage afterward, and `Player::init()` resetting invincibility. Disabled-build harness confirmed F1-F6 do not show debug UI. Screenshots and logs remain in `build/` for local review. This is a functional smoke test, not the item 28 sustained FPS benchmark; manual full gameplay/restart QA remains part of item 01.
+- 14 Oct, item 04: `Game::resetRun()` does not exist yet. Debug state is reset in both current paths (`onSwitch()` and `restartGame()`); consolidate in item 05. The F1 radius revealed an inaccurate architecture note: player collision uses width 8, not 4; corrected the note without changing gameplay. F5 leaves existing collision removal behavior intact.
 
 - 14 Oct: `build.bat` now discovers CMake from PATH or Visual Studio, configures and builds Debug, stops on failure, refreshes assets, and launches from the executable directory. `C:/Users/dande/.local/bin/build.cmd` forwards to this checkout, enabling plain `build` in PowerShell without changing execution policy or PATH. Verified the command compiled and launched a responsive game; the wrapper is machine-local and not tracked in Git.
 - 14 Oct: Imported the source and assets from Space Ablaze after the initial documentation upload. Local Debug build passed using Visual Studio's bundled CMake (not on PATH). Executable and copied assets are in `build/Debug/`; run from that directory. Launch smoke check stayed responsive for 8 seconds and closed normally; a game-over/restart playtest and other team machines remain unverified. Existing assets are retained for the item 02 provenance audit.

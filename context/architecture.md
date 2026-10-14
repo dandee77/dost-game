@@ -130,7 +130,7 @@ The gameplay camera zoom is **20** (it starts at 150 and eases down to 20 at the
 
 | Quantity | Current value (world units) | Where |
 |---|---|---|
-| Player sprite | 8 x 8 (hitbox width 4) | `Player::init` |
+| Player sprite | 8 x 8 (current collision radius 8, from `getHitbox().width`) | `Player::init`, `Game::CheckCollisions` |
 | Low and mid enemy sprite | 15 x 15 (hitbox width ~4.3) | Enemy constructors |
 | Asteroid draw size | 15, 25 or 30 | `Asteroid` (`size * 10`) |
 | Bullet draw size | player 8 x 5, enemy 8 x 8 | `Bullet::draw` |
@@ -334,6 +334,12 @@ Names are 3 to 12 characters, A-Z, 0-9 and space only (no commas). The file is c
 ### Debug tools (debug builds only)
 
 Compiled only when CMake is configured with `-DGAME_DEBUG=ON` (adds the `GAME_DEBUG` define). Owned by `Game` through `DebugTools`.
+
+Item 04 implemented on 14 October: F1 shows collision circles, entity IDs, bullet point markers, enemy/asteroid/bullet counts, HP, FPS and the current `GameState`. F5 blocks damage and its side effects at `Player::takeDamage`; a visible indicator remains when F1 is off. Both toggles reset on restart and new runs through the existing reset paths. Debug input is handled in every game state, including pause and augment selection; F5 does not revive a dead player.
+
+The table below is the final target. F2/F3/F4/F6 currently show an unavailable explanation without changing gameplay: connect F2/F6 in item 11, F3 in item 12 and F4 in item 17. Wave phase/budget and magnet radius cannot be displayed until those systems exist. No planned wave/economy behavior is simulated by the stubs.
+
+The CMake option defaults to OFF. The local Windows `build.bat` explicitly enables it; direct CMake release builds should use `-DGAME_DEBUG=OFF`. This removes debug input, invincibility state, overlays and the application's FPS counter at compile time.
 
 | Key | Action |
 |---|---|

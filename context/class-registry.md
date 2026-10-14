@@ -98,7 +98,7 @@ All use the same pattern: `static X& GetInstance()` with a function-local static
 
 ### Application
 - Files: src/Application.hpp, src/Application.cpp
-- Status: existing
+- Status: modified (item 04)
 - Kind: value (one instance in `main`)
 - Owned by: `main()`
 - Public API: `Application()`, `void Run()`, `~Application()`
@@ -106,9 +106,9 @@ All use the same pattern: `static X& GetInstance()` with a function-local static
 - Gotchas:
   - Creates every scene once in `m_sceneFactory` (a `std::map<std::string, std::shared_ptr<Scene>>`). New scenes must be added there.
   - Defines its own `screenWidth = 3840`, `screenHeight = 2160` constants; replace with `Config.hpp` in item 03.
-  - Calls `DrawFPS(10, 10)` on the real window every frame (outside the CRT pass). Remove or guard with `GAME_DEBUG` before recording videos.
+  - Calls `DrawFPS` on the real window (outside the CRT pass) only with `GAME_DEBUG`; coordinates come from `Theme`.
   - `SetExitKey(KEY_NULL)`: Esc does not close the window, so Esc is free for pause.
-- Changed by: 03, 20, 24, 25
+- Changed by: 04; planned: 03, 20, 24, 25
 
 ### Scene
 - Files: src/Scene.hpp
@@ -142,8 +142,9 @@ All use the same pattern: `static X& GetInstance()` with a function-local static
 - Kind: scene (`"Game"`), the gameplay orchestrator
 - Owns (current): `Player playerEntity`, `KillCounter killCounter`, `GameTimer gameTimer`, `std::vector<Card> augmentCards`, `std::vector<BackgroundLayer> backgroundLayers` (4 parallax layers), `Music gameMusic`, `Button* restartButton`, `Button* mainMenuButton` (raw `new`), `std::array<Sound, 10> scoreSounds`, `DeathInfo deathInfo`, `GameState gameState`
 - Owns (target): adds `WaveDirector`, `CollisionSystem`, `HUD`, `Dock`, `UpgradeShop`, `DockShopUI`, `PauseOverlay`, `DebugTools`, run economy (credits, cargo)
+- Item 04: owns `DebugTools debugTools` only with `GAME_DEBUG`. Handles debug input before the state switch; draws hitboxes after world sprites and diagnostics after the state UI. Both `onSwitch()` and `restartGame()` reset the tools.
 - Public API: `update()`, `draw()`, `onSwitch()`, `onExit()` (Scene overrides). Private: `restartGame()`, `DrawParallaxBackground()`, `DrawLayer()`
-- Enums in `Game.hpp`: `GameState { GAME_RUNNING, GAME_AUGMENT_SELECTION, GAME_PAUSED, GAME_OVER }` (target adds `GAME_DOCKED`, `GAME_VICTORY`), `KillerType { KILLER_ENEMY_BULLET, KILLER_ENEMY_COLLISION, KILLER_ASTEROID }`, struct `DeathInfo`
+- Enums in `Game.hpp`: `GameState : int { GAME_RUNNING, GAME_AUGMENT_SELECTION, GAME_PAUSED, GAME_OVER }` (explicit underlying type permits the debug header's forward declaration; target adds `GAME_DOCKED`, `GAME_VICTORY`), `KillerType { KILLER_ENEMY_BULLET, KILLER_ENEMY_COLLISION, KILLER_ASTEROID }`, struct `DeathInfo`
 - Gotchas:
   - File-level statics `prevGameTimer` and `gameOverTextStarted` survive between runs; `prevGameTimer` is never reset. Move them into the class during item 05.
   - `onSwitch()` loads 10 copies of `score_sound.wav` with `LoadSound` every time the scene starts and never unloads them (leak). Use `LoadSoundAlias` (item 05).
@@ -215,12 +216,13 @@ All use the same pattern: `static X& GetInstance()` with a function-local static
 
 ### Player
 - Files: src/Player.hpp, src/Player.cpp
-- Status: existing → modified (item 08)
+- Status: modified (item 04; stats refactor planned in item 08)
 - Kind: entity
 - Inherits: `Entity`
 - Owned by: `Game` (value member `playerEntity`)
 - Public API (current): `init()` (resets everything, registers animations), `update()`, `draw()` (empty; the Animator draws the ship), `getHitbox()`, `takeDamage(float timeStateEntered, Vector2 entityPosition, float entitySize)`, `getPlayerState()`, `addScore(int)`, `getScore()`, `addDamageDealt(int)`, `getTotalDamageDealt()`, `getRandomDamage()`, `getMinDamage()`, `getMaxDamage()`, `getKnockbackPower()`, and nine augment methods: `increasePlayerAttackSpeed()`, `increasePlayerHealth()`, `increasePlayerMovementSpeed()`, `increasePlayerIframeDuration()`, `increasePlayerRotationSpeed()`, `increaseTriggerHappyBurst()`, `increaseScatterShot()`, `increasePiercingRounds()`, `increaseInertiaImpact()`
 - Enum: `PlayerState { PLAYER_DEFAULT, PLAYER_STUNNED, PLAYER_IFRAME, PLAYER_DEAD }`
+- Debug-only API (item 04): `void setDebugInvincible(bool enabled)`, `bool isDebugInvincible() const`. `init()` resets the flag; `takeDamage()` returns before health, stun, knockback, audio or overlay effects when enabled. Contact still consumes colliding bullets/enemies/asteroids normally. F5 does not revive a dead run or clear an existing stun.
 - Behavior: 8-direction WASD movement with acceleration; the ship rotates toward the mouse (rotation speed scales with velocity); shooting fires along the **facing** direction, not straight at the cursor. Burst fire (Trigger Happy) and scatter fan (30° steps). Animations `"accelerating"` (4 frames) and `"deaccelerating"` (3 frames) are registered in the Animator under those fixed IDs.
 - Gotchas:
   - `takeDamage` always subtracts 10 and ignores its arguments for the amount. Item 08 changes the signature to `takeDamage(int amount, Vector2 sourcePosition, float knockbackScale)`.
@@ -228,7 +230,7 @@ All use the same pattern: `static X& GetInstance()` with a function-local static
   - Loads 10 copies of `player_atk_sound.mp3` in `init()` on every restart (leak). Use `LoadSoundAlias`.
   - `Player.cpp` redefines `GAME_SCREEN_WIDTH/HEIGHT`.
   - Stats are loose fields (`attackSpeed`, `speed`, `iframeDuration`, `minDamage`, ...). Item 08 groups them into `PlayerStats`.
-- Changed by: 03, 05, 08, 09, 12, 14
+- Changed by: 04; planned: 03, 05, 08, 09, 12, 14
 
 ### PlayerStats (planned)
 - Files: inside src/Player.hpp
@@ -541,10 +543,16 @@ All use the same pattern: `static X& GetInstance()` with a function-local static
 - Status: planned (item 07)
 - Behavior: dim overlay, "PAUSED", Resume and Quit to Menu buttons. Returns an action enum.
 
-### DebugTools (planned)
+### DebugTools
 - Files: src/DebugTools.hpp, src/DebugTools.cpp
-- Status: planned (item 04)
-- Behavior: compiled only with `GAME_DEBUG`. Handles F1 to F6 (see `architecture.md`) and draws the overlay.
+- Status: built (item 04)
+- Kind: value
+- Owned by: `Game`
+- Public API: `void reset()`, `void update(Player& player)`, `void drawWorld(const Player& player) const`, `void drawOverlay(const Player& player, GameState state) const`
+- Uses: `Player`, read-only iteration over existing enemy/asteroid/bullet containers, `ResourceManager`, `Theme`
+- Behavior: compiled only with `GAME_DEBUG`. F1 toggles collision circles, IDs, bullet point markers, entity counts, HP, FPS and `GameState`. F5 toggles `Player`'s debug invincibility; its indicator stays visible even with F1 off. F2/F3/F4/F6 display pending-system explanations until items 11/12/17.
+- Gotchas: ship collision radius is `getHitbox().width`, asteroid radius is `getAsteroidSize()`, bullets are points. Call `drawWorld` inside the gameplay camera and `drawOverlay` in canvas space. `reset()` clears overlay/message; `Player::init()` separately resets invincibility. When item 05 introduces `Game::resetRun()`, move both existing reset paths there. Wave phase/budget and magnet radius remain unavailable until their systems exist.
+- Changed by: 04
 
 ---
 

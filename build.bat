@@ -13,7 +13,7 @@ for /f "usebackq delims=" %%I in (`"%GAME_VSWHERE%" -latest -products * -find Co
 if not defined GAME_CMAKE goto missing_cmake
 
 :configure
-"%GAME_CMAKE%" -S . -B build
+"%GAME_CMAKE%" -S . -B build -DGAME_DEBUG=ON
 if errorlevel 1 goto failed
 "%GAME_CMAKE%" --build build --config Debug -j 8
 if errorlevel 1 goto failed

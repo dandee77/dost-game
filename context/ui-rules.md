@@ -76,6 +76,8 @@ To place screen UI over a world object, convert with `GetWorldToScreen2D(worldPo
 
 No other sizes. If a layout needs a new size, add a token first and record why.
 
+Item 04 adds `Theme::DEBUG_TEXT_WORLD_ID = 2` world units for compact debug entity IDs; the normal 5-unit tutorial labels overlap in the 30+ enemy test. Debug panel text uses `TEXT_CAPTION` (50 canvas pixels). The panel is `(220, 450, 1480, 800)`, with 30-pixel padding and 64-pixel rows; the F5 indicator sits at `(220, 360)`. All debug UI tokens live in the initial `Theme.hpp`; item 03 still needs to migrate the other UI values. Hitbox circles use player accent, enemy toxic and asteroid muted colors; bullets use colored crosses at their collision points.
+
 ---
 
 ## Colors

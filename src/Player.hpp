@@ -32,6 +32,11 @@ public:
     void addDamageDealt(int damage) { totalDamageDealt += damage; }
     int getTotalDamageDealt() const { return totalDamageDealt; }
 
+#ifdef GAME_DEBUG
+    void setDebugInvincible(bool enabled) { debugInvincible = enabled; }
+    bool isDebugInvincible() const { return debugInvincible; }
+#endif
+
     void increasePlayerAttackSpeed();
     void increasePlayerHealth();
     void increasePlayerMovementSpeed();
@@ -50,6 +55,9 @@ public:
 
 
 private:
+#ifdef GAME_DEBUG
+    bool debugInvincible = false;
+#endif
     
 
     void fireScatterBullets(Vector2 baseDirection);

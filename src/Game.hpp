@@ -18,6 +18,9 @@
 #include "ExplosionConfettiManager.hpp"
 #include "GameOverOverlay.hpp"
 #include "Button.hpp"
+#ifdef GAME_DEBUG
+#include "DebugTools.hpp"
+#endif
 
 #define MAX_SOUND_INSTANCES 10
 
@@ -36,7 +39,7 @@ struct DeathInfo
     Texture2D killerTexture;
 };
 
-enum GameState
+enum GameState : int
 {
     GAME_RUNNING = 0,
     GAME_AUGMENT_SELECTION,
@@ -64,6 +67,9 @@ private:
     void restartGame();
 
     GameState gameState;
+#ifdef GAME_DEBUG
+    DebugTools debugTools;
+#endif
 
     std::vector<BackgroundLayer> backgroundLayers;
     float worldTileSize;

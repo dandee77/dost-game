@@ -1,6 +1,8 @@
 cmake_minimum_required(VERSION 3.11) 
 project(SpaceAblaze)
 
+option(GAME_DEBUG "Enable debug keys and overlay" OFF)
+
 
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 
@@ -33,6 +35,10 @@ endif()
 
 
 add_executable(${PROJECT_NAME} ${SOURCES})
+
+if (GAME_DEBUG)
+    target_compile_definitions(${PROJECT_NAME} PRIVATE GAME_DEBUG)
+endif()
 
 # hide console window on Windows
 if(WIN32)
