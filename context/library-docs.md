@@ -45,6 +45,8 @@ cmake --build build -j 8
 
 The first configure downloads Raylib 5.5 from GitHub into `build/_deps`. It needs internet once. If a machine has Raylib 5.5 installed system-wide, `find_package(raylib 5.5)` uses that instead.
 
+With the Visual Studio generator, the default Debug executable and copied assets are in `build/Debug/`. Run from that folder. On the current Windows machine, CMake is bundled at `C:/Program Files (x86)/Microsoft Visual Studio/2022/BuildTools/Common7/IDE/CommonExtensions/Microsoft/CMake/CMake/bin/cmake.exe` and is not on PATH.
+
 ### Release build for the finals
 
 ```bash
@@ -92,6 +94,8 @@ endif()
 
 | Trap | Fix |
 |---|---|
+| MSVC error C4576 for `(Vector2){...}` or `(Rectangle){...}` | Use standard C++ `Vector2{...}` / `Rectangle{...}`. Fixed in the item 01 baseline import |
+| MSVC unresolved `WinMain` with `WIN32_EXECUTABLE TRUE` and a standard `main()` | Select `/ENTRY:mainCRTStartup` for MSVC while retaining the windowed executable. Fixed in item 01; see [Microsoft entry-point documentation](https://learn.microsoft.com/cpp/build/reference/entry-entry-point-symbol?view=msvc-170) |
 | `if (${PLATFORM} STREQUAL "Web")` errors when `PLATFORM` is undefined (happens when Raylib comes from `find_package` instead of `FetchContent`) | Change to `if (PLATFORM STREQUAL "Web")` (item 01) |
 | `WIN32_EXECUTABLE TRUE` hides the console on Windows, so `TraceLog` output is invisible | For debugging, run from a terminal on Linux, or temporarily guard the property with `if (WIN32 AND NOT GAME_DEBUG)` (item 04) |
 | Assets not found at runtime | Run the executable from the build folder; paths are relative (`assets/...`) and the post-build step copies `assets/` next to the executable |

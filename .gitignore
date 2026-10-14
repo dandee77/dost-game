@@ -1,0 +1,6 @@
+build/
+build-*/
+*.exe
+.vscode/
+leaderboard.txt
+compile_commands.json

@@ -7,8 +7,8 @@ Update this file after every completed build-plan item. Anyone reading it (teamm
 ## Current Status
 
 **Phase:** 0 (Foundation)
-**Last completed:** Context files created (14 October 2026)
-**In progress:** Item 01 (repository initialized; eligibility and machine builds pending)
+**Last completed:** Space Ablaze baseline imported with history; local MSVC build and launch smoke check passed (14 October 2026)
+**In progress:** Item 01 (eligibility, other team machine builds, and full gameplay/restart checks pending)
 **Next:** Item 01 (eligibility question, repository, build on every machine) and item 02 (asset provenance)
 **Blocked:** Open Question 1 (may Space Ablaze code be reused under rule 7?) must be answered before the team depends on the old code for the final submission
 **Deadline:** 25 October 2026 (target submission 24 October)
@@ -34,7 +34,7 @@ Fill in during item 01.
 
 | Machine | Owner | OS | Compiler and version | CMake | Builds? | 60 FPS at 80 enemies? |
 |---|---|---|---|---|---|---|
-| | | | | | | |
+| Local development machine | dandee77 | Windows 11 | MSVC 19.44.35229.0 (VS 2022) | 3.31.6-msvc6 | Yes, Debug | Not tested |
 | Demo laptop (finals) | | | | | | |
 
 | Dependency | Version | Notes |
@@ -131,7 +131,8 @@ Fill in during item 01.
 
 | Date | # | Decision | Reason | Files changed |
 |---|---|---|---|---|
-| | | | | |
+| 2026-10-14 | D17 | Import Space Ablaze main at `72361209c6afac24a2a0400a605124b38ca46420`, preserving all 113 upstream commits | User selected the existing game as the starting point; keep `origin` pointing to dost-game and `space-ablaze` pointing to the reference repository | Source, assets, README, build files |
+| 2026-10-14 | D18 | Make only the compatibility changes needed for the local MSVC baseline build | Replace 10 C-style compound literals with C++ brace initialization; select the CRT entry point for the existing `main()` in a windowed MSVC executable; enable compiler warnings and fix the optional PLATFORM condition | CMakeLists.txt, Asteroid.cpp, Button.cpp, GameTimer.cpp, MainMenu.cpp, Player.cpp |
 
 ---
 
@@ -158,7 +159,7 @@ Record compiler warnings present after item 01 here, so new warnings are easy to
 
 | File | Warning | Status |
 |---|---|---|
-| | | |
+| Raylib 5.5 CMakeLists.txt | CMake deprecation warning for compatibility with CMake older than 3.10 | Existing dependency warning; no game compiler warnings in the MSVC build |
 
 Known bugs from the code review are in `library-docs.md`, Known Pitfalls.
 
@@ -172,6 +173,7 @@ Required for Form 03 (Asset and AI Usage Disclosure). Organizers may request pro
 |---|---|---|---|---|---|
 | 2026-10-14 | Planning | Claude (Anthropic) | Context files, code review of Space Ablaze, build plan | Moderate | Team review pending |
 | 2026-10-14 | 01 (repository setup only) | Codex (OpenAI) | Initialize Git, prepare README, and upload the existing project documents to dandee77/dost-game | Minimal | Team review pending |
+| 2026-10-14 | 01 (baseline import and local build) | Codex (OpenAI) | Import Space Ablaze with history, resolve README, fix ignore patterns and MSVC build compatibility, verify build and launch, update documentation | Moderate | Team review pending |
 
 Asset generation is logged per file in `assets/ASSETS.md`.
 
@@ -195,6 +197,7 @@ Asset generation is logged per file in `assets/ASSETS.md`.
 
 ## Notes
 
+- 14 Oct: Imported the source and assets from Space Ablaze after the initial documentation upload. Local Debug build passed using Visual Studio's bundled CMake (not on PATH). Executable and copied assets are in `build/Debug/`; run from that directory. Launch smoke check stayed responsive for 8 seconds and closed normally; a game-over/restart playtest and other team machines remain unverified. Existing assets are retained for the item 02 provenance audit.
 - 14 Oct: Initialized the repository on `main` with origin `https://github.com/dandee77/dost-game.git`. This workspace currently contains project instructions and context documents only; no game source, assets, or CMake project are present, so a build cannot yet be verified. Item 01 remains incomplete.
 - 14 Oct: Code review findings: `CollisionSystem.*` and `Pause.*` are empty files; `SpatialGrid` is unused; collisions are brute-force loops in `Game::update`. Only Low and Mid enemies exist. `MainMenu` links to `Settings` and `Credits` scenes that do not exist. The game builds cleanly on Linux with Raylib 5.5 (checked 14 Oct).
 - 14 Oct: The `.gitignore` contains `*.txt`, which silently ignores any new text file, including font license files (`OFL.txt`) needed for asset provenance. Replace it with `leaderboard.txt` in item 01.

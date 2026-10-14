@@ -2,6 +2,8 @@
 
 Living document. It replaces the web project's UI registry: instead of components, it lists every **class**, what it owns, who owns it, its public API and its traps. Read it before creating or changing any class.
 
+Item 01 baseline import (14 October 2026): Asteroid, Button, GameTimer, MainMenu and Player use standard C++ brace initialization instead of C-style compound literals so MSVC can compile them. Public APIs, ownership and gameplay behavior are unchanged.
+
 Before creating a class:
 
 1. Search this file for the **job** the class would do, not only its name.
