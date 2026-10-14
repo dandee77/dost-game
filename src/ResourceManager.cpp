@@ -13,6 +13,34 @@ ResourceManager::ResourceManager(){
 
     // textureID                                filePath
     texturePaths = {
+        {"player_hull_damaged", "assets/textures/player/hull_damaged.png"},
+        {"player_hull_full_health", "assets/textures/player/hull_full_health.png"},
+        {"player_hull_slight_damage", "assets/textures/player/hull_slight_damage.png"},
+        {"player_hull_very_damaged", "assets/textures/player/hull_very_damaged.png"},
+        {"player_engine_base_engine_idle", "assets/textures/player/engine_base_engine_idle.png"},
+        {"player_engine_base_engine_powering", "assets/textures/player/engine_base_engine_powering.png"},
+        {"player_engine_big_pulse_engine_idle", "assets/textures/player/engine_big_pulse_engine_idle.png"},
+        {"player_engine_big_pulse_engine_powering", "assets/textures/player/engine_big_pulse_engine_powering.png"},
+        {"player_engine_burst_engine_idle", "assets/textures/player/engine_burst_engine_idle.png"},
+        {"player_engine_burst_engine_powering", "assets/textures/player/engine_burst_engine_powering.png"},
+        {"player_engine_supercharged_engine_idle", "assets/textures/player/engine_supercharged_engine_idle.png"},
+        {"player_engine_supercharged_engine_powering", "assets/textures/player/engine_supercharged_engine_powering.png"},
+        {"player_engine_base_engine", "assets/textures/player/engine_base_engine.png"},
+        {"player_engine_big_pulse_engine", "assets/textures/player/engine_big_pulse_engine.png"},
+        {"player_engine_burst_engine", "assets/textures/player/engine_burst_engine.png"},
+        {"player_engine_supercharged_engine", "assets/textures/player/engine_supercharged_engine.png"},
+        {"player_shield_front_and_side_shield", "assets/textures/player/shield_front_and_side_shield.png"},
+        {"player_shield_front_shield", "assets/textures/player/shield_front_shield.png"},
+        {"player_shield_invincibility_shield", "assets/textures/player/shield_invincibility_shield.png"},
+        {"player_shield_round_shield", "assets/textures/player/shield_round_shield.png"},
+        {"player_weapon_auto_cannon", "assets/textures/player/weapon_auto_cannon.png"},
+        {"player_weapon_big_space_gun", "assets/textures/player/weapon_big_space_gun.png"},
+        {"player_weapon_rockets", "assets/textures/player/weapon_rockets.png"},
+        {"player_weapon_zapper", "assets/textures/player/weapon_zapper.png"},
+        {"player_projectile_auto_cannon_bullet", "assets/textures/player/projectile_auto_cannon_bullet.png"},
+        {"player_projectile_big_space_gun", "assets/textures/player/projectile_big_space_gun.png"},
+        {"player_projectile_rocket", "assets/textures/player/projectile_rocket.png"},
+        {"player_projectile_zapper", "assets/textures/player/projectile_zapper.png"},
         {"game_background",                     "assets/textures/game_background_texture.png"},
         {"border",                              "assets/textures/border_raw.png"},
         {"main_menu_background",                "assets/textures/MainMenuBackground.png"},
@@ -54,6 +82,7 @@ ResourceManager::ResourceManager(){
     };
 
     soundPaths = {
+        {"player_shoot", "assets/sounds/player_atk_sound.mp3"},
         {"player_damaged",                      "assets/sounds/hit.wav"},
         {"player_damaged_2",                    "assets/sounds/player_damaged.mp3"},
         {"button_click",                        "assets/sounds/click_sound.mp3"},

@@ -1,427 +1,349 @@
 #include "Player.hpp"
 #include "Animator.hpp"
+#include "Balance.hpp"
+#include "Config.hpp"
 #include "ResourceManager.hpp"
 #include "DamageOverlay.hpp"
-#include <memory>
-#include <iostream>
-#include "raymath.h"
-#include <cmath>
+#include "Theme.hpp"
 #include "Utils.hpp"
+#include "raymath.h"
+#include <algorithm>
+#include <cmath>
 
-#define GAME_SCREEN_WIDTH 3840
-#define GAME_SCREEN_HEIGHT 2160
+namespace {
+    constexpr const char* weaponKeys[] = {"player_weapon_auto_cannon", "player_weapon_zapper",
+        "player_weapon_rockets", "player_weapon_big_space_gun"};
+    constexpr const char* engineKeys[] = {"player_engine_base_engine", "player_engine_big_pulse_engine",
+        "player_engine_burst_engine", "player_engine_supercharged_engine"};
+    constexpr const char* shieldKeys[] = {"", "player_shield_front_shield", "player_shield_front_and_side_shield",
+        "player_shield_round_shield", "player_shield_invincibility_shield"};
+    constexpr const char* weaponNames[] = {"CANNON", "LASER", "ROCKETS", "HEAVY"};
+    constexpr const char* engineNames[] = {"BASE", "PULSE", "BURST", "SUPERCHARGED"};
+    constexpr const char* shieldNames[] = {"NONE", "FRONT", "SIDES", "ROUND", "INVINCIBILITY"};
 
-#define PLAYER_SPEED 50.0f
-#define PLAYER_MAX_ACCELERATION 400.0f
+    void drawLayer(const std::string& key, int frameSize, float size, Vector2 position,
+                   float rotation, float time, Color tint)
+    {
+        const auto& sheet = ResourceManager::GetInstance().GetTextureRef(key);
+        if (sheet.id == 0 || sheet.width < frameSize) return;
+        const int frames = sheet.width / frameSize;
+        const int frame = static_cast<int>(time / Theme::EQUIPMENT_FRAME_TIME) % frames;
+        DrawTexturePro(sheet, {static_cast<float>(frame * frameSize), 0.0f,
+            static_cast<float>(frameSize), static_cast<float>(frameSize)},
+            {position.x, position.y, size, size}, {size / 2.0f, size / 2.0f}, rotation, tint);
+    }
+}
 
-#define PLAYER_STATE_STUN_DURATION 0.2f
-#define PLAYER_STATE_IFRAME_DURATION 0.8f
-#define PLAYER_COLLISION_NUDGE 20.0f
+Player::Player() = default;
 
-Player::Player() : playerState(PLAYER_DEFAULT), timeStateEntered(0.0f) {};
-
-// TODO: MAKE BULLETS SPAWNING FRAME INDEPENDENT
-
-
-// ** SKILLS **
-// - Player movement
-// - Player rotationSPEED ?
-// - Player shooting CD
-// - Player BULLETS MULTIPLIER
-// - Player health
-// - Player damage
-// - Player IFRAME DURATION
-// - PLAYER BODY DAMAGE?
-// - bullet penetration
-
-void Player::init() 
-{   
+void Player::init()
+{
 #ifdef GAME_DEBUG
     debugInvincible = false;
 #endif
-    playerScore = 0;
-    totalDamageDealt = 0;
-    rect = {250, 250, 8, 8};
-    position = {rect.x, rect.y};
-    speed = PLAYER_SPEED;
-    damage = 10.0f;
-    rotation = 0.0f;
-    velocity = {0, 0};
-    playerAccelerating = false;
-    playerState = PLAYER_DEFAULT;
-    timeStateEntered = 0.0f;
+    Animator::GetInstance().Remove("accelerating");
+    Animator::GetInstance().Remove("deaccelerating");
+    playerScore = totalDamageDealt = 0;
+    position = Balance::PLAYER_SPAWN;
+    rect = {position.x - Balance::PLAYER_RADIUS / 2.0f, position.y - Balance::PLAYER_RADIUS / 2.0f,
+        Balance::PLAYER_RADIUS, Balance::PLAYER_RADIUS};
     origin = {rect.width / 2.0f, rect.height / 2.0f};
-    
-    // attributes
-    attackSpeed = 0.5f; 
-    health = 100;
-    iframeDuration = PLAYER_STATE_IFRAME_DURATION;
-    rotationSpeedMultiplier = 1.0f; 
+    speed = Balance::PLAYER_SPEED;
+    health = Balance::PLAYER_MAX_HEALTH;
+    damage = Balance::PLAYER_CONTACT_DAMAGE;
+    rotation = 0.0f;
+    velocity = {};
+    playerAccelerating = autoShoot = false;
+    playerState = PLAYER_DEFAULT;
+    stateElapsed = timeStateEntered = animationTime = 0.0f;
+    attackSpeed = Balance::PLAYER_ATTACK_COOLDOWN;
+    iframeDuration = Balance::PLAYER_IFRAME_TIME;
+    rotationSpeedMultiplier = 1.0f;
+    burstCount = scatterCount = bulletPiercePower = 1;
+    knockbackPower = 0.0f;
+    minDamage = Balance::PLAYER_DAMAGE_MIN;
+    maxDamage = Balance::PLAYER_DAMAGE_MAX;
+    blasts.clear();
+    setBuild(BUILD_DEFAULT);
+    shotCooldown = attackSpeed;
+}
 
-    // trigger hppy burst fire initialization
-    burstCount = 1; 
-    currentBurstShot = 0;
-    burstDelay = 0.1f;  // 100ms delay between burst shots
-    isBurstActive = false; 
-
-    // scatter shot initialization
-    scatterCount = 1;  
-
-    // piercing rounds initialization
-    bulletPiercePower = 1; 
-
-    // inertia impact initialization
-    knockbackPower = 0.0f;  
-
-    // damage system initialization
-    minDamage = 7;
-    maxDamage = 12; 
-
-    // ? We animate two textures, one for acceleration and one for deacceleration
-    // ? Then hide the deacceleration animation until we need it
-    Animator::GetInstance().AddAnimation("accelerating", std::make_shared<Animation>(
-        ResourceManager::GetInstance().GetTextureRef("player_acceleration"),
-        ResourceManager::GetInstance().GetTextureRef("player_acceleration").width / 4,
-        ResourceManager::GetInstance().GetTextureRef("player_acceleration").height,
-        0.1f,
-        true,
-        rect,
-        false,
-        WHITE
-    ));
-    Animator::GetInstance().SetOrigin("accelerating", origin);
-    Animator::GetInstance().AddAnimation("deaccelerating", std::make_shared<Animation>(
-        ResourceManager::GetInstance().GetTextureRef("player_deacceleration"),
-        ResourceManager::GetInstance().GetTextureRef("player_deacceleration").width / 3,
-        ResourceManager::GetInstance().GetTextureRef("player_deacceleration").height,
-        0.1f,
-        true,
-        rect,
-        false,
-        WHITE
-    ));
-    Animator::GetInstance().SetOrigin("deaccelerating", origin);
-    Animator::GetInstance().Play("deaccelerating");
-
-    playerAttackCooldown = Cooldown(attackSpeed); 
-    playerAttackCooldown.startCooldown(); // ? prevents accidental shooting at the start of the game
+void Player::setBuild(PlayerBuild build)
+{
+    switch (build) {
+    case BUILD_DEFAULT: setWeapon(WEAPON_CANNON); setEngine(ENGINE_BASE); setShield(SHIELD_NONE); break;
+    case BUILD_CANNON: setWeapon(WEAPON_CANNON); setEngine(ENGINE_PULSE); setShield(SHIELD_FRONT); break;
+    case BUILD_LASER: setWeapon(WEAPON_LASER); setEngine(ENGINE_SUPERCHARGED); setShield(SHIELD_SIDES); break;
+    case BUILD_ROCKETS: setWeapon(WEAPON_ROCKETS); setEngine(ENGINE_BURST); setShield(SHIELD_ROUND); break;
+    case BUILD_HEAVY: setWeapon(WEAPON_HEAVY); setEngine(ENGINE_PULSE); setShield(SHIELD_INVINCIBILITY); break;
+    }
     autoShoot = false;
-    rect.width -= 4.0f;
-    rect.height -= 4.0f;
+}
 
-    //? we have to load one by one because raylib uses a single sound instance
-    //? and it doesn't support multiple instances of the same sound
-    for (int i = 0; i < MAX_SHOOTING_SOUND_INSTANCES; i++) {
-        shootingSounds[i] = LoadSound("assets/sounds/player_atk_sound.mp3");
+void Player::setWeapon(PlayerWeapon value)
+{
+    weapon = value;
+    laserActive = isBurstActive = false;
+    pendingLaserTicks = currentBurstShot = 0;
+    laserClock = shotCooldown = weaponAnimationTime = weaponFlash = 0.0f;
+}
+
+void Player::setEngine(PlayerEngine value) { engine = value; boostTime = boostCooldown = 0.0f; }
+void Player::setShield(PlayerShield value)
+{
+    shield = value;
+    shieldCharge = static_cast<float>(Balance::SHIELD_CAPACITY[shield]);
+    shieldDelay = invincibilityTime = invincibilityCooldown = 0.0f;
+}
+
+void Player::increasePlayerAttackSpeed() { attackSpeed *= Balance::AUG_ATTACK_MULT; }
+void Player::increasePlayerHealth() { health = std::min(Balance::PLAYER_MAX_HEALTH, health + Balance::AUG_HEAL); }
+void Player::increasePlayerMovementSpeed() { speed *= Balance::AUG_SPEED_MULT; }
+void Player::increasePlayerIframeDuration() { iframeDuration *= Balance::AUG_IFRAME_MULT; }
+void Player::increasePlayerRotationSpeed() { rotationSpeedMultiplier *= Balance::AUG_TURN_MULT; }
+void Player::increaseTriggerHappyBurst() { ++burstCount; }
+void Player::increaseScatterShot() { ++scatterCount; }
+void Player::increasePiercingRounds() { ++bulletPiercePower; }
+void Player::increaseInertiaImpact() { knockbackPower += Balance::AUG_KNOCKBACK; }
+int Player::getRandomDamage() const { return GetRandomValue(minDamage, maxDamage); }
+Vector2 Player::facing() const { return Vector2Rotate({0.0f, -1.0f}, rotation * DEG2RAD); }
+Vector2 Player::getLaserStart() const { return Vector2Add(position, Vector2Scale(facing(), Balance::MUZZLE_OFFSET)); }
+Vector2 Player::getLaserEnd() const { return Vector2Add(getLaserStart(), Vector2Scale(facing(), Balance::LASER_RANGE)); }
+int Player::consumeLaserTicks() { const int ticks = pendingLaserTicks; pendingLaserTicks = 0; return ticks; }
+
+float Player::weaponCooldown() const
+{
+    const float multiplier = attackSpeed / Balance::PLAYER_ATTACK_COOLDOWN;
+    switch (weapon) {
+    case WEAPON_HEAVY: return Balance::HEAVY_COOLDOWN * multiplier;
+    case WEAPON_ROCKETS: return Balance::ROCKET_COOLDOWN * multiplier;
+    case WEAPON_LASER: return Balance::LASER_TICK * multiplier;
+    default: return attackSpeed;
     }
-};
-
-#pragma region PlayerAttributes
-// TODO: passively increase each every minute for better skill balance
-// decrease by 10% 
-void Player::increasePlayerAttackSpeed() {
-    attackSpeed *= 0.9f;
-    playerAttackCooldown.updateCooldownDuration(attackSpeed);
-    TraceLog(LOG_INFO, "Player attack speed increased to: %f", attackSpeed);
 }
 
-// increase health by 10
-void Player::increasePlayerHealth() {
-    if (health < 100) health += 10; 
-    TraceLog(LOG_INFO, "Player health increased to: %d", health);
-}
-
-// increase speed by 10%
-void Player::increasePlayerMovementSpeed() {
-    speed *= 1.1f; // increase speed by 10%
-    TraceLog(LOG_INFO, "Player speed increased to: %f", speed);
-}
-
-// increase iframe duration by 10%
-void Player::increasePlayerIframeDuration() {
-    iframeDuration *= 1.1f;
-    TraceLog(LOG_INFO, "Player iframe duration increased to: %f", iframeDuration);
-}
-
-// increase rotation speed by 10%
-void Player::increasePlayerRotationSpeed() {
-    rotationSpeedMultiplier *= 1.1f;
-    TraceLog(LOG_INFO, "Player rotation speed multiplier increased to: %f", rotationSpeedMultiplier);
-}
-
-// increase burst count by 1
-void Player::increaseTriggerHappyBurst() {
-    burstCount++;
-    TraceLog(LOG_INFO, "Player burst count increased to: %d", burstCount);
-}
-
-// increase scatter count by 1
-void Player::increaseScatterShot() {
-    scatterCount++;
-    TraceLog(LOG_INFO, "Player scatter count increased to: %d", scatterCount);
-}
-
-// increase bullet pierce power by 1
-void Player::increasePiercingRounds() {
-    bulletPiercePower++;
-    TraceLog(LOG_INFO, "Player bullet pierce power increased to: %d", bulletPiercePower);
-}
-
-void Player::increaseInertiaImpact() {
-    knockbackPower += 50.0f;  
-    TraceLog(LOG_INFO, "Player knockback power increased to: %f", knockbackPower);
-}
-
-int Player::getRandomDamage() const {
-    return GetRandomValue(minDamage, maxDamage);
-}
-
-
-void Player::fireScatterBullets(Vector2 baseDirection) {
-    if (scatterCount == 1) {
-        Bullet bullet = Bullet(position, baseDirection, false, bulletPiercePower, knockbackPower);
+void Player::fireScatterBullets(Vector2 direction)
+{
+    for (int index = 0; index < scatterCount; ++index) {
+        const float offset = (static_cast<float>(index) - static_cast<float>(scatterCount - 1) / 2.0f) * Balance::SCATTER_ANGLE;
+        const Vector2 shotDirection = Vector2Rotate(direction, offset * DEG2RAD);
+        int pierce = bulletPiercePower;
+        if (weapon == WEAPON_HEAVY) pierce += Balance::HEAVY_PIERCE - 1;
+        if (weapon == WEAPON_ROCKETS) pierce = 1;
+        Bullet bullet(getLaserStart(), shotDirection, false, pierce, knockbackPower);
+        switch (weapon) {
+        case WEAPON_HEAVY:
+            bullet.configure(PROJECTILE_HEAVY, Balance::HEAVY_DAMAGE, Balance::HEAVY_RADIUS, Balance::HEAVY_SPEED); break;
+        case WEAPON_ROCKETS:
+            bullet.configure(PROJECTILE_ROCKET, Balance::ROCKET_DAMAGE, Balance::ROCKET_RADIUS, Balance::ROCKET_SPEED); break;
+        default:
+            bullet.configure(PROJECTILE_CANNON, getRandomDamage(), Balance::CANNON_RADIUS, Balance::CANNON_SPEED); break;
+        }
         BulletManager::GetInstance().addBullet(bullet);
-    } else {
-      
-        float baseAngle = atan2(baseDirection.y, baseDirection.x);
-        float angleStep = 30.0f * DEG2RAD; 
-        
-        if (scatterCount % 2 == 1) {
-            Bullet centerBullet = Bullet(position, baseDirection, false, bulletPiercePower, knockbackPower);
-            BulletManager::GetInstance().addBullet(centerBullet);
-            
-            for (int i = 1; i <= scatterCount / 2; i++) {
-                float leftAngle = baseAngle - (angleStep * i);
-                float rightAngle = baseAngle + (angleStep * i);
-                
-                Vector2 leftDir = {cos(leftAngle), sin(leftAngle)};
-                Vector2 rightDir = {cos(rightAngle), sin(rightAngle)};
-                
-                Bullet leftBullet = Bullet(position, leftDir, false, bulletPiercePower, knockbackPower);
-                Bullet rightBullet = Bullet(position, rightDir, false, bulletPiercePower, knockbackPower);
-                
-                BulletManager::GetInstance().addBullet(leftBullet);
-                BulletManager::GetInstance().addBullet(rightBullet);
-            }
-        } else {
-            for (int i = 0; i < scatterCount / 2; i++) {
-                float leftAngle = baseAngle - (angleStep * (i + 0.5f));
-                float rightAngle = baseAngle + (angleStep * (i + 0.5f));
-                
-                Vector2 leftDir = {cos(leftAngle), sin(leftAngle)};
-                Vector2 rightDir = {cos(rightAngle), sin(rightAngle)};
-                
-                Bullet leftBullet = Bullet(position, leftDir, false, bulletPiercePower, knockbackPower);
-                Bullet rightBullet = Bullet(position, rightDir, false, bulletPiercePower, knockbackPower);
-                
-                BulletManager::GetInstance().addBullet(leftBullet);
-                BulletManager::GetInstance().addBullet(rightBullet);
-            }
-        }
     }
+    weaponAnimationTime = 0.0f;
+    const auto& sheet = ResourceManager::GetInstance().GetTextureRef(weaponKeys[weapon]);
+    weaponFlash = static_cast<float>(sheet.width / Theme::PLAYER_LAYER_FRAME) * Theme::EQUIPMENT_FRAME_TIME;
+    PlaySound(ResourceManager::GetInstance().GetSound("player_shoot"));
+}
 
-    for (int i = 0; i < MAX_SHOOTING_SOUND_INSTANCES; i++) {
-        if (!IsSoundPlaying(shootingSounds[i])) {
-            PlaySound(shootingSounds[i]);
-            break;
-        }
+void Player::updateWeapon(float dt, bool firing)
+{
+    pendingLaserTicks = 0;
+    laserActive = weapon == WEAPON_LASER && firing;
+    if (weapon == WEAPON_LASER) {
+        laserClock -= dt;
+        if (laserActive) {
+            while (laserClock <= Config::TIMER_EPSILON) { ++pendingLaserTicks; laserClock += weaponCooldown(); }
+        } else laserClock = std::max(0.0f, laserClock);
+        return;
+    }
+    shotCooldown -= dt;
+    if (!firing && !isBurstActive) { shotCooldown = std::max(0.0f, shotCooldown); return; }
+    while (shotCooldown <= Config::TIMER_EPSILON && (firing || isBurstActive)) {
+        fireScatterBullets(facing());
+        ++currentBurstShot;
+        isBurstActive = currentBurstShot < burstCount;
+        if (isBurstActive) shotCooldown += Balance::BURST_DELAY;
+        else { currentBurstShot = 0; shotCooldown += weaponCooldown(); }
     }
 }
 
-// TODO: bullet pierce power, fire rate, attack multiplier
-
-
-#pragma endregion PlayerAttributes
-
-
-void Player::update() {
-
-#pragma region HandlePlayerState
-
-    switch(playerState) 
-    {
-    case PLAYER_DEFAULT:
-        // no check
-        // todo: add all of update logic here
-        break;
-    case PLAYER_STUNNED:
-        if ((GetTime() - timeStateEntered) > PLAYER_STATE_STUN_DURATION) 
-        {
-            playerState = PLAYER_IFRAME;
-            timeStateEntered = GetTime();
-        }
-        break;
-    case PLAYER_IFRAME:
-        if ((GetTime() - timeStateEntered) > iframeDuration)
-        {
-            playerState = PLAYER_DEFAULT;
-            Animator::GetInstance().SetTint("accelerating", WHITE);
-            Animator::GetInstance().SetTint("deaccelerating", WHITE);
-        }
-        else
-        {
-            float seconds = GetTime() - timeStateEntered;
-            int value = (int)(seconds * 6.0f);
-            if (value % 2 == 0) 
-            {
-                Animator::GetInstance().SetTint("accelerating", RED);
-                Animator::GetInstance().SetTint("deaccelerating", RED);
-            } 
-            else 
-            {
-                Animator::GetInstance().SetTint("accelerating", WHITE);
-                Animator::GetInstance().SetTint("deaccelerating", WHITE);
-            }
-        }
-        break;
-    case PLAYER_DEAD:
-        // no check for now
-        // todo: pass the game over function
-        // return "GameOver";
-        break;
+void Player::updateEquipment(float dt, bool skillPressed)
+{
+    animationTime += dt;
+    weaponAnimationTime += dt;
+    weaponFlash = std::max(0.0f, weaponFlash - dt);
+    boostTime = std::max(0.0f, boostTime - dt);
+    boostCooldown = std::max(0.0f, boostCooldown - dt);
+    invincibilityTime = std::max(0.0f, invincibilityTime - dt);
+    invincibilityCooldown = std::max(0.0f, invincibilityCooldown - dt);
+    if (skillPressed && engine == ENGINE_BURST && boostCooldown == 0.0f) {
+        boostTime = Balance::BOOST_DURATION; boostCooldown = Balance::BOOST_COOLDOWN;
     }
-
-#pragma endregion
-
-
-
-#pragma region PlayerRotation
-
-    Vector2 mouseWorldPos = GetScreenToWorld2D(GetMousePosition(), utils::gameCamera); 
-    Vector2 direction = Vector2Subtract(mouseWorldPos, position);
-
-    if (Vector2Length(direction) == 0.0f) direction = {1, 0};
-    else direction = Vector2Normalize(direction);
-
-    float targetRotation = atan2(direction.y, direction.x) * RAD2DEG + 90.0f;
-
-    float deltaAngle = targetRotation - rotation;
-    
-    while (deltaAngle > 180.0f) deltaAngle -= 360.0f;
-    while (deltaAngle < -180.0f) deltaAngle += 360.0f;
-    
-    float baseRotationSpeed = 4.0f * rotationSpeedMultiplier;
-    float maxRotationSpeed = 8.0f * rotationSpeedMultiplier;
-    float speedFactor = Vector2Length(velocity) / speed; 
-    float rotationSpeed = baseRotationSpeed + speedFactor * (maxRotationSpeed - baseRotationSpeed);
-
-    rotation += deltaAngle * (1.0f - expf(-rotationSpeed * GetFrameTime()));
-
-    rotation = fmodf(rotation + 360.0f, 360.0f);
-
-    Animator::GetInstance().SetRotation("accelerating", rotation);
-    Animator::GetInstance().SetRotation("deaccelerating", rotation);
-
-#pragma endregion
-
-
-#pragma region PlayerMovement
-
-    Vector2 facing_direction = Vector2Rotate(Vector2{0, -1}, rotation * DEG2RAD);
-    // Vector2 target_velocity = Vector2Scale(facing_direction, (int)(IsKeyDown(KEY_W)||IsKeyDown(KEY_SPACE)) * speed);
-
-    // 8 direction movement 
-    Vector2 inputDirection = {0, 0};
-    if (IsKeyDown(KEY_W)) inputDirection.y -= 1.0f;
-    if (IsKeyDown(KEY_S)) inputDirection.y += 1.0f;
-    if (IsKeyDown(KEY_A)) inputDirection.x -= 1.0f;
-    if (IsKeyDown(KEY_D)) inputDirection.x += 1.0f;
-    if (Vector2Length(inputDirection) > 0.0f) {
-        inputDirection = Vector2Normalize(inputDirection);
+    if (skillPressed && shield == SHIELD_INVINCIBILITY && invincibilityCooldown == 0.0f) {
+        invincibilityTime = Balance::INVINCIBILITY_DURATION; invincibilityCooldown = Balance::INVINCIBILITY_COOLDOWN;
     }
-    Vector2 target_velocity = Vector2Scale(inputDirection, speed);
+    const float rechargeTime = std::max(0.0f, dt - shieldDelay);
+    shieldDelay = std::max(0.0f, shieldDelay - dt);
+    shieldCharge = std::min(static_cast<float>(Balance::SHIELD_CAPACITY[shield]),
+        shieldCharge + rechargeTime * Balance::SHIELD_RECHARGE_RATE);
+    for (auto& blast : blasts) blast.remaining -= dt;
+    std::erase_if(blasts, [](const Blast& blast) { return blast.remaining <= 0.0f; });
+}
 
-    velocity = Vector2MoveTowards(velocity, target_velocity, PLAYER_MAX_ACCELERATION * GetFrameTime());
-    position = Vector2Add(position, Vector2Scale(velocity, GetFrameTime()));
+bool Player::shieldCovers(Vector2 source) const
+{
+    if (shield == SHIELD_NONE) return false;
+    if (shield == SHIELD_INVINCIBILITY) return invincibilityTime > 0.0f;
+    if (shieldCharge < Balance::PLAYER_CONTACT_DAMAGE) return false;
+    if (shield == SHIELD_ROUND) return true;
+    const Vector2 direction = Vector2Normalize(Vector2Subtract(source, position));
+    const float dot = Vector2DotProduct(facing(), direction);
+    return dot >= (shield == SHIELD_FRONT ? Balance::SHIELD_FRONT_DOT : Balance::SHIELD_SIDE_DOT);
+}
 
-
-    Animator::GetInstance().SetPosition("accelerating", position); 
-    Animator::GetInstance().SetPosition("deaccelerating", position);
-
-
-#pragma endregion 
-
-
-#pragma region PlayerAnimation
-
-
-    if (Vector2Length(velocity) > 0) {
-        if (!playerAccelerating) {
-            Animator::GetInstance().Play("accelerating");
-            playerAccelerating = true;
-        }
-    } else {
-        if (playerAccelerating) {
-            Animator::GetInstance().Stop("accelerating");
-            playerAccelerating = false;
-        }   
+bool Player::tryBlockHit(Vector2 source)
+{
+    if (!shieldCovers(source)) return false;
+    if (shield != SHIELD_INVINCIBILITY) {
+        shieldCharge -= Balance::PLAYER_CONTACT_DAMAGE;
+        shieldDelay = Balance::SHIELD_RECHARGE_DELAY;
     }
+    return true;
+}
 
-
-#pragma endregion
-
-
-#pragma region PlayerShoot
-
-    if (IsKeyPressed(KEY_E)) autoShoot = !autoShoot;    // burst fire 
-    if (isBurstActive) {
-        burstTimer += GetFrameTime();
-        if (burstTimer >= burstDelay && currentBurstShot < burstCount) {
- 
-            fireScatterBullets(facing_direction);
-            
-            currentBurstShot++;
-            burstTimer = 0.0f; 
-
-            if (currentBurstShot >= burstCount) {
-                isBurstActive = false;
-                currentBurstShot = 0;
-                playerAttackCooldown.startCooldown(); 
-            }
-        }
+void Player::update()
+{
+    const float dt = GetFrameTime();
+    if (health <= 0) { playerState = PLAYER_DEAD; laserActive = false; pendingLaserTicks = 0; return; }
+    stateElapsed += dt;
+    if (playerState == PLAYER_STUNNED && stateElapsed >= Balance::PLAYER_STUN_TIME) {
+        playerState = PLAYER_IFRAME; stateElapsed -= Balance::PLAYER_STUN_TIME;
     }
-   
-    else if ((IsMouseButtonDown(MOUSE_BUTTON_LEFT) || autoShoot) && !playerAttackCooldown.isOnCooldown()) {
-     
-        fireScatterBullets(facing_direction);
-        
-        if (burstCount > 1) {
-            isBurstActive = true;
-            currentBurstShot = 1; 
-            burstTimer = 0.0f;
-        } else {
-            
-            playerAttackCooldown.startCooldown();
-        }
+    if (playerState == PLAYER_IFRAME && stateElapsed >= iframeDuration) playerState = PLAYER_DEFAULT;
+    updateEquipment(dt, IsKeyPressed(KEY_SPACE));
+    const Vector2 direction = Vector2Subtract(GetScreenToWorld2D(GetMousePosition(), utils::gameCamera), position);
+    if (Vector2Length(direction) > 0.0f) {
+        const float target = std::atan2(direction.y, direction.x) * RAD2DEG + 90.0f;
+        const float delta = std::remainder(target - rotation, 360.0f);
+        const float turnSpeed = (Balance::PLAYER_TURN_BASE + Vector2Length(velocity) / speed *
+            Balance::PLAYER_TURN_SPEED_BONUS) * rotationSpeedMultiplier;
+        rotation = std::fmod(rotation + delta * (1.0f - std::exp(-turnSpeed * dt)) + 360.0f, 360.0f);
     }
+    Vector2 input = {static_cast<float>(IsKeyDown(KEY_D) - IsKeyDown(KEY_A)),
+                     static_cast<float>(IsKeyDown(KEY_S) - IsKeyDown(KEY_W))};
+    input = Vector2Normalize(input);
+    const float moveSpeed = speed * Balance::ENGINE_SPEED[engine] * (boostTime > 0.0f ? Balance::BOOST_SPEED : 1.0f);
+    velocity = Vector2MoveTowards(velocity, Vector2Scale(input, moveSpeed),
+        Balance::PLAYER_ACCELERATION * Balance::ENGINE_ACCELERATION[engine] * dt);
+    position = Vector2Add(position, Vector2Scale(velocity, dt));
+    playerAccelerating = Vector2Length(velocity) > 0.0f;
+    rect.x = position.x - rect.width / 2.0f;
+    rect.y = position.y - rect.height / 2.0f;
+    if (IsKeyPressed(KEY_E)) autoShoot = !autoShoot;
+    updateWeapon(dt, IsMouseButtonDown(MOUSE_BUTTON_LEFT) || autoShoot);
+}
 
-#pragma endregion PlayerShoot
-
-    rect = {position.x - rect.width / 2, position.y - rect.height / 2, rect.width, rect.height};
-};
-
-
-void Player::takeDamage(float timeStateEntered, Vector2 entityPosition, float entitySize) 
+void Player::takeDamage(float entered, Vector2 source, float entitySize)
 {
 #ifdef GAME_DEBUG
     if (debugInvincible) return;
 #endif
-    health -= 10; 
-    playerState = PLAYER_STUNNED;
-    this->timeStateEntered = timeStateEntered;
-    Vector2 nudgeDirection = Vector2Normalize(Vector2Subtract(position, entityPosition));
-    velocity = Vector2Scale(nudgeDirection, PLAYER_COLLISION_NUDGE * entitySize); 
-    Animator::GetInstance().SetTint("accelerating", RED);
-    Animator::GetInstance().SetTint("deaccelerating", RED);
-    
+    if (tryBlockHit(source)) return;
+    health = std::max(0, health - Balance::PLAYER_CONTACT_DAMAGE);
+    playerState = health == 0 ? PLAYER_DEAD : PLAYER_STUNNED;
+    timeStateEntered = entered;
+    stateElapsed = 0.0f;
+    velocity = Vector2Scale(Vector2Normalize(Vector2Subtract(position, source)), Balance::PLAYER_COLLISION_NUDGE * entitySize);
+    if (health == 0) { laserActive = false; pendingLaserTicks = 0; }
     PlaySound(ResourceManager::GetInstance().GetSound("player_damaged"));
     PlaySound(ResourceManager::GetInstance().GetSound("player_damaged_2"));
     DamageOverlay::GetInstance().startDamageAnimation();
 }
 
+void Player::addBlast(Vector2 center) { blasts.push_back({center, Theme::EXPLOSION_TIME}); }
 
 void Player::draw()
 {
-    // DrawRectangleRec(rect, WHITE); // ? for debugging purposes
-    // no drawing since the animator class handles it
-};
+    for (const auto& blast : blasts) {
+        DrawRing(blast.center, Balance::ROCKET_SPLASH_RADIUS - Theme::DEBUG_OUTLINE_WIDTH,
+            Balance::ROCKET_SPLASH_RADIUS, 0.0f, 360.0f, Theme::EQUIPMENT_RING_SEGMENTS,
+            Fade(Theme::COLOR_ACCENT, blast.remaining / Theme::EXPLOSION_TIME));
+    }
+    if (health <= 0) return;
+    if (laserActive) {
+        const auto& sheet = ResourceManager::GetInstance().GetTextureRef("player_projectile_zapper");
+        if (sheet.id != 0) {
+            const int frame = static_cast<int>(animationTime / Theme::EQUIPMENT_FRAME_TIME) % (sheet.width / Theme::PROJECTILE_FRAME);
+            for (float distance = 0.0f; distance < Balance::LASER_RANGE; distance += Theme::LASER_TILE_LENGTH) {
+                const float length = std::min(Theme::LASER_TILE_LENGTH, Balance::LASER_RANGE - distance);
+                const Vector2 center = Vector2Add(getLaserStart(), Vector2Scale(facing(), distance + length / 2.0f));
+                DrawTexturePro(sheet, {static_cast<float>(frame * Theme::PROJECTILE_FRAME) + Theme::LASER_SOURCE_X, 0.0f,
+                    Theme::LASER_SOURCE_WIDTH, static_cast<float>(Theme::PROJECTILE_FRAME)},
+                    {center.x, center.y, Balance::LASER_RADIUS * 2.0f, length},
+                    {Balance::LASER_RADIUS, length / 2.0f}, rotation, WHITE);
+            }
+        }
+    }
+    const bool hurt = playerState != PLAYER_DEFAULT && static_cast<int>(stateElapsed * Theme::HURT_FLASH_RATE) % 2 == 0;
+    const Color tint = hurt ? Theme::COLOR_DANGER : WHITE;
+    drawLayer(std::string(engineKeys[engine]) + (playerAccelerating ? "_powering" : "_idle"),
+        Theme::PLAYER_LAYER_FRAME, Theme::PLAYER_LAYER_SIZE, position, rotation, animationTime, WHITE);
+    drawLayer(engineKeys[engine], Theme::PLAYER_LAYER_FRAME, Theme::PLAYER_LAYER_SIZE, position, rotation, 0.0f, tint);
+    const float fraction = static_cast<float>(health) / Balance::PLAYER_MAX_HEALTH;
+    const char* hull = fraction <= Balance::HULL_CRITICAL_FRACTION ? "player_hull_very_damaged" :
+        fraction <= Balance::HULL_DAMAGED_FRACTION ? "player_hull_damaged" :
+        fraction <= Balance::HULL_SLIGHT_FRACTION ? "player_hull_slight_damage" : "player_hull_full_health";
+    drawLayer(hull, Theme::PLAYER_LAYER_FRAME, Theme::PLAYER_LAYER_SIZE, position, rotation, 0.0f, tint);
+    drawLayer(weaponKeys[weapon], Theme::PLAYER_LAYER_FRAME, Theme::PLAYER_LAYER_SIZE, position, rotation,
+        laserActive ? animationTime : weaponFlash > 0.0f ? weaponAnimationTime : 0.0f, tint);
+    if (shield != SHIELD_NONE) {
+        const float capacity = static_cast<float>(Balance::SHIELD_CAPACITY[shield]);
+        const float alpha = shield == SHIELD_INVINCIBILITY ? (invincibilityTime > 0.0f ? 1.0f : Theme::SHIELD_EMPTY_OPACITY) :
+            shieldCharge < Balance::PLAYER_CONTACT_DAMAGE ? Theme::SHIELD_EMPTY_OPACITY :
+            Theme::SHIELD_MIN_OPACITY + (1.0f - Theme::SHIELD_MIN_OPACITY) * shieldCharge / capacity;
+        drawLayer(shieldKeys[shield], Theme::PLAYER_SHIELD_FRAME, Theme::PLAYER_SHIELD_SIZE,
+            position, rotation, animationTime, Fade(WHITE, alpha));
+    }
+}
+
+void Player::drawEquipmentStatus() const
+{
+    const Font font = ResourceManager::GetInstance().GetFont(Theme::FONT_PRIMARY);
+    Vector2 at = Theme::EQUIPMENT_STATUS_POSITION;
+    DrawTextEx(font, TextFormat("%s / %s", weaponNames[weapon], engineNames[engine]), at,
+        Theme::TEXT_CAPTION, Theme::TEXT_SPACING, Theme::COLOR_ACCENT);
+    at.y += Theme::EQUIPMENT_STATUS_LINE;
+    const char* shieldStatus = shield == SHIELD_INVINCIBILITY ?
+        TextFormat("GUARD %s %.1fs", invincibilityTime > 0.0f ? "ACTIVE" : invincibilityCooldown > 0.0f ? "RECHARGE" : "READY",
+            invincibilityTime > 0.0f ? invincibilityTime : invincibilityCooldown) :
+        TextFormat("SHIELD %s %.0f/%d", shieldNames[shield], shieldCharge, Balance::SHIELD_CAPACITY[shield]);
+    DrawTextEx(font, shieldStatus, at,
+        Theme::TEXT_CAPTION, Theme::TEXT_SPACING, Theme::COLOR_TEXT);
+    at.y += Theme::EQUIPMENT_STATUS_LINE;
+    if (engine == ENGINE_BURST)
+        DrawTextEx(font, TextFormat("SPACE: BOOST %s %.1fs", boostTime > 0.0f ? "ACTIVE" : boostCooldown > 0.0f ? "RECHARGE" : "READY",
+            boostTime > 0.0f ? boostTime : boostCooldown), at, Theme::TEXT_CAPTION, Theme::TEXT_SPACING, Theme::COLOR_TEXT);
+    if (shield == SHIELD_INVINCIBILITY) {
+        if (engine == ENGINE_BURST) at.y += Theme::EQUIPMENT_STATUS_LINE;
+        DrawTextEx(font, "SPACE: ACTIVATE GUARD", at, Theme::TEXT_CAPTION, Theme::TEXT_SPACING, Theme::COLOR_TEXT);
+    }
+}
+
+void Player::drawAttackHitboxes() const
+{
+    if (laserActive) {
+        const Vector2 side = Vector2Scale(Vector2Rotate(facing(), PI / 2.0f), Balance::LASER_RADIUS);
+        DrawLineV(Vector2Add(getLaserStart(), side), Vector2Add(getLaserEnd(), side), Theme::COLOR_ACCENT);
+        DrawLineV(Vector2Subtract(getLaserStart(), side), Vector2Subtract(getLaserEnd(), side), Theme::COLOR_ACCENT);
+        DrawCircleLinesV(getLaserStart(), Balance::LASER_RADIUS, Theme::COLOR_ACCENT);
+        DrawCircleLinesV(getLaserEnd(), Balance::LASER_RADIUS, Theme::COLOR_ACCENT);
+    }
+    if (shield != SHIELD_NONE) {
+        const float halfAngle = shield == SHIELD_FRONT ? Balance::SHIELD_FRONT_HALF_ANGLE :
+            shield == SHIELD_SIDES ? Balance::SHIELD_SIDE_HALF_ANGLE : 180.0f;
+        DrawRing(position, Balance::SHIELD_RADIUS, Balance::SHIELD_RADIUS + Theme::DEBUG_OUTLINE_WIDTH,
+            rotation - 90.0f - halfAngle, rotation - 90.0f + halfAngle, Theme::EQUIPMENT_RING_SEGMENTS, Theme::COLOR_ACCENT);
+    }
+}

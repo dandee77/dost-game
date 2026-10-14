@@ -3,6 +3,22 @@
 
 // Item 04 introduces only the tokens needed by debug tools; item 03 migrates the rest.
 namespace Theme {
+    inline constexpr float PLAYER_LAYER_SIZE = 12.0f;
+    inline constexpr float PLAYER_SHIELD_SIZE = 16.0f;
+    inline constexpr int PLAYER_LAYER_FRAME = 48, PLAYER_SHIELD_FRAME = 64;
+    inline constexpr int PROJECTILE_FRAME = 32;
+    inline constexpr float EQUIPMENT_FRAME_TIME = 0.06f;
+    inline constexpr float EQUIPMENT_FLASH_TIME = 0.15f;
+    inline constexpr float HURT_FLASH_RATE = 6.0f;
+    inline constexpr float CANNON_DRAW_SIZE = 6.0f, HEAVY_DRAW_SIZE = 8.0f, ROCKET_DRAW_SIZE = 6.0f;
+    inline constexpr float LASER_TILE_LENGTH = 8.0f;
+    inline constexpr float LASER_SOURCE_X = 13.0f, LASER_SOURCE_WIDTH = 6.0f;
+    inline constexpr float EXPLOSION_TIME = 0.25f;
+    inline constexpr float SHIELD_EMPTY_OPACITY = 0.15f, SHIELD_MIN_OPACITY = 0.35f;
+    inline constexpr Vector2 EQUIPMENT_STATUS_POSITION = {2300.0f, 350.0f};
+    inline constexpr float EQUIPMENT_STATUS_LINE = 60.0f;
+    inline constexpr int EQUIPMENT_RING_SEGMENTS = 48;
+    inline constexpr float DEBUG_OUTLINE_WIDTH = 0.15f;
     inline constexpr const char* FONT_PRIMARY = "primary_font";
     inline constexpr float TEXT_CAPTION = 50.0f;
     // Smaller than tutorial labels so IDs remain legible in the 30+ enemy overlay.

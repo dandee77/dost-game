@@ -16,6 +16,7 @@
 #include "ExplosionConfettiManager.hpp"
 #include "GameOverOverlay.hpp"
 #include "DamageOverlay.hpp"
+#include "Balance.hpp"
 
 
 static bool CheckCollisions(Vector2 bulletPos, Vector2 shipPos, float shipSize) // circled hitbox so edit the draw hitbox
@@ -182,6 +183,114 @@ void Game::restartGame() { //ts kinda useless ngl
 }
 
 
+void Game::damageEquipmentEnemy(const std::string& id, int amount, Vector2 direction, float knockback)
+{
+    auto& enemies = EnemyManager::GetInstance().getEnemies();
+    const auto found = enemies.find(id);
+    if (found == enemies.end()) return;
+    auto& enemy = *found->second;
+    const int dealt = std::min(amount, enemy.getHealth());
+    enemy.takeDamage(amount);
+    playerEntity.addDamageDealt(dealt);
+    DamageIndicatorManager::GetInstance().addDamageIndicator(enemy.getPosition(), dealt, amount);
+    if (knockback > 0.0f && enemy.canReceiveKnockback()) enemy.applyKnockback(direction, knockback);
+    if (!enemy.isDead()) return;
+    killCounter.increment();
+    playerEntity.addScore(enemy.getEnemyType() == LOW_LEVEL_ENEMY ? Balance::LOW_SCORE :
+        enemy.getEnemyType() == MID_LEVEL_ENEMY ? Balance::MID_SCORE : Balance::DEBRIS_SCORE);
+    for (const auto& sound : scoreSounds) {
+        if (!IsSoundPlaying(sound)) { PlaySound(sound); break; }
+    }
+    EnemyManager::GetInstance().removeEnemy(id);
+}
+
+void Game::destroyEquipmentAsteroid(const std::string& id)
+{
+    auto& manager = AsteroidManager::GetInstance();
+    if (manager.getAsteroids().find(id) == manager.getAsteroids().end()) return;
+    killCounter.increment();
+    playerEntity.addScore(Balance::DEBRIS_SCORE);
+    manager.removeAsteroid(id);
+}
+
+void Game::detonateRocket(Vector2 center, int amount, float knockback)
+{
+    playerEntity.addBlast(center);
+    std::vector<std::pair<std::string, Vector2>> targets;
+    for (const auto& [id, enemy] : EnemyManager::GetInstance().getEnemies()) {
+        if (Vector2Distance(center, enemy->getPosition()) <= Balance::ROCKET_SPLASH_RADIUS + enemy->getHitbox().width)
+            targets.push_back({id, Vector2Subtract(enemy->getPosition(), center)});
+    }
+    for (const auto& [id, direction] : targets) damageEquipmentEnemy(id, amount, direction, knockback);
+    std::vector<std::string> debris;
+    for (const auto& [id, asteroid] : AsteroidManager::GetInstance().getAsteroids()) {
+        if (Vector2Distance(center, asteroid->getPosition()) <= Balance::ROCKET_SPLASH_RADIUS + asteroid->getAsteroidSize())
+            debris.push_back(id);
+    }
+    for (const auto& id : debris) destroyEquipmentAsteroid(id);
+}
+
+void Game::resolveEquipmentAttacks()
+{
+    auto& em = EnemyManager::GetInstance();
+    auto& am = AsteroidManager::GetInstance();
+    const int ticks = playerEntity.consumeLaserTicks();
+    if (playerEntity.isLaserActive() && ticks > 0) {
+        const Vector2 from = playerEntity.getLaserStart(), to = playerEntity.getLaserEnd();
+        std::vector<std::string> targets;
+        for (const auto& [id, enemy] : em.getEnemies()) {
+            if (Bullet::hitFraction(from, to, enemy->getPosition(), Balance::LASER_RADIUS + enemy->getHitbox().width) >= 0.0f)
+                targets.push_back(id);
+        }
+        for (const auto& id : targets) damageEquipmentEnemy(id, ticks * Balance::LASER_DAMAGE,
+            Vector2Subtract(to, from), playerEntity.getKnockbackPower());
+        targets.clear();
+        for (const auto& [id, asteroid] : am.getAsteroids()) {
+            if (Bullet::hitFraction(from, to, asteroid->getPosition(), Balance::LASER_RADIUS + asteroid->getAsteroidSize()) >= 0.0f)
+                targets.push_back(id);
+        }
+        for (const auto& id : targets) destroyEquipmentAsteroid(id);
+    }
+
+    auto& bullets = BulletManager::GetInstance().getBullets();
+    for (auto& bullet : bullets) {
+        if (bullet.isEnemyBullet() || bullet.getKind() == PROJECTILE_LEGACY) continue;
+        struct Hit { float fraction; std::string id; bool asteroid; };
+        std::vector<Hit> hits;
+        for (const auto& [id, enemy] : em.getEnemies()) {
+            if (bullet.hasHit(id)) continue;
+            const float t = Bullet::hitFraction(bullet.getPreviousPosition(), bullet.getPosition(),
+                enemy->getPosition(), bullet.getRadius() + enemy->getHitbox().width);
+            if (t >= 0.0f) hits.push_back({t, id, false});
+        }
+        for (const auto& [id, asteroid] : am.getAsteroids()) {
+            if (bullet.hasHit(id)) continue;
+            const float t = Bullet::hitFraction(bullet.getPreviousPosition(), bullet.getPosition(),
+                asteroid->getPosition(), bullet.getRadius() + asteroid->getAsteroidSize());
+            if (t >= 0.0f) hits.push_back({t, id, true});
+        }
+        std::sort(hits.begin(), hits.end(), [](const Hit& a, const Hit& b) {
+            return a.fraction == b.fraction ? a.id < b.id : a.fraction < b.fraction;
+        });
+        for (const auto& hit : hits) {
+            if (!bullet.canPierce()) break;
+            if (bullet.getKind() == PROJECTILE_ROCKET) {
+                const Vector2 center = Vector2Lerp(bullet.getPreviousPosition(), bullet.getPosition(), hit.fraction);
+                detonateRocket(center, bullet.getDamage(), bullet.getKnockbackPower());
+                bullet.reducePiercePower();
+                break;
+            }
+            if (hit.asteroid) destroyEquipmentAsteroid(hit.id);
+            else damageEquipmentEnemy(hit.id, bullet.getDamage(), bullet.getDirection(), bullet.getKnockbackPower());
+            bullet.recordHit(hit.id);
+            bullet.reducePiercePower();
+        }
+    }
+    std::erase_if(bullets, [](const Bullet& bullet) {
+        return bullet.getKind() != PROJECTILE_LEGACY && !bullet.canPierce();
+    });
+}
+
 std::string Game::update() 
 {
     // if (IsKeyPressed(KEY_ENTER)) return "MainMenu"; 
@@ -311,6 +420,8 @@ std::string Game::update()
 
 #pragma region UpdateBulletsCollision
 
+        resolveEquipmentAttacks();
+
         // Snapshot before movement, matching the original bullet collision phase.
         enemyCollisionGrid.clear();
         collisionEnemies.clear();
@@ -331,6 +442,8 @@ std::string Game::update()
 
 
         for (int i = 0; i < bm.getBullets().size(); i++) {
+
+            if (bm.getBullets()[i].getKind() != PROJECTILE_LEGACY) continue;
 
             if (!bm.getBullets()[i].isEnemyBullet()) {
                 // Player bullets vs enemies
@@ -430,6 +543,14 @@ std::string Game::update()
             }
             else {
                 // Enemy bullets vs player
+                const auto& incoming = bm.getBullets()[i];
+                const float shieldHit = Bullet::hitFraction(incoming.getPreviousPosition(), incoming.getPosition(),
+                    playerEntity.getPosition(), Balance::SHIELD_RADIUS);
+                if (shieldHit >= 0.0f && playerEntity.tryBlockHit(Vector2Lerp(
+                    incoming.getPreviousPosition(), incoming.getPosition(), shieldHit))) {
+                    bm.removeBullet(i--);
+                    continue;
+                }
                 if (CheckCollisions(bm.getBullets()[i].getPosition(),
                                 playerEntity.getPosition(),
                                 playerEntity.getHitbox().width) &&
@@ -760,7 +881,7 @@ void Game::draw()
         DrawParallaxBackground();
         BulletManager::GetInstance().draw(playerBulletTexture, enemyBulletTexture);
 
-        // ? no draw function for the player as it is handled in the animator class
+        // Equipment layers draw directly in a fixed order.
         playerEntity.draw();
 
         EnemyManager::GetInstance().draw();
@@ -829,6 +950,8 @@ void Game::draw()
 #endif
 
     EndMode2D();
+
+    if (gameState != GAME_OVER) playerEntity.drawEquipmentStatus();
 
     if(gameState == GAME_AUGMENT_SELECTION) ConfettiManager::GetInstance().draw();
 

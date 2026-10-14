@@ -82,6 +82,12 @@ Item 04 adds `Theme::DEBUG_TEXT_WORLD_ID = 2` world units for compact debug IDs.
 
 ## Colors
 
+P1 supplied-pack exception (14 October): preserve the user's CC0 pack pixel colors, including green engine/shield effects and gold guard art, for the requested equipment prototypes. This is an explicit asset-integration scope exception to the palette below; do not recolor or replace the supplied files. A final theme reskin remains the separate art track. Runtime PNGs are in `assets/textures/player/`; combined reference sheets and editable files are in `assets/source/player/` with the original license.
+
+P1 sprite layout: hull/engine/effect/weapon layers use 48×48 frames drawn at 12 world units. Shields use 64×64 frames drawn at 16 units, sharing the same center and rotation. Weapon strips have 7 cannon, 12 heavy, 17 rockets, 14 zapper frames; shield strips have 10 front, 6 sides, 12 round and 10 invincibility frames. Engine idle/powering counts: base 3/4, pulse 4/4, burst 7/6, supercharged 4/4. Projectiles are 32×32 frames: cannon 4, heavy 10, rocket 3, zapper 8. Counts derive from sheet width divided by the Theme frame-size tokens; all new sheets are separate assets, with no changes to old sheet dimensions.
+
+The zapper beam crops columns 13–18 of each 32-pixel frame to remove transparent padding, then tiles at 8 world units along the damage capsule. Its visible width matches the 3-unit damage width. Equipment status starts at (2300,350), inside the safe area: weapon/engine, shield capacity or guard state, equipped Space skill cooldown. `hitbox on` outlines beam, directional shield arcs and projectile swept paths/radii. Player-owned sprite timers pause with simulation.
+
 Debug diagnostic text/IDs use 55% opacity, console text 85%, and both panels 25%. World outlines and the invincibility indicator retain normal opacity. The audio status row reports ON or MUTED; use the console's `mute` command to change it.
 
 Semantic colors make the action readable in a 3-second glance and in a trailer.

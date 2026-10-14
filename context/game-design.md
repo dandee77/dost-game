@@ -17,6 +17,37 @@ Values marked **(SA)** are the current Space Ablaze values, kept so the game sti
 
 ## Player
 
+### P1 equipment prototypes (14 October, user request)
+
+These are debug-selectable prototypes, with no acquisition conditions or progression integration. New runs use cannon/base engine/no shield. All values are in `Balance.hpp` and are TUNE. Switching equipment preserves health, score and earned augments; presets turn auto-fire off. Projectiles already in flight keep their original weapon, damage and piercing count. Beam/burst state and relevant cooldowns reset when replacing their equipment. Debug equipment changes refill the selected shield.
+
+| Weapon | Behavior | Values |
+|---|---|---|
+| Cannon | Animated shot; swept circular hitbox; consumed on first hit unless piercing augmented | 7–12 damage, 0.5 s cooldown, speed 200, radius 0.6 |
+| Laser (Zapper art) | Continuous piercing capsule from the muzzle along ship facing; damages all intersecting enemies and destroys debris | Range 100, radius 1.5; immediate first tick, then 4 damage every 0.1 s; long frames accumulate all due ticks |
+| Rockets | Swept collision; detonates once at first contact; full damage to each overlapping enemy, destroys overlapping debris | 30 damage, 0.9 s cooldown, speed 90, radius 0.7; splash radius 14 |
+| Heavy | Slow energy shot; hits each target at most once, nearest first | 40 damage, 1.2 s cooldown, speed 100, radius 2; pierces 3 targets |
+
+LMB and E use the existing fire/auto-fire controls. Rapid Fire scales every weapon cooldown, including laser ticks. Scatter and Trigger Happy apply to projectile weapons; continuous laser already hits every target in its beam and does not fire burst/scatter projectiles. Piercing adds targets to cannon/heavy; rockets always detonate once. Inertia Impact applies to all weapons. Damage dealt records actual HP removed (overkill excluded) for equipment attacks. Existing enemy/debris kill scores and effects are retained.
+
+| Engine | Speed multiplier | Acceleration multiplier | Skill |
+|---|---|---|---|
+| Base | 1.0 | 1.0 | None |
+| Pulse | 0.9 | 1.5 | Strong acceleration |
+| Burst | 1.1 | 1.2 | Space: speed ×2.5 for 0.45 s, 3 s cooldown |
+| Supercharged | 1.4 | 1.0 | Higher sustained speed |
+
+| Shield | Protection | Capacity / timing |
+|---|---|---|
+| Front | Facing ±60 degrees | 30 capacity |
+| Sides | Facing ±90 degrees | 40 capacity |
+| Round | All directions | 50 capacity |
+| Invincibility | Space activates all-direction protection | 2 s active, 8 s cooldown from activation |
+
+Each ordinary block costs 10 capacity; a shield with less than 10 cannot block. It regenerates 10/s after 3 s without a block. Bullet interception uses radius 7.5; contact protection uses the same directional coverage at the hull. Invincibility is a timed equipment skill, distinct from the existing permanent debug `invincible` toggle. Space activates both equipped skills when a custom build combines burst engine and invincibility shield. All equipment, animation, attack, stun and iframe timers advance only during gameplay; console/pause/augment selection stop them.
+
+Hull art selects full, slight, damaged and very damaged at >75%, ≤75%, ≤50%, ≤25% health. The original player collision radius remains 4 world units. Equipment lives in Player/Bullet values and resets on both restart and new scene entry; no new singleton.
+
 | Stat | Base | Source |
 |---|---|---|
 | Max health | 100 | (SA) |

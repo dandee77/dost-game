@@ -2,6 +2,7 @@
 #include <cstddef>
 
 namespace Config {
+    inline constexpr float TIMER_EPSILON = 0.00001f;
     inline constexpr std::size_t DEBUG_INPUT_LIMIT = 80;
     inline constexpr std::size_t DEBUG_HISTORY_LIMIT = 32;
     inline constexpr std::size_t DEBUG_OUTPUT_LINES = 6;

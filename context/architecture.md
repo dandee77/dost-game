@@ -150,6 +150,12 @@ Convert between spaces with `GetScreenToWorld2D(screenPos, utils::gameCamera)` a
 
 ## Current Game Loop (Space Ablaze)
 
+P1 equipment extension (14 October): Player owns typed weapon/engine/shield selections, fire/skill/shield/animation timers and short-lived blast visuals. Player update produces typed Bullet values or a count of due laser ticks. Game::resolveEquipmentAttacks runs after bullet movement and before the legacy collision snapshots: swept circle tests select projectile contacts in travel order; laser capsules and rocket circles gather targets before removal. Existing score, kill, damage indicator and destruction paths handle results. No progression/unlock system is added. Legacy/enemy bullets retain their existing manager API; enemy bullets can be intercepted by directional shields before hull collision.
+
+The modular player draws directly in a fixed effect/engine/hull/weapon/shield order, avoiding unordered Animator layer ordering. Textures remain ResourceManager-owned. Shots capture damage and pierced target IDs on creation; changing weapons cannot retune shots already in flight. Player::init clears equipment state/effects and both Game reset paths already call it. The player shooting sound now loads once through ResourceManager instead of leaking ten loads per restart.
+
+Debug commands: `player` lists syntax. `player <default|cannon|laser|rockets|heavy> build` selects presets. `player weapon <cannon|laser|rockets|heavy>`, `player engine <base|pulse|burst|supercharged>`, and `player shield <none|front|sides|round|invincibility>` mix components. Tab completes every argument; invalid/extra arguments are rejected without changes. Commands require a live run and do not revive dead players. All command registration remains under GAME_DEBUG.
+
 `Game::update()` switches on `GameState`:
 
 | State | What happens |

@@ -17,7 +17,29 @@
 
 namespace {
     enum DebugCommand { DEBUG_HELP, DEBUG_HITBOX, DEBUG_MUTE, DEBUG_INVINCIBLE,
-                        DEBUG_CREDITS, DEBUG_BOSS, DEBUG_WAVE, DEBUG_CLEAR, DEBUG_CLOSE };
+                        DEBUG_CREDITS, DEBUG_BOSS, DEBUG_WAVE, DEBUG_CLEAR, DEBUG_CLOSE, DEBUG_PLAYER };
+    enum EquipmentCommand { EQUIP_BUILD, EQUIP_WEAPON, EQUIP_ENGINE, EQUIP_SHIELD };
+    struct EquipmentInfo { const char* text; EquipmentCommand command; int value; };
+    constexpr std::array equipmentCommands = {
+        EquipmentInfo{"default build", EQUIP_BUILD, BUILD_DEFAULT},
+        EquipmentInfo{"cannon build", EQUIP_BUILD, BUILD_CANNON},
+        EquipmentInfo{"laser build", EQUIP_BUILD, BUILD_LASER},
+        EquipmentInfo{"rockets build", EQUIP_BUILD, BUILD_ROCKETS},
+        EquipmentInfo{"heavy build", EQUIP_BUILD, BUILD_HEAVY},
+        EquipmentInfo{"weapon cannon", EQUIP_WEAPON, WEAPON_CANNON},
+        EquipmentInfo{"weapon laser", EQUIP_WEAPON, WEAPON_LASER},
+        EquipmentInfo{"weapon rockets", EQUIP_WEAPON, WEAPON_ROCKETS},
+        EquipmentInfo{"weapon heavy", EQUIP_WEAPON, WEAPON_HEAVY},
+        EquipmentInfo{"engine base", EQUIP_ENGINE, ENGINE_BASE},
+        EquipmentInfo{"engine pulse", EQUIP_ENGINE, ENGINE_PULSE},
+        EquipmentInfo{"engine burst", EQUIP_ENGINE, ENGINE_BURST},
+        EquipmentInfo{"engine supercharged", EQUIP_ENGINE, ENGINE_SUPERCHARGED},
+        EquipmentInfo{"shield none", EQUIP_SHIELD, SHIELD_NONE},
+        EquipmentInfo{"shield front", EQUIP_SHIELD, SHIELD_FRONT},
+        EquipmentInfo{"shield sides", EQUIP_SHIELD, SHIELD_SIDES},
+        EquipmentInfo{"shield round", EQUIP_SHIELD, SHIELD_ROUND},
+        EquipmentInfo{"shield invincibility", EQUIP_SHIELD, SHIELD_INVINCIBILITY}
+    };
     struct CommandInfo {
         const char* name;
         DebugCommand command;
@@ -26,6 +48,7 @@ namespace {
     };
     constexpr std::array commands = {
         CommandInfo{"help", DEBUG_HELP, false, false},
+        CommandInfo{"player", DEBUG_PLAYER, false, true},
         CommandInfo{"hitbox", DEBUG_HITBOX, true, true},
         CommandInfo{"mute", DEBUG_MUTE, true, false},
         CommandInfo{"invincible", DEBUG_INVINCIBLE, true, true},
@@ -112,6 +135,13 @@ void DebugTools::addOutput(const std::string& line)
 std::vector<std::string> DebugTools::completions() const
 {
     std::vector<std::string> matches;
+    if (input.starts_with("player ")) {
+        for (const auto& option : equipmentCommands) {
+            const std::string candidate = std::string("player ") + option.text;
+            if (candidate.starts_with(input)) matches.push_back(candidate);
+        }
+        return matches;
+    }
     for (const auto& command : commands) {
         const std::string name = command.name;
         if (name.starts_with(input)) matches.push_back(name);
@@ -163,8 +193,8 @@ void DebugTools::execute(Player* player)
         addOutput("Unknown command. Type help or press Tab.");
         return;
     }
-    if (!extra.empty() || (!found->toggle && !argument.empty()) ||
-        (found->toggle && !argument.empty() && argument != "on" && argument != "off" && argument != "toggle")) {
+    if (found->command != DEBUG_PLAYER && (!extra.empty() || (!found->toggle && !argument.empty()) ||
+        (found->toggle && !argument.empty() && argument != "on" && argument != "off" && argument != "toggle"))) {
         addOutput("Usage: " + name + (found->toggle ? " [on|off|toggle]" : ""));
         return;
     }
@@ -178,8 +208,38 @@ void DebugTools::execute(Player* player)
         return !current;
     };
     switch (found->command) {
+    case DEBUG_PLAYER: {
+        std::string trailing;
+        stream >> trailing;
+        if (argument.empty()) {
+            addOutput("player <default|cannon|laser|rockets|heavy> build");
+            addOutput("player weapon <cannon|laser|rockets|heavy>");
+            addOutput("player engine <base|pulse|burst|supercharged>");
+            addOutput("player shield <none|front|sides|round|invincibility>");
+            addOutput("Space: burst boost / invincibility shield");
+            break;
+        }
+        const auto option = std::find_if(equipmentCommands.begin(), equipmentCommands.end(), [&](const EquipmentInfo& info) {
+            return argument + " " + extra == info.text;
+        });
+        if (!trailing.empty() || option == equipmentCommands.end()) {
+            addOutput("Unknown player option. Type player for commands.");
+            break;
+        }
+        if (player->getHealth() <= 0) { addOutput("Restart the run before equipping a build."); break; }
+        switch (option->command) {
+        case EQUIP_BUILD: player->setBuild(static_cast<PlayerBuild>(option->value)); break;
+        case EQUIP_WEAPON: player->setWeapon(static_cast<PlayerWeapon>(option->value)); break;
+        case EQUIP_ENGINE: player->setEngine(static_cast<PlayerEngine>(option->value)); break;
+        case EQUIP_SHIELD: player->setShield(static_cast<PlayerShield>(option->value)); break;
+        }
+        addOutput(std::string("Equipped: ") + option->text);
+        addOutput("Hold LMB / E: auto-fire. Space: equipped skill.");
+        break;
+    }
     case DEBUG_HELP:
         addOutput("hitbox / mute / invincible [on|off|toggle]");
+        addOutput("player: builds, weapons, engines and shields");
         addOutput("credits / boss / wave: pending systems");
         addOutput("help / clear / close | Up/Down: history");
         break;
@@ -256,6 +316,7 @@ void DebugTools::drawWorld(const Player& player) const
     const Font font = ResourceManager::GetInstance().GetFont(Theme::FONT_PRIMARY);
     // Collision checks use width as the radius, not half the sprite width.
     drawHitbox(font, player.getPosition(), player.getHitbox().width, "player", Theme::COLOR_ACCENT);
+    player.drawAttackHitboxes();
     for (const auto& [id, enemy] : EnemyManager::GetInstance().getEnemies()) {
         drawHitbox(font, enemy->getPosition(), enemy->getHitbox().width, id.c_str(), Theme::COLOR_TOXIC);
     }
@@ -266,6 +327,10 @@ void DebugTools::drawWorld(const Player& player) const
     for (const auto& bullet : BulletManager::GetInstance().getBullets()) {
         const Vector2 position = bullet.getPosition();
         const Color color = bullet.isEnemyBullet() ? Theme::COLOR_DANGER : Theme::COLOR_ACCENT;
+        if (bullet.getRadius() > 0.0f) {
+            DrawCircleLinesV(position, bullet.getRadius(), color);
+            DrawLineV(bullet.getPreviousPosition(), position, color);
+        }
         const float halfSize = Theme::DEBUG_POINT_HALF_SIZE;
         DrawLineV(Vector2{position.x - halfSize, position.y}, Vector2{position.x + halfSize, position.y}, color);
         DrawLineV(Vector2{position.x, position.y - halfSize}, Vector2{position.x, position.y + halfSize}, color);

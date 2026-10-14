@@ -119,6 +119,7 @@ All use the same pattern: `static X& GetInstance()` with a function-local static
 - Gotchas: also `#define`s `GAME_SCREEN_WIDTH 3840` and `GAME_SCREEN_HEIGHT 2160`. Many files get these constants through `Scene.hpp`. Item 03 moves them to `Config.hpp` and makes `Scene.hpp` include `Config.hpp` so existing includes keep working.
 
 ### LoadingScreen
+- P1: after decoded progress reaches 100%, drains pending GPU uploads again before leaving, preventing final worker textures from missing in the first gameplay scene.
 - Files: src/LoadingScreen.hpp, src/LoadingScreen.cpp
 - Status: existing
 - Kind: scene (`"LoadingScreen"`)
@@ -138,7 +139,8 @@ All use the same pattern: `static X& GetInstance()` with a function-local static
 - Changed by: 22
 
 ### Game
-- Files: src/Game.hpp, src/Game.cpp (857 lines)
+- P1: private `resolveEquipmentAttacks()`, `damageEquipmentEnemy(const std::string&, int, Vector2, float)`, `destroyEquipmentAsteroid(const std::string&)`, `detonateRocket(Vector2, int, float)` integrate swept projectiles, beam ticks, splash, score and destruction before legacy snapshots. No public API change. Player draws its own layers and equipment HUD; shield interception precedes legacy enemy-bullet hull collisions.
+- Files: src/Game.hpp, src/Game.cpp
 - Status: existing → modified in most items
 - Kind: scene (`"Game"`), the gameplay orchestrator
 - Owns (current): `Player playerEntity`, `KillCounter killCounter`, `GameTimer gameTimer`, `std::vector<Card> augmentCards`, `std::vector<BackgroundLayer> backgroundLayers` (4 parallax layers), `Music gameMusic`, `Button* restartButton`, `Button* mainMenuButton` (raw `new`), `std::array<Sound, 10> scoreSounds`, `DeathInfo deathInfo`, `GameState gameState`
@@ -219,21 +221,17 @@ All use the same pattern: `static X& GetInstance()` with a function-local static
 
 ### Player
 - Files: src/Player.hpp, src/Player.cpp
-- Status: modified (item 04; stats refactor planned in item 08)
-- Kind: entity
-- Inherits: `Entity`
-- Owned by: `Game` (value member `playerEntity`)
-- Public API (current): `init()` (resets everything, registers animations), `update()`, `draw()` (empty; the Animator draws the ship), `getHitbox()`, `takeDamage(float timeStateEntered, Vector2 entityPosition, float entitySize)`, `getPlayerState()`, `addScore(int)`, `getScore()`, `addDamageDealt(int)`, `getTotalDamageDealt()`, `getRandomDamage()`, `getMinDamage()`, `getMaxDamage()`, `getKnockbackPower()`, and nine augment methods: `increasePlayerAttackSpeed()`, `increasePlayerHealth()`, `increasePlayerMovementSpeed()`, `increasePlayerIframeDuration()`, `increasePlayerRotationSpeed()`, `increaseTriggerHappyBurst()`, `increaseScatterShot()`, `increasePiercingRounds()`, `increaseInertiaImpact()`
-- Enum: `PlayerState { PLAYER_DEFAULT, PLAYER_STUNNED, PLAYER_IFRAME, PLAYER_DEAD }`
-- Debug-only API (item 04): `void setDebugInvincible(bool enabled)`, `bool isDebugInvincible() const`. `init()` resets the flag; `takeDamage()` returns before health, stun, knockback, audio or overlay effects when enabled. Contact still consumes colliding bullets/enemies/asteroids normally. The `invincible` command does not revive a dead run or clear an existing stun.
-- Behavior: 8-direction WASD movement with acceleration; the ship rotates toward the mouse (rotation speed scales with velocity); shooting fires along the **facing** direction, not straight at the cursor. Burst fire (Trigger Happy) and scatter fan (30° steps). Animations `"accelerating"` (4 frames) and `"deaccelerating"` (3 frames) are registered in the Animator under those fixed IDs.
-- Gotchas:
-  - `takeDamage` always subtracts 10 and ignores its arguments for the amount. Item 08 changes the signature to `takeDamage(int amount, Vector2 sourcePosition, float knockbackScale)`.
-  - `increasePlayerHealth()` heals 10 up to a hardcoded 100.
-  - Loads 10 copies of `player_atk_sound.mp3` in `init()` on every restart (leak). Use `LoadSoundAlias`.
-  - `Player.cpp` redefines `GAME_SCREEN_WIDTH/HEIGHT`.
-  - Stats are loose fields (`attackSpeed`, `speed`, `iframeDuration`, `minDamage`, ...). Item 08 groups them into `PlayerStats`.
-- Changed by: 04; planned: 03, 05, 08, 09, 12, 14
+- Status: modified (P1 equipment prototypes, 14 October; PlayerStats refactor remains item 08)
+- Kind: entity; inherits Entity; owned by Game as a value.
+- Public API: `Player()`, `init()`, `update()`, `draw()`, `drawEquipmentStatus() const`, `getHitbox() const`, `takeDamage(float timeStateEntered, Vector2 entityPosition, float entitySize)`, `getPlayerState() const`, `addScore(int)`, `getScore() const`, `addDamageDealt(int)`, `getTotalDamageDealt() const`, `getRandomDamage() const`, `getMinDamage() const`, `getMaxDamage() const`, `getKnockbackPower() const`.
+- Equipment API: `setBuild(PlayerBuild)`, `setWeapon(PlayerWeapon)`, `setEngine(PlayerEngine)`, `setShield(PlayerShield)`, `getWeapon() const`, `getEngine() const`, `getShield() const`, `getShieldCharge() const`, `tryBlockHit(Vector2 source)`, `shieldCovers(Vector2 source) const`, `isLaserActive() const`, `getLaserStart() const`, `getLaserEnd() const`, `consumeLaserTicks()`, `addBlast(Vector2 center)`, `drawAttackHitboxes() const`.
+- Augment API (unchanged): `increasePlayerAttackSpeed()`, `increasePlayerHealth()`, `increasePlayerMovementSpeed()`, `increasePlayerIframeDuration()`, `increasePlayerRotationSpeed()`, `increaseTriggerHappyBurst()`, `increaseScatterShot()`, `increasePiercingRounds()`, `increaseInertiaImpact()`.
+- Debug-only API: `setDebugInvincible(bool)`, `isDebugInvincible() const`.
+- Enums: PlayerState (DEFAULT/STUNNED/IFRAME/DEAD); PlayerEngine (BASE/PULSE/BURST/SUPERCHARGED); PlayerShield (NONE/FRONT/SIDES/ROUND/INVINCIBILITY); PlayerBuild (DEFAULT/CANNON/LASER/ROCKETS/HEAVY). PlayerWeapon is declared before Bullet in Bullet.hpp.
+- Owns: equipment selections, shield charge/recharge, boost/guard state, attack/burst/laser timers, ordered layer animation clocks, blast visual values. All cleared by init, called by both current Game reset paths.
+- Behavior: WASD movement, mouse-facing attacks, LMB/E fire; Space activates equipped burst/guard abilities. Default is cannon/base/no shield. Typed equipment dispatch; no progression/unlocks. Hull art reflects health. Direct ordered rendering replaces the old accelerating/deaccelerating Animator entries.
+- Gotchas: current incoming damage remains 10 until item 08. Directional shields intercept bullets at radius 7.5 and protect contact damage by source direction. All new timers and player stun/iframes use simulation dt. `consumeLaserTicks()` clears pending ticks; Game consumes it once per update. Switching preserves health/augments and in-flight shots, but resets the replaced component's timers; presets disable auto-fire. Shooting sound is ResourceManager-owned, loaded once. `EquipmentTestAccess` is a friend solely for optional native fixtures.
+- Changed by: 04, P1; planned: 03, 05, 08, 09, 12, 14.
 
 ### PlayerStats (planned)
 - Files: inside src/Player.hpp
@@ -547,6 +545,7 @@ All use the same pattern: `static X& GetInstance()` with a function-local static
 - Behavior: dim overlay, "PAUSED", Resume and Quit to Menu buttons. Returns an action enum.
 
 ### DebugTools
+- P1: `player` command lists presets and individual weapon/engine/shield choices, with argument autocomplete. Typed metadata dispatch, strict argument validation and live-run guard. Public API unchanged; hitbox view adds swept projectile geometry, beam capsules and shield arcs.
 - Files: src/DebugTools.hpp, src/DebugTools.cpp
 - Status: built (item 04, F5 console follow-up)
 - Kind: value
@@ -562,6 +561,7 @@ All use the same pattern: `static X& GetInstance()` with a function-local static
 ## Rendering, Assets and Effects
 
 ### ResourceManager
+- P1: registers 28 modular player textures plus managed `player_shoot` sound. Public API unchanged. Paths/CC0 provenance are in assets/ASSETS.md.
 - Files: src/ResourceManager.hpp, src/ResourceManager.cpp
 - Status: existing
 - Kind: singleton
@@ -591,11 +591,14 @@ All use the same pattern: `static X& GetInstance()` with a function-local static
 
 ### Bullet
 - Files: src/Bullet.hpp, src/Bullet.cpp
-- Status: existing
-- Kind: value (stored by value in `BulletManager`)
-- Constructor: `Bullet(Vector2 position, Vector2 direction, bool isEnemy, int piercePower = 1, float knockbackPower = 0.0f)`
-- Public API: `update()`, `draw(const Texture2D&)`, `getPosition()`, `getDirection()`, `isEnemyBullet()`, `setBulletSpeed(float)`, `getPiercePower()`, `reducePiercePower()`, `canPierce()`, `getKnockbackPower()`
-- Planned (item 08): `int damage` field with `setDamage/getDamage` so enemy and boss bullets carry their damage.
+- Status: modified (P1)
+- Kind: value, owned by BulletManager vector.
+- Constructor (unchanged): `Bullet(Vector2 position, Vector2 direction, bool isEnemy, int piercePower = 1, float knockbackPower = 0.0f)`.
+- Public API: `update()`, `draw(const Texture2D&) const`, `getPosition() const`, `getDirection() const`, `isEnemyBullet() const`, `setBulletSpeed(float)`, `getPiercePower() const`, `reducePiercePower()`, `canPierce() const`, `getKnockbackPower() const`.
+- Equipment API: `configure(ProjectileKind, int damage, float radius, float speed)`, `getKind() const`, `getDamage() const`, `getRadius() const`, `getPreviousPosition() const`, `hasHit(const std::string&) const`, `recordHit(const std::string&)`, static `hitFraction(Vector2 from, Vector2 to, Vector2 center, float radius)`.
+- Enums: PlayerWeapon (CANNON/LASER/ROCKETS/HEAVY); ProjectileKind (LEGACY/CANNON/ROCKET/HEAVY).
+- Gotchas: constructor defaults to LEGACY for existing enemy callers and regression fixtures. Player-produced projectiles configure immutable-at-fire damage, sprite type and radius. update saves previous position before movement. hitFraction returns earliest swept-circle contact in [0,1], or -1 for no hit; use target radius plus projectile radius. Piercing IDs prevent repeated damage across frames. Laser is a Player-owned continuous beam, not a Bullet.
+- Planned item 08: incoming enemy/boss damage amounts remain separate; this prototype adds player projectile damage only.
 
 ### DamageIndicator / DamageIndicatorManager
 - Files: src/DamageIndicator.*, src/DamageIndicatorManager.*

@@ -272,6 +272,10 @@ Shaders are `#version 330`. If a teammate's laptop shows a black screen, its Ope
 
 ## raymath Functions Used
 
+P1 equipment (14 October): Context7 `/raysan5/raylib` verified `DrawTexturePro` source/destination rectangles, origin and degree rotation against the official API. Sprite source padding matters: drawing a full 32×32 zapper frame into a 3-unit-wide destination shrinks the six visible columns to 0.56 units. Crop the visible columns before scaling so the beam matches its collision width. Use direct, ordered draws for modular ship layers; Animator's unordered map cannot guarantee layer order. Rotate up-facing new projectile art by direction angle +90 degrees. Gameplay timers accumulate `GetFrameTime()` only in update; never advance them inside draw or use wall time for pause-sensitive skills. Swept-circle intersections are local math in Bullet::hitFraction, including stationary overlap and tangency.
+
+Native equipment fixtures reuse the existing test-only field exposure. For calls to private methods, `EquipmentTestAccess` is a friend declared in Player/Game/DebugTools and defined only in the test target using normal class declarations. MSVC decorates method symbols with access, so calling an out-of-line private method through `#define private public` directly produces linker errors. No test accessor implementation ships in SpaceAblaze.
+
 All `RMAPI` in `raymath.h`. Angles in raymath are **radians**; Raylib drawing rotation is **degrees**. Convert with `DEG2RAD` and `RAD2DEG`.
 
 | Function | Use |
@@ -349,3 +353,5 @@ What was verified, where, and the rule that follows from it.
 ### Item 04: F5 console input (14 October 2026)
 
 Verified `GetCharPressed()` and `IsKeyPressedRepeat()` through Context7's official Raylib repository documentation and the installed 5.5 header. Drain the character queue until zero, including unsupported characters. Commands accept ASCII and normalize to lowercase; Backspace handles both first press and repeat. `IsKeyPressed` does not consume a key for other callers: explicitly capture console opening/open/closing frames before gameplay or menu controls. Escape already cannot exit because Application sets `KEY_NULL`. Use `GameTimer::pause/unpause` only if this console paused the timer; preserve existing GameState. Draw into the virtual canvas before the CRT pass and fit long input/output text with `MeasureTextEx`.
+
+P1 loading race fix: decoded texture progress can become 100% between the first upload drain and the completion check. LoadingScreen now drains once more after observing 100% before returning MainMenu. Every counted successful decode enqueues its image before incrementing progress, so the final drain captures all queued equipment sheets.

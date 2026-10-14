@@ -63,6 +63,7 @@ public:
 #endif
 
 private:        
+    friend struct EquipmentTestAccess;
     struct BackgroundLayer {
         Texture2D texture;
         float parallaxFactor; // 0.0 (stationary) to 1.0 (moves with player)
@@ -70,6 +71,10 @@ private:
     };
 
     void restartGame();
+    void resolveEquipmentAttacks();
+    void damageEquipmentEnemy(const std::string& id, int damage, Vector2 direction, float knockback);
+    void destroyEquipmentAsteroid(const std::string& id);
+    void detonateRocket(Vector2 center, int damage, float knockback);
 
     GameState gameState;
     SpatialGrid enemyCollisionGrid;

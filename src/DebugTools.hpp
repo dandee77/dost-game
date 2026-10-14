@@ -18,6 +18,7 @@ public:
     void drawOverlay(const Player& player, GameState state) const;
 
 private:
+    friend struct EquipmentTestAccess;
     void execute(Player* player);
     void complete();
     void addOutput(const std::string& line);
