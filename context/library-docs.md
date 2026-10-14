@@ -6,7 +6,7 @@ How to use Raylib, raymath, CMake and the compilers correctly in this project, p
 
 ## Authority Order
 
-15 October pickup glow: verified `DrawCircleV(Vector2, float, Color)` against the installed Raylib 5.5 header and Context7 `/raysan5/raylib`; `Fade(color, alpha)` accepts alpha in [0,1]. Draw translucent glow rings inside the same BeginMode2D world transform as texture fragments. Drawing must not advance their timers; ScrapManager updates them only during simulation. No additional Animator update is needed.
+15 October pickup glow correction: DrawTexturePro draws the generated RGBA scrap_orb texture with WHITE tint, preserving its soft alpha halo. The prior DrawCircleV/Fade layers and intact-sprite cuts were removed at the user's request. Destruction playback and handoff share ScrapManager's simulation dt; rendering changes no timers and adds no Animator update. Saved coordinates use pixel centers, subtract the 48px frame center, then scale and rotate with the explosion transform.
 
 Native Windows input fixture note (P2): arrow-key PostMessage events need their scan code and extended-key bit. Key-up lParam must also carry bits 30/31; merely using WM_KEYUP with a zero lParam can be interpreted as another press/repeat by GLFW. For Down use scan code 0x50 and bit 24; Enter uses scan code 0x1c. PollInputEvents between press/release frames. This is test-fixture behavior, not an application input workaround.
 

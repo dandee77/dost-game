@@ -35,6 +35,92 @@ int runDebrisChecks(const std::string& artifactDirectory)
         debris.getDebris().emplace(id, std::move(item));
         return id;
     };
+    // Validate saved endpoints against the actual sheet, not an invented radial pattern.
+    Image sheetImage = LoadImage("assets/textures/debris_destruct.png");
+    require(sheetImage.width == 768 && sheetImage.height == 96 &&
+        sheetImage.format == PIXELFORMAT_UNCOMPRESSED_R8G8B8A8, "Destruction remains eight RGBA frames");
+    const auto* pixels = static_cast<const Color*>(sheetImage.data);
+    std::array<bool, 96 * 96> visited = {};
+    std::vector<Vector2> centers;
+    for (int y = 0; y < 96; ++y) for (int x = 0; x < 96; ++x) {
+        const int start = y * 96 + x;
+        if (visited[start] || pixels[y * 768 + 6 * 96 + x].a == 0) continue;
+        std::vector<int> pending = {start}; visited[start] = true;
+        Vector2 sum = {}; int count = 0;
+        while (!pending.empty()) {
+            const int point = pending.back(); pending.pop_back();
+            const int px = point % 96, py = point / 96;
+            sum.x += px + 0.5f; sum.y += py + 0.5f; ++count;
+            for (int dy = -1; dy <= 1; ++dy) for (int dx = -1; dx <= 1; ++dx) {
+                const int nx = px + dx, ny = py + dy;
+                if (nx < 0 || nx >= 96 || ny < 0 || ny >= 96) continue;
+                const int next = ny * 96 + nx;
+                if (!visited[next] && pixels[ny * 768 + 6 * 96 + nx].a != 0) {
+                    visited[next] = true; pending.push_back(next);
+                }
+            }
+        }
+        centers.push_back(Vector2Scale(sum, 1.0f / count));
+    }
+    require(centers.size() == Theme::SCRAP_EXIT_PIXELS.size(), "Every last-frame fleck has exactly one saved endpoint");
+    for (std::size_t i = 0; i < centers.size(); ++i)
+        require(Vector2Distance(centers[i], Theme::SCRAP_EXIT_PIXELS[i]) < 0.0001f, "Saved coordinate matches actual fleck centroid");
+    // Exercise actual rendering: every complete frame must match the preserved sheet.
+    const auto frameRender = LoadRenderTexture(96, 96);
+    for (int frame = 0; frame < 8; ++frame) {
+        scraps.reset(); scraps.spawnDebris({48, 48}, 0, DEBRIS_CLUMP, 96, false);
+        scraps.update(frame * 0.1f + 0.05f, {});
+        BeginTextureMode(frameRender); ClearBackground(BLANK); scraps.draw(); EndTextureMode();
+        Image actual = LoadImageFromTexture(frameRender.texture); ImageFlipVertical(&actual);
+        require(actual.format == PIXELFORMAT_UNCOMPRESSED_R8G8B8A8, "Capture has readable RGBA pixels");
+        const auto* rendered = static_cast<const Color*>(actual.data);
+        bool same = true;
+        for (int y = 0; y < 96; ++y) for (int x = 0; x < 96; ++x) {
+            const auto expected = pixels[y * 768 + frame * 96 + x], found = rendered[y * 96 + x];
+            same = same && expected.a == found.a && (expected.a == 0 ||
+                (expected.r == found.r && expected.g == found.g && expected.b == found.b));
+        }
+        require(same, "Whole destruction frame renders unchanged, including blank terminal frame");
+        UnloadImage(actual);
+    }
+    UnloadRenderTexture(frameRender); UnloadImage(sheetImage);
+    Image orb = LoadImage("assets/textures/scrap_orb.png");
+    require(orb.width == 96 && orb.height == 96 && orb.format == PIXELFORMAT_UNCOMPRESSED_R8G8B8A8,
+        "Generated orb loads as a 96px RGBA asset");
+    const auto* glowPixels = static_cast<const Color*>(orb.data);
+    std::array<bool, 256> alphaLevels = {};
+    for (int i = 0; i < 96 * 96; ++i) alphaLevels[glowPixels[i].a] = true;
+    require(glowPixels[0].a == 0 && std::count(alphaLevels.begin(), alphaLevels.end(), true) > 100,
+        "Glow texture has transparent margins and a continuous soft alpha halo");
+    UnloadImage(orb);
+
+    for (const float angle : {0.0f, 33.0f, 90.0f, 245.0f}) {
+        clear();
+        scraps.spawnDebris({12, -9}, angle, DEBRIS_WING, 48, true);
+        require(scraps.update(0.699f, {500, 0}) == 0 && scraps.count() == 0,
+            "Last visible frame finishes before any orb appears");
+        scraps.update(Theme::SCRAP_HANDOFF_TIME - 0.699f, {500, 0});
+        require(scraps.count() == centers.size(), "One orb replaces every final fleck");
+        for (std::size_t i = 0; i < centers.size(); ++i) {
+            const auto local = Vector2Scale(Vector2Subtract(centers[i], {48, 48}), 0.5f);
+            const auto expected = Vector2Add({12, -9}, Vector2Rotate(local, angle * DEG2RAD));
+            require(Vector2Distance(scraps.getPickups()[i]->getPosition(), expected) < 0.0001f,
+                "Orb starts at rotated/scaled destruction pixel coordinate");
+        }
+        scraps.update(0.05f, {500, 0});
+        require(scraps.count() == centers.size(), "Handoff runs only once");
+    }
+
+    clear(); scraps.spawnDebris({}, 33, DEBRIS_WING, 48, true);
+    scraps.update(0.9f, {500, 0});
+    std::vector<Vector2> largeStep;
+    for (const auto& pickup : scraps.getPickups()) largeStep.push_back(pickup->getPosition());
+    clear(); scraps.spawnDebris({}, 33, DEBRIS_WING, 48, true);
+    for (int i = 0; i < 90; ++i) scraps.update(0.01f, {500, 0});
+    require(scraps.count() == largeStep.size(), "Crossing animation boundary creates identical pickups");
+    for (std::size_t i = 0; i < largeStep.size(); ++i)
+        require(Vector2Distance(scraps.getPickups()[i]->getPosition(), largeStep[i]) < 0.001f,
+            "Handoff carries only residual frame time into homing");
     for (int type = 0; type < DEBRIS_KIND_COUNT; ++type) {
         const auto kind = static_cast<DebrisKind>(type);
         const auto& texture = ResourceManager::GetInstance().GetTextureRef(DEBRIS_INFO[type].texture);
@@ -47,7 +133,7 @@ int runDebrisChecks(const std::string& artifactDirectory)
         clear();
         const auto id = spawn(kind, {30, 0});
         require(debris.removeDebris(id, true), "Player destruction succeeds");
-        require(scraps.count() == Theme::SCRAP_FRAGMENTS, "Every variant uses the same eight fragment exits");
+        require(scraps.count() == 0 && scraps.destructionCount() == 1, "Destruction sheet plays before pickups spawn");
         require(scraps.pendingValue() == Balance::DEBRIS_SCRAP_VALUES[type], "Breakup preserves exact variant value");
         require(!debris.removeDebris(id, true), "Repeated destruction is harmless");
         require(scraps.update(0.5f, {}) == 0, "No credit during scatter");
@@ -65,12 +151,12 @@ int runDebrisChecks(const std::string& artifactDirectory)
     debris.update({}, game.gameTimer);
     require(debris.getDebris().empty() && scraps.count() == 0, "Offscreen cleanup produces no fragments or rewards");
 
-    // Fixed analytic scatter is independent of frame rate and hands off continuously.
-    ScrapPickup single({}, 33, DEBRIS_WING, 48, 2, 1, true);
-    ScrapPickup many({}, 33, DEBRIS_WING, 48, 2, 1, true);
+    // Homing agrees across frame rates and cannot overshoot.
+    ScrapPickup single({}, 1);
+    ScrapPickup many({}, 1);
     single.advance(0.8f, {500, 0});
     for (int i = 0; i < 80; ++i) many.advance(0.01f, {500, 0});
-    require(Vector2Distance(single.getPosition(), many.getPosition()) < 0.001f, "Scatter agrees across frame rates");
+    require(Vector2Distance(single.getPosition(), many.getPosition()) < 0.001f, "Homing agrees across frame rates");
     const auto endpoint = single.getPosition();
     single.advance(0, {500, 0});
     require(Vector2Distance(endpoint, single.getPosition()) == 0, "Zero dt freezes pickup");
@@ -80,6 +166,8 @@ int runDebrisChecks(const std::string& artifactDirectory)
     require(single.isCollected() && Vector2Length(single.getPosition()) == 0, "Large frame cannot overshoot player");
     clear();
     for (int i = 0; i < 200; ++i) scraps.spawnDebris({30, 0}, 0, DEBRIS_WING, 48, true);
+    require(scraps.count() == 0 && scraps.destructionCount() == 200, "Mass kills preserve the destruction animations");
+    scraps.update(Theme::SCRAP_HANDOFF_TIME, {});
     require(scraps.count() <= Balance::SCRAP_MAX_PICKUPS, "Pickup cap bounds render workload");
     require(scraps.pendingValue() == 200 * Balance::DEBRIS_SCRAP_VALUES[DEBRIS_WING], "Overflow merges all earned value");
     int massCollected = 0;
@@ -88,7 +176,7 @@ int runDebrisChecks(const std::string& artifactDirectory)
     clear();
     game.harvestedScrap = 100;
     scraps.spawnDebris({}, 0, DEBRIS_WING, 48, true);
-    require(scraps.update(0.8f, {}) == 0, "Breakup reaches pickup phase without early credit");
+    require(scraps.update(Theme::SCRAP_HANDOFF_TIME, {}) == 0, "Breakup reaches pickup phase without early credit");
     SetTargetFPS(60);
     for (int frame = 0; frame < 30; ++frame) { BeginDrawing(); EndDrawing(); game.update(); }
     SetTargetFPS(0);
@@ -118,28 +206,31 @@ int runDebrisChecks(const std::string& artifactDirectory)
     clear();
     scraps.spawnDebris({30, 0}, 0, DEBRIS_CLUMP, 20, true);
     game.gameState = GAME_PAUSED; game.update();
-    require(scraps.getPickups().front()->getElapsed() == 0, "Pause freezes fragments");
+    require(scraps.destructions.front().elapsed == 0 && scraps.count() == 0, "Pause freezes destruction and handoff");
     game.gameState = GAME_AUGMENT_SELECTION; game.update();
-    require(scraps.getPickups().front()->getElapsed() == 0, "Augment choice freezes fragments");
+    require(scraps.destructions.front().elapsed == 0, "Augment choice freezes destruction");
 #ifdef GAME_DEBUG
     game.debugTools.inputCaptured = true;
     game.gameState = GAME_RUNNING; game.update();
-    require(scraps.getPickups().front()->getElapsed() == 0, "Debug console freezes fragments");
+    require(scraps.destructions.front().elapsed == 0, "Debug console freezes destruction");
     game.debugTools.inputCaptured = false;
     game.debugTools.input = "spawn debris all";
     EquipmentTestAccess::execute(game.debugTools, &player, &game.barricadeEvent);
     require(debris.getDebris().size() == DEBRIS_KIND_COUNT, "Debug gallery spawns exactly ten types");
 #endif
+    scraps.update(Theme::SCRAP_HANDOFF_TIME, {});
+    game.gameState = GAME_PAUSED; game.update();
+    require(scraps.getPickups().front()->getElapsed() == 0, "Pause also freezes spawned glow orbs");
     game.harvestedScrap = 123;
     EquipmentTestAccess::restart(game);
-    require(scraps.count() == 0 && game.harvestedScrap == 0, "Restart clears particles and harvested balance");
+    require(scraps.count() == 0 && scraps.destructionCount() == 0 && game.harvestedScrap == 0, "Restart clears explosions, particles and balance");
     scraps.spawnDebris({30, 0}, 0, DEBRIS_CLUMP, 20, true);
     game.harvestedScrap = 321; game.onExit();
-    require(scraps.count() == 0 && game.harvestedScrap == 0, "Scene exit clears harvesting state");
+    require(scraps.count() == 0 && scraps.destructionCount() == 0 && game.harvestedScrap == 0, "Scene exit clears harvesting state");
     clear();
     scraps.spawnDebris({30, 0}, 0, DEBRIS_CLUMP, 20, true);
     game.harvestedScrap = 321; game.gameState = GAME_OVER; game.update();
-    require(scraps.count() == 0 && game.harvestedScrap == 0, "Death loses harvested scrap and cancels flight");
+    require(scraps.count() == 0 && scraps.destructionCount() == 0 && game.harvestedScrap == 0, "Death loses harvested scrap and cancels effects");
 
     // Native renderer: actual fixed-size variants and continuous pickup phases.
     const auto render = LoadRenderTexture(1600, 900);
@@ -151,11 +242,12 @@ int runDebrisChecks(const std::string& artifactDirectory)
         BeginMode2D(camera); item.draw(); EndMode2D();
         DrawText(DEBRIS_INFO[i].name, 45 + column * 320, 260 + row * 280, 20, WHITE);
     }
-    const char* stages[] = {"BREAK", "SCATTER", "RED GLOW", "ABSORB"};
+    const char* stages[] = {"DESTRUCTION", "LAST FLECKS", "GLOW HANDOFF", "ABSORB"};
+    const float times[] = {0.35f, 0.65f, 0.7f, 0.95f};
     for (int phase = 0; phase < 4; ++phase) {
         scraps.reset();
         scraps.spawnDebris({}, 0, DEBRIS_WING, 48, true);
-        scraps.update(phase == 0 ? 0 : phase == 1 ? 0.3f : phase == 2 ? 0.8f : 1.0f, {35, 0});
+        scraps.update(times[phase], {35, 0});
         Camera2D camera = {{120.0f + phase * 400, 710}, {}, 0, 5};
         BeginMode2D(camera); scraps.draw(); EndMode2D();
         DrawText(stages[phase], 65 + phase * 400, 830, 22, Theme::COLOR_HARVEST);

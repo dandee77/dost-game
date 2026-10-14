@@ -1,0 +1,88 @@
+{
+  "tool": "OpenAI built-in image_gen (model not exposed)",
+  "date": "2026-10-15",
+  "prompt": "Use case: stylized-concept. Asset type: single 2D space-game collectible VFX texture. Generate ONE centered small circular red energy orb on actual transparent RGBA background. White-hot pale red circular core, vivid saturated scarlet inner glow and broad soft crimson bloom halo fading smoothly into zero alpha. The halo must be visible, luminous, soft and diffuse like an emissive glow shadow, not hard concentric rings. Radially symmetric, no perspective, no ground, no cast ground shadow, no trails or sparkles. Orb core diameter 18% of square canvas, halo diameter 75%; generous transparent margins. No text, no border, no checkerboard painted into the image, no black background. This will render as a tiny pickup over dark space. Square image.",
+  "source": "scrap-orb-generated.png",
+  "export": "../../textures/scrap_orb.png",
+  "export_notes": "96x96 RGBA high-quality bicubic resize; preserve continuous generated alpha.",
+  "sheet": "../../textures/debris_destruct.png",
+  "frame_size": 96,
+  "last_visible_frame_zero_based": 6,
+  "blank_terminal_frame_zero_based": 7,
+  "handoff_seconds": 0.7,
+  "extraction": "All nonzero-alpha pixels, 8-connected components; arithmetic mean of pixel centers (x+0.5,y+0.5). Same complete destruction sheet for all variants and barricades. Rotate and scale local offsets exactly as DrawTexturePro; never cut intact debris.",
+  "exit_pixel_centers": [
+    [
+      31.5,
+      15
+    ],
+    [
+      46.5,
+      20.5
+    ],
+    [
+      61.5,
+      20
+    ],
+    [
+      24,
+      21.5
+    ],
+    [
+      74.833333,
+      30.166667
+    ],
+    [
+      19,
+      31.3
+    ],
+    [
+      15,
+      45.5
+    ],
+    [
+      74.5,
+      47.25
+    ],
+    [
+      30.5,
+      50
+    ],
+    [
+      58,
+      61
+    ],
+    [
+      49.25,
+      63.5
+    ],
+    [
+      18.5,
+      65.5
+    ],
+    [
+      71.5,
+      65.5
+    ],
+    [
+      38,
+      73.5
+    ]
+  ],
+  "component_pixel_counts": [
+    6,
+    3,
+    6,
+    4,
+    3,
+    10,
+    2,
+    4,
+    2,
+    2,
+    4,
+    1,
+    1,
+    2
+  ]
+}

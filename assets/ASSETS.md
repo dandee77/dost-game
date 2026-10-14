@@ -1,8 +1,17 @@
 # Asset provenance
 
+## Glowing scrap pickup correction (15 October 2026)
+
+Built-in OpenAI image_gen created a red orb with an actual transparent soft glow halo. Exact prompt, export settings and saved destruction-frame particle coordinates: `source/debris/harvest-handoff.json`. No third-party art pack used. Underlying image model was not exposed by the tool.
+
+| File | Resource key | Source / author | License | Edits | Date |
+|---|---|---|---|---|---|
+| textures/scrap_orb.png | scrap_orb | OpenAI built-in image_gen, user/Codex direction | AI-generated; no CC0 claim | 96 x 96 RGBA bicubic export preserving continuous alpha | 2026-10-15 |
+| source/debris/scrap-orb-generated.png | - | OpenAI built-in image_gen | AI-generated; no CC0 claim | Unmodified generated source | 2026-10-15 |
+
 ## Ten debris variants and harvesting (15 October 2026)
 
-The accepted clump is now textures/debris.png; its previous destruction strip is textures/debris_destruct.png, retained as a reference. Live explosions slice each variant into the same eight full-height texture fragments, which scatter, glow red and home without replacing particles. Runtime harvesting visuals are drawn in code from these generated textures; no additional external art or licenses were introduced. Originals in textures/legacy remain byte-for-byte unchanged.
+The accepted clump is textures/debris.png; textures/debris_destruct.png is again the live eight-frame destruction strip for every variant and barricade. The rejected texture-slicing effect was removed. At the last visible frame, saved fleck centroids spawn the new glowing red texture below. Intact art, destruction sheet and originals in textures/legacy remain byte-for-byte unchanged by this correction.
 
 Nine new variants plus the existing clump make ten. Exact prompts and original output paths are recorded in source/debris/variants.json; source images are preserved under source/debris/variants/. Built-in image tool used (underlying image model not exposed); no third-party pack added and no CC0 claim made. Team art review pending.
 

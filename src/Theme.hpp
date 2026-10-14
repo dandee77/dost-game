@@ -8,19 +8,26 @@ namespace Theme {
     inline constexpr int DEBRIS_FRAME = 96;
     inline constexpr Rectangle DEBRIS_BODY = {30.0f, 30.0f, 36.0f, 36.0f};
     inline constexpr std::array<float, DEBRIS_KIND_COUNT> DEBRIS_DRAW_SIZES = {20.0f, 20.0f, 48.0f, 20.0f, 34.0f, 18.0f, 38.0f, 30.0f, 38.0f, 36.0f};
-    inline constexpr int SCRAP_COLUMNS = 8, SCRAP_ROWS = 1;
-    inline constexpr int SCRAP_FRAGMENTS = SCRAP_COLUMNS * SCRAP_ROWS;
-    inline constexpr float SCRAP_SPIN = 180.0f, SCRAP_GLOW_SIZE = 1.1f;
-    inline constexpr std::array<float, 3> SCRAP_GLOW_SCALES = {3.0f, 2.0f, 1.0f};
-    inline constexpr std::array<float, 3> SCRAP_GLOW_ALPHAS = {0.10f, 0.22f, 0.5f};
+    // Centers of all 14 flecks in frame 7 (zero-based 6); frame 8 is blank.
+    // Extraction notes: assets/source/debris/harvest-handoff.json.
+    inline constexpr int DEBRIS_LAST_VISIBLE_FRAME = 6;
+    inline constexpr float DEBRIS_DESTRUCT_FRAME_TIME = 0.1f;
+    inline constexpr float SCRAP_HANDOFF_TIME = (DEBRIS_LAST_VISIBLE_FRAME + 1) * DEBRIS_DESTRUCT_FRAME_TIME;
+    inline constexpr std::array<Vector2, 14> SCRAP_EXIT_PIXELS = {{
+        {31.5f, 15.0f}, {46.5f, 20.5f}, {61.5f, 20.0f}, {24.0f, 21.5f},
+        {74.833333f, 30.166667f}, {19.0f, 31.3f}, {15.0f, 45.5f}, {74.5f, 47.25f},
+        {30.5f, 50.0f}, {58.0f, 61.0f}, {49.25f, 63.5f}, {18.5f, 65.5f},
+        {71.5f, 65.5f}, {38.0f, 73.5f}
+    }};
+    inline constexpr int SCRAP_FRAGMENTS = static_cast<int>(SCRAP_EXIT_PIXELS.size());
+    inline constexpr float SCRAP_ORB_SIZE = 4.0f, SCRAP_ORB_HOLD_TIME = 0.1f;
     inline constexpr Color COLOR_HARVEST = {255, 65, 75, 255};
-    inline constexpr Color COLOR_HARVEST_CORE = {255, 195, 180, 255};
     inline constexpr Vector2 SCRAP_HUD_POSITION = {220.0f, 390.0f};
     inline constexpr float SCRAP_HUD_SIZE = 64.0f;
     // The 96px debris frame has a roughly 36px body; account for transparent padding.
     inline constexpr float BARRICADE_DRAW_SIZE = 20.0f, BARRICADE_SPIN = 20.0f;
     inline constexpr float BARRICADE_IDLE_FRAME_TIME = 1.0f;
-    inline constexpr float BARRICADE_DESTRUCT_FRAME_TIME = 0.1f;
+    inline constexpr float BARRICADE_DESTRUCT_FRAME_TIME = DEBRIS_DESTRUCT_FRAME_TIME;
     inline constexpr int FRAMES_DEBRIS_DESTRUCT = 8;
     inline constexpr int BARRICADE_DESTRUCT_FRAMES = FRAMES_DEBRIS_DESTRUCT;
     inline constexpr Vector2 BARRICADE_STATUS_POSITION = {1350.0f, 270.0f};

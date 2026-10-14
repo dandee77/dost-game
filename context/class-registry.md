@@ -249,15 +249,15 @@ All use the same pattern: `static X& GetInstance()` with a function-local static
 - Kind: Entity subclass, owned by DebrisManager as unique_ptr values keyed by unique debris IDs.
 - Constructors: Debris(playerPos) chooses a variant; Debris(playerPos, DebrisKind) chooses a specific variant. Ten typed variants share behavior; no random scale.
 - API: update(), draw(), getDebrisID(), getDebrisSize() (fixed collision radius from Balance), getKind(), getTextureKey(), getDisplayName(), destruct(bool harvestable = false).
-- Draw dimensions come from Theme; collision radius and scrap yield come from Balance. Body remains centered within a 96 x 96 frame. Destruct creates the same eight actual texture fragments used for pickup flight; no separate disappearing animation.
+- Draw dimensions come from Theme; collision radius and scrap yield come from Balance. Body remains centered within a 96 x 96 frame. Destruct queues the accepted complete eight-frame sheet; its final visible flecks are replaced by glowing orb pickups.
 - IDs use a monotonic counter and are never reused. Collision circles are retained for all silhouettes. No new entity class per art variant.
 ### ScrapPickup
 - Files: src/ScrapPickup.hpp/.cpp
 - Status: implemented for debris harvesting (15 October); broader enemy-drop/cargo economy remains item 12.
 - Kind: Entity subclass owned by ScrapManager through unique_ptr.
-- API: advance(dt, target), update(), draw(), setAttractTarget(), isCollected(), isExpired(), getValue(), addValue(), getElapsed(), getSource(), canHarvest().
-- Each pickup is a source rectangle cut from the destroyed object's texture. Eight pieces start assembled at the original rotation, follow fixed rotated scatter directions for 0.8 seconds, turn red from 0.5 seconds, then home at 90 units/s. The same objects and coordinates continue through the transition. Swept arrival prevents overshoot; credit is emitted once.
-- Environmental fragments fade at 0.8 seconds with zero value; collectible fragments expire at 20 simulation seconds. Rendering does not change state and uses no Animator IDs.
+- API: advance(dt, target), update(), draw(), setAttractTarget(), isCollected(), isExpired(), getValue(), addValue(), getElapsed(). Constructor: ScrapPickup(worldPosition, value).
+- Each pickup draws the generated scrap_orb texture, including its continuous alpha halo. It starts at a saved final-frame fleck centroid, holds 0.1 s, then homes at 90 units/s. No sprite cutting, scatter simulation or concentric-circle drawing. Swept arrival prevents overshoot; credit is emitted once.
+- Orbs expire at 20 simulation seconds. Environmental explosions play without spawning pickups. Rendering changes no state and uses no Animator IDs.
 ### Dock (planned)
 - Files: src/Dock.hpp, src/Dock.cpp
 - Status: planned (item 13)
@@ -324,7 +324,7 @@ All use the same pattern: `static X& GetInstance()` with a function-local static
 - Constructor: `BarricadeEnemy(const std::string& id, Vector2 center, float angle)`.
 - Behavior: orbits a fixed center at 4 degrees/s while shrinking, then scatters straight along its release heading, using accumulated simulation time. `update()` delegates to deterministic `advance(float dt)`. Previous position supports relative swept contact.
 - Combat: normal enemy HP/damage/removal paths; cannot receive knockback or crowd separation. Never removed by ordinary kamikaze or debris contact. Gameplay values are `Balance::BARRICADE_*`.
-  - Drawing: orbital scrap texture registered as a one-frame WORLD animation under its unique enemy ID; destruction removes its Animator entry and emits the same collectible fragments as DEBRIS_CLUMP. Flying enemies retain their top layer.
+  - Drawing: orbital scrap texture registered as a one-frame WORLD animation under its unique enemy ID; destruction removes its Animator entry and queues the same complete destruction sheet and saved-coordinate glow handoff as DEBRIS_CLUMP. Flying enemies retain their top layer.
 
 ### BarricadeEvent
 - P3 follow-up queries: `getRadius() const`, `getAliveSegments() const`, `hasTriggeredAutomatically() const` provide live diagnostics without exposing mutable event state. Radius includes outward scatter; inactive radius is zero.
@@ -443,9 +443,9 @@ All use the same pattern: `static X& GetInstance()` with a function-local static
 ### ScrapManager
 - Files: src/ScrapManager.hpp/.cpp
 - Status: implemented for debris harvesting, 15 October.
-- Kind: run-state singleton; owns vector<unique_ptr<ScrapPickup>>.
-- API: spawnDebris(center, angle, kind, drawSize, harvestable), update(dt, playerPosition) returns newly collected value, draw(), reset(), count(), pendingValue(), getPickups() (read-only inspection).
-- Breaks each texture into eight shared fragment exits and distributes the variant's total value exactly. Limits active pieces to 150; overflow removes cosmetic-only bursts first, then merges earned value into the nearest harvestable piece.
+- Kind: run-state singleton; owns pending Destruction records and vector<unique_ptr<ScrapPickup>>.
+- API: spawnDebris(center, angle, kind, drawSize, harvestable), update(dt, playerPosition) returns newly collected value, draw(), reset(), count(), pendingValue(), getPickups(), destructionCount() (read-only inspection).
+- Plays all eight whole destruction frames. At 0.7 s it replaces the last visible frame's 14 flecks with glow-texture orbs using Theme::SCRAP_EXIT_PIXELS, scaled/rotated around the same origin. Pending value includes unfinished explosions. Limits active orbs to 150; overflow merges value only after the explosion. New orbs consume only residual dt. Reset clears explosions and pickups.
 - Game advances it only while running and alive, after collisions, and adds the result to harvestedScrap. No cargo limit for now (explicit user choice). Pause/console/augment freeze it; death, scene exit, destruction, restart and entry clear it. Deposit/shop/ordinary enemy drops remain planned.
 ---
 

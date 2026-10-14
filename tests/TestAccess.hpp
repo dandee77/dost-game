@@ -26,6 +26,7 @@
 #include "Application.hpp"
 #include "Game.hpp"
 #include "DebrisManager.hpp"
+#include "ScrapManager.hpp"
 #include "LowLevelEnemy.hpp"
 #include "MidLevelEnemy.hpp"
 #undef protected

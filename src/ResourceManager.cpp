@@ -72,6 +72,7 @@ ResourceManager::ResourceManager(){
         {"debris_beam", "assets/textures/debris/beam.png"},
         {"debris_hull", "assets/textures/debris/hull.png"},
         {"debris_destruct",                   "assets/textures/debris_destruct.png"},
+        {"scrap_orb",                         "assets/textures/scrap_orb.png"},
         {"wasd_keys",                           "assets/textures/wasd_keys.png"},
         {"e_key",                               "assets/textures/e_key.png"},
         {"health",                              "assets/textures/health.png"},
