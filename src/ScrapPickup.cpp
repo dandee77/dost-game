@@ -5,10 +5,10 @@
 #include "Theme.hpp"
 #include "raymath.h"
 
-ScrapPickup::ScrapPickup(Vector2 spawnPosition, int scrapValue) : value(scrapValue)
+ScrapPickup::ScrapPickup(Vector2 spawnPosition, int scrapValue, float drawSize) : value(scrapValue)
 {
     position = spawnPosition;
-    rect = {position.x, position.y, Theme::SCRAP_ORB_SIZE, Theme::SCRAP_ORB_SIZE};
+    rect = {position.x, position.y, drawSize, drawSize};
     origin = {rect.width / 2.0f, rect.height / 2.0f};
     rotation = 0.0f;
     health = damage = 0;

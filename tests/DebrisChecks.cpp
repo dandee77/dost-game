@@ -136,7 +136,24 @@ int runDebrisChecks(const std::string& artifactDirectory)
         require(scraps.count() == 0 && scraps.destructionCount() == 1, "Destruction sheet plays before pickups spawn");
         require(scraps.pendingValue() == Balance::DEBRIS_SCRAP_VALUES[type], "Breakup preserves exact variant value");
         require(!debris.removeDebris(id, true), "Repeated destruction is harmless");
-        require(scraps.update(Theme::SCRAP_HANDOFF_TIME * 0.75f, {}) == 0, "No credit during destruction");
+        require(scraps.update(Theme::SCRAP_HANDOFF_TIME, {}) == 0, "No credit before absorption");
+        const int expectedCounts[] = {4, 4, 14, 4, 8, 4, 14, 8, 14, 14};
+        const float expectedSizes[] = {1.25f, 1.25f, 2.5f, 1.25f, 1.8f, 1.25f, 2.5f, 1.8f, 2.5f, 2.5f};
+        require(scraps.count() == expectedCounts[type], "Every variant uses its fixed small, medium or large burst count");
+        std::vector<Vector2> seenPositions;
+        for (const auto& pickup : scraps.getPickups()) {
+            require(pickup->getSize().x == expectedSizes[type], "Orb diameter follows debris size tier");
+            const auto local = Vector2Add(Vector2Scale(Vector2Subtract(pickup->getPosition(), {30, 0}),
+                96.0f / Theme::DEBRIS_DRAW_SIZES[type]), {48, 48});
+            require(std::any_of(centers.begin(), centers.end(), [&](Vector2 center) {
+                return Vector2Distance(center, local) < 0.001f;
+            }), "Reduced burst still spawns at an actual saved explosion fleck");
+            require(std::none_of(seenPositions.begin(), seenPositions.end(), [&](Vector2 previous) {
+                return Vector2Distance(previous, local) < 0.001f;
+            }), "Reduced burst does not duplicate an exit");
+            seenPositions.push_back(local);
+        }
+        require(scraps.pendingValue() == Balance::DEBRIS_SCRAP_VALUES[type], "Fewer visual orbs preserve full scrap yield");
         int total = 0;
         for (int frame = 0; frame < 180; ++frame) total += scraps.update(1.0f / 60.0f, {});
         require(total == Balance::DEBRIS_SCRAP_VALUES[type] && scraps.count() == 0, "All shards home and credit exactly once");
@@ -152,8 +169,8 @@ int runDebrisChecks(const std::string& artifactDirectory)
     require(debris.getDebris().empty() && scraps.count() == 0, "Offscreen cleanup produces no fragments or rewards");
 
     // Homing agrees across frame rates and cannot overshoot.
-    ScrapPickup single({}, 1);
-    ScrapPickup many({}, 1);
+    ScrapPickup single({}, 1, Theme::SCRAP_ORB_SIZE);
+    ScrapPickup many({}, 1, Theme::SCRAP_ORB_SIZE);
     single.advance(0.8f, {500, 0});
     for (int i = 0; i < 80; ++i) many.advance(0.01f, {500, 0});
     require(Vector2Distance(single.getPosition(), many.getPosition()) < 0.001f, "Homing agrees across frame rates");
@@ -173,6 +190,15 @@ int runDebrisChecks(const std::string& artifactDirectory)
     int massCollected = 0;
     for (int i = 0; i < 180; ++i) massCollected += scraps.update(1.0f / 60.0f, {});
     require(massCollected == 1600, "Merged pickup value is collected without cargo cap");
+    clear();
+    for (int i = 0; i < 10; ++i) scraps.spawnDebris({30, 0}, 0, DEBRIS_WING, 48, true);
+    for (int i = 0; i < 3; ++i) scraps.spawnDebris({30, 0}, 0, DEBRIS_CLUMP, 20, true);
+    scraps.update(Theme::SCRAP_HANDOFF_TIME, {});
+    require(scraps.count() == 148 && scraps.pendingValue() == 89,
+        "Small bursts fit remaining cap slots; overflow preserves their value");
+    int mixedCollected = 0;
+    for (int i = 0; i < 180; ++i) mixedCollected += scraps.update(1.0f / 60.0f, {});
+    require(mixedCollected == 89, "Mixed-size overflow credits the complete reward");
     clear();
     game.harvestedScrap = 100;
     scraps.spawnDebris({}, 0, DEBRIS_WING, 48, true);
@@ -233,7 +259,7 @@ int runDebrisChecks(const std::string& artifactDirectory)
     require(scraps.count() == 0 && scraps.destructionCount() == 0 && game.harvestedScrap == 0, "Death loses harvested scrap and cancels effects");
 
     // Native renderer: actual fixed-size variants and continuous pickup phases.
-    const auto render = LoadRenderTexture(1600, 900);
+    const auto render = LoadRenderTexture(1600, 1200);
     BeginTextureMode(render); ClearBackground(Color{18, 14, 30, 255});
     for (int i = 0; i < DEBRIS_KIND_COUNT; ++i) {
         const int column = i % 5, row = i / 5;
@@ -253,6 +279,17 @@ int runDebrisChecks(const std::string& artifactDirectory)
         Camera2D camera = {{120.0f + phase * 400, 710}, {}, 0, 5};
         BeginMode2D(camera); scraps.draw(); EndMode2D();
         DrawText(stages[phase], 65 + phase * 400, 830, 22, Theme::COLOR_HARVEST);
+    }
+    const DebrisKind tierKinds[] = {DEBRIS_PIPE, DEBRIS_DISH, DEBRIS_WING};
+    const char* tierLabels[] = {"SMALL: 4 ORBS", "MEDIUM: 8 ORBS", "LARGE: 14 ORBS"};
+    for (int tier = 0; tier < 3; ++tier) {
+        scraps.reset();
+        const auto kind = tierKinds[tier];
+        scraps.spawnDebris({}, 0, kind, Theme::DEBRIS_DRAW_SIZES[kind], true);
+        scraps.update(Theme::SCRAP_HANDOFF_TIME, {100, 0});
+        Camera2D camera = {{260.0f + tier * 530, 1040}, {}, 0, 5};
+        BeginMode2D(camera); scraps.draw(); EndMode2D();
+        DrawText(tierLabels[tier], 140 + tier * 530, 1140, 22, Theme::COLOR_HARVEST);
     }
     EndTextureMode();
     Image capture = LoadImageFromTexture(render.texture); ImageFlipVertical(&capture);

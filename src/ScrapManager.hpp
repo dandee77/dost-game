@@ -20,6 +20,7 @@ private:
         float angle, drawSize;
         int value;
         bool harvestable;
+        DebrisKind kind;
         float elapsed = 0.0f;
         bool released = false;
     };

@@ -4,7 +4,7 @@
 // A glowing orb born at a saved destruction-frame particle position.
 class ScrapPickup : public Entity {
 public:
-    ScrapPickup(Vector2 spawnPosition, int value);
+    ScrapPickup(Vector2 spawnPosition, int value, float drawSize);
     void update() override;
     void draw() override;
     void advance(float dt, Vector2 target);

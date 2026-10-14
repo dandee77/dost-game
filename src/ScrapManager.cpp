@@ -9,12 +9,13 @@
 void ScrapManager::spawnDebris(Vector2 center, float angle, DebrisKind kind, float drawSize, bool harvestable)
 {
     destructions.push_back({center, angle, drawSize,
-        harvestable ? Balance::DEBRIS_SCRAP_VALUES[kind] : 0, harvestable});
+        harvestable ? Balance::DEBRIS_SCRAP_VALUES[kind] : 0, harvestable, kind});
 }
 
 int ScrapManager::releasePickups(const Destruction& destruction, float remainingDt, Vector2 playerPosition)
 {
-    if (pickups.size() + Theme::SCRAP_FRAGMENTS > Balance::SCRAP_MAX_PICKUPS) {
+    const auto& visual = Theme::DEBRIS_SCRAP_VISUALS[destruction.kind];
+    if (pickups.size() + visual.exitCount > Balance::SCRAP_MAX_PICKUPS) {
         // Preserve earned value under load, after the complete visible explosion.
         ScrapPickup* nearest = nullptr;
         float nearestDistance = std::numeric_limits<float>::max();
@@ -25,15 +26,15 @@ int ScrapManager::releasePickups(const Destruction& destruction, float remaining
         if (nearest) { nearest->addValue(destruction.value); return 0; }
     }
     int collected = 0;
-    for (int i = 0; i < Theme::SCRAP_FRAGMENTS; ++i) {
-        const auto pixel = Theme::SCRAP_EXIT_PIXELS[i];
+    for (int i = 0; i < visual.exitCount; ++i) {
+        const auto pixel = Theme::SCRAP_EXIT_PIXELS[visual.exitIndices[i]];
         const float scale = destruction.drawSize / Theme::DEBRIS_FRAME;
         const Vector2 offset = {(pixel.x - Theme::DEBRIS_FRAME / 2.0f) * scale,
             (pixel.y - Theme::DEBRIS_FRAME / 2.0f) * scale};
         const auto position = Vector2Add(destruction.center, Vector2Rotate(offset, destruction.angle * DEG2RAD));
-        const int value = destruction.value / Theme::SCRAP_FRAGMENTS +
-            (i < destruction.value % Theme::SCRAP_FRAGMENTS ? 1 : 0);
-        auto pickup = std::make_unique<ScrapPickup>(position, value);
+        const int value = destruction.value / visual.exitCount +
+            (i < destruction.value % visual.exitCount ? 1 : 0);
+        auto pickup = std::make_unique<ScrapPickup>(position, value, visual.orbSize);
         // Only time beyond the handoff belongs to the newly spawned orb.
         pickup->advance(remainingDt, playerPosition);
         if (pickup->isCollected()) collected += value;

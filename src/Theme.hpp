@@ -21,6 +21,21 @@ namespace Theme {
     }};
     inline constexpr int SCRAP_FRAGMENTS = static_cast<int>(SCRAP_EXIT_PIXELS.size());
     inline constexpr float SCRAP_ORB_SIZE = 2.5f, SCRAP_ORB_HOLD_TIME = 0.05f;
+    struct ScrapVisual {
+        float orbSize;
+        int exitCount;
+        std::array<int, SCRAP_FRAGMENTS> exitIndices;
+    };
+    // Smaller bursts use a spread-out subset of actual final-frame flecks.
+    inline constexpr ScrapVisual SCRAP_SMALL = {1.25f, 4, {0, 4, 12, 11}};
+    inline constexpr ScrapVisual SCRAP_MEDIUM = {1.8f, 8, {0, 2, 4, 7, 12, 13, 11, 6}};
+    inline constexpr ScrapVisual SCRAP_LARGE = {SCRAP_ORB_SIZE, SCRAP_FRAGMENTS,
+        {0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13}};
+    // Clump, pipe, wing, canister, dish, coil, tank, thruster, beam, hull.
+    inline constexpr std::array<ScrapVisual, DEBRIS_KIND_COUNT> DEBRIS_SCRAP_VISUALS = {{
+        SCRAP_SMALL, SCRAP_SMALL, SCRAP_LARGE, SCRAP_SMALL, SCRAP_MEDIUM,
+        SCRAP_SMALL, SCRAP_LARGE, SCRAP_MEDIUM, SCRAP_LARGE, SCRAP_LARGE
+    }};
     inline constexpr Color COLOR_HARVEST = {255, 65, 75, 255};
     inline constexpr Vector2 SCRAP_HUD_POSITION = {220.0f, 390.0f};
     inline constexpr float SCRAP_HUD_SIZE = 64.0f;
