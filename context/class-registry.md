@@ -249,7 +249,7 @@ All use the same pattern: `static X& GetInstance()` with a function-local static
 - Kind: Entity subclass, owned by DebrisManager as unique_ptr values keyed by unique debris IDs.
 - Constructors: Debris(playerPos) chooses a variant; Debris(playerPos, DebrisKind) chooses a specific variant. Ten typed variants share behavior; no random scale.
 - API: update(), draw(), getDebrisID(), getDebrisSize() (fixed collision radius from Balance), getKind(), getTextureKey(), getDisplayName(), destruct(bool harvestable = false).
-- Draw dimensions come from Theme; collision radius and scrap yield come from Balance. Body remains centered within a 96 x 96 frame. Destruct queues the accepted complete eight-frame sheet; its final visible flecks are replaced by glowing orb pickups.
+- Draw dimensions come from Theme; collision radius and scrap yield come from Balance. Body remains centered within a 96 x 96 frame. DebrisInfo stores texture, display name and a unique destructTexture key. Destruct queues that variant's own eight-frame sheet and saved final-fleck layout.
 - IDs use a monotonic counter and are never reused. Collision circles are retained for all silhouettes. No new entity class per art variant.
 ### ScrapPickup
 - Files: src/ScrapPickup.hpp/.cpp
@@ -324,7 +324,7 @@ All use the same pattern: `static X& GetInstance()` with a function-local static
 - Constructor: `BarricadeEnemy(const std::string& id, Vector2 center, float angle)`.
 - Behavior: orbits a fixed center at 4 degrees/s while shrinking, then scatters straight along its release heading, using accumulated simulation time. `update()` delegates to deterministic `advance(float dt)`. Previous position supports relative swept contact.
 - Combat: normal enemy HP/damage/removal paths; cannot receive knockback or crowd separation. Never removed by ordinary kamikaze or debris contact. Gameplay values are `Balance::BARRICADE_*`.
-  - Drawing: orbital scrap texture registered as a one-frame WORLD animation under its unique enemy ID; destruction removes its Animator entry and queues the same complete destruction sheet and saved-coordinate glow handoff as DEBRIS_CLUMP. Flying enemies retain their top layer.
+  - Drawing: barricade_enemy is a dedicated mutated trash creature, max-32px body in a padded 96px frame, registered as one WORLD animation under its unique ID. Destruction removes that entry and queues cosmetic barricade_enemy_destruct via ScrapManager::spawnDestruction. Eight-frame inward collapse; no pickup particles or scrap yield. Orbital/contact behavior is unchanged.
 
 ### BarricadeEvent
 - P3 follow-up queries: `getRadius() const`, `getAliveSegments() const`, `hasTriggeredAutomatically() const` provide live diagnostics without exposing mutable event state. Radius includes outward scatter; inactive radius is zero.
@@ -444,8 +444,8 @@ All use the same pattern: `static X& GetInstance()` with a function-local static
 - Files: src/ScrapManager.hpp/.cpp
 - Status: implemented for debris harvesting, 15 October.
 - Kind: run-state singleton; owns pending Destruction records and vector<unique_ptr<ScrapPickup>>.
-- API: spawnDebris(center, angle, kind, drawSize, harvestable), update(dt, playerPosition) returns newly collected value, draw(), reset(), count(), pendingValue(), getPickups(), destructionCount() (read-only inspection).
-- Plays all eight whole destruction frames. At 0.525 s it replaces a fixed subset of the last visible frame's flecks with glow-texture orbs using Theme::SCRAP_EXIT_PIXELS and Theme::DEBRIS_SCRAP_VISUALS (4/8/14 orbs at 1.25/1.8/2.5 units). Destruction records retain DebrisKind so every variant has a fixed visual tier; the same total reward is divided among that tier's orbs. Saved positions are scaled/rotated around the same origin. Pending value includes unfinished explosions. Limits active orbs to 150; overflow merges value only after the explosion. New orbs consume only residual dt. Reset clears explosions and pickups.
+- API: spawnDebris(center, angle, kind, drawSize, harvestable), spawnDestruction(center, angle, drawSize, textureKey) for cosmetic deaths, update(dt, playerPosition) returns newly collected value, draw(), reset(), count(), pendingValue(), getPickups(), destructionCount() (read-only inspection).
+- Plays all eight whole frames from the texture key owned by each Destruction record. At 0.525 s, harvestable records use their kind's immutable Theme::DEBRIS_SCRAP_VISUALS coordinate span and orb size; counts are measured separately from each sheet. New sheets use every final fleck; the accepted clump retains four selected exits. Same total yield divided among all exits; cap handling uses actual count. Cosmetic records have zero value and no pickup phase. Rendering changes no state. Reset clears all effects and pickups.
 - Game advances it only while running and alive, after collisions, and adds the result to harvestedScrap. No cargo limit for now (explicit user choice). Pause/console/augment freeze it; death, scene exit, destruction, restart and entry clear it. Deposit/shop/ordinary enemy drops remain planned.
 ---
 

@@ -35,55 +35,71 @@ int runDebrisChecks(const std::string& artifactDirectory)
         debris.getDebris().emplace(id, std::move(item));
         return id;
     };
-    // Validate saved endpoints against the actual sheet, not an invented radial pattern.
-    Image sheetImage = LoadImage("assets/textures/debris_destruct.png");
-    require(sheetImage.width == 768 && sheetImage.height == 96 &&
-        sheetImage.format == PIXELFORMAT_UNCOMPRESSED_R8G8B8A8, "Destruction remains eight RGBA frames");
-    const auto* pixels = static_cast<const Color*>(sheetImage.data);
-    std::array<bool, 96 * 96> visited = {};
-    std::vector<Vector2> centers;
-    for (int y = 0; y < 96; ++y) for (int x = 0; x < 96; ++x) {
-        const int start = y * 96 + x;
-        if (visited[start] || pixels[y * 768 + 6 * 96 + x].a == 0) continue;
-        std::vector<int> pending = {start}; visited[start] = true;
-        Vector2 sum = {}; int count = 0;
-        while (!pending.empty()) {
-            const int point = pending.back(); pending.pop_back();
-            const int px = point % 96, py = point / 96;
-            sum.x += px + 0.5f; sum.y += py + 0.5f; ++count;
-            for (int dy = -1; dy <= 1; ++dy) for (int dx = -1; dx <= 1; ++dx) {
-                const int nx = px + dx, ny = py + dy;
-                if (nx < 0 || nx >= 96 || ny < 0 || ny >= 96) continue;
-                const int next = ny * 96 + nx;
-                if (!visited[next] && pixels[ny * 768 + 6 * 96 + nx].a != 0) {
-                    visited[next] = true; pending.push_back(next);
+    std::array<std::vector<Vector2>, DEBRIS_KIND_COUNT> sheetCenters;
+    std::unordered_set<std::size_t> sheetSignatures;
+    // Read actual art independently, then verify each sheet and its saved handoff.
+    for (int type = 0; type < DEBRIS_KIND_COUNT; ++type) {
+        const auto kind = static_cast<DebrisKind>(type);
+        Image sheetImage = LoadImageFromTexture(ResourceManager::GetInstance().GetTextureRef(DEBRIS_INFO[type].destructTexture));
+        require(sheetImage.width == 768 && sheetImage.height == 96 &&
+            sheetImage.format == PIXELFORMAT_UNCOMPRESSED_R8G8B8A8, "Destruction remains eight RGBA frames");
+        const auto* pixels = static_cast<const Color*>(sheetImage.data);
+        std::array<bool, 96 * 96> visited = {};
+        auto& centers = sheetCenters[type];
+        for (int y = 0; y < 96; ++y) for (int x = 0; x < 96; ++x) {
+            const int start = y * 96 + x;
+            if (visited[start] || pixels[y * 768 + 6 * 96 + x].a == 0) continue;
+            std::vector<int> pending = {start}; visited[start] = true;
+            Vector2 sum = {}; int count = 0;
+            while (!pending.empty()) {
+                const int point = pending.back(); pending.pop_back();
+                const int px = point % 96, py = point / 96;
+                sum.x += px + 0.5f; sum.y += py + 0.5f; ++count;
+                for (int dy = -1; dy <= 1; ++dy) for (int dx = -1; dx <= 1; ++dx) {
+                    const int nx = px + dx, ny = py + dy;
+                    if (nx < 0 || nx >= 96 || ny < 0 || ny >= 96) continue;
+                    const int next = ny * 96 + nx;
+                    if (!visited[next] && pixels[ny * 768 + 6 * 96 + nx].a != 0) {
+                        visited[next] = true; pending.push_back(next);
+                    }
                 }
             }
+            centers.push_back(Vector2Scale(sum, 1.0f / count));
         }
-        centers.push_back(Vector2Scale(sum, 1.0f / count));
-    }
-    require(centers.size() == Theme::SCRAP_EXIT_PIXELS.size(), "Every last-frame fleck has exactly one saved endpoint");
-    for (std::size_t i = 0; i < centers.size(); ++i)
-        require(Vector2Distance(centers[i], Theme::SCRAP_EXIT_PIXELS[i]) < 0.0001f, "Saved coordinate matches actual fleck centroid");
-    // Exercise actual rendering: every complete frame must match the preserved sheet.
-    const auto frameRender = LoadRenderTexture(96, 96);
-    for (int frame = 0; frame < 8; ++frame) {
-        scraps.reset(); scraps.spawnDebris({48, 48}, 0, DEBRIS_CLUMP, 96, false);
-        scraps.update((frame + 0.5f) * Theme::DEBRIS_DESTRUCT_FRAME_TIME, {});
-        BeginTextureMode(frameRender); ClearBackground(BLANK); scraps.draw(); EndTextureMode();
-        Image actual = LoadImageFromTexture(frameRender.texture); ImageFlipVertical(&actual);
-        require(actual.format == PIXELFORMAT_UNCOMPRESSED_R8G8B8A8, "Capture has readable RGBA pixels");
-        const auto* rendered = static_cast<const Color*>(actual.data);
-        bool same = true;
-        for (int y = 0; y < 96; ++y) for (int x = 0; x < 96; ++x) {
-            const auto expected = pixels[y * 768 + frame * 96 + x], found = rendered[y * 96 + x];
-            same = same && expected.a == found.a && (expected.a == 0 ||
-                (expected.r == found.r && expected.g == found.g && expected.b == found.b));
+        const auto exits = Theme::DEBRIS_SCRAP_VISUALS[type].exitPixels;
+        require(!exits.empty(), "Every kind has its own saved particle positions");
+        if (kind != DEBRIS_CLUMP)
+            require(centers.size() == exits.size(), "Each new sheet has one orb per final fleck");
+        for (const auto exit : exits)
+            require(std::any_of(centers.begin(), centers.end(), [&](Vector2 center) {
+                return Vector2Distance(center, exit) < 0.0001f;
+            }), "Saved coordinate belongs to this variant's actual final flecks");
+        const auto signature = std::hash<std::string>{}(std::string(static_cast<const char*>(sheetImage.data), 768 * 96 * 4));
+        require(sheetSignatures.insert(signature).second, "Every debris kind has a different destruction sheet");
+        bool blankEnd = true;
+        for (int y = 0; y < 96; ++y) for (int x = 0; x < 96; ++x)
+            blankEnd = blankEnd && pixels[y * 768 + 7 * 96 + x].a == 0;
+        require(blankEnd, "Every destruction ends with a transparent frame");
+        // Exercise actual rendering: every complete frame must match the preserved sheet.
+        const auto frameRender = LoadRenderTexture(96, 96);
+        for (int frame = 0; frame < 8; ++frame) {
+            scraps.reset(); scraps.spawnDebris({48, 48}, 0, kind, 96, false);
+            scraps.update((frame + 0.5f) * Theme::DEBRIS_DESTRUCT_FRAME_TIME, {});
+            BeginTextureMode(frameRender); ClearBackground(BLANK); scraps.draw(); EndTextureMode();
+            Image actual = LoadImageFromTexture(frameRender.texture); ImageFlipVertical(&actual);
+            require(actual.format == PIXELFORMAT_UNCOMPRESSED_R8G8B8A8, "Capture has readable RGBA pixels");
+            const auto* rendered = static_cast<const Color*>(actual.data);
+            bool same = true;
+            for (int y = 0; y < 96; ++y) for (int x = 0; x < 96; ++x) {
+                const auto expected = pixels[y * 768 + frame * 96 + x], found = rendered[y * 96 + x];
+                same = same && expected.a == found.a && (expected.a == 0 ||
+                    (expected.r == found.r && expected.g == found.g && expected.b == found.b));
+            }
+            require(same, "Whole destruction frame renders unchanged, including blank terminal frame");
+            UnloadImage(actual);
         }
-        require(same, "Whole destruction frame renders unchanged, including blank terminal frame");
-        UnloadImage(actual);
+        UnloadRenderTexture(frameRender); UnloadImage(sheetImage);
     }
-    UnloadRenderTexture(frameRender); UnloadImage(sheetImage);
     Image orb = LoadImage("assets/textures/scrap_orb.png");
     require(orb.width == 96 && orb.height == 96 && orb.format == PIXELFORMAT_UNCOMPRESSED_R8G8B8A8,
         "Generated orb loads as a 96px RGBA asset");
@@ -94,6 +110,7 @@ int runDebrisChecks(const std::string& artifactDirectory)
         "Glow texture has transparent margins and a continuous soft alpha halo");
     UnloadImage(orb);
 
+    const auto centers = Theme::DEBRIS_SCRAP_VISUALS[DEBRIS_WING].exitPixels;
     for (const float angle : {0.0f, 33.0f, 90.0f, 245.0f}) {
         clear();
         scraps.spawnDebris({12, -9}, angle, DEBRIS_WING, 48, true);
@@ -137,15 +154,14 @@ int runDebrisChecks(const std::string& artifactDirectory)
         require(scraps.pendingValue() == Balance::DEBRIS_SCRAP_VALUES[type], "Breakup preserves exact variant value");
         require(!debris.removeDebris(id, true), "Repeated destruction is harmless");
         require(scraps.update(Theme::SCRAP_HANDOFF_TIME, {}) == 0, "No credit before absorption");
-        const int expectedCounts[] = {4, 4, 14, 4, 8, 4, 14, 8, 14, 14};
         const float expectedSizes[] = {1.25f, 1.25f, 2.5f, 1.25f, 1.8f, 1.25f, 2.5f, 1.8f, 2.5f, 2.5f};
-        require(scraps.count() == expectedCounts[type], "Every variant uses its fixed small, medium or large burst count");
+        require(scraps.count() == Theme::DEBRIS_SCRAP_VISUALS[type].exitPixels.size(), "Every variant uses its own saved particle count");
         std::vector<Vector2> seenPositions;
         for (const auto& pickup : scraps.getPickups()) {
             require(pickup->getSize().x == expectedSizes[type], "Orb diameter follows debris size tier");
             const auto local = Vector2Add(Vector2Scale(Vector2Subtract(pickup->getPosition(), {30, 0}),
                 96.0f / Theme::DEBRIS_DRAW_SIZES[type]), {48, 48});
-            require(std::any_of(centers.begin(), centers.end(), [&](Vector2 center) {
+            require(std::any_of(sheetCenters[type].begin(), sheetCenters[type].end(), [&](Vector2 center) {
                 return Vector2Distance(center, local) < 0.001f;
             }), "Reduced burst still spawns at an actual saved explosion fleck");
             require(std::none_of(seenPositions.begin(), seenPositions.end(), [&](Vector2 previous) {
@@ -191,14 +207,17 @@ int runDebrisChecks(const std::string& artifactDirectory)
     for (int i = 0; i < 180; ++i) massCollected += scraps.update(1.0f / 60.0f, {});
     require(massCollected == 1600, "Merged pickup value is collected without cargo cap");
     clear();
-    for (int i = 0; i < 10; ++i) scraps.spawnDebris({30, 0}, 0, DEBRIS_WING, 48, true);
-    for (int i = 0; i < 3; ++i) scraps.spawnDebris({30, 0}, 0, DEBRIS_CLUMP, 20, true);
+    const int wingCount = static_cast<int>(Theme::DEBRIS_SCRAP_VISUALS[DEBRIS_WING].exitPixels.size());
+    const int wingBursts = (Balance::SCRAP_MAX_PICKUPS - 8) / wingCount;
+    for (int i = 0; i < wingBursts; ++i) scraps.spawnDebris({30, 0}, 0, DEBRIS_WING, 48, true);
+    for (int i = 0; i < 8; ++i) scraps.spawnDebris({30, 0}, 0, DEBRIS_CLUMP, 20, true);
     scraps.update(Theme::SCRAP_HANDOFF_TIME, {});
-    require(scraps.count() == 148 && scraps.pendingValue() == 89,
+    require(scraps.count() <= Balance::SCRAP_MAX_PICKUPS && scraps.count() > wingBursts * wingCount &&
+        scraps.pendingValue() == wingBursts * 8 + 24,
         "Small bursts fit remaining cap slots; overflow preserves their value");
     int mixedCollected = 0;
     for (int i = 0; i < 180; ++i) mixedCollected += scraps.update(1.0f / 60.0f, {});
-    require(mixedCollected == 89, "Mixed-size overflow credits the complete reward");
+    require(mixedCollected == wingBursts * 8 + 24, "Mixed-size overflow credits the complete reward");
     clear();
     game.harvestedScrap = 100;
     scraps.spawnDebris({}, 0, DEBRIS_WING, 48, true);
@@ -281,7 +300,7 @@ int runDebrisChecks(const std::string& artifactDirectory)
         DrawText(stages[phase], 65 + phase * 400, 830, 22, Theme::COLOR_HARVEST);
     }
     const DebrisKind tierKinds[] = {DEBRIS_PIPE, DEBRIS_DISH, DEBRIS_WING};
-    const char* tierLabels[] = {"SMALL: 4 ORBS", "MEDIUM: 8 ORBS", "LARGE: 14 ORBS"};
+    const char* tierLabels[] = {"PIPE", "DISH", "WING"};
     for (int tier = 0; tier < 3; ++tier) {
         scraps.reset();
         const auto kind = tierKinds[tier];
@@ -289,12 +308,33 @@ int runDebrisChecks(const std::string& artifactDirectory)
         scraps.update(Theme::SCRAP_HANDOFF_TIME, {100, 0});
         Camera2D camera = {{260.0f + tier * 530, 1040}, {}, 0, 5};
         BeginMode2D(camera); scraps.draw(); EndMode2D();
-        DrawText(tierLabels[tier], 140 + tier * 530, 1140, 22, Theme::COLOR_HARVEST);
+        DrawText(TextFormat("%s: %d ORBS", tierLabels[tier], static_cast<int>(scraps.count())),
+            140 + tier * 530, 1140, 22, Theme::COLOR_HARVEST);
     }
     EndTextureMode();
     Image capture = LoadImageFromTexture(render.texture); ImageFlipVertical(&capture);
     require(ExportImage(capture, (artifactDirectory + "/debris-harvest-preview.png").c_str()), "Export native debris and harvest render");
     UnloadImage(capture); UnloadRenderTexture(render);
+    const auto sheetPreview = LoadRenderTexture(1440, 1320);
+    BeginTextureMode(sheetPreview); ClearBackground(Color{18, 14, 30, 255});
+    DrawText("DEBRIS / EIGHT DESTRUCTION FRAMES / GLOW HANDOFF", 20, 20, 24, WHITE);
+    for (int type = 0; type < DEBRIS_KIND_COUNT; ++type) {
+        const auto kind = static_cast<DebrisKind>(type);
+        const float y = 120.0f + type * 120;
+        DrawText(DEBRIS_INFO[type].name, 12, static_cast<int>(y), 16, WHITE);
+        for (int frame = 0; frame < 9; ++frame) {
+            scraps.reset(); scraps.spawnDebris({}, 0, kind, 96, frame == 8);
+            scraps.update(frame == 8 ? Theme::SCRAP_HANDOFF_TIME :
+                (frame + 0.5f) * Theme::DEBRIS_DESTRUCT_FRAME_TIME, {500, 0});
+            Camera2D camera = {{250.0f + frame * 128, y}, {}, 0, 1.25f};
+            BeginMode2D(camera); scraps.draw(); EndMode2D();
+        }
+    }
+    EndTextureMode();
+    Image allSheets = LoadImageFromTexture(sheetPreview.texture); ImageFlipVertical(&allSheets);
+    require(ExportImage(allSheets, (artifactDirectory + "/debris-destruction-preview.png").c_str()),
+        "Export every unique destruction and its glow handoff");
+    UnloadImage(allSheets); UnloadRenderTexture(sheetPreview);
     game.onExit();
     std::cout << "Debris: " << checks << " checks\n";
     return checks;

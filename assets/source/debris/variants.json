@@ -75,5 +75,5 @@
                          "runtimeAsset":  "../../textures/debris/hull.png"
                      }
                  ],
-    "export":  "Nearest-neighbor downsample of alpha\u003e=128 body bounds into a centered \u003c=36x36 silhouette on a 96x96 transparent canvas; binary alpha. Native preview: build/debris-harvest-preview.png. Runtime correction: intact sprites are never sliced. The shared eight-frame destruction sheet plays, then scrap_orb textures spawn at saved final-fleck coordinates; see harvest-handoff.json."
+    "export":  "Nearest-neighbor downsample of alpha\u003e=128 body bounds into a centered \u003c=36x36 silhouette on a 96x96 transparent canvas; binary alpha. Native preview: build/debris-harvest-preview.png. Runtime correction: intact sprites are never sliced. Each kind now plays its own eight-frame destruction sheet, then scrap_orb textures spawn at that sheet's saved final-fleck coordinates; see destruction-particles.json and destruction-generation.json."
 }

@@ -1,5 +1,6 @@
 #pragma once
 #include <memory>
+#include <string>
 #include <vector>
 #include "ScrapPickup.hpp"
 #include "DebrisKind.hpp"
@@ -7,6 +8,7 @@ class ScrapManager {
 public:
     static ScrapManager& GetInstance() { static ScrapManager instance; return instance; }
     void spawnDebris(Vector2 center, float angle, DebrisKind kind, float drawSize, bool harvestable);
+    void spawnDestruction(Vector2 center, float angle, float drawSize, const std::string& textureKey);
     int update(float dt, Vector2 playerPosition);
     void draw();
     void reset() { pickups.clear(); destructions.clear(); }
@@ -21,6 +23,7 @@ private:
         int value;
         bool harvestable;
         DebrisKind kind;
+        std::string textureKey;
         float elapsed = 0.0f;
         bool released = false;
     };

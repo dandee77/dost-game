@@ -2,6 +2,8 @@
 #include "EquipmentAccess.hpp"
 #include "BarricadeEnemy.hpp"
 #include "Balance.hpp"
+#include "ScrapManager.hpp"
+#include "Theme.hpp"
 #include "raymath.h"
 #include <stdexcept>
 
@@ -27,6 +29,7 @@ int runBarricadeChecks(const std::string& artifactDirectory)
         manager.reset();
         testDebrisManager().reset();
         BulletManager::GetInstance().reset();
+        ScrapManager::GetInstance().reset();
         player.init(); player.position = {}; player.rotation = 0;
         game.gameState = GAME_RUNNING;
         game.gameTimer.setStartTime(1.0f);
@@ -44,6 +47,29 @@ int runBarricadeChecks(const std::string& artifactDirectory)
         enemy->rotation = 0;
         enemies["event_bystander"] = std::move(enemy);
     };
+
+    auto& scraps = ScrapManager::GetInstance();
+    const auto& monsterTexture = ResourceManager::GetInstance().GetTextureRef("barricade_enemy");
+    const auto& monsterDeath = ResourceManager::GetInstance().GetTextureRef("barricade_enemy_destruct");
+    require(monsterTexture.id != 0 && monsterTexture.width == 96 && monsterTexture.height == 96,
+        "Barricade creature uses a separate padded pixel-art sprite");
+    require(monsterDeath.id != 0 && monsterDeath.width == 768 && monsterDeath.height == 96,
+        "Barricade creature has eight dedicated death frames");
+    start();
+    const auto& idle = Animator::GetInstance().animations.at("enemy_0").animation;
+    require(idle->spriteSheet.id == monsterTexture.id, "Ring actually displays the creature, not debris");
+    enemies.at("enemy_0")->destruct();
+    require(!Animator::GetInstance().animations.contains("enemy_0"), "Death removes the idle creature");
+    require(scraps.destructionCount() == 1 && scraps.pendingValue() == 0 && scraps.count() == 0,
+        "Creature death queues a cosmetic animation with no scrap");
+    require(scraps.destructions.front().textureKey == "barricade_enemy_destruct",
+        "Creature death selects its own collapse sheet");
+    game.gameState = GAME_PAUSED; game.update();
+    require(scraps.destructions.front().elapsed == 0, "Creature death animation freezes while paused");
+    require(scraps.update(Theme::SCRAP_HANDOFF_TIME, {}) == 0 && scraps.count() == 0,
+        "Creature collapse never enters the collectible-particle phase");
+    require(scraps.update(1.0f, {}) == 0 && scraps.destructionCount() == 0 && scraps.count() == 0,
+        "Creature death finishes without leaving particles or rewards");
 
     reset();
     event.update(0, 119.99f, {});
@@ -156,6 +182,8 @@ int runBarricadeChecks(const std::string& artifactDirectory)
     require(enemies.at("enemy_0")->getHealth() == Balance::BARRICADE_HEALTH - Balance::LASER_DAMAGE, "Laser cannot duplicate a consumed tick");
     EquipmentTestAccess::updateWeapon(player, 3, true); EquipmentTestAccess::resolve(game);
     require(!enemies.contains("enemy_0") && game.killCounter.getCount() > 0, "Sustained beam kills and removes segment through normal combat");
+    require(scraps.pendingValue() == 0 && scraps.count() == 0,
+        "Actual weapon kills of barricade monsters award no harvest particles");
 
     // Exercise real Game::update scheduling and the original player's bullet path.
     reset(); BeginDrawing(); EndDrawing(); BeginDrawing(); EndDrawing();
@@ -311,6 +339,20 @@ int runBarricadeChecks(const std::string& artifactDirectory)
     Image capture = LoadImageFromTexture(target.texture); ImageFlipVertical(&capture);
     require(ExportImage(capture, (artifactDirectory + "/barricade-event.png").c_str()), "Export native barricade preview");
     UnloadImage(capture); UnloadRenderTexture(target);
+    // Render all eight actual cosmetic death frames and verify the rendered sheet.
+    const auto deathPreview = LoadRenderTexture(1536, 192);
+    BeginTextureMode(deathPreview); ClearBackground(Color{18, 14, 30, 255});
+    for (int frame = 0; frame < 8; ++frame) {
+        scraps.reset();
+        scraps.spawnDestruction({96.0f + frame * 192, 96}, 0, 192, "barricade_enemy_destruct");
+        scraps.update((frame + 0.5f) * Theme::DEBRIS_DESTRUCT_FRAME_TIME, {});
+        scraps.draw();
+    }
+    EndTextureMode();
+    Image deathCapture = LoadImageFromTexture(deathPreview.texture); ImageFlipVertical(&deathCapture);
+    require(ExportImage(deathCapture, (artifactDirectory + "/barricade-monster-death.png").c_str()),
+        "Export creature collapse preview");
+    UnloadImage(deathCapture); UnloadRenderTexture(deathPreview);
     game.onExit();
     require(!event.isActive() && utils::gameCamera.zoom == 20, "Leaving scene clears event and camera");
     reset();

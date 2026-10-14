@@ -1,5 +1,34 @@
 # Asset provenance
 
+## Unique debris destruction and barricade monster (15 October 2026)
+
+Built-in OpenAI image_gen created nine shape-specific destruction sheets using the corresponding intact sprites as references, plus one mutated trash creature and its inward-collapse sheet. Image model not exposed; no third-party pack and no CC0 claim. Source prompts: `source/debris/destruction-generation.json` and `source/barricade/generation.json`. Native final-particle measurements: `source/debris/destruction-particles.json` and Theme. Export scripts preserve a shared registration across cells, nearest-neighbor pixel art and binary alpha; each new first frame is the exact intact sprite. Eight 96px frames per sheet, final frame blank. Monster body max 32px within 96px padding; no pickup particles.
+
+| File | Resource key | Source / author | License | Edits | Date |
+|---|---|---|---|---|---|
+| textures/debris/pipe_destruct.png | debris_pipe_destruct | OpenAI built-in image_gen; user/Codex direction | AI-generated; reference provenance audit pending | Uniform registered pixel export, 768 x 96 RGBA | 2026-10-15 |
+| source/debris/destruction/pipe.png | - | OpenAI built-in image_gen | AI-generated; reference provenance audit pending | Unmodified generated source | 2026-10-15 |
+| textures/debris/wing_destruct.png | debris_wing_destruct | OpenAI built-in image_gen; user/Codex direction | AI-generated; reference provenance audit pending | Uniform registered pixel export, 768 x 96 RGBA | 2026-10-15 |
+| source/debris/destruction/wing.png | - | OpenAI built-in image_gen | AI-generated; reference provenance audit pending | Unmodified generated source | 2026-10-15 |
+| textures/debris/canister_destruct.png | debris_canister_destruct | OpenAI built-in image_gen; user/Codex direction | AI-generated; reference provenance audit pending | Uniform registered pixel export, 768 x 96 RGBA | 2026-10-15 |
+| source/debris/destruction/canister.png | - | OpenAI built-in image_gen | AI-generated; reference provenance audit pending | Unmodified generated source | 2026-10-15 |
+| textures/debris/dish_destruct.png | debris_dish_destruct | OpenAI built-in image_gen; user/Codex direction | AI-generated; reference provenance audit pending | Uniform registered pixel export, 768 x 96 RGBA | 2026-10-15 |
+| source/debris/destruction/dish.png | - | OpenAI built-in image_gen | AI-generated; reference provenance audit pending | Unmodified generated source | 2026-10-15 |
+| textures/debris/coil_destruct.png | debris_coil_destruct | OpenAI built-in image_gen; user/Codex direction | AI-generated; reference provenance audit pending | Uniform registered pixel export, 768 x 96 RGBA | 2026-10-15 |
+| source/debris/destruction/coil.png | - | OpenAI built-in image_gen | AI-generated; reference provenance audit pending | Unmodified generated source | 2026-10-15 |
+| textures/debris/tank_destruct.png | debris_tank_destruct | OpenAI built-in image_gen; user/Codex direction | AI-generated; reference provenance audit pending | Uniform registered pixel export, 768 x 96 RGBA | 2026-10-15 |
+| source/debris/destruction/tank.png | - | OpenAI built-in image_gen | AI-generated; reference provenance audit pending | Unmodified generated source | 2026-10-15 |
+| textures/debris/thruster_destruct.png | debris_thruster_destruct | OpenAI built-in image_gen; user/Codex direction | AI-generated; reference provenance audit pending | Uniform registered pixel export, 768 x 96 RGBA | 2026-10-15 |
+| source/debris/destruction/thruster.png | - | OpenAI built-in image_gen | AI-generated; reference provenance audit pending | Unmodified generated source | 2026-10-15 |
+| textures/debris/beam_destruct.png | debris_beam_destruct | OpenAI built-in image_gen; user/Codex direction | AI-generated; reference provenance audit pending | Uniform registered pixel export, 768 x 96 RGBA | 2026-10-15 |
+| source/debris/destruction/beam.png | - | OpenAI built-in image_gen | AI-generated; reference provenance audit pending | Unmodified generated source | 2026-10-15 |
+| textures/debris/hull_destruct.png | debris_hull_destruct | OpenAI built-in image_gen; user/Codex direction | AI-generated; reference provenance audit pending | Uniform registered pixel export, 768 x 96 RGBA | 2026-10-15 |
+| source/debris/destruction/hull.png | - | OpenAI built-in image_gen | AI-generated; reference provenance audit pending | Unmodified generated source | 2026-10-15 |
+| textures/barricade_enemy.png | barricade_enemy | OpenAI built-in image_gen; user/Codex direction | AI-generated; reference provenance audit pending | 32px body centered in 96px RGBA | 2026-10-15 |
+| textures/barricade_enemy_destruct.png | barricade_enemy_destruct | OpenAI built-in image_gen; user/Codex direction | AI-generated; reference provenance audit pending | Eight 96px frames; inward collapse | 2026-10-15 |
+| source/barricade/monster-generated.png | - | OpenAI built-in image_gen; user/Codex direction | AI-generated; reference provenance audit pending | Unmodified generated source | 2026-10-15 |
+| source/barricade/monster-destruct-generated.png | - | OpenAI built-in image_gen; user/Codex direction | AI-generated; reference provenance audit pending | Unmodified generated source | 2026-10-15 |
+
 ## Glowing scrap pickup correction (15 October 2026)
 
 Built-in OpenAI image_gen created a red orb with an actual transparent soft glow halo. Exact prompt, export settings and saved destruction-frame particle coordinates: `source/debris/harvest-handoff.json`. No third-party art pack used. Underlying image model was not exposed by the tool.
@@ -11,7 +40,7 @@ Built-in OpenAI image_gen created a red orb with an actual transparent soft glow
 
 ## Ten debris variants and harvesting (15 October 2026)
 
-The accepted clump is textures/debris.png; textures/debris_destruct.png is again the live eight-frame destruction strip for every variant and barricade. The rejected texture-slicing effect was removed. At the last visible frame, saved fleck centroids spawn the new glowing red texture below. Intact art, destruction sheet and originals in textures/legacy remain byte-for-byte unchanged by this correction.
+The accepted clump is textures/debris.png; textures/debris_destruct.png is now used only by that clump. Nine other variants have dedicated *_destruct.png sheets, and the barricade has separate monster art (see newest provenance entries). Intact debris art, accepted clump destruction, red orb texture and original legacy files are unchanged.
 
 Nine new variants plus the existing clump make ten. Exact prompts and original output paths are recorded in source/debris/variants.json; source images are preserved under source/debris/variants/. Built-in image tool used (underlying image model not exposed); no third-party pack added and no CC0 claim made. Team art review pending.
 

@@ -1,5 +1,6 @@
 #pragma once
 #include <array>
+#include <span>
 #include "raylib.h"
 #include "DebrisKind.hpp"
 
@@ -8,38 +9,127 @@ namespace Theme {
     inline constexpr int DEBRIS_FRAME = 96;
     inline constexpr Rectangle DEBRIS_BODY = {30.0f, 30.0f, 36.0f, 36.0f};
     inline constexpr std::array<float, DEBRIS_KIND_COUNT> DEBRIS_DRAW_SIZES = {20.0f, 20.0f, 48.0f, 20.0f, 34.0f, 18.0f, 38.0f, 30.0f, 38.0f, 36.0f};
-    // Centers of all 14 flecks in frame 7 (zero-based 6); frame 8 is blank.
-    // Extraction notes: assets/source/debris/harvest-handoff.json.
+    // Each sheet has its own measured final-fleck coordinates. Regenerate with
+    // assets/source/debris/write-destruction-metadata.py after exporting art.
     inline constexpr int DEBRIS_LAST_VISIBLE_FRAME = 6;
     inline constexpr float DEBRIS_DESTRUCT_FRAME_TIME = 0.075f;
     inline constexpr float SCRAP_HANDOFF_TIME = (DEBRIS_LAST_VISIBLE_FRAME + 1) * DEBRIS_DESTRUCT_FRAME_TIME;
-    inline constexpr std::array<Vector2, 14> SCRAP_EXIT_PIXELS = {{
-        {31.5f, 15.0f}, {46.5f, 20.5f}, {61.5f, 20.0f}, {24.0f, 21.5f},
-        {74.833333f, 30.166667f}, {19.0f, 31.3f}, {15.0f, 45.5f}, {74.5f, 47.25f},
-        {30.5f, 50.0f}, {58.0f, 61.0f}, {49.25f, 63.5f}, {18.5f, 65.5f},
-        {71.5f, 65.5f}, {38.0f, 73.5f}
-    }};
-    inline constexpr int SCRAP_FRAGMENTS = static_cast<int>(SCRAP_EXIT_PIXELS.size());
     inline constexpr float SCRAP_ORB_SIZE = 2.5f, SCRAP_ORB_HOLD_TIME = 0.05f;
+    inline constexpr std::array<Vector2, 4> SCRAP_EXIT_CLUMP = {{
+        {31.500000f, 15.000000f},
+        {74.833333f, 30.166667f},
+        {71.500000f, 65.500000f},
+        {18.500000f, 65.500000f},
+    }};
+    inline constexpr std::array<Vector2, 3> SCRAP_EXIT_PIPE = {{
+        {26.000000f, 39.700000f},
+        {72.000000f, 39.500000f},
+        {49.666667f, 49.666667f},
+    }};
+    inline constexpr std::array<Vector2, 10> SCRAP_EXIT_WING = {{
+        {19.000000f, 27.000000f},
+        {30.250000f, 30.500000f},
+        {25.750000f, 39.500000f},
+        {51.100000f, 39.300000f},
+        {41.333333f, 40.666667f},
+        {51.100000f, 51.700000f},
+        {39.666667f, 52.666667f},
+        {65.000000f, 55.500000f},
+        {75.166667f, 59.166667f},
+        {61.666667f, 62.500000f},
+    }};
+    inline constexpr std::array<Vector2, 5> SCRAP_EXIT_CANISTER = {{
+        {53.115385f, 19.884615f},
+        {26.250000f, 41.916667f},
+        {61.166667f, 52.000000f},
+        {84.500000f, 63.300000f},
+        {35.000000f, 74.000000f},
+    }};
+    inline constexpr std::array<Vector2, 5> SCRAP_EXIT_DISH = {{
+        {28.884615f, 26.500000f},
+        {46.115385f, 45.115385f},
+        {75.000000f, 56.666667f},
+        {35.200000f, 59.800000f},
+        {53.884615f, 67.423077f},
+    }};
+    inline constexpr std::array<Vector2, 4> SCRAP_EXIT_COIL = {{
+        {32.500000f, 30.000000f},
+        {67.785714f, 35.000000f},
+        {30.000000f, 60.000000f},
+        {66.954545f, 66.136364f},
+    }};
+    inline constexpr std::array<Vector2, 11> SCRAP_EXIT_TANK = {{
+        {32.000000f, 22.000000f},
+        {56.000000f, 26.000000f},
+        {72.500000f, 34.000000f},
+        {25.200000f, 39.800000f},
+        {16.785714f, 46.500000f},
+        {47.300000f, 48.000000f},
+        {80.409091f, 48.772727f},
+        {66.500000f, 52.700000f},
+        {36.441176f, 63.088235f},
+        {24.884615f, 64.115385f},
+        {57.200000f, 70.800000f},
+    }};
+    inline constexpr std::array<Vector2, 7> SCRAP_EXIT_THRUSTER = {{
+        {48.214286f, 26.500000f},
+        {34.500000f, 38.000000f},
+        {63.000000f, 42.500000f},
+        {39.500000f, 56.500000f},
+        {22.611111f, 62.055556f},
+        {65.666667f, 61.666667f},
+        {51.500000f, 73.500000f},
+    }};
+    inline constexpr std::array<Vector2, 11> SCRAP_EXIT_BEAM = {{
+        {65.000000f, 36.000000f},
+        {74.500000f, 40.500000f},
+        {83.500000f, 43.500000f},
+        {53.833333f, 43.833333f},
+        {31.166667f, 46.833333f},
+        {50.500000f, 48.000000f},
+        {67.300000f, 49.100000f},
+        {40.750000f, 53.500000f},
+        {20.500000f, 55.250000f},
+        {13.100000f, 56.700000f},
+        {29.833333f, 59.833333f},
+    }};
+    inline constexpr std::array<Vector2, 15> SCRAP_EXIT_HULL = {{
+        {68.250000f, 22.500000f},
+        {31.500000f, 28.214286f},
+        {77.500000f, 31.500000f},
+        {45.500000f, 36.000000f},
+        {21.375000f, 38.375000f},
+        {35.000000f, 46.000000f},
+        {65.000000f, 46.000000f},
+        {57.500000f, 50.500000f},
+        {20.750000f, 54.500000f},
+        {76.500000f, 54.500000f},
+        {35.625000f, 57.625000f},
+        {65.500000f, 64.500000f},
+        {44.166667f, 66.166667f},
+        {78.000000f, 71.500000f},
+        {33.333333f, 74.666667f},
+    }};
     struct ScrapVisual {
         float orbSize;
-        int exitCount;
-        std::array<int, SCRAP_FRAGMENTS> exitIndices;
+        std::span<const Vector2> exitPixels;
     };
-    // Smaller bursts use a spread-out subset of actual final-frame flecks.
-    inline constexpr ScrapVisual SCRAP_SMALL = {1.25f, 4, {0, 4, 12, 11}};
-    inline constexpr ScrapVisual SCRAP_MEDIUM = {1.8f, 8, {0, 2, 4, 7, 12, 13, 11, 6}};
-    inline constexpr ScrapVisual SCRAP_LARGE = {SCRAP_ORB_SIZE, SCRAP_FRAGMENTS,
-        {0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13}};
-    // Clump, pipe, wing, canister, dish, coil, tank, thruster, beam, hull.
     inline constexpr std::array<ScrapVisual, DEBRIS_KIND_COUNT> DEBRIS_SCRAP_VISUALS = {{
-        SCRAP_SMALL, SCRAP_SMALL, SCRAP_LARGE, SCRAP_SMALL, SCRAP_MEDIUM,
-        SCRAP_SMALL, SCRAP_LARGE, SCRAP_MEDIUM, SCRAP_LARGE, SCRAP_LARGE
+        {1.25f, SCRAP_EXIT_CLUMP},
+        {1.25f, SCRAP_EXIT_PIPE},
+        {2.5f, SCRAP_EXIT_WING},
+        {1.25f, SCRAP_EXIT_CANISTER},
+        {1.8f, SCRAP_EXIT_DISH},
+        {1.25f, SCRAP_EXIT_COIL},
+        {2.5f, SCRAP_EXIT_TANK},
+        {1.8f, SCRAP_EXIT_THRUSTER},
+        {2.5f, SCRAP_EXIT_BEAM},
+        {2.5f, SCRAP_EXIT_HULL},
     }};
     inline constexpr Color COLOR_HARVEST = {255, 65, 75, 255};
     inline constexpr Vector2 SCRAP_HUD_POSITION = {220.0f, 390.0f};
     inline constexpr float SCRAP_HUD_SIZE = 64.0f;
-    // The 96px debris frame has a roughly 36px body; account for transparent padding.
+    // The 96px creature frame has a 32px body; account for transparent padding.
     inline constexpr float BARRICADE_DRAW_SIZE = 20.0f, BARRICADE_SPIN = 20.0f;
     inline constexpr float BARRICADE_IDLE_FRAME_TIME = 1.0f;
     inline constexpr float BARRICADE_DESTRUCT_FRAME_TIME = DEBRIS_DESTRUCT_FRAME_TIME;

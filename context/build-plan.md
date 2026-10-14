@@ -6,7 +6,7 @@ The order in which the game is built between **14 October** and the **25 October
 
 ## Core Principle
 
-**15 October user-requested P4: debris variants and harvesting.** Implemented ahead of numbered order: rename Asteroid/AsteroidManager to Debris/DebrisManager, ten AI-assisted pixel-art variants with fixed sizes, restored eight-frame destruction followed by red glow texture orbs at saved final-fleck coordinates, uncapped run-local harvested scrap (user confirmed), HUD counter and debug gallery. This is scoped to debris/barricade salvage and A5 art; item 12 enemy drops/cargo and item 13 docking remain pending. Existing enemy, wave and shop work is not included.
+**15 October user-requested P4: debris variants and harvesting.** Implemented ahead of numbered order: rename Asteroid/AsteroidManager to Debris/DebrisManager, ten AI-assisted pixel-art variants with fixed sizes, restored eight-frame destruction followed by red glow texture orbs at saved final-fleck coordinates, uncapped run-local harvested scrap (user confirmed), HUD counter and debug gallery. Follow-up: unique per-kind destruction art/particle layouts and a dedicated barricade trash-monster sprite/death with no drops. This is scoped to debris salvage and barricade A5 art; item 12 enemy drops/cargo and item 13 docking remain pending. Existing enemy, wave and shop work is not included.
 
 **Playable at the end of every item.** Every item ends with something you can see and test in the running game. No item leaves the build broken. Refactors (items 03 to 10) must not change how the game plays; new features come after the foundation is safe.
 

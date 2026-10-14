@@ -24,7 +24,7 @@ BarricadeEnemy::BarricadeEnemy(const std::string& id, Vector2 eventCenter, float
     origin = {spriteSize / 2.0f, spriteSize / 2.0f};
     rect = {position.x, position.y, spriteSize, spriteSize};
     hitbox = {position.x, position.y, Balance::BARRICADE_BODY_RADIUS, Balance::BARRICADE_BODY_RADIUS};
-    const auto& texture = ResourceManager::GetInstance().GetTextureRef("debris");
+    const auto& texture = ResourceManager::GetInstance().GetTextureRef("barricade_enemy");
     auto& animator = Animator::GetInstance();
     animator.AddAnimation(enemyID, std::make_shared<Animation>(texture, texture.width, texture.height,
         Theme::BARRICADE_IDLE_FRAME_TIME, true, rect, false, WHITE));
@@ -42,7 +42,7 @@ void BarricadeEnemy::advance(float dt)
     const float fraction = std::min(1.0f, elapsed / Balance::BARRICADE_DURATION);
     const float radius = Lerp(Balance::BARRICADE_START_RADIUS, Balance::BARRICADE_END_RADIUS, fraction) +
         std::max(0.0f, elapsed - Balance::BARRICADE_DURATION) * Balance::BARRICADE_SCATTER_SPEED;
-    // Freeze the orbit heading at release so scattered rocks travel straight out.
+    // Freeze the orbit heading at release so surviving creatures travel straight out.
     const float orbit = Balance::BARRICADE_ORBIT_SPEED * DEG2RAD * std::min(elapsed, Balance::BARRICADE_DURATION);
     position = Vector2Add(center, Vector2Scale(Vector2Rotate(radialDirection, orbit), radius));
     rect.x = hitbox.x = position.x;
@@ -60,5 +60,5 @@ void BarricadeEnemy::draw()
 void BarricadeEnemy::destruct()
 {
     Animator::GetInstance().Remove(enemyID);
-    ScrapManager::GetInstance().spawnDebris(position, rotation, DEBRIS_CLUMP, spriteSize, true);
+    ScrapManager::GetInstance().spawnDestruction(position, rotation, spriteSize, "barricade_enemy_destruct");
 }

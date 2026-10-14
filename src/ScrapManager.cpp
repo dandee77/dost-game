@@ -9,13 +9,20 @@
 void ScrapManager::spawnDebris(Vector2 center, float angle, DebrisKind kind, float drawSize, bool harvestable)
 {
     destructions.push_back({center, angle, drawSize,
-        harvestable ? Balance::DEBRIS_SCRAP_VALUES[kind] : 0, harvestable, kind});
+        harvestable ? Balance::DEBRIS_SCRAP_VALUES[kind] : 0, harvestable, kind, DEBRIS_INFO[kind].destructTexture});
+}
+
+void ScrapManager::spawnDestruction(Vector2 center, float angle, float drawSize, const std::string& textureKey)
+{
+    // Cosmetic deaths share the simulation clock/reset path, with no pickup phase.
+    destructions.push_back({center, angle, drawSize, 0, false, DEBRIS_CLUMP, textureKey});
 }
 
 int ScrapManager::releasePickups(const Destruction& destruction, float remainingDt, Vector2 playerPosition)
 {
     const auto& visual = Theme::DEBRIS_SCRAP_VISUALS[destruction.kind];
-    if (pickups.size() + visual.exitCount > Balance::SCRAP_MAX_PICKUPS) {
+    const int exitCount = static_cast<int>(visual.exitPixels.size());
+    if (pickups.size() + exitCount > Balance::SCRAP_MAX_PICKUPS) {
         // Preserve earned value under load, after the complete visible explosion.
         ScrapPickup* nearest = nullptr;
         float nearestDistance = std::numeric_limits<float>::max();
@@ -26,14 +33,14 @@ int ScrapManager::releasePickups(const Destruction& destruction, float remaining
         if (nearest) { nearest->addValue(destruction.value); return 0; }
     }
     int collected = 0;
-    for (int i = 0; i < visual.exitCount; ++i) {
-        const auto pixel = Theme::SCRAP_EXIT_PIXELS[visual.exitIndices[i]];
+    for (int i = 0; i < exitCount; ++i) {
+        const auto pixel = visual.exitPixels[i];
         const float scale = destruction.drawSize / Theme::DEBRIS_FRAME;
         const Vector2 offset = {(pixel.x - Theme::DEBRIS_FRAME / 2.0f) * scale,
             (pixel.y - Theme::DEBRIS_FRAME / 2.0f) * scale};
         const auto position = Vector2Add(destruction.center, Vector2Rotate(offset, destruction.angle * DEG2RAD));
-        const int value = destruction.value / visual.exitCount +
-            (i < destruction.value % visual.exitCount ? 1 : 0);
+        const int value = destruction.value / exitCount +
+            (i < destruction.value % exitCount ? 1 : 0);
         auto pickup = std::make_unique<ScrapPickup>(position, value, visual.orbSize);
         // Only time beyond the handoff belongs to the newly spawned orb.
         pickup->advance(remainingDt, playerPosition);
@@ -68,16 +75,15 @@ int ScrapManager::update(float dt, Vector2 playerPosition)
 
 void ScrapManager::draw()
 {
-    const auto& sheet = ResourceManager::GetInstance().GetTextureRef("debris_destruct");
-    if (sheet.id != 0) {
-        for (const auto& destruction : destructions) {
-            const int frame = std::min(static_cast<int>(destruction.elapsed / Theme::DEBRIS_DESTRUCT_FRAME_TIME),
-                Theme::FRAMES_DEBRIS_DESTRUCT - 1);
-            const float frameSize = static_cast<float>(Theme::DEBRIS_FRAME);
-            DrawTexturePro(sheet, {frame * frameSize, 0, frameSize, frameSize},
-                {destruction.center.x, destruction.center.y, destruction.drawSize, destruction.drawSize},
-                {destruction.drawSize / 2.0f, destruction.drawSize / 2.0f}, destruction.angle, WHITE);
-        }
+    for (const auto& destruction : destructions) {
+        const auto& sheet = ResourceManager::GetInstance().GetTextureRef(destruction.textureKey);
+        if (sheet.id == 0) continue;
+        const int frame = std::min(static_cast<int>(destruction.elapsed / Theme::DEBRIS_DESTRUCT_FRAME_TIME),
+            Theme::FRAMES_DEBRIS_DESTRUCT - 1);
+        const float frameSize = static_cast<float>(Theme::DEBRIS_FRAME);
+        DrawTexturePro(sheet, {frame * frameSize, 0, frameSize, frameSize},
+            {destruction.center.x, destruction.center.y, destruction.drawSize, destruction.drawSize},
+            {destruction.drawSize / 2.0f, destruction.drawSize / 2.0f}, destruction.angle, WHITE);
     }
     for (auto& pickup : pickups) pickup->draw();
 }
