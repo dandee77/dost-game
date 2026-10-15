@@ -315,6 +315,7 @@ All use the same pattern: `static X& GetInstance()` with a function-local static
 - Debug-spawn support: rotation initializes to zero so drawing while the console pauses simulation is defined before the first update.
 - Behavior: homing. Each frame it lerps its direction toward the player (`turnSpeed` 5) and moves at 15 to 30 units/s. Kamikaze on contact. HP 30.
 - Sprites: picks one of three variants at random: `low_level_enemy1` (10 frames), `low_level_enemy2` (5), `low_level_enemy3` (5); destruct `*_destruct` (8, 8, 7 frames). All frames 64 x 64 px.
+- 15 October art: variant 1 crushed-can biter, variant 2 leaking-battery crawler, variant 3 cracked-monitor parasite. Mutated-trash pixel art with dusty mauve metal, purple tissue and toxic-green features. Matching individual breakup sheets, existing animation keys/counts/timings and collision behavior preserved. Originals archived under assets/textures/legacy/low-enemies; source prompts and export registration in assets/source/low-enemies.
 - Gotchas: the constructor initializes `textureName` with one random roll and the animation with a second, separate roll; `textureName` is unused for drawing. Harmless; do not rely on `textureName`.
 
 ### BarricadeEnemy

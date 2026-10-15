@@ -180,6 +180,8 @@ Current positions (SA) and planned additions. All move into `Theme.hpp`.
 
 ### Orientation and size rules
 
+15 October low-enemy reskin: three recognizable mutated trash objects, with fronts/claws toward the top and trailing cables toward the bottom. Variant A is a crushed ribbed tin can with torn-lid jaws; B a leaking rectangular battery with two terminals; C a cracked monitor with a green eye and broken bracket claws. Shared dusty mauve/copper metal, dark purple mutation and toxic-green eyes; crisp binary-alpha pixel art. Original 64px frame padding and 15-unit world size are retained, with the animated body bounded to 32px. Idle loops remain 10/5/5 frames at 0.1 s/frame; corresponding object-specific breakups remain 8/8/7 frames at 0.1 s/frame. Death starts with the exact exported idle frame and ends transparent.
+
 - **All ship and enemy sprites face UP** in the source image. The code rotates sprites by `atan2(direction) + 90°`, which assumes the art points toward the top of the image.
 - Sprite sheets are **horizontal strips**: frames left to right, all the same size, no padding. The code divides the width by the frame count.
 - Transparent PNG. Pixel art, consistent pixel density across all sprites.
@@ -195,9 +197,9 @@ Existing sheets (sizes measured from the current files). "Frame" is width x heig
 | `player_deacceleration` | player_deaccelerating.png | 32 x 32 | 3 | 8 | Collector ship, idle |
 | `player_bullet` | player_bullet.png | 249 x 144 | 1 | 8 x 5 | Sky-blue bolt |
 | `enemy_bullet` | enemy_bullet.png | 233 x 134 | 1 | 8 x 8 | Toxic glob |
-| `low_level_enemy1` | low_level_enemy1.png | 64 x 64 | 10 | 15 | Junk Swarmer variant A |
-| `low_level_enemy2` | low_level_enemy2.png | 64 x 64 | 5 | 15 | Junk Swarmer variant B |
-| `low_level_enemy3` | low_level_enemy3.png | 64 x 64 | 5 | 15 | Junk Swarmer variant C |
+| `low_level_enemy1` | low_level_enemy1.png | 64 x 64 | 10 | 15 | Can biter |
+| `low_level_enemy2` | low_level_enemy2.png | 64 x 64 | 5 | 15 | Battery crawler |
+| `low_level_enemy3` | low_level_enemy3.png | 64 x 64 | 5 | 15 | Monitor parasite |
 | `low_level_enemy1_destruct` | | 64 x 64 | 8 | 15 | Burst into scrap |
 | `low_level_enemy2_destruct` | | 64 x 64 | 8 | 15 | |
 | `low_level_enemy3_destruct` | | 64 x 64 | 7 | 15 | |

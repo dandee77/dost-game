@@ -1,0 +1,6 @@
+low_level_enemy1.png: 640x64; unique frames=10; opaque pixels=362,367,365,378,355,363,375,359,375,353
+low_level_enemy1_destruct.png: 512x64; unique frames=8; opaque pixels=362,384,423,461,411,159,27,0
+low_level_enemy2.png: 320x64; unique frames=5; opaque pixels=501,501,517,515,499
+low_level_enemy2_destruct.png: 512x64; unique frames=8; opaque pixels=501,557,634,679,593,237,24,0
+low_level_enemy3.png: 320x64; unique frames=5; opaque pixels=428,429,429,426,430
+low_level_enemy3_destruct.png: 448x64; unique frames=7; opaque pixels=428,451,471,441,137,14,0

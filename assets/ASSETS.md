@@ -1,5 +1,32 @@
 # Asset provenance
 
+## Low-level mutated-trash enemies (15 October 2026)
+
+User requested every low-level enemy asset be reskinned with concrete mutated-trash concepts, using current enemy sheets as references. The built-in OpenAI image_gen tool produced three idle sheets and three matching breakup sheets; model not exposed. Concepts: crushed-can biter, leaking-battery crawler and cracked-monitor parasite. Existing enemy sheets supplied silhouette/orientation references; the prior barricade mutant supplied the mauve metal, purple tissue and toxic-green palette reference. No new external pack or license claim. Original reference provenance remains subject to the legacy audit.
+
+Exact prompts and generator metadata: `source/low-enemies/generation.json`. Mechanical export: `source/low-enemies/export-sprites.ps1`, using nearest-neighbor sampling, binary alpha, fixed scale, row registration, horizontal 64px packing, exact intact first death frame and transparent terminal death frame. Idle frame counts 10/5/5; death counts 8/8/7. Existing runtime keys, timing and behavior unchanged. Original files are preserved byte-for-byte in `textures/legacy/low-enemies/`.
+
+| File | Resource key | Source / author | License | Edits | Date |
+|---|---|---|---|---|---|
+| textures/low_level_enemy1.png | low_level_enemy1 | OpenAI built-in image_gen; user/Codex direction | AI-generated; reference audit pending | 10 horizontal 64px frames; registered pixel export | 2026-10-15 |
+| source/low-enemies/can-biter-idle-generated.png | - | OpenAI built-in image_gen | AI-generated; reference audit pending | Unmodified generated source | 2026-10-15 |
+| textures/legacy/low-enemies/low_level_enemy1.png | - (archived) | Existing repository; original author pending audit | Pending legacy audit | Byte-identical original preserved | 2026-10-15 |
+| textures/low_level_enemy1_destruct.png | low_level_enemy1_destruct | OpenAI built-in image_gen; user/Codex direction | AI-generated; reference audit pending | 8 horizontal 64px frames; registered pixel export | 2026-10-15 |
+| source/low-enemies/can-biter-death-generated.png | - | OpenAI built-in image_gen | AI-generated; reference audit pending | Unmodified generated source | 2026-10-15 |
+| textures/legacy/low-enemies/low_level_enemy1_destruct.png | - (archived) | Existing repository; original author pending audit | Pending legacy audit | Byte-identical original preserved | 2026-10-15 |
+| textures/low_level_enemy2.png | low_level_enemy2 | OpenAI built-in image_gen; user/Codex direction | AI-generated; reference audit pending | 5 horizontal 64px frames; registered pixel export | 2026-10-15 |
+| source/low-enemies/battery-crawler-idle-generated.png | - | OpenAI built-in image_gen | AI-generated; reference audit pending | Unmodified generated source | 2026-10-15 |
+| textures/legacy/low-enemies/low_level_enemy2.png | - (archived) | Existing repository; original author pending audit | Pending legacy audit | Byte-identical original preserved | 2026-10-15 |
+| textures/low_level_enemy2_destruct.png | low_level_enemy2_destruct | OpenAI built-in image_gen; user/Codex direction | AI-generated; reference audit pending | 8 horizontal 64px frames; registered pixel export | 2026-10-15 |
+| source/low-enemies/battery-crawler-death-generated.png | - | OpenAI built-in image_gen | AI-generated; reference audit pending | Unmodified generated source | 2026-10-15 |
+| textures/legacy/low-enemies/low_level_enemy2_destruct.png | - (archived) | Existing repository; original author pending audit | Pending legacy audit | Byte-identical original preserved | 2026-10-15 |
+| textures/low_level_enemy3.png | low_level_enemy3 | OpenAI built-in image_gen; user/Codex direction | AI-generated; reference audit pending | 5 horizontal 64px frames; registered pixel export | 2026-10-15 |
+| source/low-enemies/monitor-parasite-idle-generated.png | - | OpenAI built-in image_gen | AI-generated; reference audit pending | Unmodified generated source | 2026-10-15 |
+| textures/legacy/low-enemies/low_level_enemy3.png | - (archived) | Existing repository; original author pending audit | Pending legacy audit | Byte-identical original preserved | 2026-10-15 |
+| textures/low_level_enemy3_destruct.png | low_level_enemy3_destruct | OpenAI built-in image_gen; user/Codex direction | AI-generated; reference audit pending | 7 horizontal 64px frames; registered pixel export | 2026-10-15 |
+| source/low-enemies/monitor-parasite-death-generated.png | - | OpenAI built-in image_gen | AI-generated; reference audit pending | Unmodified generated source | 2026-10-15 |
+| textures/legacy/low-enemies/low_level_enemy3_destruct.png | - (archived) | Existing repository; original author pending audit | Pending legacy audit | Byte-identical original preserved | 2026-10-15 |
+
 ## Barricade asteroid restoration (15 October 2026)
 
 User requested the original asteroid appearance again. Runtime keys `barricade_asteroid` and `barricade_asteroid_destruct` now load the unchanged legacy files listed below. Three size tiers and randomized rotation are runtime transforms only. No new art or image edits. Generated monster files and their sources remain preserved but are no longer loaded. Original legacy provenance audit remains pending.

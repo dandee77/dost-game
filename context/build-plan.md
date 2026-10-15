@@ -277,6 +277,8 @@ A1 ─> A2..A9 ─> 15, 26
 ## Phase 3: Enemies and Bosses
 
 ### 15 Reskin Low, Mid and debris
+
+**15 October user-requested low-enemy reskin (complete):** Replace all three low-enemy idle sheets and their matching destruction sheets with concrete mutated-trash creatures: crushed can, leaking battery and cracked monitor. Preserve 64 x 64 frames, idle counts 10/5/5, death counts 8/8/7, existing keys, timing, scale and gameplay. Archive originals, record prompts/provenance, inspect every exported frame and native crowd rendering, then build and run existing integration checks. Mid enemies and remaining item 15 art remain outside this request.
 **Owner:** Programmer 2 with Artist. **Date:** 19 Oct. **Depends on:** A3, A5.
 
 **14 Oct user-requested debris-only work:** orbital scrap intact/destruction textures delivered with original 96 x 96 frame size; destruction expanded from seven to eight frames at the user's request. Originals archived under `assets/textures/legacy/`, provenance/prompts recorded. Debug build and 7,513 native checks pass. Human art review and all other item 15/A5 assets remain pending.
