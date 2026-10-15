@@ -39,6 +39,8 @@ public:
     virtual void destruct() = 0;
     
     void takeDamage(int damage);
+    void advanceHitReaction(float dt);
+    Color getHitTint() const;
     bool isDead() const { return health <= 0; }
     void applyKnockback(Vector2 direction, float force);
     virtual bool canReceiveKnockback() const;
@@ -59,4 +61,6 @@ protected:
     Vector2 knockbackVelocity;
     float knockbackDecay;
     Cooldown knockbackCooldown;
+    float hitReactionRemaining = 0.0f;
+    bool hitReactionFresh = false;
 };

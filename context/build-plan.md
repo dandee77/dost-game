@@ -278,6 +278,8 @@ A1 ─> A2..A9 ─> 15, 26
 
 ### 15 Reskin Low, Mid and debris
 
+**15 October user-requested bullet feedback (complete):** Add a cosmetic charge/core/trail/contact-burst/reaction/sound/aftermath chain to existing player and enemy bullets. Keep weapon cadence, movement, damage, collision order and live projectile art unchanged. Use Bullet/BulletManager ownership, bounded effects, simulation-time cleanup and existing reset paths. Add one original AI-assisted eight-frame impact strip and one original synthesized impact sound with full provenance. Debug/Release builds, native regression checks and native preview must pass. Remaining item 15 enemy art is still pending.
+
 **15 October user-requested low-enemy reskin (complete):** Replace all three low-enemy idle sheets and their matching destruction sheets with concrete mutated-trash creatures: crushed can, leaking battery and cracked monitor. Preserve 64 x 64 frames, idle counts 10/5/5, death counts 8/8/7, existing keys, timing, scale and gameplay. Archive originals, record prompts/provenance, inspect every exported frame and native crowd rendering, then build and run existing integration checks. Mid enemies and remaining item 15 art remain outside this request.
 **Owner:** Programmer 2 with Artist. **Date:** 19 Oct. **Depends on:** A3, A5.
 

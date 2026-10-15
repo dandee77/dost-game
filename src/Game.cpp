@@ -254,7 +254,8 @@ void Game::resolveEquipmentAttacks()
         for (const auto& id : targets) destroyEquipmentDebris(id);
     }
 
-    auto& bullets = BulletManager::GetInstance().getBullets();
+    auto& bulletManager = BulletManager::GetInstance();
+    auto& bullets = bulletManager.getBullets();
     for (auto& bullet : bullets) {
         if (bullet.isEnemyBullet() || bullet.getKind() == PROJECTILE_LEGACY) continue;
         struct Hit { float fraction; std::string id; bool debris; };
@@ -276,14 +277,17 @@ void Game::resolveEquipmentAttacks()
         });
         for (const auto& hit : hits) {
             if (!bullet.canPierce()) break;
+            const Vector2 impactPosition = Vector2Lerp(
+                bullet.getPreviousPosition(), bullet.getPosition(), hit.fraction);
             if (bullet.getKind() == PROJECTILE_ROCKET) {
-                const Vector2 center = Vector2Lerp(bullet.getPreviousPosition(), bullet.getPosition(), hit.fraction);
-                detonateRocket(center, bullet.getDamage(), bullet.getKnockbackPower());
+                bulletManager.spawnImpact(impactPosition, bullet.getKind(), false, bullet.getDirection());
+                detonateRocket(impactPosition, bullet.getDamage(), bullet.getKnockbackPower());
                 bullet.reducePiercePower();
                 break;
             }
             if (hit.debris) destroyEquipmentDebris(hit.id);
             else damageEquipmentEnemy(hit.id, bullet.getDamage(), bullet.getDirection(), bullet.getKnockbackPower());
+            bulletManager.spawnImpact(impactPosition, bullet.getKind(), false, bullet.getDirection());
             bullet.recordHit(hit.id);
             bullet.reducePiercePower();
         }
@@ -522,6 +526,8 @@ std::string Game::update()
                         }
                         
                         hitSomething = true;
+                        bm.spawnImpact(bm.getBullets()[i].getPosition(), PROJECTILE_LEGACY, false,
+                            bm.getBullets()[i].getDirection());
                     }
                 }
                 
@@ -546,6 +552,8 @@ std::string Game::update()
                             debrisToRemove.push_back(id);
                             debrisCollisionGrid.deactivate(target);
                             hitSomething = true;
+                            bm.spawnImpact(bm.getBullets()[i].getPosition(), PROJECTILE_LEGACY, false,
+                                bm.getBullets()[i].getDirection());
                         }
                     }
                 }
@@ -575,6 +583,8 @@ std::string Game::update()
                     playerEntity.getPosition(), Balance::SHIELD_RADIUS);
                 if (shieldHit >= 0.0f && playerEntity.tryBlockHit(Vector2Lerp(
                     incoming.getPreviousPosition(), incoming.getPosition(), shieldHit))) {
+                    bm.spawnImpact(Vector2Lerp(incoming.getPreviousPosition(), incoming.getPosition(), shieldHit),
+                        incoming.getKind(), true, incoming.getDirection());
                     bm.removeBullet(i--);
                     continue;
                 }
@@ -583,6 +593,8 @@ std::string Game::update()
                                 playerEntity.getHitbox().width) &&
                                 playerEntity.getPlayerState() == PLAYER_DEFAULT) {
                     Vector2 bulletPosition = bm.getBullets()[i].getPosition(); 
+                    bm.spawnImpact(bulletPosition, bm.getBullets()[i].getKind(), true,
+                        bm.getBullets()[i].getDirection());
                     bm.removeBullet(i);
                     playerEntity.takeDamage(GetTime(), bulletPosition, 3.0f);
                     if (playerEntity.getHealth() <= 0) {
@@ -615,6 +627,8 @@ std::string Game::update()
                 }
         
                 if (!debrisToRemove.empty()) {
+                    bm.spawnImpact(bm.getBullets()[i].getPosition(), bm.getBullets()[i].getKind(), true,
+                        bm.getBullets()[i].getDirection());
                     bm.removeBullet(i);
                     i--;
                     

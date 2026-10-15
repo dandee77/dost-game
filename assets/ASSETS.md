@@ -1,5 +1,17 @@
 # Asset provenance
 
+## Projectile feedback (15 October 2026)
+
+User requested a complete bullet-animation feedback chain: charge, core, trail, burst, reaction, sound and aftermath. OpenAI built-in `image_gen` produced the original eight-stage sky-blue impact source; the image model was not exposed. The exact prompt is preserved in `source/projectile-vfx/prompt.txt`. `export_projectile_vfx.py` splits the generated 4 x 2 grid, uses nearest-neighbor reduction, thresholds alpha to binary transparency and packs a horizontal 512 x 64 runtime strip. `bullet_impact.wav` is not model-generated: `generate_bullet_impact_sound.py` deterministically synthesizes the 0.12 s mono PCM transient from decaying tones and seeded noise using Python's standard library. No external pack or third-party copyrighted source was used.
+
+| File | Resource key | Source / author | License | Edits | Date |
+|---|---|---|---|---|---|
+| `textures/projectile_impact.png` | `projectile_impact` | OpenAI built-in image_gen; user/Codex direction | AI-generated; no CC0 claim | Eight horizontal 64 px frames; nearest-neighbor export and binary alpha | 2026-10-15 |
+| `source/projectile-vfx/projectile-impact-source.png` | - | OpenAI built-in image_gen | AI-generated; no CC0 claim | Unmodified generated RGBA source | 2026-10-15 |
+| `sounds/bullet_impact.wav` | `bullet_impact` | Codex-authored deterministic synthesis script | Original project asset | 44.1 kHz, 16-bit mono PCM, 0.12 s | 2026-10-15 |
+| `source/projectile-vfx/export_projectile_vfx.py` | - | Codex (OpenAI) | Original project tooling | Reproducible art exporter | 2026-10-15 |
+| `source/projectile-vfx/generate_bullet_impact_sound.py` | - | Codex (OpenAI) | Original project tooling | Reproducible audio generator | 2026-10-15 |
+
 ## Low-level mutated-trash enemies (15 October 2026)
 
 User requested every low-level enemy asset be reskinned with concrete mutated-trash concepts, using current enemy sheets as references. The built-in OpenAI image_gen tool produced three idle sheets and three matching breakup sheets; model not exposed. Concepts: crushed-can biter, leaking-battery crawler and cracked-monitor parasite. Existing enemy sheets supplied silhouette/orientation references; the prior barricade mutant supplied the mauve metal, purple tissue and toxic-green palette reference. No new external pack or license claim. Original reference provenance remains subject to the legacy audit.

@@ -37,6 +37,8 @@ Debug crowd spawning: `spawn lowlevel enemy <quantity>` accepts 1–10,000 and a
 
 These are debug-selectable prototypes, with no acquisition conditions or progression integration. New runs use the original ship, original bullet and base movement with no shield. `player default build` restores this original loadout; `player gunner build` selects the newly added modular cannon/base-engine/no-shield loadout. Every build preset is shield-free; shields are selected separately with `player shield ...` for testing, with future skill integration deferred. All values are in `Balance.hpp` and are TUNE. Switching equipment preserves health, score and earned augments; presets turn auto-fire off. Projectiles already in flight keep their original weapon, damage and piercing count. Beam/burst state and relevant cooldowns reset when replacing their equipment. Explicit shield selection refills the selected shield; presets clear shield charge and active guard/recharge timers.
 
+15 October feedback pass is cosmetic only: projectile spawn shows a brief charge ring, the existing projectile art remains the moving core with a pulsing halo and trail, contact produces a short burst/SFX, targets tint briefly, and bounded particles provide aftermath. It does not add firing latency or change any table value below.
+
 | Weapon | Behavior | Values |
 |---|---|---|
 | Cannon | Animated shot; swept circular hitbox; consumed on first hit unless piercing augmented | 7–12 damage, 0.5 s cooldown, speed 200, radius 0.6 |
