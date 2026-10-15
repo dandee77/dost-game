@@ -6,7 +6,7 @@ The order in which the game is built between **14 October** and the **25 October
 
 ## Core Principle
 
-**15 October user-requested P4: debris variants and harvesting.** Implemented ahead of numbered order: rename Asteroid/AsteroidManager to Debris/DebrisManager, ten AI-assisted pixel-art variants with fixed sizes, restored eight-frame destruction followed by red glow texture orbs at saved final-fleck coordinates, uncapped run-local harvested scrap (user confirmed), HUD counter and debug gallery. Follow-up: unique per-kind destruction art/particle layouts and a dedicated barricade trash-monster sprite/death with no drops. This is scoped to debris salvage and barricade A5 art; item 12 enemy drops/cargo and item 13 docking remain pending. Existing enemy, wave and shop work is not included.
+**15 October user-requested P4: debris variants and harvesting.** Implemented ahead of numbered order: rename Asteroid/AsteroidManager to Debris/DebrisManager, ten AI-assisted pixel-art variants with fixed sizes, restored eight-frame destruction followed by red glow texture orbs at saved final-fleck coordinates, uncapped run-local harvested scrap (user confirmed), HUD counter and debug gallery. Follow-up: unique per-kind destruction art/particle layouts and initially a dedicated barricade trash-monster sprite/death with no drops; the latest user correction restores legacy asteroid art and three size tiers with random spin. This is scoped to debris salvage and barricade A5 art; item 12 enemy drops/cargo and item 13 docking remain pending. Existing enemy, wave and shop work is not included.
 
 **Playable at the end of every item.** Every item ends with something you can see and test in the running game. No item leaves the build broken. Refactors (items 03 to 10) must not change how the game plays; new features come after the foundation is safe.
 
@@ -71,6 +71,8 @@ A1 ─> A2..A9 ─> 15, 26
 - Scatter survivors outward on timeout; remove them after four seconds. Clear early after distant/offscreen escape. Smoothly widen/restore camera zoom; pause/reset all event state correctly.
 - Add `spawn barricade event` to F5 help and autocomplete.
 - Follow-up: double the starting radius while reaching the original radius 45 at 30 seconds, retain the original event zoom 13, and use 64 smaller segments with a slow formation orbit. Separate `stats` from `hitbox`, include live event diagnostics and darken console/dropdown backgrounds.
+
+- 15 October correction: restore original asteroid idle/seven-frame breakup, random small/medium/large sizes with matching hitboxes and independent random spin. Retain radius 130 to 45 over 30 seconds, zoom 13, orbit and no-drop deaths. Verify mixed-size containment/gaps and spin at 30/144 FPS.
 
 **Done when:** automatic/manual triggers, combat, containment, escape, scatter, camera and reset checks pass in Debug/Release; native render inspected.
 **Test:** swept contact across every seam, boost and iframe checks, all weapon paths, pause/restart, capacity/command validation, timeout and early escape, frame-rate independent zoom. User request overrides numbered item order only for P3.

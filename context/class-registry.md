@@ -324,7 +324,7 @@ All use the same pattern: `static X& GetInstance()` with a function-local static
 - Constructor: `BarricadeEnemy(const std::string& id, Vector2 center, float angle)`.
 - Behavior: orbits a fixed center at 4 degrees/s while shrinking, then scatters straight along its release heading, using accumulated simulation time. `update()` delegates to deterministic `advance(float dt)`. Previous position supports relative swept contact.
 - Combat: normal enemy HP/damage/removal paths; cannot receive knockback or crowd separation. Never removed by ordinary kamikaze or debris contact. Gameplay values are `Balance::BARRICADE_*`.
-  - Drawing: barricade_enemy is a dedicated mutated trash creature, max-32px body in a padded 96px frame, registered as one WORLD animation under its unique ID. Destruction removes that entry and queues cosmetic barricade_enemy_destruct via ScrapManager::spawnDestruction. Eight-frame inward collapse; no pickup particles or scrap yield. Orbital/contact behavior is unchanged.
+- Drawing: barricade_asteroid reuses the original legacy 96px asteroid, registered as one WORLD animation under its unique ID. Spawn chooses small/medium/large padded draw size 15/25/30, corresponding collision radius 3.75/6.25/7.5, random initial angle and a stable 5-240 degrees/s spin. Destruction removes that entry and queues cosmetic barricade_asteroid_destruct via ScrapManager::spawnDestruction. Original seven-frame breakup; no pickup particles or scrap yield.
 
 ### BarricadeEvent
 - P3 follow-up queries: `getRadius() const`, `getAliveSegments() const`, `hasTriggeredAutomatically() const` provide live diagnostics without exposing mutable event state. Radius includes outward scatter; inactive radius is zero.
@@ -332,7 +332,7 @@ All use the same pattern: `static X& GetInstance()` with a function-local static
 - Status: implemented, P3; value owned by Game, not a singleton or replacement WaveDirector.
 - API: `start(Vector2)`, `update(float dt, float runTime, Vector2 playerPosition)`, `constrainPlayer(Player&, Vector2 previousPosition) const`, `finishIfEscaped(Vector2, const Camera2D&)`, `reset()`, `drawStatus() const`, phase/center/elapsed queries.
 - Owns only tracked segment IDs, center, simulation elapsed time, phase and once-per-run automatic trigger flag. EnemyManager owns all segment objects. Resolves IDs on every use; no persistent enemy pointers.
-- Full-ring spawn or no spawn at capacity. Relative circle sweeps catch boost and moving-wall contacts; bounded neighboring-disk projections resolve seams. Interior bounce points into the arena. Player handles vulnerability and shield damage rules separately.
+- Full-ring spawn or no spawn at capacity. Relative circle sweeps use each segment's actual radius and catch boost and moving-wall contacts; bounded neighboring-disk projections resolve seams. Interior bounce points into the arena. Player handles vulnerability and shield damage rules separately.
 - Cleanup erases only tracked IDs and their animations without kill rewards. Reset before EnemyManager resets/reuses IDs. Game calls reset on restart, scene entry/exit, death and destruction.
 
 ### MidLevelEnemy
@@ -445,7 +445,7 @@ All use the same pattern: `static X& GetInstance()` with a function-local static
 - Status: implemented for debris harvesting, 15 October.
 - Kind: run-state singleton; owns pending Destruction records and vector<unique_ptr<ScrapPickup>>.
 - API: spawnDebris(center, angle, kind, drawSize, harvestable), spawnDestruction(center, angle, drawSize, textureKey) for cosmetic deaths, update(dt, playerPosition) returns newly collected value, draw(), reset(), count(), pendingValue(), getPickups(), destructionCount() (read-only inspection).
-- Plays all eight whole frames from the texture key owned by each Destruction record. At 0.525 s, harvestable records use their kind's immutable Theme::DEBRIS_SCRAP_VISUALS coordinate span and orb size; counts are measured separately from each sheet. New sheets use every final fleck; the accepted clump retains four selected exits. Same total yield divided among all exits; cap handling uses actual count. Cosmetic records have zero value and no pickup phase. Rendering changes no state. Reset clears all effects and pickups.
+- Each Destruction record stores its texture key and frame count: eight for ordinary debris, derived from sheet width for cosmetic deaths (seven for legacy barricade asteroids). At 0.525 s, harvestable records use their kind's immutable Theme::DEBRIS_SCRAP_VISUALS coordinate span and orb size; counts are measured separately from each sheet. New sheets use every final fleck; the accepted clump retains four selected exits. Same total yield divided among all exits; cap handling uses actual count. Cosmetic records have zero value and no pickup phase. Rendering changes no state. Reset clears all effects and pickups.
 - Game advances it only while running and alive, after collisions, and adds the result to harvestedScrap. No cargo limit for now (explicit user choice). Pause/console/augment freeze it; death, scene exit, destruction, restart and entry clear it. Deposit/shop/ordinary enemy drops remain planned.
 ---
 

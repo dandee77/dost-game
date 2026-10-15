@@ -1,5 +1,9 @@
 # Asset provenance
 
+## Barricade asteroid restoration (15 October 2026)
+
+User requested the original asteroid appearance again. Runtime keys `barricade_asteroid` and `barricade_asteroid_destruct` now load the unchanged legacy files listed below. Three size tiers and randomized rotation are runtime transforms only. No new art or image edits. Generated monster files and their sources remain preserved but are no longer loaded. Original legacy provenance audit remains pending.
+
 ## Unique debris destruction and barricade monster (15 October 2026)
 
 Built-in OpenAI image_gen created nine shape-specific destruction sheets using the corresponding intact sprites as references, plus one mutated trash creature and its inward-collapse sheet. Image model not exposed; no third-party pack and no CC0 claim. Source prompts: `source/debris/destruction-generation.json` and `source/barricade/generation.json`. Native final-particle measurements: `source/debris/destruction-particles.json` and Theme. Export scripts preserve a shared registration across cells, nearest-neighbor pixel art and binary alpha; each new first frame is the exact intact sprite. Eight 96px frames per sheet, final frame blank. Monster body max 32px within 96px padding; no pickup particles.
@@ -24,8 +28,8 @@ Built-in OpenAI image_gen created nine shape-specific destruction sheets using t
 | source/debris/destruction/beam.png | - | OpenAI built-in image_gen | AI-generated; reference provenance audit pending | Unmodified generated source | 2026-10-15 |
 | textures/debris/hull_destruct.png | debris_hull_destruct | OpenAI built-in image_gen; user/Codex direction | AI-generated; reference provenance audit pending | Uniform registered pixel export, 768 x 96 RGBA | 2026-10-15 |
 | source/debris/destruction/hull.png | - | OpenAI built-in image_gen | AI-generated; reference provenance audit pending | Unmodified generated source | 2026-10-15 |
-| textures/barricade_enemy.png | barricade_enemy | OpenAI built-in image_gen; user/Codex direction | AI-generated; reference provenance audit pending | 32px body centered in 96px RGBA | 2026-10-15 |
-| textures/barricade_enemy_destruct.png | barricade_enemy_destruct | OpenAI built-in image_gen; user/Codex direction | AI-generated; reference provenance audit pending | Eight 96px frames; inward collapse | 2026-10-15 |
+| textures/barricade_enemy.png | - (retained; not loaded) | OpenAI built-in image_gen; user/Codex direction | AI-generated; reference provenance audit pending | 32px body centered in 96px RGBA | 2026-10-15 |
+| textures/barricade_enemy_destruct.png | - (retained; not loaded) | OpenAI built-in image_gen; user/Codex direction | AI-generated; reference provenance audit pending | Eight 96px frames; inward collapse | 2026-10-15 |
 | source/barricade/monster-generated.png | - | OpenAI built-in image_gen; user/Codex direction | AI-generated; reference provenance audit pending | Unmodified generated source | 2026-10-15 |
 | source/barricade/monster-destruct-generated.png | - | OpenAI built-in image_gen; user/Codex direction | AI-generated; reference provenance audit pending | Unmodified generated source | 2026-10-15 |
 
@@ -40,7 +44,7 @@ Built-in OpenAI image_gen created a red orb with an actual transparent soft glow
 
 ## Ten debris variants and harvesting (15 October 2026)
 
-The accepted clump is textures/debris.png; textures/debris_destruct.png is now used only by that clump. Nine other variants have dedicated *_destruct.png sheets, and the barricade has separate monster art (see newest provenance entries). Intact debris art, accepted clump destruction, red orb texture and original legacy files are unchanged.
+The accepted clump is textures/debris.png; textures/debris_destruct.png is now used only by that clump. Nine other variants have dedicated *_destruct.png sheets, and the barricade reuses original legacy asteroid art (see newest provenance entries). Intact debris art, accepted clump destruction, red orb texture and original legacy files are unchanged.
 
 Nine new variants plus the existing clump make ten. Exact prompts and original output paths are recorded in source/debris/variants.json; source images are preserved under source/debris/variants/. Built-in image tool used (underlying image model not exposed); no third-party pack added and no CC0 claim made. Team art review pending.
 
@@ -83,8 +87,8 @@ Existing repository textures reused at the user's request; no new external asset
 
 | File | Resource key | Source / author | License | Edits | Date |
 |---|---|---|---|---|---|
-| `textures/legacy/asteroid.png` | - (archived) | Existing Space Ablaze repository; original author pending audit | Pending legacy audit | Original 96 x 96 file preserved unchanged | 2026-10-14 |
-| `textures/legacy/asteroid_destruct.png` | - (archived) | Existing Space Ablaze repository; original author pending audit | Pending legacy audit | Original seven-frame 672 x 96 file preserved unchanged | 2026-10-14 |
+| `textures/legacy/asteroid.png` | `barricade_asteroid` | Existing Space Ablaze repository; original author pending audit | Pending legacy audit | Original 96 x 96 file preserved unchanged | 2026-10-14 |
+| `textures/legacy/asteroid_destruct.png` | `barricade_asteroid_destruct` | Existing Space Ablaze repository; original author pending audit | Pending legacy audit | Original seven-frame 672 x 96 file preserved unchanged | 2026-10-14 |
 
 ## Player equipment pack (14 October 2026)
 

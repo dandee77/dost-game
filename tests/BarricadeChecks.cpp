@@ -49,27 +49,57 @@ int runBarricadeChecks(const std::string& artifactDirectory)
     };
 
     auto& scraps = ScrapManager::GetInstance();
-    const auto& monsterTexture = ResourceManager::GetInstance().GetTextureRef("barricade_enemy");
-    const auto& monsterDeath = ResourceManager::GetInstance().GetTextureRef("barricade_enemy_destruct");
-    require(monsterTexture.id != 0 && monsterTexture.width == 96 && monsterTexture.height == 96,
-        "Barricade creature uses a separate padded pixel-art sprite");
-    require(monsterDeath.id != 0 && monsterDeath.width == 768 && monsterDeath.height == 96,
-        "Barricade creature has eight dedicated death frames");
+    const auto& asteroidTexture = ResourceManager::GetInstance().GetTextureRef("barricade_asteroid");
+    const auto& asteroidDeath = ResourceManager::GetInstance().GetTextureRef("barricade_asteroid_destruct");
+    require(asteroidTexture.id != 0 && asteroidTexture.width == 96 && asteroidTexture.height == 96,
+        "Barricade restores the original padded asteroid sprite");
+    require(asteroidDeath.id != 0 && asteroidDeath.width == 672 && asteroidDeath.height == 96,
+        "Original asteroid breakup has seven frames");
     start();
     const auto& idle = Animator::GetInstance().animations.at("enemy_0").animation;
-    require(idle->spriteSheet.id == monsterTexture.id, "Ring actually displays the creature, not debris");
+    require(idle->spriteSheet.id == asteroidTexture.id, "Ring displays the original asteroid texture");
     enemies.at("enemy_0")->destruct();
-    require(!Animator::GetInstance().animations.contains("enemy_0"), "Death removes the idle creature");
+    require(!Animator::GetInstance().animations.contains("enemy_0"), "Death removes the idle asteroid");
     require(scraps.destructionCount() == 1 && scraps.pendingValue() == 0 && scraps.count() == 0,
-        "Creature death queues a cosmetic animation with no scrap");
-    require(scraps.destructions.front().textureKey == "barricade_enemy_destruct",
-        "Creature death selects its own collapse sheet");
+        "Asteroid death queues a cosmetic animation with no scrap");
+    require(scraps.destructions.front().textureKey == "barricade_asteroid_destruct" &&
+        scraps.destructions.front().frameCount == 7, "Asteroid death uses all seven original breakup frames");
     game.gameState = GAME_PAUSED; game.update();
-    require(scraps.destructions.front().elapsed == 0, "Creature death animation freezes while paused");
-    require(scraps.update(Theme::SCRAP_HANDOFF_TIME, {}) == 0 && scraps.count() == 0,
-        "Creature collapse never enters the collectible-particle phase");
+    require(scraps.destructions.front().elapsed == 0, "Asteroid death animation freezes while paused");
+    require(scraps.update(6.5f * Theme::DEBRIS_DESTRUCT_FRAME_TIME, {}) == 0 &&
+        scraps.destructionCount() == 1 && scraps.count() == 0,
+        "Asteroid collapse never enters the collectible-particle phase");
     require(scraps.update(1.0f, {}) == 0 && scraps.destructionCount() == 0 && scraps.count() == 0,
-        "Creature death finishes without leaving particles or rewards");
+        "Asteroid death finishes without leaving particles or rewards");
+
+    SetRandomSeed(42);
+    start();
+    std::array<bool, 3> sizesSeen{};
+    float firstSpin = -1;
+    bool variedSpin = false;
+    for (auto& [id, enemy] : enemies) {
+        bool matchedSize = false;
+        for (size_t size = 0; size < Theme::BARRICADE_DRAW_SIZES.size(); ++size) {
+            if (enemy->getSize().x != Theme::BARRICADE_DRAW_SIZES[size]) continue;
+            matchedSize = true;
+            sizesSeen[size] = true;
+            require(enemy->getHitbox().width == Balance::BARRICADE_BODY_RADII[size],
+                "Each asteroid size has its matching collision radius");
+        }
+        require(matchedSize, "Asteroid uses small, medium or large size");
+        const float before = enemy->getRotation();
+        auto& rock = static_cast<BarricadeEnemy&>(*enemy);
+        rock.advance(0);
+        require(enemy->getRotation() == before, "Zero delta freezes individual spin");
+        rock.advance(0.1f);
+        const float spin = (enemy->getRotation() - before) / 0.1f;
+        require(spin >= Theme::BARRICADE_SPIN_MIN - 0.001f && spin <= Theme::BARRICADE_SPIN_MAX + 0.001f,
+            "Individual spin stays within configured random range");
+        if (firstSpin < 0) firstSpin = spin;
+        else variedSpin = variedSpin || std::abs(firstSpin - spin) > 0.01f;
+    }
+    require(sizesSeen[0] && sizesSeen[1] && sizesSeen[2] && variedSpin,
+        "Seeded ring contains all three sizes and different rotation speeds");
 
     reset();
     event.update(0, 119.99f, {});
@@ -109,6 +139,8 @@ int runBarricadeChecks(const std::string& artifactDirectory)
         // narrow a single opening. Clear the neighbors for a ship-sized late gap.
         if (age > 0.0f) {
             enemies.at("enemy_1")->takeDamage(Balance::BARRICADE_HEALTH);
+            enemies.at("enemy_2")->takeDamage(Balance::BARRICADE_HEALTH);
+            enemies.at("enemy_62")->takeDamage(Balance::BARRICADE_HEALTH);
             enemies.at("enemy_63")->takeDamage(Balance::BARRICADE_HEALTH);
         }
         player.position = Vector2Scale(gapDirection, radius + 80);
@@ -117,9 +149,12 @@ int runBarricadeChecks(const std::string& artifactDirectory)
     }
 
     std::vector<Vector2> orbitPositions;
+    std::vector<float> spinAngles;
     for (int fps : {30, 144}) {
+        SetRandomSeed(42);
         start();
         for (int frame = 0; frame < fps * 10; ++frame) advance(1.0f / fps);
+        spinAngles.push_back(enemies.at("enemy_0")->getRotation());
         orbitPositions.push_back(enemies.at("enemy_0")->getPosition());
         require(std::abs(std::atan2(orbitPositions.back().y, orbitPositions.back().x) * RAD2DEG - 40) < 0.01f,
             "Whole ring orbits at four degrees per second");
@@ -136,6 +171,7 @@ int runBarricadeChecks(const std::string& artifactDirectory)
         }
     }
     require(Vector2Distance(orbitPositions.front(), orbitPositions.back()) < 0.01f, "Orbit agrees at 30 and 144 FPS");
+    require(std::abs(spinAngles.front() - spinAngles.back()) < 0.05f, "Individual spin agrees at 30 and 144 FPS");
 
     start();
     player.position = {startRadius + 40, 0};
@@ -155,9 +191,9 @@ int runBarricadeChecks(const std::string& artifactDirectory)
     start(); player.setShield(SHIELD_ROUND); player.position = {startRadius + 40, 0};
     require(event.constrainPlayer(player, {}) && player.getHealth() == 100 && player.position.x < startRadius,
         "Shield protects health without bypassing containment");
-    start(); player.position = {startRadius - Balance::BARRICADE_BODY_RADIUS - Balance::PLAYER_RADIUS + 0.1f, 0}; player.playerState = PLAYER_IFRAME;
+    start(); player.position = {startRadius - enemies.at("enemy_0")->getHitbox().width - Balance::PLAYER_RADIUS + 0.1f, 0}; player.playerState = PLAYER_IFRAME;
     const auto stationary = player.position;
-    advance(1);
+    advance(0.1f);
     require(event.constrainPlayer(player, stationary) && player.position.x < stationary.x, "Shrinking wall moves stationary player inward");
     low(enemies.at("enemy_0")->getPosition());
     const auto rockPosition = enemies.at("enemy_0")->getPosition();
@@ -183,7 +219,7 @@ int runBarricadeChecks(const std::string& artifactDirectory)
     EquipmentTestAccess::updateWeapon(player, 3, true); EquipmentTestAccess::resolve(game);
     require(!enemies.contains("enemy_0") && game.killCounter.getCount() > 0, "Sustained beam kills and removes segment through normal combat");
     require(scraps.pendingValue() == 0 && scraps.count() == 0,
-        "Actual weapon kills of barricade monsters award no harvest particles");
+        "Actual weapon kills of barricade asteroids award no harvest particles");
 
     // Exercise real Game::update scheduling and the original player's bullet path.
     reset(); BeginDrawing(); EndDrawing(); BeginDrawing(); EndDrawing();
@@ -330,7 +366,7 @@ int runBarricadeChecks(const std::string& artifactDirectory)
     start(); EquipmentTestAccess::restart(game);
     require(!event.isActive() && enemies.empty() && utils::gameCamera.zoom == 20, "Restart clears event and restores camera");
 
-    start(); low({-18, 15});
+    start(); advance(20); low({-18, 15});
     game.gameTimer.setStartTime(121);
     utils::gameCamera.zoom = Config::CAMERA_ZOOM_BARRICADE;
     game.gameState = GAME_PAUSED;
@@ -339,19 +375,19 @@ int runBarricadeChecks(const std::string& artifactDirectory)
     Image capture = LoadImageFromTexture(target.texture); ImageFlipVertical(&capture);
     require(ExportImage(capture, (artifactDirectory + "/barricade-event.png").c_str()), "Export native barricade preview");
     UnloadImage(capture); UnloadRenderTexture(target);
-    // Render all eight actual cosmetic death frames and verify the rendered sheet.
-    const auto deathPreview = LoadRenderTexture(1536, 192);
+    // Render all seven original asteroid breakup frames.
+    const auto deathPreview = LoadRenderTexture(1344, 192);
     BeginTextureMode(deathPreview); ClearBackground(Color{18, 14, 30, 255});
-    for (int frame = 0; frame < 8; ++frame) {
+    for (int frame = 0; frame < 7; ++frame) {
         scraps.reset();
-        scraps.spawnDestruction({96.0f + frame * 192, 96}, 0, 192, "barricade_enemy_destruct");
+        scraps.spawnDestruction({96.0f + frame * 192, 96}, 0, 192, "barricade_asteroid_destruct");
         scraps.update((frame + 0.5f) * Theme::DEBRIS_DESTRUCT_FRAME_TIME, {});
         scraps.draw();
     }
     EndTextureMode();
     Image deathCapture = LoadImageFromTexture(deathPreview.texture); ImageFlipVertical(&deathCapture);
-    require(ExportImage(deathCapture, (artifactDirectory + "/barricade-monster-death.png").c_str()),
-        "Export creature collapse preview");
+    require(ExportImage(deathCapture, (artifactDirectory + "/barricade-asteroid-death.png").c_str()),
+        "Export original asteroid breakup preview");
     UnloadImage(deathCapture); UnloadRenderTexture(deathPreview);
     game.onExit();
     require(!event.isActive() && utils::gameCamera.zoom == 20, "Leaving scene clears event and camera");

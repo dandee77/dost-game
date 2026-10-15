@@ -129,12 +129,13 @@ namespace Theme {
     inline constexpr Color COLOR_HARVEST = {255, 65, 75, 255};
     inline constexpr Vector2 SCRAP_HUD_POSITION = {220.0f, 390.0f};
     inline constexpr float SCRAP_HUD_SIZE = 64.0f;
-    // The 96px creature frame has a 32px body; account for transparent padding.
-    inline constexpr float BARRICADE_DRAW_SIZE = 20.0f, BARRICADE_SPIN = 20.0f;
+    // Original asteroid frame is 96px with a roughly 36px body and transparent padding.
+    inline constexpr std::array<float, 3> BARRICADE_DRAW_SIZES = {15.0f, 25.0f, 30.0f};
+    inline constexpr int BARRICADE_SPIN_MIN = 5, BARRICADE_SPIN_MAX = 240;
     inline constexpr float BARRICADE_IDLE_FRAME_TIME = 1.0f;
     inline constexpr float BARRICADE_DESTRUCT_FRAME_TIME = DEBRIS_DESTRUCT_FRAME_TIME;
     inline constexpr int FRAMES_DEBRIS_DESTRUCT = 8;
-    inline constexpr int BARRICADE_DESTRUCT_FRAMES = FRAMES_DEBRIS_DESTRUCT;
+    inline constexpr int BARRICADE_DESTRUCT_FRAMES = 7;
     inline constexpr Vector2 BARRICADE_STATUS_POSITION = {1350.0f, 270.0f};
     inline constexpr float BARRICADE_STATUS_SIZE = 40.0f;
     inline constexpr float ORIGINAL_PLAYER_SIZE = 8.0f;

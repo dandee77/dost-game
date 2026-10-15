@@ -19,12 +19,15 @@ BarricadeEnemy::BarricadeEnemy(const std::string& id, Vector2 eventCenter, float
     radialDirection = {std::cos(angle), std::sin(angle)};
     position = Vector2Add(center, Vector2Scale(radialDirection, Balance::BARRICADE_START_RADIUS));
     previousPosition = position;
-    rotation = angle * RAD2DEG;
-    spriteSize = Theme::BARRICADE_DRAW_SIZE;
+    rotation = static_cast<float>(GetRandomValue(0, 359));
+    spinSpeed = static_cast<float>(GetRandomValue(Theme::BARRICADE_SPIN_MIN, Theme::BARRICADE_SPIN_MAX));
+    const int sizeIndex = GetRandomValue(0, static_cast<int>(Balance::BARRICADE_BODY_RADII.size()) - 1);
+    spriteSize = Theme::BARRICADE_DRAW_SIZES[sizeIndex];
     origin = {spriteSize / 2.0f, spriteSize / 2.0f};
     rect = {position.x, position.y, spriteSize, spriteSize};
-    hitbox = {position.x, position.y, Balance::BARRICADE_BODY_RADIUS, Balance::BARRICADE_BODY_RADIUS};
-    const auto& texture = ResourceManager::GetInstance().GetTextureRef("barricade_enemy");
+    const float bodyRadius = Balance::BARRICADE_BODY_RADII[sizeIndex];
+    hitbox = {position.x, position.y, bodyRadius, bodyRadius};
+    const auto& texture = ResourceManager::GetInstance().GetTextureRef("barricade_asteroid");
     auto& animator = Animator::GetInstance();
     animator.AddAnimation(enemyID, std::make_shared<Animation>(texture, texture.width, texture.height,
         Theme::BARRICADE_IDLE_FRAME_TIME, true, rect, false, WHITE));
@@ -42,12 +45,12 @@ void BarricadeEnemy::advance(float dt)
     const float fraction = std::min(1.0f, elapsed / Balance::BARRICADE_DURATION);
     const float radius = Lerp(Balance::BARRICADE_START_RADIUS, Balance::BARRICADE_END_RADIUS, fraction) +
         std::max(0.0f, elapsed - Balance::BARRICADE_DURATION) * Balance::BARRICADE_SCATTER_SPEED;
-    // Freeze the orbit heading at release so surviving creatures travel straight out.
+    // Freeze the orbit heading at release so surviving rocks travel straight out.
     const float orbit = Balance::BARRICADE_ORBIT_SPEED * DEG2RAD * std::min(elapsed, Balance::BARRICADE_DURATION);
     position = Vector2Add(center, Vector2Scale(Vector2Rotate(radialDirection, orbit), radius));
     rect.x = hitbox.x = position.x;
     rect.y = hitbox.y = position.y;
-    rotation += Theme::BARRICADE_SPIN * dt;
+    rotation += spinSpeed * std::max(0.0f, dt);
 }
 
 void BarricadeEnemy::draw()
@@ -60,5 +63,5 @@ void BarricadeEnemy::draw()
 void BarricadeEnemy::destruct()
 {
     Animator::GetInstance().Remove(enemyID);
-    ScrapManager::GetInstance().spawnDestruction(position, rotation, spriteSize, "barricade_enemy_destruct");
+    ScrapManager::GetInstance().spawnDestruction(position, rotation, spriteSize, "barricade_asteroid_destruct");
 }

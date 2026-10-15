@@ -9,13 +9,17 @@
 void ScrapManager::spawnDebris(Vector2 center, float angle, DebrisKind kind, float drawSize, bool harvestable)
 {
     destructions.push_back({center, angle, drawSize,
-        harvestable ? Balance::DEBRIS_SCRAP_VALUES[kind] : 0, harvestable, kind, DEBRIS_INFO[kind].destructTexture});
+        harvestable ? Balance::DEBRIS_SCRAP_VALUES[kind] : 0, harvestable, kind, DEBRIS_INFO[kind].destructTexture,
+        Theme::FRAMES_DEBRIS_DESTRUCT});
 }
 
 void ScrapManager::spawnDestruction(Vector2 center, float angle, float drawSize, const std::string& textureKey)
 {
     // Cosmetic deaths share the simulation clock/reset path, with no pickup phase.
-    destructions.push_back({center, angle, drawSize, 0, false, DEBRIS_CLUMP, textureKey});
+    const auto& sheet = ResourceManager::GetInstance().GetTextureRef(textureKey);
+    const int frames = sheet.width / Theme::DEBRIS_FRAME;
+    if (sheet.id == 0 || frames <= 0) return;
+    destructions.push_back({center, angle, drawSize, 0, false, DEBRIS_CLUMP, textureKey, frames});
 }
 
 int ScrapManager::releasePickups(const Destruction& destruction, float remainingDt, Vector2 playerPosition)
@@ -68,7 +72,7 @@ int ScrapManager::update(float dt, Vector2 playerPosition)
         }
     }
     std::erase_if(destructions, [](const auto& destruction) {
-        return destruction.elapsed >= Theme::FRAMES_DEBRIS_DESTRUCT * Theme::DEBRIS_DESTRUCT_FRAME_TIME;
+        return destruction.elapsed >= destruction.frameCount * Theme::DEBRIS_DESTRUCT_FRAME_TIME;
     });
     return collected;
 }
@@ -79,7 +83,7 @@ void ScrapManager::draw()
         const auto& sheet = ResourceManager::GetInstance().GetTextureRef(destruction.textureKey);
         if (sheet.id == 0) continue;
         const int frame = std::min(static_cast<int>(destruction.elapsed / Theme::DEBRIS_DESTRUCT_FRAME_TIME),
-            Theme::FRAMES_DEBRIS_DESTRUCT - 1);
+            destruction.frameCount - 1);
         const float frameSize = static_cast<float>(Theme::DEBRIS_FRAME);
         DrawTexturePro(sheet, {frame * frameSize, 0, frameSize, frameSize},
             {destruction.center.x, destruction.center.y, destruction.drawSize, destruction.drawSize},

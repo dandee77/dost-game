@@ -24,6 +24,7 @@ private:
         bool harvestable;
         DebrisKind kind;
         std::string textureKey;
+        int frameCount;
         float elapsed = 0.0f;
         bool released = false;
     };

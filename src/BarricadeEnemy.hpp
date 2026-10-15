@@ -16,4 +16,5 @@ private:
     Vector2 radialDirection = {};
     Vector2 previousPosition = {};
     float elapsed = 0.0f;
+    float spinSpeed = 0.0f;
 };

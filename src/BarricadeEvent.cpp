@@ -46,7 +46,7 @@ bool BarricadeEvent::constrainPlayer(Player& player, Vector2 previousPosition) c
 {
     if (!isContaining() || player.getHealth() <= 0) return false;
     const auto& enemies = EnemyManager::GetInstance().getEnemies();
-    const float radius = player.getHitbox().width + Balance::BARRICADE_BODY_RADIUS;
+    const float playerRadius = player.getHitbox().width;
     float earliest = 2.0f;
     const Enemy* contact = nullptr;
     Vector2 normal = {};
@@ -56,6 +56,7 @@ bool BarricadeEvent::constrainPlayer(Player& player, Vector2 previousPosition) c
         const auto found = enemies.find(id);
         if (found == enemies.end() || found->second->isDead()) continue;
         const auto& segment = *found->second;
+        const float radius = playerRadius + segment.getHitbox().width;
         const Vector2 from = Vector2Subtract(previousPosition, segment.getPreviousPosition());
         const Vector2 to = Vector2Subtract(player.getPosition(), segment.getPosition());
         const float hit = Bullet::hitFraction(from, to, {}, radius);
@@ -67,7 +68,8 @@ bool BarricadeEvent::constrainPlayer(Player& player, Vector2 previousPosition) c
             normal = Vector2Normalize(Vector2Subtract(center, segment.getPosition()));
     }
     if (!contact) return false;
-    corrected = Vector2Add(contact->getPosition(), Vector2Scale(normal, radius + Config::BARRICADE_CONTACT_SKIN));
+    corrected = Vector2Add(contact->getPosition(), Vector2Scale(normal,
+        playerRadius + contact->getHitbox().width + Config::BARRICADE_CONTACT_SKIN));
     // Resolve neighboring disks at seams without allowing a gap between intact rocks.
     for (int pass = 0; pass < Config::BARRICADE_CONTACT_PASSES; ++pass) {
         bool moved = false;
@@ -75,6 +77,7 @@ bool BarricadeEvent::constrainPlayer(Player& player, Vector2 previousPosition) c
             const auto found = enemies.find(id);
             if (found == enemies.end() || found->second->isDead()) continue;
             const auto& segment = *found->second;
+            const float radius = playerRadius + segment.getHitbox().width;
             const Vector2 offset = Vector2Subtract(corrected, segment.getPosition());
             const float distance = Vector2Length(offset);
             if (distance >= radius) continue;
@@ -99,7 +102,8 @@ void BarricadeEvent::finishIfEscaped(Vector2 playerPosition, const Camera2D& cam
     const float radius = getRadius();
     if (Vector2Distance(playerPosition, center) <= radius + Balance::BARRICADE_ESCAPE_MARGIN) return;
     // Require both distance and the whole ring to leave the view, not just one missing rock.
-    const float extent = (radius + Theme::BARRICADE_DRAW_SIZE / 2.0f) * camera.zoom;
+    const float maxDrawSize = *std::max_element(Theme::BARRICADE_DRAW_SIZES.begin(), Theme::BARRICADE_DRAW_SIZES.end());
+    const float extent = (radius + maxDrawSize / 2.0f) * camera.zoom;
     const Vector2 screenCenter = GetWorldToScreen2D(center, camera);
     if (screenCenter.x + extent < 0.0f || screenCenter.x - extent > GAME_SCREEN_WIDTH ||
         screenCenter.y + extent < 0.0f || screenCenter.y - extent > GAME_SCREEN_HEIGHT) clearSegments();
