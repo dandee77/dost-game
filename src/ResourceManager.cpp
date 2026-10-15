@@ -41,6 +41,7 @@ ResourceManager::ResourceManager(){
         {"player_projectile_big_space_gun", "assets/textures/player/projectile_big_space_gun.png"},
         {"player_projectile_rocket", "assets/textures/player/projectile_rocket.png"},
         {"player_projectile_zapper", "assets/textures/player/projectile_zapper.png"},
+        {"projectile_impact",                   "assets/textures/projectile_impact.png"},
         {"game_background",                     "assets/textures/game_background_texture.png"},
         {"border",                              "assets/textures/border_raw.png"},
         {"main_menu_background",                "assets/textures/MainMenuBackground.png"},
@@ -109,6 +110,7 @@ ResourceManager::ResourceManager(){
         {"button_click",                        "assets/sounds/click_sound.mp3"},
         {"exit_sound",                          "assets/sounds/exit_sound.mp3"},
         {"game_over",                           "assets/sounds/game_over.mp3"},
+        {"bullet_impact",                       "assets/sounds/bullet_impact.wav"},
     };      
 
     // TODO: ADD MUSIC DIR

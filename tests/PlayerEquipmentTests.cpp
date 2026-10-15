@@ -1,6 +1,7 @@
 #include "TestAccess.hpp"
 #include "EquipmentAccess.hpp"
 #include "Balance.hpp"
+#include "Config.hpp"
 #include "Theme.hpp"
 #include "raymath.h"
 #include <stdexcept>
@@ -84,6 +85,40 @@ int main(int argc, char** argv)
                 require(resources.GetTexture(key).id != 0, "New texture failed to load");
         }
         require(resources.GetSound("player_shoot").stream.buffer != nullptr, "Managed shooting sound");
+        require(resources.GetTexture("projectile_impact").id != 0, "Projectile impact sheet loads");
+        require(resources.GetSound("bullet_impact").stream.buffer != nullptr, "Projectile impact sound loads");
+        clearWorld(game);
+        Bullet effectShot({0.0f, 0.0f}, {0.0f, -1.0f}, false);
+        effectShot.configure(PROJECTILE_CANNON, 10, Balance::CANNON_RADIUS, Balance::CANNON_SPEED);
+        bm.addBullet(effectShot);
+        require(bm.getChargeEffectCount() == 1, "Projectile spawn creates charge anticipation");
+        bm.spawnImpact({0.0f, -10.0f}, PROJECTILE_CANNON, false, {0.0f, -1.0f});
+        require(bm.getImpactEffectCount() == 1, "Projectile contact creates burst effect");
+        require(bm.getAftermathParticleCount() == Theme::PROJECTILE_PARTICLE_COUNT,
+            "Projectile contact creates aftermath particles");
+        for (std::size_t index = 0; index < Config::PROJECTILE_EFFECT_LIMIT + 5; ++index)
+            bm.spawnImpact({0.0f, -10.0f}, PROJECTILE_CANNON, true, {0.0f, -1.0f});
+        require(bm.getImpactEffectCount() == static_cast<int>(Config::PROJECTILE_EFFECT_LIMIT),
+            "Projectile bursts respect the effect capacity");
+        require(bm.getAftermathParticleCount() == static_cast<int>(Config::PROJECTILE_EFFECT_LIMIT),
+            "Projectile aftermath respects the effect capacity");
+        bm.reset();
+        require(bm.getBullets().empty() && bm.getChargeEffectCount() == 0 &&
+            bm.getImpactEffectCount() == 0 && bm.getAftermathParticleCount() == 0,
+            "Projectile reset clears bullets and every feedback stage");
+        enemy("reaction", {0.0f, -20.0f});
+        auto& reaction = *EnemyManager::GetInstance().getEnemies().at("reaction");
+        reaction.takeDamage(1);
+        const Color hitTint = reaction.getHitTint();
+        require(hitTint.r == Theme::COLOR_PROJECTILE_HIT.r && hitTint.g == Theme::COLOR_PROJECTILE_HIT.g &&
+            hitTint.b == Theme::COLOR_PROJECTILE_HIT.b, "Enemy hit starts the reaction tint");
+        reaction.advanceHitReaction(Theme::PROJECTILE_HIT_FLASH_TIME);
+        require(reaction.getHitTint().r == Theme::COLOR_PROJECTILE_HIT.r,
+            "Enemy hit reaction survives its collision frame");
+        reaction.advanceHitReaction(Theme::PROJECTILE_HIT_FLASH_TIME);
+        const Color restingTint = reaction.getHitTint();
+        require(restingTint.r == WHITE.r && restingTint.g == WHITE.g && restingTint.b == WHITE.b,
+            "Enemy hit reaction expires in simulation time");
         clearWorld(game);
         require(player.getWeapon() == WEAPON_DEFAULT, "Original ship is the initial default");
         player.shotCooldown = 0.0f;
@@ -456,6 +491,40 @@ int main(int argc, char** argv)
         Image capture = LoadImageFromTexture(target.texture); ImageFlipVertical(&capture);
         require(ExportImage(capture, (artifactDirectory + "/player-equipment-preview.png").c_str()), "Export render preview");
         UnloadImage(capture); UnloadRenderTexture(target);
+
+        // Export every authored impact frame plus live charge/core/trail rendering.
+        bm.reset();
+        const auto vfxTarget = LoadRenderTexture(1152, 512);
+        BeginTextureMode(vfxTarget); ClearBackground(Color{10, 14, 28, 255});
+        const auto& impactSheet = resources.GetTextureRef("projectile_impact");
+        for (int frame = 0; frame < Theme::PROJECTILE_IMPACT_FRAMES; ++frame) {
+            const float size = 112.0f;
+            DrawTexturePro(impactSheet,
+                {static_cast<float>(frame * Theme::PROJECTILE_IMPACT_FRAME), 0.0f,
+                 static_cast<float>(Theme::PROJECTILE_IMPACT_FRAME), static_cast<float>(Theme::PROJECTILE_IMPACT_FRAME)},
+                {72.0f + frame * 144.0f, 86.0f, size, size}, {size / 2.0f, size / 2.0f}, 0.0f, WHITE);
+        }
+        for (int index = 0; index < 4; ++index) {
+            const ProjectileKind kind = index == 0 ? PROJECTILE_LEGACY :
+                index == 1 ? PROJECTILE_CANNON : index == 2 ? PROJECTILE_ROCKET : PROJECTILE_HEAVY;
+            Bullet preview({-40.0f + index * 25.0f, 14.0f}, {1.0f, -0.35f}, false);
+            if (kind != PROJECTILE_LEGACY)
+                preview.configure(kind, 10, Balance::CANNON_RADIUS, Balance::CANNON_SPEED);
+            bm.addBullet(preview);
+            bm.spawnImpact({-40.0f + index * 25.0f, 29.0f}, kind, false, {1.0f, -0.35f});
+        }
+        Camera2D vfxCamera = {{576.0f, 360.0f}, {0.0f, 20.0f}, 0.0f, 8.0f};
+        BeginMode2D(vfxCamera);
+        bm.draw(resources.GetTextureRef("player_bullet"), resources.GetTextureRef("enemy_bullet"));
+        EndMode2D();
+        DrawText("IMPACT BURST: CONTACT TO AFTERMATH", 24, 16, 24, Theme::COLOR_ACCENT);
+        DrawText("CHARGE / CORE / TRAIL / BURST", 24, 470, 24, WHITE);
+        EndTextureMode();
+        Image vfxCapture = LoadImageFromTexture(vfxTarget.texture); ImageFlipVertical(&vfxCapture);
+        require(ExportImage(vfxCapture, (artifactDirectory + "/projectile-vfx-preview.png").c_str()),
+            "Export projectile feedback preview");
+        UnloadImage(vfxCapture); UnloadRenderTexture(vfxTarget);
+        bm.reset();
         checks += runCrowdChecks(artifactDirectory);
         checks += runBarricadeChecks(artifactDirectory);
         checks += runDebrisChecks(artifactDirectory);

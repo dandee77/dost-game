@@ -1,5 +1,7 @@
 #include "Enemy.hpp"
+#include "Theme.hpp"
 #include "raymath.h"
+#include <algorithm>
 
 void Enemy::applySeparation(Vector2 displacement)
 {
@@ -10,9 +12,25 @@ void Enemy::applySeparation(Vector2 displacement)
 
 void Enemy::takeDamage(int damage) {
     health -= damage;
+    hitReactionRemaining = Theme::PROJECTILE_HIT_FLASH_TIME;
+    hitReactionFresh = true;
     if (health < 0) {
         health = 0;
     }
+}
+
+void Enemy::advanceHitReaction(float dt)
+{
+    if (hitReactionFresh) {
+        hitReactionFresh = false;
+        return;
+    }
+    hitReactionRemaining = std::max(0.0f, hitReactionRemaining - dt);
+}
+
+Color Enemy::getHitTint() const
+{
+    return hitReactionRemaining > 0.0f ? Theme::COLOR_PROJECTILE_HIT : WHITE;
 }
 
 void Enemy::applyKnockback(Vector2 direction, float force) {

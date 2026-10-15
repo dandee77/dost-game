@@ -21,6 +21,8 @@ void Bullet::update()
 
 void Bullet::draw(const Texture2D &texture) const
 {
+    drawTrail();
+    drawCoreGlow();
     if (kind != PROJECTILE_LEGACY) {
         const char* key = kind == PROJECTILE_CANNON ? "player_projectile_auto_cannon_bullet" :
             kind == PROJECTILE_ROCKET ? "player_projectile_rocket" : "player_projectile_big_space_gun";
@@ -46,6 +48,30 @@ void Bullet::draw(const Texture2D &texture) const
         angle,
         WHITE
     );
+}
+
+void Bullet::drawTrail() const
+{
+    const float kindScale = kind == PROJECTILE_HEAVY ? Theme::PROJECTILE_HEAVY_SCALE :
+        kind == PROJECTILE_ROCKET ? Theme::PROJECTILE_ROCKET_SCALE : 1.0f;
+    const Vector2 tail = Vector2Subtract(position,
+        Vector2Scale(fireDirection, Theme::PROJECTILE_TRAIL_LENGTH * kindScale));
+    const Color color = enemyBullet ? Theme::COLOR_TOXIC : Theme::COLOR_ACCENT;
+    DrawLineEx(tail, position, Theme::PROJECTILE_TRAIL_WIDTH * kindScale,
+        Fade(color, Theme::PROJECTILE_TRAIL_OPACITY));
+    DrawCircleV(tail, Theme::PROJECTILE_TRAIL_WIDTH * kindScale,
+        Fade(color, Theme::PROJECTILE_TRAIL_TIP_OPACITY));
+}
+
+void Bullet::drawCoreGlow() const
+{
+    const float kindScale = kind == PROJECTILE_HEAVY ? Theme::PROJECTILE_HEAVY_SCALE :
+        kind == PROJECTILE_ROCKET ? Theme::PROJECTILE_ROCKET_SCALE : 1.0f;
+    const float pulse = Theme::PROJECTILE_CORE_PULSE_BASE + Theme::PROJECTILE_CORE_PULSE_AMOUNT *
+        std::sin(animationTime / Theme::EQUIPMENT_FRAME_TIME * PI);
+    const Color color = enemyBullet ? Theme::COLOR_TOXIC : Theme::COLOR_PROJECTILE_CORE;
+    DrawCircleV(position, Theme::PROJECTILE_CORE_HALO * kindScale * pulse,
+        Fade(color, Theme::PROJECTILE_CORE_OPACITY));
 }
 
 void Bullet::configure(ProjectileKind newKind, int newDamage, float newRadius, float newSpeed)

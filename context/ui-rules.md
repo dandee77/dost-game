@@ -197,6 +197,7 @@ Existing sheets (sizes measured from the current files). "Frame" is width x heig
 | `player_deacceleration` | player_deaccelerating.png | 32 x 32 | 3 | 8 | Collector ship, idle |
 | `player_bullet` | player_bullet.png | 249 x 144 | 1 | 8 x 5 | Sky-blue bolt |
 | `enemy_bullet` | enemy_bullet.png | 233 x 134 | 1 | 8 x 8 | Toxic glob |
+| `projectile_impact` | projectile_impact.png | 64 x 64 | 8 | 10 (14 heavy) | Sky-blue contact burst through fading aftermath |
 | `low_level_enemy1` | low_level_enemy1.png | 64 x 64 | 10 | 15 | Can biter |
 | `low_level_enemy2` | low_level_enemy2.png | 64 x 64 | 5 | 15 | Battery crawler |
 | `low_level_enemy3` | low_level_enemy3.png | 64 x 64 | 5 | 15 | Monitor parasite |
@@ -257,6 +258,7 @@ New sheets (planned). Sizes are recommendations; record the final ones here and 
 | `exit_sound` | sound | Exit animation | Exists |
 | `game_over` | sound | Death | Exists |
 | `player_atk_sound.mp3` | sound | Player shot (loaded by path in `Player`) | Register as `player_shoot` in item 05 |
+| `bullet_impact` | sound | Player projectile contact | New; original synthesized PCM |
 | `score_sound.wav` | sound | Kill (loaded by path in `Game`) | Register as `kill` in item 05 |
 | `scrap_pickup` | sound | Scrap collected | New |
 | `dock_deposit` | sound | Deposit at the dock | New |
@@ -275,7 +277,7 @@ Reuse what exists before adding new effects.
 
 | Event | Feedback | Exists? |
 |---|---|---|
-| Enemy hit | Damage number (white, red when max damage) | Yes |
+| Enemy hit | Damage number, 0.08 s red reaction tint, contact burst and aftermath | Yes |
 | Enemy killed | Destruct animation, kill sound, kill counter wobble | Yes |
 | Player hit | Red edge overlay, red flashing ship, hit sounds, knockback | Yes |
 | Augment pick | Confetti, card animations | Yes |

@@ -58,6 +58,7 @@ void BarricadeEnemy::draw()
     auto& animator = Animator::GetInstance();
     animator.SetPosition(enemyID, position);
     animator.SetRotation(enemyID, rotation);
+    animator.SetTint(enemyID, getHitTint());
 }
 
 void BarricadeEnemy::destruct()

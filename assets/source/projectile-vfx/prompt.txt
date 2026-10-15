@@ -1,0 +1,13 @@
+Built-in image_gen, 15 October 2026
+
+Use case: stylized-concept
+Asset type: original 2D game projectile-impact sprite sheet source
+Primary request: Create exactly eight sequential frames of one sky-blue plasma projectile impact, progressing from a tight bright contact spark through a broad burst and then fading into tiny drifting embers.
+Scene/backdrop: perfectly flat solid #ff00ff chroma-key background for background removal; one uniform color, no shadows, gradients, texture, reflections, floor plane, or lighting variation.
+Style/medium: crisp hand-authored pixel art, hard square pixels, dark navy outline, limited sky-blue/cyan/white palette, no antialiasing, visually compatible with a retro top-down space shooter.
+Composition/framing: exact 4 columns by 2 rows grid, eight equal square cells, one centered effect per cell, generous consistent padding, chronological order left-to-right across the top row then left-to-right across the bottom row. No grid lines.
+Constraints: every frame is distinct; frame 1 is a compact impact star, frames 2-4 rapidly expand, frames 5-8 dissipate into smaller fragments; use no #ff00ff in the effect; no text, no letters, no numbers, no watermark, no logos, no named brands, games, films, studios, artists, companies, or people.
+
+The generated source arrived with native transparency. export_projectile_vfx.py split the 4x2 source, nearest-neighbor reduced each cell to 64x64, thresholded alpha, and packed the frames into a horizontal 512x64 runtime strip.
+
+bullet_impact.wav is not model-generated. generate_bullet_impact_sound.py creates it deterministically from decaying synthesized tones and seeded noise using Python's standard library.

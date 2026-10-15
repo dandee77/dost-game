@@ -279,9 +279,9 @@ All use the same pattern: `static X& GetInstance()` with a function-local static
 - Inherits: `Entity`
 - Owned by: `EnemyManager` (map `std::unordered_map<std::string, std::unique_ptr<Enemy>>`)
 - Constructor: `Enemy(std::string enemyID, EnemyType type, Vector2 spawnPos, Vector2 playerPos)`
-- Public API (current): `getPlayerPositionForEnemy(Vector2)` (a setter), `getEnemyType()`, `getHitbox()`, `getEnemyID()`, `virtual void destruct() = 0`, `takeDamage(int)`, `isDead()`, `applyKnockback(Vector2 direction, float force)`, `canReceiveKnockback()`
+- Public API (current): `getPlayerPositionForEnemy(Vector2)` (a setter), `getEnemyType()`, `getHitbox()`, `getEnemyID()`, `virtual void destruct() = 0`, `takeDamage(int)`, `advanceHitReaction(float)`, `getHitTint()`, `isDead()`, `applyKnockback(Vector2 direction, float force)`, `canReceiveKnockback()`
 - P2: `applySeparation(Vector2 displacement)` updates position and rect/hitbox origins without changing velocity, steering, knockback or combat radius.
-- Protected (current): `enemyID`, `enemyType`, `viewDirection`, `playerPosition`, `hitbox`, `speed`, `spriteSize`, `knockbackVelocity`, `knockbackDecay`, `knockbackCooldown` (`ENEMY_KNOCKBACK_COOLDOWN` 0.5 s)
+- Protected (current): `enemyID`, `enemyType`, `viewDirection`, `playerPosition`, `hitbox`, `speed`, `spriteSize`, `knockbackVelocity`, `knockbackDecay`, `knockbackCooldown` (`ENEMY_KNOCKBACK_COOLDOWN` 0.5 s), simulation-time `hitReactionRemaining` and one-frame `hitReactionFresh` latch.
 - Enum: `EnemyType { LOW_LEVEL_ENEMY, MID_LEVEL_ENEMY, HIGH_LEVEL_ENEMY, BOSS_LEVEL_ENEMY, BARRICADE_ENEMY }` (high and boss are not used yet)
 - Planned additions (item 10):
   ```cpp
@@ -428,10 +428,11 @@ All use the same pattern: `static X& GetInstance()` with a function-local static
 
 ### BulletManager
 - Files: src/BulletManager.hpp, src/BulletManager.cpp
-- Status: existing
+- Status: modified (projectile feedback, 15 October)
 - Kind: singleton
-- Public API: `update(Vector2 playerPos)` (moves bullets, removes those over 150 units from the player), `draw(const Texture2D& playerTex, const Texture2D& enemyTex)`, `addBullet(Bullet)`, `getBullets()`, `getBullet(int)`, `removeBullet(int)`, `clear()`, `reset()`
-- Gotchas: a `std::vector<Bullet>` with erase-by-index. Callers iterating while removing must decrement the index (existing code does `i--`). Item 17 may add a boss bullet texture; if so, add a third texture parameter rather than a new manager.
+- Public API: `update(Vector2 playerPos)` (moves bullets and advances effects), `draw(const Texture2D& playerTex, const Texture2D& enemyTex)`, `addBullet(Bullet)`, `spawnImpact(Vector2, ProjectileKind, bool enemy, Vector2 direction)`, `getBullets()`, `getBullet(int)`, `removeBullet(int)`, read-only effect counts, `clear()`, `reset()`.
+- Owns: bullets plus bounded charge rings, impact bursts and aftermath particles. `addBullet` creates charge anticipation; collision owners call `spawnImpact` at the resolved contact point. All effect clocks use running simulation delta and `reset()` clears every stage.
+- Gotchas: a `std::vector<Bullet>` with erase-by-index. Callers iterating while removing must decrement the index (existing code does `i--`). Effects are capped by `Config::PROJECTILE_EFFECT_LIMIT`; despawn does not create an impact. Item 17 may add a boss bullet texture; if so, add a third texture parameter rather than a new manager.
 
 ### DebrisManager
 - Files: src/DebrisManager.hpp/.cpp
@@ -589,7 +590,7 @@ All use the same pattern: `static X& GetInstance()` with a function-local static
 ## Rendering, Assets and Effects
 
 ### ResourceManager
-- P1: registers 28 modular player textures plus managed `player_shoot` sound. Public API unchanged. Paths/CC0 provenance are in assets/ASSETS.md.
+- P1/projectile feedback: registers 28 modular player textures, `player_shoot`, the eight-frame `projectile_impact` sheet and original `bullet_impact` sound. Public API unchanged. Provenance is in assets/ASSETS.md.
 - Files: src/ResourceManager.hpp, src/ResourceManager.cpp
 - Status: existing
 - Kind: singleton
@@ -619,12 +620,13 @@ All use the same pattern: `static X& GetInstance()` with a function-local static
 
 ### Bullet
 - Files: src/Bullet.hpp, src/Bullet.cpp
-- Status: modified (P1)
+- Status: modified (P1 and projectile feedback)
 - Kind: value, owned by BulletManager vector.
 - Constructor (unchanged): `Bullet(Vector2 position, Vector2 direction, bool isEnemy, int piercePower = 1, float knockbackPower = 0.0f)`.
 - Public API: `update()`, `draw(const Texture2D&) const`, `getPosition() const`, `getDirection() const`, `isEnemyBullet() const`, `setBulletSpeed(float)`, `getPiercePower() const`, `reducePiercePower()`, `canPierce() const`, `getKnockbackPower() const`.
 - Equipment API: `configure(ProjectileKind, int damage, float radius, float speed)`, `getKind() const`, `getDamage() const`, `getRadius() const`, `getPreviousPosition() const`, `hasHit(const std::string&) const`, `recordHit(const std::string&)`, static `hitFraction(Vector2 from, Vector2 to, Vector2 center, float radius)`.
 - Enums: PlayerWeapon (CANNON/LASER/ROCKETS/HEAVY/DEFAULT); ProjectileKind (LEGACY/CANNON/ROCKET/HEAVY).
+- Rendering: every live bullet draws a direction-aligned fading trail and pulsing core halo before its existing legacy or typed projectile sprite. These visuals read existing state only; movement and collision remain unchanged.
 - Gotchas: constructor defaults to LEGACY for existing enemy callers and regression fixtures. Modular player projectiles configure immutable-at-fire damage, sprite type and radius; the original default uses LEGACY bullets and the existing damage/collision path. update saves previous position before movement. hitFraction returns earliest swept-circle contact in [0,1], or -1 for no hit; use target radius plus projectile radius. Piercing IDs prevent repeated damage across frames. Laser is a Player-owned continuous beam, not a Bullet.
 - Planned item 08: incoming enemy/boss damage amounts remain separate; this prototype adds player projectile damage only.
 

@@ -16,6 +16,7 @@
 
 void EnemyManager::update(Vector2 playerPos, const GameTimer& gameTimer)
 {
+    const float dt = GetFrameTime();
     float elapsed = gameTimer.getElapsedTime(); 
 
     float newCooldown = std::max(0.025f, 1.25f - (elapsed / 250.0f) * 1.25f);
@@ -35,6 +36,7 @@ void EnemyManager::update(Vector2 playerPos, const GameTimer& gameTimer)
         enemy->getPlayerPositionForEnemy(playerPos);
         
         enemy->update();
+        enemy->advanceHitReaction(dt);
         if (dist > ENEMY_MAX_DISTANCE) {
             toRemove.push_back(id);
         }
@@ -43,7 +45,7 @@ void EnemyManager::update(Vector2 playerPos, const GameTimer& gameTimer)
     for (const auto& id : toRemove) {
         removeEnemy(id);
     }
-    separateEnemies(GetFrameTime());
+    separateEnemies(dt);
 }
 
 void EnemyManager::separateEnemies(float dt)

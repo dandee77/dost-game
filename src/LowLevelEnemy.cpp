@@ -174,6 +174,7 @@ void LowLevelEnemy::draw()
     
     Animator::GetInstance().SetPosition(enemyID, position);
     Animator::GetInstance().SetRotation(enemyID, rotation);
+    Animator::GetInstance().SetTint(enemyID, getHitTint());
 
     // DrawRectanglePro(hitbox, hitboxOrigin, 0, WHITE);
     // DrawTexturePro(enemyTexture, source, rect, origin, rotation, WHITE);

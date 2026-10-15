@@ -32,6 +32,9 @@ public:
     static float hitFraction(Vector2 from, Vector2 to, Vector2 center, float radius);
 
 private:
+    void drawTrail() const;
+    void drawCoreGlow() const;
+
     ProjectileKind kind = PROJECTILE_LEGACY;
     int damage = 0;
     float radius = 0.0f;
