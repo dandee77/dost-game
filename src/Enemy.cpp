@@ -1,7 +1,43 @@
 #include "Enemy.hpp"
 #include "Theme.hpp"
+#include "Balance.hpp"
 #include "raymath.h"
 #include <algorithm>
+
+void Enemy::applyStun(float duration)
+{
+    // Formation segments must keep the event's shared movement clock.
+    if (enemyType != BARRICADE_ENEMY) stunRemaining = std::max(stunRemaining, duration);
+}
+void Enemy::applyCorrosion(float duration)
+{
+    if (enemyType != BARRICADE_ENEMY) corrosionRemaining = std::max(corrosionRemaining, duration);
+}
+
+void Enemy::updateWithStatus(float dt)
+{
+    const bool stunned = isStunned();
+    const float originalSpeed = speed;
+    const Vector2 before = position;
+    if (isCorroded()) speed *= Balance::SKILL_SLOW_MULTIPLIER;
+    if (!stunned) update();
+    // Include inertia/knockback movement in slow, without permanently editing base stats.
+    if (isCorroded()) {
+        const Vector2 moved = Vector2Subtract(position, before);
+        const float allowed = originalSpeed * Balance::SKILL_SLOW_MULTIPLIER * dt;
+        if (Vector2Length(moved) > allowed)
+            applySeparation(Vector2Subtract(Vector2Scale(Vector2Normalize(moved), allowed), moved));
+    }
+    speed = originalSpeed;
+    stunRemaining = std::max(0.0f, stunRemaining - dt);
+    corrosionRemaining = std::max(0.0f, corrosionRemaining - dt);
+}
+
+int Enemy::getContactDamage() const
+{
+    return isCorroded() ? std::max(1, static_cast<int>(Balance::PLAYER_CONTACT_DAMAGE * Balance::SKILL_WEAKEN_MULTIPLIER)) :
+        Balance::PLAYER_CONTACT_DAMAGE;
+}
 
 void Enemy::applySeparation(Vector2 displacement)
 {

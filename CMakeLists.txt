@@ -60,6 +60,20 @@ add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD
     COMMENT "Copying assets to build directory"
 )
 
+# Portable LLVM-MinGW builds need these C++ runtime DLLs beside the executable.
+if (WIN32 AND CMAKE_CXX_COMPILER_ID STREQUAL "Clang")
+    get_filename_component(CXX_COMPILER_DIR "${CMAKE_CXX_COMPILER}" DIRECTORY)
+    foreach(RUNTIME_DLL libc++.dll libunwind.dll)
+        if (EXISTS "${CXX_COMPILER_DIR}/${RUNTIME_DLL}")
+            add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD
+                COMMAND ${CMAKE_COMMAND} -E copy_if_different
+                    "${CXX_COMPILER_DIR}/${RUNTIME_DLL}"
+                    "$<TARGET_FILE_DIR:${PROJECT_NAME}>/${RUNTIME_DLL}"
+            )
+        endif()
+    endforeach()
+endif()
+
 if (MSVC)
     target_compile_options(${PROJECT_NAME} PRIVATE /W3 /wd4244)
     # Keep the windowed executable while using the existing standard main().
@@ -117,7 +131,7 @@ if (GAME_EQUIPMENT_TESTS)
     enable_testing()
     set(EQUIPMENT_SOURCES ${SOURCES})
     list(FILTER EQUIPMENT_SOURCES EXCLUDE REGEX "/main\\.cpp$")
-    add_executable(PlayerEquipmentTests tests/PlayerEquipmentTests.cpp tests/CrowdChecks.cpp tests/BarricadeChecks.cpp tests/DebrisChecks.cpp tests/EquipmentAccess.cpp tests/NormalAccess.cpp ${EQUIPMENT_SOURCES})
+    add_executable(PlayerEquipmentTests tests/PlayerEquipmentTests.cpp tests/CrowdChecks.cpp tests/BarricadeChecks.cpp tests/DebrisChecks.cpp tests/SkillChecks.cpp tests/EquipmentAccess.cpp tests/NormalAccess.cpp ${EQUIPMENT_SOURCES})
     target_include_directories(PlayerEquipmentTests PRIVATE src)
     target_link_libraries(PlayerEquipmentTests raylib)
     if (GAME_DEBUG)

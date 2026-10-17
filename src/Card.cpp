@@ -2,6 +2,13 @@
 #include "ResourceManager.hpp"
 #include "raymath.h"
 #include <cmath>
+#include <cstdlib>
+
+Card::Card(Vector2 position, Vector2 size, AugmentId id)
+    : Card(position, size, augmentCatalog()[id].title, augmentCatalog()[id].description)
+{
+    augmentId = id;
+}
 
 float easeOutBounce(float t) {
     if (t < 1.0f / 2.75f) {
@@ -137,7 +144,6 @@ void Card::update() {
             rect.height = targetRect.height;
         } else {
             float t = exitAnimationTime / duration;
-            float easedT = easeInOutQuad(t);
             
             float scale;
             if (t < 0.2f) {

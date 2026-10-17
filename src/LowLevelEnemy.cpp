@@ -2,6 +2,7 @@
 #include "ResourceManager.hpp"
 #include "Animator.hpp"
 #include "raymath.h"
+#include <cstdlib>
 
 
 static const std::string EnemyTextureNames[] = 

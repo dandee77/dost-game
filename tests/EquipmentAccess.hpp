@@ -11,6 +11,7 @@ struct EquipmentTestAccess {
     static void updateEquipment(Player& player, float dt, bool skill);
     static float weaponCooldown(const Player& player);
     static void resolve(Game& game);
+    static void skillStep(Game& game, float dt, Vector2 aim, bool activateSelected = false);
     static void restart(Game& game);
     static void camera(Game& game, float dt);
     static void barricadeContact(Game& game, Vector2 previousPosition);

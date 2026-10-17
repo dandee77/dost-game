@@ -61,6 +61,20 @@ A1 ─> A2..A9 ─> 15, 26
 
 ## Phase 0: Foundation
 
+### P5 Skills and augments prototype (user-requested scope, 17 Oct)
+**Status:** Complete; Debug/Release builds, 9,414/9,331 native checks, 610,000 spatial queries, catalog/startup command validation and native placeholder preview passed. Human balance/feel review pending.
+**Classes:** Augment catalog, SkillSystem (Game-owned), Player, Enemy, EnemyManager, ScrapManager, Card, DebugTools, Application; Balance/Theme/Config tokens.
+
+- Implement all 14 augments and 18 active abilities from `skills-context.md`, with existing art and simple placeholder shapes.
+- Expose typed augment/ability commands in F5 with autocomplete and repeatable terminal `--command` launch arguments; provide `--skills-list` without a window.
+- Implement only combat/effect support needed by the skills. Acquisition, inventory, drops for acquiring skills, shop and progression connections are deferred explicitly by the user.
+- Centralize provisional tuning, support simulation-time cooldowns and statuses, and clear state on restart/exit/death. Space Collapse must award no scrap.
+
+**Done when:** Every skill has observable behavior, can be exercised by command, and passes native effect/reward/reset validation in debug-enabled and debug-disabled builds. No new art generation.
+**Test:** `GAME_EQUIPMENT_TESTS=ON`, CTest; native skill gallery; terminal catalog and startup-command launch; validate damage, immunity/crowd control, scrap suppression, interception, all primary weapons, invalid commands, pause, restart and 30/144 FPS timing. See `skills-commands.md`.
+
+This explicit user request overrides numbered ordering and the old nine-augment scope for P5 only. It does not mark unrelated foundation, wave, economy, boss, or submission items complete.
+
 ### P3 Shrinking barricade event (user-requested scope, 14 Oct)
 **Status:** Complete; Debug/Release builds and native integration checks pass; rendered asteroid ring inspected.
 **Classes:** BarricadeEnemy (Enemy subclass), BarricadeEvent (Game-owned coordinator), EnemyManager, Game, Player, DebugTools; Balance/Config/Theme tokens.

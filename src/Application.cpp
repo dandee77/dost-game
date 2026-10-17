@@ -32,7 +32,7 @@ Application::Application()
     m_target = LoadRenderTexture(screenWidth, screenHeight);
     SetTextureFilter(m_target.texture, TEXTURE_FILTER_BILINEAR);
 
-    m_camera = Camera2D{ 0 };
+    m_camera = Camera2D{};
     m_camera.target = { 0.0f, 0.0f };
     m_camera.offset = { (float)screenWidth/2.0f, (float)screenHeight/2.0f };
     m_camera.rotation = 0.0f;
@@ -62,7 +62,7 @@ Application::~Application()
     CloseWindow();
 }
 
-void Application::Run()
+void Application::Run(const std::vector<std::string>& startupCommands)
 {
     ResourceManager& resourceManager = ResourceManager::GetInstance();
     
@@ -86,6 +86,8 @@ void Application::Run()
 #ifdef GAME_DEBUG
     // The Game scene lives for the application lifetime, including on the menu.
     const auto debugGame = std::static_pointer_cast<Game>(m_sceneFactory.at("Game"));
+#else
+    (void)startupCommands;
 #endif
 
     while (!WindowShouldClose())
@@ -106,7 +108,7 @@ void Application::Run()
         float scale = MIN((float)GetScreenWidth()/screenWidth, (float)GetScreenHeight()/screenHeight);
         // ? Set the mouse offset and scale
         Vector2 mouse = GetMousePosition();
-        Vector2 virtualMouse = { 0 };
+        Vector2 virtualMouse = {};
         virtualMouse.x = (mouse.x - ((float)GetScreenWidth() - ((float)screenWidth*scale))*0.5f)/scale;
         virtualMouse.y = (mouse.y - ((float)GetScreenHeight() - ((float)screenHeight*scale))*0.5f)/scale;
         virtualMouse = Vector2Clamp(virtualMouse, Vector2Zero(), Vector2{ (float)screenWidth, (float)screenHeight });
@@ -132,12 +134,20 @@ void Application::Run()
                 {
                     nextScene = m_sceneFactory[m_currentScene]->update();
                 }
+#ifdef GAME_DEBUG
+                const bool launchCommands = !startupCommands.empty() && m_currentScene == "LoadingScreen" && nextScene != m_currentScene;
+                if (launchCommands) nextScene = "Game";
+#endif
                 if (m_currentScene != nextScene)
                 {
                     if (m_sceneFactory.find(nextScene) != m_sceneFactory.end())
                     {
                         m_sceneFactory[m_currentScene]->onExit();
                         m_sceneFactory[nextScene]->onSwitch();
+#ifdef GAME_DEBUG
+                        if (launchCommands)
+                            for (const auto& command : startupCommands) debugGame->executeDebugCommand(command);
+#endif
                     }
                     else
                     {

@@ -21,7 +21,7 @@ public:
         return instance;
     }
 
-    void update(Vector2 playerPos, const GameTimer& gameTimer);
+    void update(Vector2 playerPos, const GameTimer& gameTimer, const Vector2* decoy = nullptr, float decoyRange = 0.0f);
     void draw();
     std::unordered_map<std::string, std::unique_ptr<Enemy>>& getEnemies() { return enemies; };
     void removeEnemy(const std::string& id);

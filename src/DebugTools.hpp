@@ -6,12 +6,15 @@
 
 class Player;
 class BarricadeEvent;
+class SkillSystem;
 enum GameState : int;
 
 class DebugTools
 {
 public:
     void reset();
+    void bindSkills(SkillSystem* system) { skills = system; }
+    void runCommand(const std::string& command, Player* player, BarricadeEvent* barricade = nullptr);
     void update(Player* player, BarricadeEvent* barricade = nullptr);
     void drawConsole() const;
     bool capturesInput() const { return inputCaptured; }
@@ -27,6 +30,7 @@ private:
     std::vector<std::string> completions() const;
 
     bool overlayVisible = false;
+    SkillSystem* skills = nullptr;
     bool statsVisible = false;
     bool consoleVisible = false;
     bool inputCaptured = false;

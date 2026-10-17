@@ -1,6 +1,8 @@
 #pragma once
 #include "Entity.hpp"
 #include "BulletManager.hpp"
+#include "Augment.hpp"
+#include <random>
 
 enum PlayerState { PLAYER_DEFAULT, PLAYER_STUNNED, PLAYER_IFRAME, PLAYER_DEAD };
 enum PlayerEngine { ENGINE_BASE, ENGINE_PULSE, ENGINE_BURST, ENGINE_SUPERCHARGED };
@@ -56,10 +58,22 @@ public:
     int getMinDamage() const { return minDamage; }
     int getMaxDamage() const { return maxDamage; }
     float getKnockbackPower() const { return knockbackPower; }
+    bool applyAugment(AugmentId id);
+    int getAugmentLevel(AugmentId id) const { return id >= 0 && id < AUG_COUNT ? augmentLevels[id] : 0; }
+    int getMaxHealth() const { return maxHealth; }
+    int scaleAttackDamage(int baseDamage) const;
+    void teleport(Vector2 destination);
+    void setDeflectorHits(int hits) { deflectorHits = hits; }
+    int getDeflectorHits() const { return deflectorHits; }
+    void fireClone(Vector2 origin, Vector2 direction);
+    float getPrimaryInterval() const;
+    int getLaserDamage() const;
+    void takeContactDamage(float entered, Vector2 source, float size, int amount);
 
 private:
     friend struct EquipmentTestAccess;
     void fireScatterBullets(Vector2 direction);
+    void firePattern(Vector2 direction);
     void updateEquipment(float dt, bool skillPressed);
     void updateWeapon(float dt, bool firing);
     float weaponCooldown() const;
@@ -87,4 +101,8 @@ private:
     bool playerAccelerating = false, autoShoot = false;
     PlayerState playerState = PLAYER_DEFAULT;
     float timeStateEntered = 0.0f;
+    std::array<int, AUG_COUNT> augmentLevels{};
+    int maxHealth = 0, deflectorHits = 0;
+    float damageMultiplier = 1.0f, criticalChance = 0.0f;
+    mutable std::mt19937 attackRng;
 };

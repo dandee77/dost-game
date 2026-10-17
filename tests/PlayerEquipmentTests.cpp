@@ -8,6 +8,7 @@
 int runCrowdChecks(const std::string& artifactDirectory);
 int runBarricadeChecks(const std::string& artifactDirectory);
 int runDebrisChecks(const std::string& artifactDirectory);
+int runSkillChecks(const std::string& artifactDirectory);
 
 #ifdef _WIN32
 extern "C" __declspec(dllimport) int __stdcall PostMessageA(void*, unsigned int, unsigned long long, long long);
@@ -528,6 +529,7 @@ int main(int argc, char** argv)
         checks += runCrowdChecks(artifactDirectory);
         checks += runBarricadeChecks(artifactDirectory);
         checks += runDebrisChecks(artifactDirectory);
+        checks += runSkillChecks(artifactDirectory);
         std::cout << "PASS: " << checks << " equipment, console, crowd and barricade checks\n";
     } catch (const std::exception& error) {
         std::cerr << "FAIL after " << checks << " checks: " << error.what() << '\n';

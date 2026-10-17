@@ -6,6 +6,7 @@
 #include <map>
 #include <memory>
 #include <string>
+#include <vector>
 
 
 class Application
@@ -20,6 +21,6 @@ private:
 public:
 
     Application();
-    void Run();
+    void Run(const std::vector<std::string>& startupCommands = {});
     ~Application();
 };

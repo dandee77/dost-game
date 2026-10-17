@@ -20,6 +20,7 @@
 #include "Button.hpp"
 #include "SpatialGrid.hpp"
 #include "BarricadeEvent.hpp"
+#include "SkillSystem.hpp"
 #ifdef GAME_DEBUG
 #include "DebugTools.hpp"
 #endif
@@ -61,6 +62,7 @@ public:
 #ifdef GAME_DEBUG
     bool updateDebugConsole(bool activeGame);
     void drawDebugConsole() const;
+    void executeDebugCommand(const std::string& command);
 #endif
 
 private:        
@@ -74,7 +76,8 @@ private:
     void restartGame();
     void resetRun();
     void resolveEquipmentAttacks();
-    void damageEquipmentEnemy(const std::string& id, int damage, Vector2 direction, float knockback);
+    bool updateSkills(float dt, Vector2 aim, bool activateSelected);
+    void damageEquipmentEnemy(const std::string& id, int damage, Vector2 direction, float knockback, bool dropSkillScrap = false);
     void destroyEquipmentDebris(const std::string& id);
     void detonateRocket(Vector2 center, int damage, float knockback);
     void updateCameraZoom(float dt);
@@ -83,6 +86,8 @@ private:
     GameState gameState;
     int harvestedScrap = 0;
     BarricadeEvent barricadeEvent;
+    SkillSystem skills;
+    std::mt19937 augmentRng;
     SpatialGrid enemyCollisionGrid;
     SpatialGrid debrisCollisionGrid;
     std::vector<Enemy*> collisionEnemies;

@@ -2,6 +2,7 @@
 #include "raylib.h"
 #include <string>
 #include <array>
+#include "Augment.hpp"
 
 class Card {
 private:
@@ -9,6 +10,7 @@ private:
     Rectangle rect;
     std::string title;
     std::string description;
+    AugmentId augmentId = AUG_COUNT;
     
     float borderAnimationTime;
     float borderSpeed;
@@ -35,6 +37,9 @@ private:
     
 public:
     Card();
+    Card(Vector2 position, Vector2 size, AugmentId id);
+    AugmentId getAugmentId() const { return augmentId; }
+    bool hasStartedExit() const { return hasExitStarted; }
     Card(Vector2 position, Vector2 size, const std::string& cardTitle, const std::string& cardDescription);
     
     void update();

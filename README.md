@@ -1,6 +1,14 @@
 # dost-game
 
-On this Windows machine, type `build` in the terminal to compile and launch the game. The local command forwards to this project's `build.bat`, which locates CMake, builds Debug, refreshes the assets, and runs from the executable's folder. On another machine, run `.\build.bat` from the project directory.
+All **14 augments and 18 abilities** are available for feature testing with placeholder effects. Commands, behavior and provisional balance: [skills guide](context/skills-commands.md).
+
+```powershell
+.\build.bat --command "augment weapons-payload" --command "skill equip laser-rings" --command "skill equip blink-drive"
+```
+
+Press **Q** for the selected manual ability. Use **F5** and Tab for `augment <key>`, `skill equip <key>`, `skill cast <key>`, and `skill unequip <key>`. In PowerShell, run `.\SpaceAblaze.exe --skills-list | Out-Host` for all 32 keys. Acquisition and shop connections are deferred.
+
+On this Windows machine, type `build` in the terminal to compile and launch the game. The local command forwards to this project's `build.bat`, which locates CMake, enables the debug console, refreshes the assets, and runs from the executable's folder. On another machine, run `.\build.bat` from the project directory.
 
 In debug builds, press **F5** for the translucent command console. Try `hitbox on`, `mute`, `invincible on`, or `help`. **Tab** completes commands and `on`/`off`/`toggle` arguments, **Up/Down** recalls history, **Enter** runs a command, and **F5/Esc** closes the console. Gameplay and its timer pause while typing. The former F1/F2/F3/F4/F6 actions are now commands; `credits`, `boss`, and `wave` remain placeholders until their systems are built. Console features are excluded when `GAME_DEBUG=OFF`.
 

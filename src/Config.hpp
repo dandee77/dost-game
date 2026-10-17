@@ -2,6 +2,7 @@
 #include <cstddef>
 
 namespace Config {
+    inline constexpr std::size_t SKILL_VISUAL_LIMIT = 128, SKILL_TRAIL_LIMIT = 32;
     inline constexpr float CAMERA_ZOOM_PLAY = 20.0f, CAMERA_ZOOM_INTRO = 150.0f;
     inline constexpr float CAMERA_ZOOM_BARRICADE = 13.0f;
     inline constexpr float CAMERA_INTRO_RESPONSE = 7.5f, CAMERA_EVENT_RESPONSE = 2.5f;

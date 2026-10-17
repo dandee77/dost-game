@@ -86,6 +86,7 @@ void MidLevelEnemy::update()
     {
         fireCooldown.startCooldown();
         Bullet b(position, viewDirection, true, 1);  // Enemy bullets have default pierce power
+        b.configure(PROJECTILE_LEGACY, getContactDamage(), 0.0f, bulletSpeed);
         b.setBulletSpeed(bulletSpeed);
         BulletManager::GetInstance().addBullet(b);
     }
@@ -123,7 +124,6 @@ void MidLevelEnemy::draw()
 {
     // const Texture2D& enemyTexture = ResourceManager::GetInstance().GetTextureRef(textureName);
     rect = {position.x, position.y, spriteSize, spriteSize};
-    Vector2 hitboxOrigin = {hitbox.width / 2.0f, hitbox.height / 2.0f};
     hitbox.x = rect.x;
     hitbox.y = rect.y;
 

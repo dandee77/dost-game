@@ -53,6 +53,8 @@ The first configure downloads Raylib 5.5 from GitHub into `build/_deps`. It need
 
 With the Visual Studio generator, the default Debug executable and copied assets are in `build/Debug/`. Run from that folder. On the current Windows machine, CMake is bundled at `C:/Program Files (x86)/Microsoft Visual Studio/2022/BuildTools/Common7/IDE/CommonExtensions/Microsoft/CMake/CMake/bin/cmake.exe` and is not on PATH.
 
+The DOST GAME workspace also has a portable LLVM-MinGW 20260908 / Clang 23.1.1, CMake 3.31.6, Ninja 1.12.1 and Raylib 5.5 under ignored `build/.tools/`. Its configured output is `build/game/`. `build.bat` detects the portable CMake and builds that output. CMake copies `libc++.dll` and `libunwind.dll` beside the executable for this toolchain; without them Windows exits with `0xC0000135`.
+
 ### Release build for the finals
 
 ```bash
@@ -344,6 +346,14 @@ Each was found by reading the Space Ablaze source. The build-plan item that fixe
 ---
 
 ## Patterns Established During the Sprint
+
+### P5 skills (17 October 2026)
+
+`Vector2ClampValue(v, min, max)` clamps vector **length**, useful for cursor target range. `CheckCollisionLines(a, b, c, d, &intersection)` tests segment crossings; combine it with swept endpoint circles and start/end capsule checks for a thick rift. Declarations verified against local Raylib 5.5 headers. Queue commands while the F5 console captures input, then consume them in the next running simulation update; otherwise a paused command could deal damage or consume effect time. Store only enemy IDs in damage reports, and resolve each again before removal. Native test code accesses private methods through EquipmentTestAccess compiled with normal declarations, preserving MSVC symbol access.
+
+The P5 native harness exports `skills-preview.png` and validates all 32 skills without new artwork. The local portable cache is `build/game` rather than `build`; use the configured path for CMake/CTest. Terminal `--skills-list` needs no asset or graphics initialization, while `--command` starts only after loading.
+
+PowerShell does not wait for/capture the windowed executable's catalog output with a plain invocation/redirection. Use `.\SpaceAblaze.exe --skills-list | Out-Host` interactively, or Start-Process with -Wait and explicit redirected output in automation. Both verified to return exactly 32 catalog lines.
 
 ### P3: physical containment and event clocks (14 October 2026)
 

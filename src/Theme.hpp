@@ -6,6 +6,11 @@
 
 // Item 04 introduces only the tokens needed by debug tools; item 03 migrates the rest.
 namespace Theme {
+    inline constexpr Vector2 SKILL_STATUS_POSITION = {220.0f, 470.0f};
+    inline constexpr float SKILL_LINE_WIDTH = 0.6f, SKILL_COMPANION_RADIUS = 3.0f;
+    inline constexpr float SKILL_FLASH_TIME = 0.3f, SKILL_FILL_ALPHA = 0.12f;
+    inline constexpr int SKILL_RING_SEGMENTS = 48;
+    inline constexpr float SKILL_MAGNET_RADIUS = 12.0f;
     inline constexpr int DEBRIS_FRAME = 96;
     inline constexpr Rectangle DEBRIS_BODY = {30.0f, 30.0f, 36.0f, 36.0f};
     inline constexpr std::array<float, DEBRIS_KIND_COUNT> DEBRIS_DRAW_SIZES = {20.0f, 20.0f, 48.0f, 20.0f, 34.0f, 18.0f, 38.0f, 30.0f, 38.0f, 36.0f};

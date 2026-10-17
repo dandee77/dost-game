@@ -1,0 +1,198 @@
+# Skills & Upgrades Context
+
+Context file for all player skills in the game. It covers only the skill systems: the augment cards and the active abilities. Other project topics are intentionally left out.
+
+**Game type:** 2D top-down space shooter, swarm-style. The player's ship fights large crowds of enemies, so most skills are built around crowd control, area damage, survivability, and scaling the ship's firepower.
+
+**Sources:** the augment screenshot (existing augments) and `game_skills_design.md` (passives and actives). The former passives are now augments, and overlapping skills were merged, keeping the better-named version (see Section 5).
+
+---
+
+## 1. Skill System Overview
+
+There are two groups of skills:
+
+| Group | Count | How it works | Player involvement |
+|---|---|---|---|
+| **Augments** | 14 | Cards the player picks. Always on once picked. Permanently change the ship's stats and projectile behavior. | Pick a card |
+| **Actives** *(working name, see Section 6)* | 18 | Triggered or deployed effects. Offensive, defensive, or utility. Need timing and positioning. | Timing and positioning matter |
+
+**Total: 32 skills.**
+
+**Design intent**
+- **Augments** make the ship stronger all the time (the "build" backbone).
+- **Actives** create the big moments: clearing swarms, escaping danger, controlling space.
+
+---
+
+## 2. Augments (14)
+
+Augments are the former existing augments (4 kept) plus the former passive upgrades (10). They run continuously once picked.
+
+### 2.1 Offense Stats
+
+| Augment | Stat | Effect |
+|---|---|---|
+| **Weapons Payload** | Damage | Scales up the base damage of all standard attacks. |
+| **Critical Matrix** | Critical Chance | Raises the chance for attacks to hit weak points, dealing a large damage multiplier. |
+| **Overclocked Chambers** | Attack Speed | Shorter cooldown between standard attacks, for a faster, smoother firing animation. |
+| **Rapid Fire** | Attack Rate | Raises the total number of bullets fired per second, for heavier suppressive fire. |
+
+### 2.2 Survivability
+
+| Augment | Stat | Effect |
+|---|---|---|
+| **Reinforced Hull** | Max Health | Raises maximum structural integrity, so the ship survives more hits. |
+| **Nano Repair** | Healing | Instantly heals a portion of your HP. |
+| **Phase Shift** | Invincibility | Extends invincibility duration after taking damage. |
+
+### 2.3 Mobility
+
+| Augment | Stat | Effect |
+|---|---|---|
+| **Thruster Overdrive** | Movement Speed | Faster navigation and easier dodging of incoming fire. |
+| **Gyro Control** | Rotation Speed | Increases rotation speed for faster turns. |
+
+### 2.4 Projectile Behavior
+
+| Augment | Effect |
+|---|---|
+| **Armor Piercing (Pierce)** | Projectiles travel through multiple targets instead of stopping at the first. Very efficient against dense swarms. |
+| **Inertia Impact** | Bullets briefly knock enemies back. |
+
+### 2.5 Weapon Patterns
+
+| Augment | Direction | Effect |
+|---|---|---|
+| **Scatter Shot** | Forward spread | Primary weapon fires multiple projectiles in a wide forward-facing spread for better area coverage. |
+| **Broadside Cannons (Side Shot)** | Left and right | Lateral turrets fire perpendicular to the ship, covering the flanks. |
+| **Tail Gunner (Rear Shot)** | Behind | Rear-facing cannon fires backward automatically, protecting against ambushes and trailing enemies. |
+
+---
+
+## 3. Actives (18)
+
+*"Actives" is a working name. See Section 6 for naming options.*
+
+Actives need strategic timing and positioning. The grouping below is a suggested organization for readability. The source document lists them without categories.
+
+### 3.1 Area Damage / Offensive Burst
+
+| Ability | Description |
+|---|---|
+| **Nuclear Missile** | Launches a high-yield warhead with a massive blast radius. Instantly obliterates all standard enemies caught in the fallout. |
+| **Armageddon** | Calls down a relentless, screen-wide barrage of missiles. Continuous explosive destruction for the duration of the skill. |
+| **Radiant Halo** | Emits a localized burst of energy that severely damages all hostiles immediately around the ship. |
+| **Space Collapse** | Collapses reality in a designated target zone and banishes everything inside. **Drawback:** enemies are erased from reality, so they drop **zero scrap**. |
+
+### 3.2 Orbiting / Aura Damage
+
+| Ability | Description |
+|---|---|
+| **Laser Rings** | High-speed spinning laser blades orbit the ship. Very dangerous to enemies that breach the immediate perimeter. |
+| **Lightning Ring** | Electrified aura around the ship. Enemies touching the perimeter take shock damage and are temporarily stunned. |
+
+### 3.3 Directed / Chain Damage
+
+| Ability | Description |
+|---|---|
+| **Plasma Beam** | Sustained, superheated cone of plasma in front of the ship. Melts through heavily armored targets. |
+| **Chain Lightning** | High-voltage arc that automatically bounces between multiple grouped enemies, chaining damage across formations. |
+
+### 3.4 Zone Control
+
+| Ability | Description |
+|---|---|
+| **Singularity (Black Hole)** | Gravitational anomaly that violently pulls nearby enemies into its center, crushing them until they disappear completely. |
+| **Realm Breaker** | Slices open a lingering spatial rift. Deals extreme continuous damage to enemies inside and swallows all incoming enemy projectiles, acting as a defensive wall. |
+| **Corrosive Trail (Acid Trail)** | Vents toxic exhaust behind the ship. Enemies flying through it take damage over time, move slower, and have reduced combat stats. |
+
+### 3.5 Defense and Crowd Pushback
+
+| Ability | Description |
+|---|---|
+| **Deflector Shield** | Energy barrier that absorbs a set amount of incoming damage or completely negates a specific number of hits. |
+| **Point-Defense Interceptor** | Automated countermeasures that track and shoot down incoming enemy projectiles before they hit. |
+| **Repulsor Pulse** | Kinetic shockwave on a recurring timer. Pushes enemies back and creates breathing room when swarmed. |
+
+### 3.6 Mobility and Decoys
+
+| Ability | Description |
+|---|---|
+| **Blink Drive (Short TP)** | Short-range, instantaneous teleport. For escaping death-traps, dodging boss attacks, or repositioning. |
+| **Hologram Clone** | Hard-light duplicate of the ship that draws enemy aggro and mimics the primary weapon's fire. |
+
+### 3.7 Summons and Utility
+
+| Ability | Description |
+|---|---|
+| **Combat Drone (Robot Pet)** | Autonomous robotic companion that independently targets, chases, and destroys hostiles. |
+| **Scrap Magnet** | Electromagnetic field that automatically vacuums up all dropped scrap and resources across the battlefield. |
+
+---
+
+## 4. Quick Reference
+
+### Augments (14)
+Weapons Payload, Critical Matrix, Overclocked Chambers, Rapid Fire, Reinforced Hull, Nano Repair, Phase Shift, Thruster Overdrive, Gyro Control, Armor Piercing, Inertia Impact, Scatter Shot, Broadside Cannons, Tail Gunner
+
+### Actives (18)
+Laser Rings, Deflector Shield, Lightning Ring, Blink Drive, Nuclear Missile, Space Collapse, Radiant Halo, Repulsor Pulse, Point-Defense Interceptor, Scrap Magnet, Chain Lightning, Hologram Clone, Combat Drone, Plasma Beam, Corrosive Trail, Singularity, Realm Breaker, Armageddon
+
+### Skills With Special Rules or Drawbacks
+- **Space Collapse:** enemies killed by it drop no scrap.
+- **Singularity:** enemies are crushed until they disappear completely. The source does not say whether they drop scrap.
+- **Realm Breaker:** swallows enemy projectiles, so it doubles as defense.
+- **Corrosive Trail:** applies three effects: damage over time, slow, and reduced enemy combat stats.
+- **Lightning Ring:** applies stun in addition to damage.
+
+---
+
+## 5. Merged Duplicates
+
+These 5 original augments overlapped with other skills. The better-named version was kept.
+
+| Removed | Kept | Reason |
+|---|---|---|
+| Scatter Shot (old augment) | **Scatter Shot** | Same name and effect; kept version has the fuller description. |
+| Piercing Rounds | **Armor Piercing (Pierce)** | Same effect; fits the ship-themed naming. |
+| Speed Demon | **Thruster Overdrive** | Same effect (movement speed); fits the ship-themed naming. |
+| Rapid Fire (old augment, +10% attack speed) | **Overclocked Chambers** | Same stat (shorter time between shots). Also removes the duplicate "Rapid Fire" name. |
+| Trigger Happy | **Rapid Fire** | Both mean more shots per second. |
+
+---
+
+## 6. Naming the Actives (pending decision)
+
+Now that the passives are augments, the second group needs a clear name. Options:
+
+| Name | Fit |
+|---|---|
+| **Abilities** | Simple and universal. Players understand it immediately. |
+| **Modules** | Ship-themed, like installing equipment. Matches the sci-fi setting. |
+| **Special Weapons** | Clear, but does not fit non-weapon actives like Scrap Magnet, Blink Drive, or Deflector Shield. |
+| **Ship Systems** | Ship-themed and covers weapons, defense, and utility. |
+| **Protocols** | Techy and unique. Less obvious to new players. |
+| **Skills** | Very clear, but conflicts with this file's use of "skills" for everything. |
+
+---
+
+## 7. Open Questions
+
+1. **Active group name:** pick from Section 6.
+2. **Overclocked Chambers vs. Rapid Fire** are still close to each other. One shortens the cooldown between shots, the other raises bullets per second. Consider merging or clearly differentiating them.
+3. **No numbers are defined yet:** values, cooldowns, durations, radii, damage, upgrade levels, and how many augments and actives the player can hold at once are all unspecified.
+4. **How the player gets each skill** (cards, shop, drops) is not specified. Augments were originally cards, but it is unclear whether actives come from the same cards.
+5. **Singularity and scrap:** do enemies it crushes drop scrap, or do they behave like Space Collapse?
+6. **Activation:** it is not defined which actives are manual (button press) vs. automatic (timer or auto-trigger). Examples that read as automatic: Repulsor Pulse (recurring timer), Point-Defense Interceptor, Scrap Magnet, Combat Drone.
+7. **Balance risk:** Nuclear Missile, Armageddon, and Space Collapse are very strong against swarms. Cooldowns and rarity will matter.
+
+---
+
+## 8. Changelog
+
+| Date | Change |
+|---|---|
+| 17 Oct 2026 | Initial draft from the augment screenshot and `game_skills_design.md`. |
+| 17 Oct 2026 | Removed 5 overlapping augments (Scatter Shot, Piercing Rounds, Speed Demon, Rapid Fire, Trigger Happy), keeping the better-named versions. |
+| 17 Oct 2026 | Converted the 10 passives into augments (now 14 total, regrouped by role). Actives name left pending, with options listed. |

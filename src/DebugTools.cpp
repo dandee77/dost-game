@@ -16,6 +16,7 @@
 #include "Player.hpp"
 #include "ResourceManager.hpp"
 #include "Theme.hpp"
+#include "SkillSystem.hpp"
 
 namespace {
     enum DebugCommand { DEBUG_HELP, DEBUG_HITBOX, DEBUG_STATS, DEBUG_MUTE, DEBUG_INVINCIBLE,
@@ -154,9 +155,17 @@ void DebugTools::addOutput(const std::string& line)
     output.push_back(line);
 }
 
+void DebugTools::runCommand(const std::string& command, Player* player, BarricadeEvent* barricade)
+{
+    input = command;
+    execute(player, barricade);
+}
+
 std::vector<std::string> DebugTools::completions() const
 {
     std::vector<std::string> matches;
+    for (const auto& candidate : SkillSystem::commandCompletions())
+        if (candidate.starts_with(input)) matches.push_back(candidate);
     if (input.starts_with("spawn ")) {
         for (const std::string prefix : {"spawn lowlevel enemy ", "spawn barricade event", "spawn debris all"})
             if (prefix.starts_with(input)) matches.push_back(prefix);
@@ -225,6 +234,7 @@ void DebugTools::execute(Player* player, BarricadeEvent* barricade)
         return;
     }
     addOutput("> " + input);
+    const std::string commandLine = input;
     if (history.empty() || history.back() != input) {
         if (history.size() == Config::DEBUG_HISTORY_LIMIT) history.erase(history.begin());
         history.push_back(input);
@@ -232,6 +242,15 @@ void DebugTools::execute(Player* player, BarricadeEvent* barricade)
     historyIndex = history.size();
     historyDraft.clear();
     input.clear();
+
+    if (name == "skill" || name == "augment") {
+        if (!skills) { addOutput("Skills are unavailable outside a game session."); return; }
+        for (const auto& line : skills->command(commandLine, player)) {
+            addOutput(line);
+            TraceLog(LOG_INFO, "[Skills] %s", line.c_str());
+        }
+        return;
+    }
 
     const auto found = std::find_if(commands.begin(), commands.end(), [&](const CommandInfo& command) {
         return name == command.name;
@@ -318,6 +337,7 @@ void DebugTools::execute(Player* player, BarricadeEvent* barricade)
         break;
     }
     case DEBUG_HELP:
+        addOutput("Skills: augment <key|list>; skill <equip|cast|unequip> <key>. Tab lists all.");
         addOutput("hitbox / stats / mute / invincible [on|off|toggle]");
         addOutput("player: builds, weapons, engines and shields");
         addOutput("spawn lowlevel enemy <quantity>");

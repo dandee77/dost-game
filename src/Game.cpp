@@ -1,5 +1,6 @@
 #include "Game.hpp"
 #include <cmath>
+#include <cstdlib>
 #include <iostream>
 #include <vector>
 #include "Animator.hpp"
@@ -41,6 +42,7 @@ Game::Game()
 
 Game::~Game()
 {
+    skills.reset();
     barricadeEvent.reset();
     ScrapManager::GetInstance().reset();
     if (restartButton) delete restartButton;
@@ -49,6 +51,9 @@ Game::~Game()
 
 void Game::resetRun()
 {
+    skills.reset();
+    augmentRng.seed(Balance::SKILL_SEED);
+    prevGameTimer = 0;
     barricadeEvent.reset();
     ScrapManager::GetInstance().reset();
     harvestedScrap = 0;
@@ -78,7 +83,7 @@ void Game::onSwitch()
     worldTileSize = 500.0f; 
     playerEntity = Player();
     playerEntity.init();
-    utils::gameCamera = {0};
+    utils::gameCamera = {};
     utils::gameCamera.target = { playerEntity.getPosition().x, playerEntity.getPosition().y };
     utils::gameCamera.offset = {GAME_SCREEN_WIDTH/2.0f, GAME_SCREEN_HEIGHT/2.0f};
     utils::gameCamera.rotation = 0.0f;
@@ -185,7 +190,17 @@ void Game::restartGame() { //ts kinda useless ngl
 }
 
 
-void Game::damageEquipmentEnemy(const std::string& id, int amount, Vector2 direction, float knockback)
+bool Game::updateSkills(float dt, Vector2 aim, bool activateSelected)
+{
+    if (gameState != GAME_RUNNING) return false;
+    const auto result = skills.update(dt, playerEntity, aim, activateSelected);
+    for (const auto& hit : result.hits)
+        damageEquipmentEnemy(hit.enemyId, hit.damage, {}, 0.0f, hit.dropsScrap);
+    harvestedScrap += result.scrap;
+    return result.teleported;
+}
+
+void Game::damageEquipmentEnemy(const std::string& id, int amount, Vector2 direction, float knockback, bool dropSkillScrap)
 {
     auto& enemies = EnemyManager::GetInstance().getEnemies();
     const auto found = enemies.find(id);
@@ -197,6 +212,9 @@ void Game::damageEquipmentEnemy(const std::string& id, int amount, Vector2 direc
     DamageIndicatorManager::GetInstance().addDamageIndicator(enemy.getPosition(), dealt, amount);
     if (knockback > 0.0f && enemy.canReceiveKnockback()) enemy.applyKnockback(direction, knockback);
     if (!enemy.isDead()) return;
+    if (dropSkillScrap && enemy.getEnemyType() != BARRICADE_ENEMY)
+        ScrapManager::GetInstance().spawnScrap(enemy.getPosition(), enemy.getEnemyType() == MID_LEVEL_ENEMY ?
+            Balance::SKILL_MID_SCRAP : Balance::SKILL_LOW_SCRAP);
     killCounter.increment();
     playerEntity.addScore(enemy.getEnemyType() == LOW_LEVEL_ENEMY ? Balance::LOW_SCORE :
         enemy.getEnemyType() == MID_LEVEL_ENEMY ? Balance::MID_SCORE : Balance::DEBRIS_SCORE);
@@ -244,7 +262,7 @@ void Game::resolveEquipmentAttacks()
             if (Bullet::hitFraction(from, to, enemy->getPosition(), Balance::LASER_RADIUS + enemy->getHitbox().width) >= 0.0f)
                 targets.push_back(id);
         }
-        for (const auto& id : targets) damageEquipmentEnemy(id, ticks * Balance::LASER_DAMAGE,
+        for (const auto& id : targets) damageEquipmentEnemy(id, ticks * playerEntity.scaleAttackDamage(Balance::LASER_DAMAGE),
             Vector2Subtract(to, from), playerEntity.getKnockbackPower());
         targets.clear();
         for (const auto& [id, debris] : am.getDebris()) {
@@ -277,13 +295,16 @@ void Game::resolveEquipmentAttacks()
         });
         for (const auto& hit : hits) {
             if (!bullet.canPierce()) break;
+            // An earlier rocket splash may already have destroyed this target.
+            if (hit.debris ? !am.getDebris().contains(hit.id) : !em.getEnemies().contains(hit.id)) continue;
             const Vector2 impactPosition = Vector2Lerp(
                 bullet.getPreviousPosition(), bullet.getPosition(), hit.fraction);
             if (bullet.getKind() == PROJECTILE_ROCKET) {
                 bulletManager.spawnImpact(impactPosition, bullet.getKind(), false, bullet.getDirection());
                 detonateRocket(impactPosition, bullet.getDamage(), bullet.getKnockbackPower());
                 bullet.reducePiercePower();
-                break;
+                bullet.recordHit(hit.id);
+                continue;
             }
             if (hit.debris) destroyEquipmentDebris(hit.id);
             else damageEquipmentEnemy(hit.id, bullet.getDamage(), bullet.getDirection(), bullet.getKnockbackPower());
@@ -357,7 +378,8 @@ std::string Game::update()
 
         if ((int)gameTimer.getElapsedTime() % 20 == 0 && (int)gameTimer.getElapsedTime() > 0 && (int)gameTimer.getElapsedTime() != prevGameTimer) {
             
-            std::vector<int> usedIndices;
+            auto offers = augmentCatalog();
+            std::shuffle(offers.begin(), offers.end(), augmentRng);
             
             float cardWidth = 1200.0f;
             float cardHeight = 300.0f;
@@ -373,18 +395,10 @@ std::string Game::update()
             };
             
             for (int i = 0; i < 3; i++) {
-                int randomIndex;
-                do {
-                    randomIndex = rand() % utils::augmentPool.size();
-                } while (std::find(usedIndices.begin(), usedIndices.end(), randomIndex) != usedIndices.end());
-                
-                usedIndices.push_back(randomIndex);
-                
                 augmentCards.push_back(Card(
                     cardPositions[i], 
                     {cardWidth, cardHeight}, 
-                    utils::augmentPool[randomIndex][0], 
-                    utils::augmentPool[randomIndex][1]
+                    offers[i].id
                 ));
             }
             
@@ -419,6 +433,8 @@ std::string Game::update()
         playerEntity.update();
         // ?  the enemies bullet shares the same bullet max range since it is relative to the player
         BulletManager::GetInstance().update(playerEntity.getPosition()); // ?  it only gets player position to calculate the distance to the bullets
+        const bool skillTeleported = updateSkills(deltaTime,
+            GetScreenToWorld2D(GetMousePosition(), utils::gameCamera), IsKeyPressed(KEY_Q));
         DamageIndicatorManager::GetInstance().update();
         ConfettiManager::GetInstance().update();
         DamageOverlay::GetInstance().update();
@@ -472,7 +488,7 @@ std::string Game::update()
         debrisCollisionGrid.build();
 
 
-        for (int i = 0; i < bm.getBullets().size(); i++) {
+        for (int i = 0; i < static_cast<int>(bm.getBullets().size()); i++) {
 
             if (bm.getBullets()[i].getKind() != PROJECTILE_LEGACY) continue;
 
@@ -593,10 +609,12 @@ std::string Game::update()
                                 playerEntity.getHitbox().width) &&
                                 playerEntity.getPlayerState() == PLAYER_DEFAULT) {
                     Vector2 bulletPosition = bm.getBullets()[i].getPosition(); 
+                    const int incomingDamage = incoming.getDamage() > 0 ? incoming.getDamage() : Balance::PLAYER_CONTACT_DAMAGE;
                     bm.spawnImpact(bulletPosition, bm.getBullets()[i].getKind(), true,
                         bm.getBullets()[i].getDirection());
                     bm.removeBullet(i);
-                    playerEntity.takeDamage(GetTime(), bulletPosition, 3.0f);
+                    playerEntity.takeContactDamage(GetTime(), bulletPosition, 3.0f,
+                        incomingDamage);
                     if (playerEntity.getHealth() <= 0) {
                         deathInfo.killerType = KILLER_ENEMY_BULLET;
                         deathInfo.killerID = "enemy_bullet";
@@ -653,9 +671,10 @@ std::string Game::update()
 #pragma endregion
 
 
-        EnemyManager::GetInstance().update(playerEntity.getPosition(), gameTimer); //! <<***********************
+        EnemyManager::GetInstance().update(playerEntity.getPosition(), gameTimer, skills.decoy(),
+            Balance::ABILITIES[ABILITY_HOLOGRAM_CLONE].radius);
 
-        resolveBarricadeContact(previousPlayerPosition);
+        resolveBarricadeContact(skillTeleported ? playerEntity.getPosition() : previousPlayerPosition);
         barricadeEvent.finishIfEscaped(playerEntity.getPosition(), utils::gameCamera);
 
 
@@ -681,7 +700,7 @@ std::string Game::update()
             // player to enemy collision
             if (CheckCollisions(enemy->getPosition(), playerEntity.getPosition(), playerEntity.getHitbox().width)
                 && playerEntity.getPlayerState() == PLAYER_DEFAULT) {
-                playerEntity.takeDamage(GetTime(), enemy->getPosition(), enemy->getHitbox().width);
+                playerEntity.takeContactDamage(GetTime(), enemy->getPosition(), enemy->getHitbox().width, enemy->getContactDamage());
                 if (playerEntity.getHealth() <= 0) {
                     deathInfo.killerType = KILLER_ENEMY_COLLISION;
                     deathInfo.killerID = enemyId;
@@ -807,39 +826,18 @@ std::string Game::update()
         
         for (auto& card : augmentCards) {
             card.update();
-            if (card.isIntroComplete() && card.isClicked()) {
+            if (card.isIntroComplete() && !card.hasStartedExit() && card.isClicked()) {
                 PlaySound(ResourceManager::GetInstance().GetSound("button_click"));
-                if (card.getTitle() == "Rapid Fire") {
-                    playerEntity.increasePlayerAttackSpeed();
-                } else if (card.getTitle() == "Trigger Happy") {
-                    playerEntity.increaseTriggerHappyBurst();
-                } else if (card.getTitle() == "Scatter Shot") {
-                    playerEntity.increaseScatterShot();
-                } else if (card.getTitle() == "Speed Demon") {
-                    playerEntity.increasePlayerMovementSpeed();
-                } else if (card.getTitle() == "Nano Repair") {
-                    playerEntity.increasePlayerHealth();
-                } else if (card.getTitle() == "Piercing Rounds") { 
-                    playerEntity.increasePiercingRounds();
-                } else if (card.getTitle() == "Phase Shift") {
-                    playerEntity.increasePlayerIframeDuration();
-                } else if (card.getTitle() == "Gyro Control") {
-                    playerEntity.increasePlayerRotationSpeed();
-                } else if (card.getTitle() == "Inertia Impact") {
-                    playerEntity.increaseInertiaImpact();
-                }
-                // } else if (card.getTitle() == "Overdrive") {
-                    
-                // } else if (card.getTitle() == "Damage Amplifier") {
-                   
-                // }                
+                applyAugment(playerEntity, card.getAugmentId());
                 card.startExitAnimation();
+                break;
             }
             if (card.isExitComplete()) {
                 augmentCards.clear();
                 ConfettiManager::GetInstance().stopConfetti();
                 gameTimer.unpause();
                 gameState = GAME_RUNNING; 
+                break;
             }
         }
         break; 
@@ -854,6 +852,8 @@ std::string Game::update()
     
     case GAME_OVER:
     {
+        skills.reset();
+        playerEntity.setDeflectorHits(0);
         barricadeEvent.reset();
         ScrapManager::GetInstance().reset();
         harvestedScrap = 0;
@@ -935,6 +935,7 @@ void Game::draw()
 
         // Equipment layers draw directly in a fixed order.
         playerEntity.draw();
+        skills.draw();
 
         EnemyManager::GetInstance().draw();
         DebrisManager::GetInstance().draw();
@@ -1005,6 +1006,7 @@ void Game::draw()
     EndMode2D();
 
     if (gameState != GAME_OVER) playerEntity.drawEquipmentStatus();
+    if (gameState != GAME_OVER) skills.drawStatus();
 
     if(gameState == GAME_AUGMENT_SELECTION) ConfettiManager::GetInstance().draw();
 
@@ -1080,7 +1082,7 @@ void Game::draw()
                     WHITE);
 
         const Texture2D& healthTexture = ResourceManager::GetInstance().GetTextureRef("health");
-        float healthBarWidth = 1000.0f * (static_cast<float>(playerEntity.getHealth()) / 100.0f);
+        float healthBarWidth = 1000.0f * (static_cast<float>(playerEntity.getHealth()) / playerEntity.getMaxHealth());
         DrawTexturePro(healthTexture,
                     Rectangle{0, 0, (float)healthTexture.width, (float)healthTexture.height},
                     Rectangle{GAME_SCREEN_WIDTH - 1200, 150, healthBarWidth, 150},
@@ -1106,6 +1108,8 @@ void Game::draw()
 
 void Game::onExit()
 {
+    skills.reset();
+    playerEntity.setDeflectorHits(0);
     barricadeEvent.reset();
     ScrapManager::GetInstance().reset();
     harvestedScrap = 0;
@@ -1118,6 +1122,7 @@ void Game::onExit()
 #ifdef GAME_DEBUG
 bool Game::updateDebugConsole(bool activeGame)
 {
+    debugTools.bindSkills(&skills);
     debugTools.update(activeGame ? &playerEntity : nullptr, activeGame ? &barricadeEvent : nullptr);
     return debugTools.capturesInput();
 }
@@ -1125,5 +1130,11 @@ bool Game::updateDebugConsole(bool activeGame)
 void Game::drawDebugConsole() const
 {
     debugTools.drawConsole();
+}
+
+void Game::executeDebugCommand(const std::string& command)
+{
+    debugTools.bindSkills(&skills);
+    debugTools.runCommand(command, &playerEntity, &barricadeEvent);
 }
 #endif

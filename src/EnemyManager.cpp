@@ -14,7 +14,7 @@
 #define ENEMY_MAX_RANGE 100.0f
 #define MID_LEVEL_ENEMY_SPAWN_START_TIME 150.0f 
 
-void EnemyManager::update(Vector2 playerPos, const GameTimer& gameTimer)
+void EnemyManager::update(Vector2 playerPos, const GameTimer& gameTimer, const Vector2* decoy, float decoyRange)
 {
     const float dt = GetFrameTime();
     float elapsed = gameTimer.getElapsedTime(); 
@@ -33,9 +33,11 @@ void EnemyManager::update(Vector2 playerPos, const GameTimer& gameTimer)
     std::vector<std::string> toRemove;
     for (auto& [id, enemy] : enemies) {
         float dist = Vector2Distance(enemy->getPosition(), playerPos);
-        enemy->getPlayerPositionForEnemy(playerPos);
+        const bool lured = decoy && enemy->getEnemyType() != BARRICADE_ENEMY &&
+            Vector2Distance(enemy->getPosition(), *decoy) <= decoyRange;
+        enemy->getPlayerPositionForEnemy(lured ? *decoy : playerPos);
         
-        enemy->update();
+        enemy->updateWithStatus(dt);
         enemy->advanceHitReaction(dt);
         if (dist > ENEMY_MAX_DISTANCE) {
             toRemove.push_back(id);

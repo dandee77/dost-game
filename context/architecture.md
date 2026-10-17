@@ -1,5 +1,13 @@
 # Architecture
 
+## P5 skills extension (17 October)
+
+Game owns `SkillSystem` by value. It owns typed ability states, cooldowns, bounded visual/trail values and seeded barrage randomness. `Player` owns augment levels, modified stats, critical RNG and deflector-hit charges. `Enemy` owns temporary stun/corrosion. No new singleton is introduced. `resetRun()` resets skills and augment-offer RNG; Player::init resets augment stats. Death and scene exit clear skill effects/deflector charges.
+
+During running simulation: Player and BulletManager update, then Game::updateSkills advances effects, removes intercepted hostile bullets, applies enemy status/displacements and returns teleport state. SkillSystem reports typed damage events with an explicit drop flag; Game routes them through existing damage/score/destruction handling. EnemyManager receives an optional short-lived clone position for targeting, then updates enemies through status-aware movement. Blink replaces the pre-teleport swept-contact start so teleporting across a wall is not treated as movement through it. Existing collision snapshots are rebuilt after skill damage/removals.
+
+Augment IDs replace card-title dispatch and utils::augmentPool. The existing timed offer samples three distinct entries from the 14-entry catalog with a reset seeded generator; no new progression path. SkillSystem::command handles skill/augment text at the input boundary; behavior dispatch uses typed IDs. DebugTools binds to the Game-owned system. Application may route repeated terminal `--command` values through the same console only after resources load and a new game starts. Debug commands remain GAME_DEBUG gated. See `skills-commands.md` for commands, provisional behavior and deferred connections.
+
 ## Current debris harvesting extension (15 October)
 
 `Asteroid`/`AsteroidManager` were renamed to `Debris`/`DebrisManager`, including source files, IDs, texture keys, collision observers, diagnostics, tests, and death labels. `DebrisKind` indexes ten entries; Theme owns fixed draw sizes, Balance owns fixed collision radii and yields. Circular collision search and deferred removal order remain unchanged.

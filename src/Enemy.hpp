@@ -46,6 +46,12 @@ public:
     virtual bool canReceiveKnockback() const;
     virtual Vector2 getPreviousPosition() const { return position; }
     void applySeparation(Vector2 displacement);
+    void applyStun(float duration);
+    void applyCorrosion(float duration);
+    void updateWithStatus(float dt);
+    int getContactDamage() const;
+    bool isStunned() const { return stunRemaining > 0.0f; }
+    bool isCorroded() const { return corrosionRemaining > 0.0f; }
 
 protected:
 
@@ -63,4 +69,5 @@ protected:
     Cooldown knockbackCooldown;
     float hitReactionRemaining = 0.0f;
     bool hitReactionFresh = false;
+    float stunRemaining = 0.0f, corrosionRemaining = 0.0f;
 };

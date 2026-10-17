@@ -8,6 +8,8 @@ Values marked **(SA)** are the current Space Ablaze values, kept so the game sti
 
 ## Design Pillars
 
+**17 October P5 skills override:** The user's supplied `skills-context.md` supersedes the old nine-augment names below for this prototype. There are now 14 typed augments and 18 abilities. Provisional numbers, activation rules, and resolved assumptions are documented in `skills-commands.md`; executable values live in `Balance.hpp`. Rapid Fire adds burst shots; Overclocked Chambers reduces cooldown. Nano Repair heals 25% of current max hull; Reinforced Hull increases max/current hull. Singularity yields scrap; Space Collapse does not. No acquisition/shop work is included.
+
 1. **Readable chaos.** Many enemies, but the player always sees what hurts: toxic green is danger, gold is reward, sky blue is you.
 2. **Every kill feeds the loop.** Junk becomes scrap, scrap becomes gear, gear clears more junk.
 3. **Fair competition.** The same seed gives every player the same waves; score rewards skill, not luck.

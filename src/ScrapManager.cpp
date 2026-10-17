@@ -6,6 +6,21 @@
 #include "Theme.hpp"
 #include "raymath.h"
 
+void ScrapManager::spawnScrap(Vector2 position, int value)
+{
+    if (value <= 0) return;
+    if (pickups.size() >= Balance::SCRAP_MAX_PICKUPS) { pickups.front()->addValue(value); return; }
+    pickups.push_back(std::make_unique<ScrapPickup>(position, value, Theme::SCRAP_ORB_SIZE));
+}
+
+int ScrapManager::collectAll()
+{
+    int value = 0;
+    for (const auto& pickup : pickups) value += pickup->getValue();
+    pickups.clear();
+    return value; // Pending destruction stays intact until its visible handoff.
+}
+
 void ScrapManager::spawnDebris(Vector2 center, float angle, DebrisKind kind, float drawSize, bool harvestable)
 {
     destructions.push_back({center, angle, drawSize,

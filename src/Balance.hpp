@@ -5,6 +5,46 @@
 
 // Player equipment prototypes. TUNE in playtests before adding progression.
 namespace Balance {
+    // P5 skills prototype. TUNE: acquisition and final balance intentionally deferred.
+    inline constexpr int AUG_MAX_LEVEL = 10, AUG_HULL_BONUS = 20;
+    inline constexpr float AUG_PAYLOAD_BONUS = 0.15f, AUG_CRIT_CHANCE = 0.05f;
+    inline constexpr float AUG_CRIT_MULTIPLIER = 2.0f, AUG_REPAIR_FRACTION = 0.25f;
+    inline constexpr int CRIT_ROLL_STEPS = 10000;
+    inline constexpr unsigned int SKILL_SEED = 20261017;
+    struct AbilityTuning { float cooldown, duration, radius; int damage; float interval; };
+    // Order matches AbilityId. Radius is in world units; damage is per tick.
+    inline constexpr std::array<AbilityTuning, 18> ABILITIES = {{
+        {12.0f, 8.0f, 18.0f, 12, 0.2f}, // Laser Rings
+        {16.0f, 8.0f, 8.0f, 0, 0.2f},  // Deflector Shield
+        {14.0f, 8.0f, 25.0f, 8, 0.5f}, // Lightning Ring
+        {4.0f, 0.2f, 35.0f, 0, 0.2f},  // Blink Drive
+        {30.0f, 0.7f, 55.0f, 250, 0.7f}, // Nuclear Missile
+        {35.0f, 0.2f, 32.0f, 300, 0.2f}, // Space Collapse
+        {8.0f, 0.2f, 32.0f, 60, 0.2f}, // Radiant Halo
+        {5.0f, 0.2f, 30.0f, 0, 0.2f},  // Repulsor Pulse
+        {12.0f, 8.0f, 38.0f, 0, 0.1f}, // Point-Defense Interceptor
+        {15.0f, 5.0f, 0.0f, 0, 0.2f},  // Scrap Magnet
+        {7.0f, 0.2f, 45.0f, 35, 0.2f}, // Chain Lightning
+        {18.0f, 10.0f, 60.0f, 0, 0.5f}, // Hologram Clone
+        {20.0f, 15.0f, 90.0f, 15, 0.4f}, // Combat Drone
+        {12.0f, 4.0f, 65.0f, 12, 0.15f}, // Plasma Beam
+        {14.0f, 8.0f, 8.0f, 6, 0.3f}, // Corrosive Trail
+        {22.0f, 6.0f, 42.0f, 10, 0.2f}, // Singularity
+        {20.0f, 6.0f, 24.0f, 20, 0.2f}, // Realm Breaker
+        {35.0f, 6.0f, 22.0f, 80, 0.3f} // Armageddon
+    }};
+    inline constexpr float SKILL_TARGET_RANGE = 90.0f, SKILL_RING_WIDTH = 5.0f;
+    inline constexpr float SKILL_ORBIT_SPEED = 6.0f, SKILL_BLADE_RADIUS = 4.0f;
+    inline constexpr int SKILL_BLADE_COUNT = 3, SKILL_SHIELD_HITS = 3, SKILL_CHAIN_TARGETS = 6;
+    inline constexpr float SKILL_STUN_TIME = 0.6f, SKILL_CORROSION_TIME = 1.0f;
+    inline constexpr float SKILL_SLOW_MULTIPLIER = 0.5f, SKILL_WEAKEN_MULTIPLIER = 0.5f;
+    inline constexpr float SKILL_REPULSE_DISTANCE = 22.0f, SKILL_PULL_SPEED = 28.0f;
+    inline constexpr float SKILL_PLASMA_DOT = 0.8660254f, SKILL_DRONE_SPEED = 70.0f;
+    inline constexpr float SKILL_DRONE_FIRE_RANGE = 35.0f, SKILL_CLONE_OFFSET = 18.0f;
+    inline constexpr float SKILL_TRAIL_LIFETIME = 3.0f, SKILL_BLINK_IFRAME = 0.25f;
+    inline constexpr float SKILL_RIFT_HALF_LENGTH = 25.0f, SKILL_RIFT_WIDTH = 6.0f;
+    inline constexpr float SKILL_BARRAGE_VIEW_FRACTION = 0.85f;
+    inline constexpr int SKILL_LOW_SCRAP = 2, SKILL_MID_SCRAP = 5;
     // Fixed per-object sizes/rewards; no random scaling. TUNE in debris playtests.
     inline constexpr std::array<float, DEBRIS_KIND_COUNT> DEBRIS_RADII = {3.75f, 3.0f, 8.0f, 3.3f, 5.7f, 3.0f, 6.8f, 5.0f, 6.0f, 6.0f};
     inline constexpr std::array<int, DEBRIS_KIND_COUNT> DEBRIS_SCRAP_VALUES = {3, 2, 8, 2, 5, 2, 6, 4, 3, 5};

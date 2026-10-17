@@ -97,6 +97,7 @@ All use the same pattern: `static X& GetInstance()` with a function-local static
 ## Application and Scenes
 
 ### Application
+- P5: `Run(startupCommands)` optionally launches directly from completed loading into Game, then executes each debug command once. `main` accepts repeatable `--command` in debug-enabled builds and `--skills-list` in either build. The catalog option exits without a window.
 - Files: src/Application.hpp, src/Application.cpp
 - Status: modified (item 04)
 - Kind: value (one instance in `main`)
@@ -139,6 +140,7 @@ All use the same pattern: `static X& GetInstance()` with a function-local static
 - Changed by: 22
 
 ### Game
+- P5: owns `SkillSystem skills` and a seeded augment-offer generator. `updateSkills(dt, aim, activateSelected)` applies reported hits through existing damage/reward handling; returns whether Blink teleported. Console/startup commands use `executeDebugCommand`. Direct ability damage can award minimal scrap or suppress it for Space Collapse. Skill state clears in resetRun, death, exit and destruction; existing manager reset paths remain authoritative.
 - P4: `resetRun()` now centralizes run-container resets (including ScrapManager) and clears the run-local `harvestedScrap` counter; both entry/restart call it. Running/alive simulation consumes ScrapManager collection results and displays SCRAP in the safe-area HUD. Death/exit/destruction clear pickups. Full player/timer/camera reset consolidation remains item 05.
 - P3: owns `BarricadeEvent barricadeEvent`; updates it only during running simulation and resolves wall contact after enemy movement. Private camera/contact helpers restore zoom and route lethal contact to normal game over. Reset event before manager resets, and on exit/death/destruction. Debug console receives the event owner only in an active run.
 - P1: private `resolveEquipmentAttacks()`, `damageEquipmentEnemy(const std::string&, int, Vector2, float)`, `destroyEquipmentDebris(const std::string&)`, `detonateRocket(Vector2, int, float)` integrate swept projectiles, beam ticks, splash, score and destruction before legacy snapshots. No public API change. Player draws its own layers and equipment HUD; shield interception precedes legacy enemy-bullet hull collisions.
@@ -222,6 +224,7 @@ All use the same pattern: `static X& GetInstance()` with a function-local static
 - Gotchas: no virtual `getRadius()`; collision radii are read from class-specific methods (`getHitbox().width`, `getDebrisSize()`). Item 10 adds `virtual float getCollisionRadius() const` with a default of `rect.width / 2`.
 
 ### Player
+- P5: owns 14 typed augment levels, max health, damage multiplier, critical chance/RNG, and temporary deflector charges. `applyAugment`, `getAugmentLevel`, `getMaxHealth`, `scaleAttackDamage`, `teleport`, `setDeflectorHits`, `getDeflectorHits`, `fireClone`, `getPrimaryInterval`, `getLaserDamage`, `takeContactDamage` expose the needed behavior. `init` resets every new field. All primary weapons support damage/critical, burst and pattern augments; health HUD and hull art read maxHealth. General PlayerStats consolidation remains item 08.
 - P3: `resolveBarricadeContact(Vector2 correctedPosition, Vector2 normal, Vector2 source)` always corrects position/velocity for living players, but calls normal damage only in PLAYER_DEFAULT. Existing shields, debug invincibility, stun and iframe timers remain authoritative.
 - Files: src/Player.hpp, src/Player.cpp
 - Status: modified (P1 equipment prototypes, 14 October; PlayerStats refactor remains item 08)
@@ -272,6 +275,7 @@ All use the same pattern: `static X& GetInstance()` with a function-local static
 ## Enemies
 
 ### Enemy
+- P5: owns stun/corrosion clocks; `applyStun`, `applyCorrosion`, `updateWithStatus(dt)`, `getContactDamage`, `isStunned`, `isCorroded`. Corrosion slows movement and halves contact/new projectile damage; stun prevents movement/fire. Barricade formations ignore both statuses to preserve their shared event clock. Temporary speed changes are restored after update.
 - P3: `canReceiveKnockback() const` is virtual; `getPreviousPosition() const` defaults to current position and is overridden for moving barricade sweeps. `BARRICADE_ENEMY` appended to EnemyType.
 - Files: src/Enemy.hpp, src/Enemy.cpp
 - Status: existing → modified (item 10)
@@ -337,6 +341,7 @@ All use the same pattern: `static X& GetInstance()` with a function-local static
 - Cleanup erases only tracked IDs and their animations without kill rewards. Reset before EnemyManager resets/reuses IDs. Game calls reset on restart, scene entry/exit, death and destruction.
 
 ### MidLevelEnemy
+- P5: fired enemy bullets capture `getContactDamage()` so corrosion weakens their damage without altering existing in-flight bullets.
 - Files: src/MidLevelEnemy.hpp, src/MidLevelEnemy.cpp
 - Status: existing (reskinned in item 15)
 - Kind: derived
@@ -403,6 +408,7 @@ All use the same pattern: `static X& GetInstance()` with a function-local static
 ## Managers
 
 ### EnemyManager
+- P5: `update(playerPos, gameTimer, decoy = nullptr, decoyRange = 0)` accepts a frame-local clone target. Nearby ordinary enemies steer/fire toward it. Despawn distance still uses the real player. Calls Enemy::updateWithStatus; no new singleton state.
 - P3: `std::vector<std::string> spawnBarricade(Vector2 center)` creates all event segments using the shared enemy ID counter, or none if capacity is insufficient. Returns IDs to the Game-owned event; no new singleton state. Crowd separation still accepts only LOW_LEVEL_ENEMY.
 - Files: src/EnemyManager.hpp, src/EnemyManager.cpp
 - Status: existing → modified (items 10, 11)
@@ -443,6 +449,7 @@ All use the same pattern: `static X& GetInstance()` with a function-local static
 - Debug-only spawnGallery(playerPos) places all ten types around a stationary 60-unit ring, via spawn debris all.
 
 ### ScrapManager
+- P5: `spawnScrap(position, value)` adds a bounded existing-art pickup for direct ability kills; merges overflow value into an existing pickup. `collectAll()` returns and removes only released pickups, leaving destruction handoff intact. No new persistent fields; existing reset clears these pickups.
 - Files: src/ScrapManager.hpp/.cpp
 - Status: implemented for debris harvesting, 15 October.
 - Kind: run-state singleton; owns pending Destruction records and vector<unique_ptr<ScrapPickup>>.
@@ -502,21 +509,27 @@ All use the same pattern: `static X& GetInstance()` with a function-local static
 - Public API: `update(float dt)`, `draw(const HudData&)`, where `HudData` is a plain struct filled by `Game` each frame: health, max health, cargo, cargo capacity, credits, wave number, wave phase, banner timer, elapsed time, kill count, boss name and health fraction, dock screen position, dock visible flag, tutorial prompt.
 - Gotchas: draws only in screen space. Moves the existing health bar, `KillCounter::draw()` and `GameTimer::draw()` calls here.
 
-### Augment (planned)
+### Augment
 - Files: src/Augment.hpp, src/Augment.cpp
-- Status: planned (item 09)
-- Kind: data + free functions (replaces `utils::augmentPool`)
+- Status: implemented for P5 (17 October); the broader numbered refactor remains separate
+- Kind: typed data + free functions (replaces `utils::augmentPool`)
 - API:
   ```cpp
-  enum AugmentId { AUG_RAPID_FIRE, AUG_TRIGGER_HAPPY, AUG_SCATTER_SHOT, AUG_SPEED_DEMON,
-                   AUG_NANO_REPAIR, AUG_PIERCING_ROUNDS, AUG_PHASE_SHIFT, AUG_GYRO_CONTROL,
-                   AUG_INERTIA_IMPACT, AUG_COUNT };
-  struct AugmentInfo { AugmentId id; const char* title; const char* description; };
-  const AugmentInfo& getAugmentInfo(AugmentId id);
-  std::array<AugmentId, 3> rollAugmentOffer(RunRng& rng);   // three distinct ids
-  void applyAugment(Player& player, AugmentId id);          // the only switch on AugmentId
+  struct AugmentInfo { AugmentId id; const char* key; const char* title; const char* description; };
+  const std::array<AugmentInfo, AUG_COUNT>& augmentCatalog(); // 14 canonical IDs
+  AugmentId findAugment(std::string_view key); // AUG_COUNT means unknown
+  bool applyAugment(Player& player, AugmentId id); // delegates to Player-owned typed dispatch
   ```
-- `Card` stores an `AugmentId` (item 09 adds `getAugmentId()`), so `Game` no longer compares titles.
+- `Card` stores an `AugmentId`, so Game no longer compares titles. Game samples three distinct catalog entries using a reset `std::mt19937`; shared RunRng integration stays deferred. No duplicate skill-class hierarchy is needed.
+
+### SkillSystem
+- Files: src/SkillSystem.hpp/.cpp
+- Status: implemented P5 (17 October)
+- Kind: gameplay system, Game-owned value; no singleton.
+- API: `reset`, `equip`, `unequip`, `queueCast`, `update(dt, player, aim, activateSelected)`, `draw`, `drawStatus`, `cooldown`, `isActive`, `decoy`, `command`, `commandCompletions`; free `abilityCatalog`/`findAbility` expose 18 typed IDs.
+- Owns: one bounded state per ability, selected Q ability, capped transient flashes/acid pools, simulation clocks and seeded barrage RNG.
+- Returns SkillResult (damage/drop events, collected scrap, teleport flag); Game applies damage and rewards. Transient orbit, zone and companion effects are value data, with existing Player/Enemy/Bullet/Scrap APIs implementing behavior.
+- Gotchas: command casts queue while the console pauses; only running/alive simulation advances. Unequip retains cooldown debt. Auto abilities repeat; last manual equip selects Q. Space Collapse suppresses drops. Interception uses swept bullet paths. No pointers survive enemy removal; decoy is a frame-local pointer to stable owned state. See skills-commands.md for provisional semantics and limits.
 
 ### UpgradeShop and GearUpgrade (planned)
 - Files: src/UpgradeShop.hpp, src/UpgradeShop.cpp
@@ -571,6 +584,7 @@ All use the same pattern: `static X& GetInstance()` with a function-local static
 - Behavior: dim overlay, "PAUSED", Resume and Quit to Menu buttons. Returns an action enum.
 
 ### DebugTools
+- P5: `bindSkills(SkillSystem*)` observes the Game-owned system; `runCommand` shares F5 dispatch with terminal startup. Full skill/augment autocomplete, live-player guards and strict argument counts. List/status results also go to event logs; only the existing six-line console tail is visible.
 - P3 follow-up: independent `statsVisible` and collision-overlay flags, both cleared by reset. `hitbox` draws only world collision geometry; `stats` draws the panel and reads the current Game-owned BarricadeEvent. Each supports on/off/toggle and autocomplete. Console opacity is 92%, dropdown 95%; stats panel remains independently translucent.
 - P3: `spawn barricade event` starts the Game-owned event, with autocomplete/help, living-run guard, duplicate-event and capacity feedback. Console capture freezes the spawned event until closed.
 - P2 spawn follow-up: `spawn lowlevel enemy <quantity>` accepts integers 1–10,000, requires a living player, and reports actual count/capacity. Autocomplete fills the command prefix and leaves quantity editable. Enemy creation stays in EnemyManager; the command and batch API compile only with GAME_DEBUG.
@@ -675,13 +689,14 @@ All use the same pattern: `static X& GetInstance()` with a function-local static
 - Planned (item 14): `setEnabled(bool)` with a muted style, for unaffordable upgrades.
 
 ### Card
+- P5: typed constructor `Card(position, size, AugmentId)`, `getAugmentId`, `hasStartedExit`. Existing text constructor retained for callers. Game prevents repeated clicks during exit and stops iteration before clearing the vector.
 - Files: src/Card.hpp, src/Card.cpp
 - Status: existing → modified (item 09)
 - Kind: UI value
 - Constructor: `Card(Vector2 position, Vector2 size, const std::string& title, const std::string& description)`
 - API: `update()`, `draw()`, `getRect()`, `getTitle()`, `setPosition`, `setSize`, `setTitle`, `setDescription`, `isMouseHovered()`, `isClicked()`, `startIntroAnimation()`, `startExitAnimation()`, `isIntroComplete()`, `isExitComplete()`
 - Style: dark panel `{20,20,30}`, animated multicolor border, title in `primary_font`, description in `secondary_font`.
-- Planned (item 09): constructor overload taking `AugmentId`, plus `getAugmentId()`.
+- Typed overload and `getAugmentId()` implemented in P5.
 
 ### KillCounter
 - Files: src/KillCounter.*
@@ -709,7 +724,7 @@ All use the same pattern: `static X& GetInstance()` with a function-local static
 ### utils (Utils.hpp)
 - Files: src/Utils.hpp, src/Utils.cpp
 - Status: existing → partly replaced (item 09)
-- Contents: `extern Camera2D utils::gameCamera` (keep), `utils::augmentPool` (replaced by `Augment`), `AUGMENTS_POOL_SIZE` define
+- Contents: `extern Camera2D utils::gameCamera`; old augmentPool and AUGMENTS_POOL_SIZE removed in P5 in favor of the typed catalog.
 
 ### SpatialGrid
 - Files: src/SpatialGrid.hpp, src/SpatialGrid.cpp

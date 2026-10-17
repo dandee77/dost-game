@@ -4,6 +4,9 @@ pushd "%~dp0"
 if errorlevel 1 exit /b 1
 
 set "GAME_CMAKE="
+set "GAME_PORTABLE_CMAKE=%CD%\build\.tools\cmake-3.31.6-windows-x86_64\bin\cmake.exe"
+if exist "%GAME_PORTABLE_CMAKE%" set "GAME_CMAKE=%GAME_PORTABLE_CMAKE%"
+if defined GAME_CMAKE goto configure
 for /f "delims=" %%I in ('where cmake.exe 2^>nul') do if not defined GAME_CMAKE set "GAME_CMAKE=%%I"
 if defined GAME_CMAKE goto configure
 
@@ -13,13 +16,15 @@ for /f "usebackq delims=" %%I in (`"%GAME_VSWHERE%" -latest -products * -find Co
 if not defined GAME_CMAKE goto missing_cmake
 
 :configure
-"%GAME_CMAKE%" -S . -B build -DGAME_DEBUG=ON
+set "GAME_BUILD_DIR=build"
+if exist "%GAME_PORTABLE_CMAKE%" set "GAME_BUILD_DIR=build\game"
+"%GAME_CMAKE%" -S . -B "%GAME_BUILD_DIR%" -DGAME_DEBUG=ON
 if errorlevel 1 goto failed
-"%GAME_CMAKE%" --build build --config Debug -j 8
+"%GAME_CMAKE%" --build "%GAME_BUILD_DIR%" --config Debug -j 8
 if errorlevel 1 goto failed
 
-set "GAME_DIRECTORY=%CD%\build\Debug"
-if not exist "%GAME_DIRECTORY%\SpaceAblaze.exe" set "GAME_DIRECTORY=%CD%\build"
+set "GAME_DIRECTORY=%CD%\%GAME_BUILD_DIR%\Debug"
+if not exist "%GAME_DIRECTORY%\SpaceAblaze.exe" set "GAME_DIRECTORY=%CD%\%GAME_BUILD_DIR%"
 if not exist "%GAME_DIRECTORY%\SpaceAblaze.exe" (
     echo Build finished but SpaceAblaze.exe was not found.
     popd
@@ -30,7 +35,7 @@ if not exist "%GAME_DIRECTORY%\SpaceAblaze.exe" (
 if errorlevel 1 goto failed
 pushd "%GAME_DIRECTORY%"
 if errorlevel 1 goto failed
-SpaceAblaze.exe
+.\SpaceAblaze.exe %*
 set "GAME_RESULT=%ERRORLEVEL%"
 popd
 popd

@@ -14,6 +14,8 @@ public:
     void reset() { pickups.clear(); destructions.clear(); }
     std::size_t count() const { return pickups.size(); }
     int pendingValue() const;
+    void spawnScrap(Vector2 position, int value);
+    int collectAll();
     const std::vector<std::unique_ptr<ScrapPickup>>& getPickups() const { return pickups; }
     std::size_t destructionCount() const { return destructions.size(); }
 private:

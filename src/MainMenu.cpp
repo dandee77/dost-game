@@ -1,5 +1,6 @@
 #include "MainMenu.hpp"
 #include "ResourceManager.hpp"
+#include <cstdlib>
 
 // TODO: ADD PARALLAX BACKGROUND THAT MOVES WITH MOUSE (SEE TEXTURES AT SOON)
 

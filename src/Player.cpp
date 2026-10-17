@@ -50,6 +50,12 @@ void Player::init()
     origin = {rect.width / 2.0f, rect.height / 2.0f};
     speed = Balance::PLAYER_SPEED;
     health = Balance::PLAYER_MAX_HEALTH;
+    maxHealth = health;
+    augmentLevels.fill(0);
+    deflectorHits = 0;
+    damageMultiplier = 1.0f;
+    criticalChance = 0.0f;
+    attackRng.seed(Balance::SKILL_SEED);
     damage = Balance::PLAYER_CONTACT_DAMAGE;
     rotation = 0.0f;
     velocity = {};
@@ -104,7 +110,7 @@ void Player::setShield(PlayerShield value)
 }
 
 void Player::increasePlayerAttackSpeed() { attackSpeed *= Balance::AUG_ATTACK_MULT; }
-void Player::increasePlayerHealth() { health = std::min(Balance::PLAYER_MAX_HEALTH, health + Balance::AUG_HEAL); }
+void Player::increasePlayerHealth() { health = std::min(maxHealth, health + Balance::AUG_HEAL); }
 void Player::increasePlayerMovementSpeed() { speed *= Balance::AUG_SPEED_MULT; }
 void Player::increasePlayerIframeDuration() { iframeDuration *= Balance::AUG_IFRAME_MULT; }
 void Player::increasePlayerRotationSpeed() { rotationSpeedMultiplier *= Balance::AUG_TURN_MULT; }
@@ -112,7 +118,85 @@ void Player::increaseTriggerHappyBurst() { ++burstCount; }
 void Player::increaseScatterShot() { ++scatterCount; }
 void Player::increasePiercingRounds() { ++bulletPiercePower; }
 void Player::increaseInertiaImpact() { knockbackPower += Balance::AUG_KNOCKBACK; }
-int Player::getRandomDamage() const { return GetRandomValue(minDamage, maxDamage); }
+int Player::getRandomDamage() const { return scaleAttackDamage(GetRandomValue(minDamage, maxDamage)); }
+
+int Player::scaleAttackDamage(int baseDamage) const
+{
+    const bool critical = criticalChance > 0.0f &&
+        attackRng() % Balance::CRIT_ROLL_STEPS < static_cast<unsigned int>(criticalChance * Balance::CRIT_ROLL_STEPS);
+    return std::max(1, static_cast<int>(std::round(baseDamage * damageMultiplier *
+        (critical ? Balance::AUG_CRIT_MULTIPLIER : 1.0f))));
+}
+
+bool Player::applyAugment(AugmentId id)
+{
+    if (id < 0 || id >= AUG_COUNT || health <= 0) return false;
+    if (id != AUG_NANO_REPAIR && augmentLevels[id] >= Balance::AUG_MAX_LEVEL) return false;
+    if (id == AUG_NANO_REPAIR) {
+        if (health >= maxHealth) return false;
+        health = std::min(maxHealth, health + static_cast<int>(std::round(maxHealth * Balance::AUG_REPAIR_FRACTION)));
+        return true;
+    }
+    ++augmentLevels[id];
+    switch (id) {
+    case AUG_WEAPONS_PAYLOAD: damageMultiplier += Balance::AUG_PAYLOAD_BONUS; break;
+    case AUG_CRITICAL_MATRIX: criticalChance += Balance::AUG_CRIT_CHANCE; break;
+    case AUG_OVERCLOCKED_CHAMBERS: increasePlayerAttackSpeed(); break;
+    case AUG_RAPID_FIRE: increaseTriggerHappyBurst(); break;
+    case AUG_REINFORCED_HULL: maxHealth += Balance::AUG_HULL_BONUS; health += Balance::AUG_HULL_BONUS; break;
+    case AUG_PHASE_SHIFT: increasePlayerIframeDuration(); break;
+    case AUG_THRUSTER_OVERDRIVE: increasePlayerMovementSpeed(); break;
+    case AUG_GYRO_CONTROL: increasePlayerRotationSpeed(); break;
+    case AUG_ARMOR_PIERCING: increasePiercingRounds(); break;
+    case AUG_INERTIA_IMPACT: increaseInertiaImpact(); break;
+    case AUG_SCATTER_SHOT: increaseScatterShot(); break;
+    default: break; // Side/rear patterns read their levels when firing.
+    }
+    return true;
+}
+
+void Player::teleport(Vector2 destination)
+{
+    position = destination;
+    rect.x = position.x - rect.width / 2.0f;
+    rect.y = position.y - rect.height / 2.0f;
+    playerState = PLAYER_IFRAME;
+    stateElapsed = std::max(0.0f, iframeDuration - Balance::SKILL_BLINK_IFRAME);
+}
+
+void Player::fireClone(Vector2 at, Vector2 direction)
+{
+    // Companion volleys reuse the primary weapon and its augment patterns.
+    const Vector2 savedPosition = position;
+    position = at;
+    if (weapon == WEAPON_LASER) {
+        Bullet shot(at, direction, false, bulletPiercePower, knockbackPower);
+        shot.configure(PROJECTILE_CANNON, scaleAttackDamage(Balance::LASER_DAMAGE * burstCount),
+            Balance::CANNON_RADIUS, Balance::CANNON_SPEED);
+        BulletManager::GetInstance().addBullet(shot);
+    } else {
+        for (int i = 0; i < burstCount; ++i) firePattern(direction);
+    }
+    position = savedPosition;
+}
+
+float Player::getPrimaryInterval() const
+{
+    return weaponCooldown() + (weapon == WEAPON_LASER ? 0.0f : (burstCount - 1) * Balance::BURST_DELAY);
+}
+
+int Player::getLaserDamage() const { return scaleAttackDamage(Balance::LASER_DAMAGE * burstCount); }
+
+void Player::firePattern(Vector2 direction)
+{
+    fireScatterBullets(direction);
+    for (int i = 0; i < augmentLevels[AUG_BROADSIDE_CANNONS]; ++i) {
+        fireScatterBullets(Vector2Rotate(direction, PI / 2.0f));
+        fireScatterBullets(Vector2Rotate(direction, -PI / 2.0f));
+    }
+    for (int i = 0; i < augmentLevels[AUG_TAIL_GUNNER]; ++i)
+        fireScatterBullets(Vector2Negate(direction));
+}
 Vector2 Player::facing() const { return Vector2Rotate({0.0f, -1.0f}, rotation * DEG2RAD); }
 Vector2 Player::getLaserStart() const { return Vector2Add(position, Vector2Scale(facing(), Balance::MUZZLE_OFFSET)); }
 Vector2 Player::getLaserEnd() const { return Vector2Add(getLaserStart(), Vector2Scale(facing(), Balance::LASER_RANGE)); }
@@ -136,14 +220,13 @@ void Player::fireScatterBullets(Vector2 direction)
         const Vector2 shotDirection = Vector2Rotate(direction, offset * DEG2RAD);
         int pierce = bulletPiercePower;
         if (weapon == WEAPON_HEAVY) pierce += Balance::HEAVY_PIERCE - 1;
-        if (weapon == WEAPON_ROCKETS) pierce = 1;
         Bullet bullet(weapon == WEAPON_DEFAULT ? position : getLaserStart(), shotDirection, false, pierce, knockbackPower);
         switch (weapon) {
         case WEAPON_DEFAULT: break; // Original sprite and legacy collision/damage path.
         case WEAPON_HEAVY:
-            bullet.configure(PROJECTILE_HEAVY, Balance::HEAVY_DAMAGE, Balance::HEAVY_RADIUS, Balance::HEAVY_SPEED); break;
+            bullet.configure(PROJECTILE_HEAVY, scaleAttackDamage(Balance::HEAVY_DAMAGE), Balance::HEAVY_RADIUS, Balance::HEAVY_SPEED); break;
         case WEAPON_ROCKETS:
-            bullet.configure(PROJECTILE_ROCKET, Balance::ROCKET_DAMAGE, Balance::ROCKET_RADIUS, Balance::ROCKET_SPEED); break;
+            bullet.configure(PROJECTILE_ROCKET, scaleAttackDamage(Balance::ROCKET_DAMAGE), Balance::ROCKET_RADIUS, Balance::ROCKET_SPEED); break;
         default:
             bullet.configure(PROJECTILE_CANNON, getRandomDamage(), Balance::CANNON_RADIUS, Balance::CANNON_SPEED); break;
         }
@@ -164,14 +247,26 @@ void Player::updateWeapon(float dt, bool firing)
     if (weapon == WEAPON_LASER) {
         laserClock -= dt;
         if (laserActive) {
-            while (laserClock <= Config::TIMER_EPSILON) { ++pendingLaserTicks; laserClock += weaponCooldown(); }
+            while (laserClock <= Config::TIMER_EPSILON) {
+                pendingLaserTicks += burstCount;
+                // Beam equipment gains visible fan/side/rear projectiles as well.
+                for (int i = 1; i < scatterCount; ++i)
+                    fireClone(position, Vector2Rotate(facing(), (i % 2 ? 1.0f : -1.0f) *
+                        static_cast<float>((i + 1) / 2) * Balance::SCATTER_ANGLE * DEG2RAD));
+                for (int i = 0; i < augmentLevels[AUG_BROADSIDE_CANNONS]; ++i) {
+                    fireClone(position, Vector2Rotate(facing(), PI / 2.0f));
+                    fireClone(position, Vector2Rotate(facing(), -PI / 2.0f));
+                }
+                for (int i = 0; i < augmentLevels[AUG_TAIL_GUNNER]; ++i) fireClone(position, Vector2Negate(facing()));
+                laserClock += weaponCooldown();
+            }
         } else laserClock = std::max(0.0f, laserClock);
         return;
     }
     shotCooldown -= dt;
     if (!firing && !isBurstActive) { shotCooldown = std::max(0.0f, shotCooldown); return; }
     while (shotCooldown <= Config::TIMER_EPSILON && (firing || isBurstActive)) {
-        fireScatterBullets(facing());
+        firePattern(facing());
         ++currentBurstShot;
         isBurstActive = currentBurstShot < burstCount;
         if (isBurstActive) shotCooldown += Balance::BURST_DELAY;
@@ -215,6 +310,7 @@ bool Player::shieldCovers(Vector2 source) const
 
 bool Player::tryBlockHit(Vector2 source)
 {
+    if (deflectorHits > 0) { --deflectorHits; return true; }
     if (!shieldCovers(source)) return false;
     if (shield != SHIELD_INVINCIBILITY) {
         shieldCharge -= Balance::PLAYER_CONTACT_DAMAGE;
@@ -257,11 +353,16 @@ void Player::update()
 
 void Player::takeDamage(float entered, Vector2 source, float entitySize)
 {
+    takeContactDamage(entered, source, entitySize, Balance::PLAYER_CONTACT_DAMAGE);
+}
+
+void Player::takeContactDamage(float entered, Vector2 source, float entitySize, int amount)
+{
 #ifdef GAME_DEBUG
     if (debugInvincible) return;
 #endif
     if (tryBlockHit(source)) return;
-    health = std::max(0, health - Balance::PLAYER_CONTACT_DAMAGE);
+    health = std::max(0, health - std::max(1, amount));
     playerState = health == 0 ? PLAYER_DEAD : PLAYER_STUNNED;
     timeStateEntered = entered;
     stateElapsed = 0.0f;
@@ -319,7 +420,7 @@ void Player::draw()
     drawLayer(std::string(engineKeys[engine]) + (playerAccelerating ? "_powering" : "_idle"),
         Theme::PLAYER_LAYER_FRAME, Theme::PLAYER_LAYER_SIZE, position, rotation, animationTime, WHITE);
     drawLayer(engineKeys[engine], Theme::PLAYER_LAYER_FRAME, Theme::PLAYER_LAYER_SIZE, position, rotation, 0.0f, tint);
-    const float fraction = static_cast<float>(health) / Balance::PLAYER_MAX_HEALTH;
+    const float fraction = static_cast<float>(health) / maxHealth;
     const char* hull = fraction <= Balance::HULL_CRITICAL_FRACTION ? "player_hull_very_damaged" :
         fraction <= Balance::HULL_DAMAGED_FRACTION ? "player_hull_damaged" :
         fraction <= Balance::HULL_SLIGHT_FRACTION ? "player_hull_slight_damage" : "player_hull_full_health";
