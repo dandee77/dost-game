@@ -140,7 +140,7 @@ All use the same pattern: `static X& GetInstance()` with a function-local static
 - Changed by: 22
 
 ### Game
-- P5.1: `createUpgradeOffer()` mixes eligible typed augments/abilities; `chooseUpgrade(index)` applies one pick and locks the whole offer during exit. Capped upgrades are filtered; consumable Nano Repair remains the all-maxed fallback.
+- P5.1: `createUpgradeOffer()` mixes eligible typed augments/abilities; `chooseUpgrade(index)` applies one pick and locks the whole offer during exit. Capped passive augments are filtered; active abilities remain eligible beyond level 5 and Nano Repair remains available.
 - P5: owns `SkillSystem skills` and a seeded augment-offer generator. `updateSkills(dt, aim, activateSelected)` applies reported hits through existing damage/reward handling; returns whether Blink teleported. Console/startup commands use `executeDebugCommand`. Direct ability damage can award minimal scrap or suppress it for Space Collapse. Skill state clears in resetRun, death, exit and destruction; existing manager reset paths remain authoritative.
 - P4: `resetRun()` now centralizes run-container resets (including ScrapManager) and clears the run-local `harvestedScrap` counter; both entry/restart call it. Running/alive simulation consumes ScrapManager collection results and displays SCRAP in the safe-area HUD. Death/exit/destruction clear pickups. Full player/timer/camera reset consolidation remains item 05.
 - P3: owns `BarricadeEvent barricadeEvent`; updates it only during running simulation and resolves wall contact after enemy movement. Private camera/contact helpers restore zoom and route lethal contact to normal game over. Reset event before manager resets, and on exit/death/destruction. Debug console receives the event owner only in an active run.
@@ -524,7 +524,7 @@ All use the same pattern: `static X& GetInstance()` with a function-local static
 - `Card` stores an `AugmentId`, so Game no longer compares titles. Game samples three distinct catalog entries using a reset `std::mt19937`; shared RunRng integration stays deferred. No duplicate skill-class hierarchy is needed.
 
 ### SkillSystem
-- P5.1: `upgrade(AbilityId)`, `level(AbilityId)`; free `abilityTuning(id, level)` and `abilityUpgradeDescription`. Earned levels cap at five; repeated equip upgrades, while re-equip after unequip preserves rank. State snapshots `castLevel`; pools snapshot stats. Owns drone values with real HP, independent movement/fire and contact cooldown. Existing resets clear both levels and drones; no extra singleton reset required.
+- P5.1: `upgrade(AbilityId)`, `level(AbilityId)`; free `abilityTuning(id, level)` and `abilityUpgradeDescription`. Earned levels continue past five; radius/range growth stops at five while count, damage, duration and recharge continue. Repeated equip upgrades, while re-equip after unequip preserves rank. State snapshots `castLevel`; pools snapshot stats. Collapse zones use dynamic storage; drone values have real HP, independent movement/fire and contact cooldown. Existing resets clear both levels and drones; no extra singleton reset required.
 - Files: src/SkillSystem.hpp/.cpp
 - Status: implemented P5 (17 October)
 - Kind: gameplay system, Game-owned value; no singleton.

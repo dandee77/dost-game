@@ -63,10 +63,11 @@ A1 ─> A2..A9 ─> 15, 26
 
 ### P5.1 Repeat-pick ability upgrades (user-requested scope, 18 Oct)
 **Status:** Complete. Debug/sanitizer 10,054 native checks, Release 9,969 checks and 610,000 spatial queries passed; level/card previews and packaged startup commands checked. Human balance review pending.
+**18 October follow-up:** User removed the five-level ability cap. Physical size freezes at level 5; quantity and other numerical growth continue. Debug/Release/sanitizer builds and expanded native suites pass; live balance review remains pending.
 **Classes:** SkillSystem, Game, Card; Balance/Theme tokens; existing SkillChecks native suite.
 
-- Add five levels for all eighteen abilities, preserving cooldown debt and snapshotting active casts.
-- Mix typed ability cards into the existing timed picker; exclude capped upgrades and lock one choice per offer.
+  - Add repeat-pick levels for all eighteen abilities, preserving cooldown debt and snapshotting active casts. Follow-up: remove the five-level cap; physical size stops at level 5 while counts and other stats continue.
+  - Mix typed ability cards into the existing timed picker; keep abilities eligible at every practical level and lock one choice per offer.
 - Space Collapse gains count/radius; Combat Drone gains count, real HP and damage; tune all other abilities individually.
 - Expose levels/upgrades through cards, Q HUD and F5/startup commands; preserve reset, pause and reward rules.
 

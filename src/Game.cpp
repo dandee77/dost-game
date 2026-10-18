@@ -12,6 +12,7 @@
 #include <algorithm>
 #include <unordered_set>
 #include <memory>
+#include <limits>
 #include "DamageIndicatorManager.hpp"
 #include "ConfettiManager.hpp"
 #include "ExplosionConfettiManager.hpp"
@@ -58,7 +59,7 @@ void Game::createUpgradeOffer()
             offers.emplace_back(Vector2{}, size, info.id);
     }
     for (const auto& info : abilityCatalog()) {
-        if (skills.level(info.id) < Balance::ABILITY_MAX_LEVEL)
+        if (skills.level(info.id) < std::numeric_limits<int>::max())
             offers.emplace_back(Vector2{}, size, info.id, skills.level(info.id) + 1);
     }
     std::shuffle(offers.begin(), offers.end(), augmentRng);

@@ -50,13 +50,21 @@ AbilityId findAbility(std::string_view key)
 Balance::AbilityTuning abilityTuning(AbilityId id, int level)
 {
     if (id < 0 || id >= ABILITY_COUNT) return {};
-    const int extra = std::clamp(level, 1, Balance::ABILITY_MAX_LEVEL) - 1;
+    const int extra = std::max(level, 1) - 1;
+    const int sizeExtra = std::min(extra, Balance::ABILITY_SIZE_GROWTH_LEVEL - 1);
     const auto& base = Balance::ABILITIES[id];
     const auto& growth = Balance::ABILITY_GROWTH[id];
-    return {base.cooldown * (1.0f - growth.recharge * extra),
+    // Preserve levels 1-5 and continue reducing recharge without crossing zero.
+    const float fifthLevelCooldown = 1.0f - growth.recharge * (Balance::ABILITY_SIZE_GROWTH_LEVEL - 1);
+    const float cooldownFactor = extra <= Balance::ABILITY_SIZE_GROWTH_LEVEL - 1 ?
+        1.0f - growth.recharge * extra :
+        fifthLevelCooldown / (1.0f + growth.recharge * (extra - (Balance::ABILITY_SIZE_GROWTH_LEVEL - 1)));
+    const double scaledDamage = std::round(static_cast<double>(base.damage) *
+        (1.0 + static_cast<double>(growth.damage) * extra));
+    return {base.cooldown * cooldownFactor,
         base.duration * (1.0f + growth.duration * extra),
-        base.radius * (1.0f + growth.radius * extra),
-        static_cast<int>(std::round(base.damage * (1.0f + growth.damage * extra))),
+        base.radius * (1.0f + growth.radius * sizeExtra),
+        static_cast<int>(std::min(scaledDamage, static_cast<double>(std::numeric_limits<int>::max()))),
         base.interval / (1.0f + growth.frequency * extra)};
 }
 
@@ -74,9 +82,20 @@ std::string abilityUpgradeDescription(AbilityId id, int level)
         "Larger acid pools; more damage", "Larger pull zone; more damage",
         "Larger rift; more damage", "More blasts per volley; more damage"
     }};
+    static constexpr std::array<const char*, ABILITY_COUNT> sizeMaxDescriptions = {{
+        "More blades and damage; size max", "Absorb more hits; shield lasts longer",
+        "Ring size max; more damage", "Distance max; faster recharge",
+        "Blast size max; faster recharge", "More zones; size max; NO SCRAP",
+        "Pulse size max; more damage", "Pulse size max; stronger push",
+        "Defense size max; longer protection", "Longer magnet; faster collection",
+        "More targets and damage; range max", "Longer-lived clone; faster firing",
+        "More drones; higher health and damage", "Beam size max; more damage",
+        "Pool size max; more damage", "Pull size max; more damage",
+        "Rift size max; more damage", "More blasts and damage; size max"
+    }};
     const auto& info = abilityCatalog()[id];
     return std::string(info.automatic ? "AUTO" : "Q") + " | Level " + std::to_string(level) +
-        " / " + std::to_string(Balance::ABILITY_MAX_LEVEL) + "\n" + descriptions[id];
+        "\n" + (level > Balance::ABILITY_SIZE_GROWTH_LEVEL ? sizeMaxDescriptions[id] : descriptions[id]);
 }
 
 namespace {
@@ -125,7 +144,7 @@ bool SkillSystem::upgrade(AbilityId id)
     auto& state = states[id];
     state.equipped = true;
     if (!abilityCatalog()[id].automatic) selected = id;
-    if (state.level >= Balance::ABILITY_MAX_LEVEL) return false;
+    if (state.level == std::numeric_limits<int>::max()) return false;
     ++state.level;
     return true;
 }
@@ -207,20 +226,21 @@ void SkillSystem::begin(AbilityId id, Player& player, SkillResult& result)
     case ABILITY_DEFLECTOR_SHIELD: player.setDeflectorHits(Balance::SKILL_SHIELD_HITS + extra); break;
     case ABILITY_SPACE_COLLAPSE: {
         state.position = state.target;
-        std::array<Vector2, Balance::ABILITY_MAX_LEVEL> centers{};
+        std::vector<Vector2> centers;
+        centers.reserve(state.castLevel);
         for (int zone = 0; zone < state.castLevel; ++zone) {
             const Vector2 offset = zone == 0 ? Vector2{} : Vector2Rotate(
                 {tuning.radius * Balance::SKILL_COLLAPSE_SPACING, 0.0f},
                 (zone - 1) * 2.0f * PI / extra);
-            centers[zone] = Vector2Add(state.target, offset);
-            flash(centers[zone], tuning.radius);
+            centers.push_back(Vector2Add(state.target, offset));
+            flash(centers.back(), tuning.radius);
         }
         // Visit each enemy once: overlapping zones must neither duplicate hits
         // nor require searching a growing hit list in dense crowds.
         for (const auto& [key, enemy] : EnemyManager::GetInstance().getEnemies()) {
             if (enemy->isDead()) continue;
             const float radius = tuning.radius + enemy->getHitbox().width;
-            if (std::any_of(centers.begin(), centers.begin() + state.castLevel, [&](Vector2 center) {
+            if (std::any_of(centers.begin(), centers.end(), [&](Vector2 center) {
                 return Vector2DistanceSqr(center, enemy->getPosition()) <= radius * radius;
             })) result.hits.push_back({key, enemy->getHealth(), false});
         }
@@ -253,7 +273,9 @@ void SkillSystem::begin(AbilityId id, Player& player, SkillResult& result)
         state.position = Vector2Add(state.position, Vector2Scale(Vector2Rotate(state.direction, PI / 2.0f), Balance::SKILL_CLONE_OFFSET)); break;
     case ABILITY_COMBAT_DRONE: {
         drones.clear();
-        const int hp = Balance::SKILL_DRONE_HEALTH + extra * Balance::SKILL_DRONE_HEALTH_PER_LEVEL;
+        const int hp = static_cast<int>(std::min(static_cast<long long>(Balance::SKILL_DRONE_HEALTH) +
+            static_cast<long long>(extra) * Balance::SKILL_DRONE_HEALTH_PER_LEVEL,
+            static_cast<long long>(std::numeric_limits<int>::max())));
         for (int drone = 0; drone < state.castLevel; ++drone) {
             const Vector2 offset = drone == 0 ? Vector2{} : Vector2Rotate(
                 {Balance::SKILL_DRONE_SPACING, 0.0f}, drone * 2.0f * PI / state.castLevel);
@@ -592,7 +614,7 @@ std::vector<std::string> SkillSystem::command(const std::string& line, Player* p
         for (const auto& info : abilityCatalog()) {
             const auto& state = states[info.id];
             result.push_back(std::string(info.key) + (info.automatic ? " [auto]" : " [Q]") +
-                " level=" + std::to_string(state.level) + "/" + std::to_string(Balance::ABILITY_MAX_LEVEL) +
+                " level=" + std::to_string(state.level) +
                 (state.equipped ? " equipped" : "") + (isActive(info.id) ? " active" : "") +
                 " cooldown=" + std::to_string(static_cast<int>(std::ceil(state.cooldown))) + "s");
         }
@@ -604,7 +626,7 @@ std::vector<std::string> SkillSystem::command(const std::string& line, Player* p
     if (!player || player->getHealth() <= 0) return {"Start a living run first."};
     if (verb == "equip" || verb == "upgrade") {
         const bool changed = verb == "upgrade" ? upgrade(id) : equip(id);
-        return {(changed ? "Equipped " : "At max level: ") + key + " Lv " + std::to_string(level(id)) +
+        return {(changed ? "Equipped " : "Cannot upgrade: ") + key + " Lv " + std::to_string(level(id)) +
             (abilityCatalog()[id].automatic ? " (automatic)." : " (press Q).")};
     }
     if (verb == "unequip") { unequip(id, *player); return {"Unequipped " + key}; }

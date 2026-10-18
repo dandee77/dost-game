@@ -70,24 +70,39 @@ int runSkillChecks(const std::string& artifactDirectory)
     require(health("upgrade-halo") < 940, "Second ability pick increases actual halo damage");
     for (const auto& info : abilityCatalog()) {
         clear(game);
-        for (int pick = 1; pick <= Balance::ABILITY_MAX_LEVEL; ++pick) {
-            require(game.skills.upgrade(info.id), "Each ability accepts upgrades through the cap");
+        for (int pick = 1; pick <= 12; ++pick) {
+            require(game.skills.upgrade(info.id), "Each ability accepts repeated upgrades beyond level five");
             require(game.skills.level(info.id) == pick, "Each pick grants exactly one level");
         }
-        require(!game.skills.upgrade(info.id) && game.skills.level(info.id) == 5, "Extra picks cannot overflow the cap");
         cast(game, info.id);
         const float debt = game.skills.cooldown(info.id);
         game.skills.unequip(info.id, player);
         game.skills.equip(info.id);
-        require(game.skills.level(info.id) == 5 && game.skills.cooldown(info.id) == debt,
+        require(game.skills.level(info.id) == 12 && game.skills.cooldown(info.id) == debt,
             "Unequip/re-equip preserves earned levels and recharge debt");
         game.skills.reset();
         require(game.skills.level(info.id) == 0, "Run reset removes earned ability levels");
     }
     clear(game);
     require(!game.skills.upgrade(ABILITY_COUNT) && !game.skills.upgrade(static_cast<AbilityId>(-1)), "Upgrade rejects invalid IDs");
+    require(std::abs(abilityTuning(ABILITY_SPACE_COLLAPSE, 5).radius - 51.2f) < 0.001f &&
+        abilityTuning(ABILITY_SPACE_COLLAPSE, 6).radius == abilityTuning(ABILITY_SPACE_COLLAPSE, 12).radius,
+        "Collapse zones stop growing after level five");
+    for (const auto& info : abilityCatalog())
+        require(abilityTuning(info.id, 5).radius == abilityTuning(info.id, 6).radius &&
+            abilityTuning(info.id, 6).radius == abilityTuning(info.id, 12).radius,
+            "Every ability keeps its level-five physical size at higher levels");
+    require(abilityTuning(ABILITY_PLASMA_BEAM, 12).damage > abilityTuning(ABILITY_PLASMA_BEAM, 6).damage,
+        "Damage-only progression continues above level five");
+    require(abilityTuning(ABILITY_BLINK_DRIVE, 25).cooldown > 0.0f &&
+        abilityTuning(ABILITY_BLINK_DRIVE, 25).cooldown < abilityTuning(ABILITY_BLINK_DRIVE, 5).cooldown,
+        "Repeated recharge upgrades remain positive beyond level five");
+    require(abilityUpgradeDescription(ABILITY_SPACE_COLLAPSE, 6).find("/ 5") == std::string::npos,
+        "Ability card labels show an uncapped level");
+    require(abilityUpgradeDescription(ABILITY_SPACE_COLLAPSE, 6).find("size max") != std::string::npos,
+        "High-level cards explain that zone size is finished growing");
     // Overlapping collapse zones may erase a target only once and never produce scrap.
-    for (int rank : {1, 2, 5}) {
+    for (int rank : {1, 2, 5, 6, 12}) {
         clear(game);
         for (int pick = 0; pick < rank; ++pick) game.skills.upgrade(ABILITY_SPACE_COLLAPSE);
         enemy("center", {0, -30}, 5000);
@@ -102,6 +117,30 @@ int runSkillChecks(const std::string& artifactDirectory)
         require(game.killCounter.getCount() == (rank == 1 ? 2 : 4) && ScrapManager::GetInstance().pendingValue() == 0,
             "Overlapping collapse counts kills once and never drops scrap");
     }
+    clear(game);
+    for (int pick = 0; pick < 6; ++pick) game.skills.upgrade(ABILITY_COMBAT_DRONE);
+    enemy("six-drones", {0, -25}, 1000); cast(game, ABILITY_COMBAT_DRONE);
+    require(game.skills.drones.size() == 6 && bullets.size() == 6,
+        "Level six summons six independently firing drones");
+    require(game.skills.drones.front().health == 105 && bullets.front().getDamage() == 34,
+        "High-level drones continue gaining real health and damage");
+    clear(game);
+    for (int pick = 0; pick < 6; ++pick) game.skills.upgrade(ABILITY_DEFLECTOR_SHIELD);
+    cast(game, ABILITY_DEFLECTOR_SHIELD);
+    require(player.getDeflectorHits() == 8, "Level-six shield adds one more real hit charge");
+    clear(game);
+    for (int pick = 0; pick < 6; ++pick) game.skills.upgrade(ABILITY_ARMAGEDDON);
+    cast(game, ABILITY_ARMAGEDDON);
+    require(game.skills.flashes.size() == 6, "Level-six barrage creates one additional blast");
+    clear(game);
+    for (int pick = 0; pick < 6; ++pick) game.skills.upgrade(ABILITY_CHAIN_LIGHTNING);
+    for (int target = 0; target < 12; ++target)
+        enemy("high-chain-" + std::to_string(target), {static_cast<float>(target * 5), -10.0f}, 1000);
+    cast(game, ABILITY_CHAIN_LIGHTNING);
+    int highChainHits = 0;
+    for (const auto& [id, object] : EnemyManager::GetInstance().getEnemies())
+        if (object->getHealth() < 1000) ++highChainHits;
+    require(highChainHits == 11, "Level-six chain reaches exactly one extra target per upgrade");
     // Upgrade an active shield without replenishing charges or restarting the cast.
     clear(game); game.skills.equip(ABILITY_DEFLECTOR_SHIELD); cast(game, ABILITY_DEFLECTOR_SHIELD);
     player.takeDamage(0.0f, {0, -1}, 1.0f);
@@ -138,7 +177,7 @@ int runSkillChecks(const std::string& artifactDirectory)
     cast(game, ABILITY_CHAIN_LIGHTNING);
     int upgradedChainHits = 0;
     for (const auto& [id, object] : EnemyManager::GetInstance().getEnemies()) if (object->getHealth() == 956) ++upgradedChainHits;
-    require(upgradedChainHits == 8, "Second chain level hits eight distinct targets for increased damage");
+    require(upgradedChainHits == 7, "Second chain level adds one distinct target and damage");
     // Old acid pools retain the radius/damage of their cast after a mid-effect upgrade.
     clear(game); game.skills.upgrade(ABILITY_CORROSIVE_TRAIL); cast(game, ABILITY_CORROSIVE_TRAIL);
     game.skills.upgrade(ABILITY_CORROSIVE_TRAIL);
@@ -177,7 +216,7 @@ int runSkillChecks(const std::string& artifactDirectory)
     clear(game); game.skills.upgrade(ABILITY_ARMAGEDDON); game.skills.upgrade(ABILITY_ARMAGEDDON);
     cast(game, ABILITY_ARMAGEDDON);
     require(game.skills.flashes.size() == 2, "Upgraded barrage emits two separate blasts per volley");
-    // Actual card dispatch, one-pick lock, cap filtering, deterministic mixed offers.
+    // Actual card dispatch, one-pick lock, unlimited abilities, deterministic mixed offers.
     clear(game);
     for (int pick = 1; pick <= 2; ++pick) {
         game.gameState = GAME_AUGMENT_SELECTION;
@@ -203,11 +242,12 @@ int runSkillChecks(const std::string& artifactDirectory)
     for (const auto& info : augmentCatalog()) if (info.id != AUG_NANO_REPAIR)
         for (int pick = 0; pick < 10; ++pick) applyAugment(player, info.id);
     game.createUpgradeOffer();
-    require(game.augmentCards.size() == 1 && game.augmentCards.front().getAugmentId() == AUG_NANO_REPAIR,
-        "Maxed abilities and augments are excluded; consumable repair remains a safe fallback");
+    require(game.augmentCards.size() == Balance::UPGRADE_OFFER_COUNT &&
+        std::any_of(game.augmentCards.begin(), game.augmentCards.end(), [](const Card& card) { return card.getAbilityId() != ABILITY_COUNT; }),
+        "Level-five abilities remain available after passive augments are maxed");
     game.gameState = GAME_AUGMENT_SELECTION;
     game.augmentCards.front().isAnimationComplete = true; game.augmentCards.front().isIntroPlaying = false;
-    require(game.chooseUpgrade(0), "Full-health all-maxed run can still finish the picker");
+    require(game.chooseUpgrade(0), "Full-health run can still finish the picker");
     clear(game);
     std::set<std::string> keys;
     for (const auto& info : augmentCatalog()) {

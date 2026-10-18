@@ -45,8 +45,8 @@ namespace Balance {
     inline constexpr float SKILL_RIFT_HALF_LENGTH = 25.0f, SKILL_RIFT_WIDTH = 6.0f;
     inline constexpr float SKILL_BARRAGE_VIEW_FRACTION = 0.85f;
     inline constexpr int SKILL_LOW_SCRAP = 2, SKILL_MID_SCRAP = 5;
-    // Repeat picks: additive fractions of level-one values, capped for the sprint. TUNE.
-    inline constexpr int ABILITY_MAX_LEVEL = 5;
+    // Repeat picks continue indefinitely; physical size stops growing at level five. TUNE.
+    inline constexpr int ABILITY_SIZE_GROWTH_LEVEL = 5;
     inline constexpr std::size_t UPGRADE_OFFER_COUNT = 3;
     struct AbilityGrowth { float radius, damage, duration, recharge, frequency; };
     inline constexpr std::array<AbilityGrowth, 18> ABILITY_GROWTH = {{
@@ -60,7 +60,7 @@ namespace Balance {
         {0.10f, 0.0f, 0.0f, 0.05f, 0.0f}, // Repulsor: stronger push too
         {0.10f, 0.0f, 0.15f, 0.0f, 0.0f},
         {0.0f, 0.0f, 0.20f, 0.05f, 0.10f}, // Magnet: uptime and collection rate
-        {0.10f, 0.25f, 0.0f, 0.0f, 0.0f},  // Chain: +2 targets too
+        {0.10f, 0.25f, 0.0f, 0.0f, 0.0f},  // Chain: +1 target too
         {0.0f, 0.0f, 0.15f, 0.0f, 0.15f}, // Clone: duration and fire rate
         {0.0f, 0.25f, 0.0f, 0.0f, 0.0f},  // Drones: +1 drone, +15 HP too
         {0.10f, 0.25f, 0.10f, 0.0f, 0.0f},
@@ -69,7 +69,7 @@ namespace Balance {
         {0.15f, 0.25f, 0.10f, 0.0f, 0.0f},
         {0.10f, 0.20f, 0.0f, 0.0f, 0.0f}   // Barrage: +1 blast per volley too
     }};
-    inline constexpr int SKILL_CHAIN_TARGETS_PER_LEVEL = 2;
+    inline constexpr int SKILL_CHAIN_TARGETS_PER_LEVEL = 1;
     inline constexpr float SKILL_FORCE_PER_LEVEL = 0.15f;
     inline constexpr float SKILL_COLLAPSE_SPACING = 1.5f;
     inline constexpr int SKILL_DRONE_HEALTH = 30, SKILL_DRONE_HEALTH_PER_LEVEL = 15;

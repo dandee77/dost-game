@@ -8,7 +8,7 @@ Why tokens became a header: in C++ the values must live in code. Writing them in
 
 ## Canvas and Window
 
-P5.1 (18 October): existing card stack now mixes passive and ability upgrades. Ability cards show the name, AUTO/Q activation, resulting level out of five, and a growth summary. Titles/descriptions fit the card's inner width, including Point-Defense Interceptor. The selected Q HUD includes earned level. Drones draw separate markers with real-health bars; collapse zones and rift dimensions use the same cast-level tuning as collisions. Layout/font/health-bar constants remain in Theme.
+P5.1 (18 October): existing card stack now mixes passive and ability upgrades. Ability cards show the name, AUTO/Q activation, uncapped resulting level, and a growth summary. Titles/descriptions fit the card's inner width, including Point-Defense Interceptor. The selected Q HUD includes earned level. Drones draw separate markers with real-health bars; collapse zones and rift dimensions use the same cast-level tuning as collisions, with physical size stopping at level 5. Layout/font/health-bar constants remain in Theme.
 
 P5 (17 October): skill effects use existing player/shot art plus simple world-space outlines, arcs and a translucent rift. No asset generation. Selected manual skill/Q prompt and cooldown appear at Theme::SKILL_STATUS_POSITION (220,470), below the scrap readout and inside the CRT safe area. Automatic effects can coexist; F5/autocomplete exposes their state without adding acquisition UI. Clone uses the existing ship sprite tinted sky blue; drone uses a small outlined marker.
 
