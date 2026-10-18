@@ -1,5 +1,11 @@
 # Architecture
 
+## P5 repeat-pick extension (18 October)
+
+`Game::createUpgradeOffer` samples eligible typed augment and ability cards using the existing seeded generator. `chooseUpgrade` applies the selected card once and locks the entire offer until its exit animation completes. Capped entries are excluded; Nano Repair remains the fallback when all persistent upgrades are maxed. `Card` stores separate typed augment/ability IDs, and ability cards show the resulting level. No scene transitions or new singleton are involved.
+
+`SkillSystem::upgrade` owns earned levels; `equip` delegates repeated equipped picks to it. Unequip preserves level/cooldown; each `begin` snapshots `castLevel` so a mid-effect pick cannot refill health/shield charges or retune an existing cast. `abilityTuning` derives bounded growth from Balance. Pools snapshot their damage/radius. The system owns bounded drone values, each with position, health and a contact clock; it consumes hostile bullets and removes destroyed drones before firing. The existing Game reset/death/exit paths clear all progression and transient values. See `skills-commands.md` for the exact upgrade contract.
+
 ## P5 skills extension (17 October)
 
 Game owns `SkillSystem` by value. It owns typed ability states, cooldowns, bounded visual/trail values and seeded barrage randomness. `Player` owns augment levels, modified stats, critical RNG and deflector-hit charges. `Enemy` owns temporary stun/corrosion. No new singleton is introduced. `resetRun()` resets skills and augment-offer RNG; Player::init resets augment stats. Death and scene exit clear skill effects/deflector charges.

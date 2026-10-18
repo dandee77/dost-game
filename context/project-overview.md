@@ -148,7 +148,7 @@ Screen IDs are used in `build-plan.md`, `ui-rules.md` and `class-registry.md`.
 - Debris hazards (the current debris, reskinned)
 - Scrap drops, magnet pickup, cargo limit, deposit at the dock
 - Dock shop with 7 gear upgrades (5 levels each) and a hull repair
-- Fourteen augments and eighteen abilities from `skills-context.md` (17 October user-requested P5 prototype). Features and command access first; acquisition/shop wiring deferred. Existing timed cards remain until waves are implemented.
+- Fourteen augments and eighteen abilities from `skills-context.md` (P5). The 18 October user-requested extension adds abilities to the existing timed cards, with five repeat-pick levels and individual scaling. Shop/drop/inventory wiring remains deferred; timed cards remain until waves are implemented.
 - Local leaderboard per mode with name entry
 - In-game tutorial prompts for the first wave
 - Credits screen with AI and asset disclosure

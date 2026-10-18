@@ -61,6 +61,18 @@ A1 ─> A2..A9 ─> 15, 26
 
 ## Phase 0: Foundation
 
+### P5.1 Repeat-pick ability upgrades (user-requested scope, 18 Oct)
+**Status:** Complete. Debug/sanitizer 10,054 native checks, Release 9,969 checks and 610,000 spatial queries passed; level/card previews and packaged startup commands checked. Human balance review pending.
+**Classes:** SkillSystem, Game, Card; Balance/Theme tokens; existing SkillChecks native suite.
+
+- Add five levels for all eighteen abilities, preserving cooldown debt and snapshotting active casts.
+- Mix typed ability cards into the existing timed picker; exclude capped upgrades and lock one choice per offer.
+- Space Collapse gains count/radius; Combat Drone gains count, real HP and damage; tune all other abilities individually.
+- Expose levels/upgrades through cards, Q HUD and F5/startup commands; preserve reset, pause and reward rules.
+
+**Done when:** repeated card/command picks improve actual effects and restart clears progression.
+**Test:** Debug/Release native suites, expanded upgrade regressions, level/card render previews and sanitizer checks. No new assets or shop system.
+
 ### P5 Skills and augments prototype (user-requested scope, 17 Oct)
 **Status:** Complete; Debug/Release builds, 9,414/9,331 native checks, 610,000 spatial queries, catalog/startup command validation and native placeholder preview passed. Human balance/feel review pending.
 **Classes:** Augment catalog, SkillSystem (Game-owned), Player, Enemy, EnemyManager, ScrapManager, Card, DebugTools, Application; Balance/Theme/Config tokens.

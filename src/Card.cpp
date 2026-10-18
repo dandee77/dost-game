@@ -1,5 +1,6 @@
 #include "Card.hpp"
 #include "ResourceManager.hpp"
+#include "Theme.hpp"
 #include "raymath.h"
 #include <cmath>
 #include <cstdlib>
@@ -8,6 +9,12 @@ Card::Card(Vector2 position, Vector2 size, AugmentId id)
     : Card(position, size, augmentCatalog()[id].title, augmentCatalog()[id].description)
 {
     augmentId = id;
+}
+
+Card::Card(Vector2 position, Vector2 size, AbilityId id, int nextLevel)
+    : Card(position, size, abilityCatalog()[id].name, abilityUpgradeDescription(id, nextLevel))
+{
+    abilityId = id;
 }
 
 float easeOutBounce(float t) {
@@ -263,14 +270,21 @@ void Card::drawCardContent() const {
         return;
     }
     
-    float titleSize = 100 * hoverScale;
-    float descSize = 64 * hoverScale;
+    const auto& titleFont = ResourceManager::GetInstance().GetFont(Theme::FONT_PRIMARY);
+    const auto& descFont = ResourceManager::GetInstance().GetFont(Theme::FONT_SECONDARY);
+    const float contentWidth = rect.width - Theme::CARD_TEXT_INSET * 2.0f;
+    float titleSize = Theme::CARD_TITLE_SIZE * hoverScale;
+    float descSize = Theme::CARD_DESCRIPTION_SIZE * hoverScale;
+    const float titleWidth = MeasureTextEx(titleFont, title.c_str(), titleSize, Theme::TEXT_SPACING).x;
+    const float descWidth = MeasureTextEx(descFont, description.c_str(), descSize, Theme::TEXT_SPACING).x;
+    if (titleWidth > contentWidth) titleSize *= contentWidth / titleWidth;
+    if (descWidth > contentWidth) descSize *= contentWidth / descWidth;
     
-    Vector2 titlePos = {rect.x + 50, rect.y + 30};
-    DrawTextEx(ResourceManager::GetInstance().GetFont("primary_font"), title.c_str(), titlePos, titleSize, 1.0f, RAYWHITE);
+    Vector2 titlePos = {rect.x + Theme::CARD_TEXT_INSET, rect.y + Theme::CARD_TITLE_Y};
+    DrawTextEx(titleFont, title.c_str(), titlePos, titleSize, Theme::TEXT_SPACING, Theme::COLOR_TEXT);
     
-    Vector2 descPos = {rect.x + 50, rect.y + 150 * hoverScale};
-    DrawTextEx(ResourceManager::GetInstance().GetFont("secondary_font"), description.c_str(), descPos, descSize, 1.0f, RAYWHITE);
+    Vector2 descPos = {rect.x + Theme::CARD_TEXT_INSET, rect.y + Theme::CARD_DESCRIPTION_Y * hoverScale};
+    DrawTextEx(descFont, description.c_str(), descPos, descSize, Theme::TEXT_SPACING, Theme::COLOR_TEXT);
     
     Rectangle innerRect = {rect.x + borderWidth, rect.y + borderWidth, 
                           rect.width - 2 * borderWidth, rect.height - 2 * borderWidth};

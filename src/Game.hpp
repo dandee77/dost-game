@@ -75,6 +75,8 @@ private:
 
     void restartGame();
     void resetRun();
+    void createUpgradeOffer();
+    bool chooseUpgrade(std::size_t index);
     void resolveEquipmentAttacks();
     bool updateSkills(float dt, Vector2 aim, bool activateSelected);
     void damageEquipmentEnemy(const std::string& id, int damage, Vector2 direction, float knockback, bool dropSkillScrap = false);

@@ -49,6 +49,45 @@ Game::~Game()
     if (mainMenuButton) delete mainMenuButton;
 }
 
+void Game::createUpgradeOffer()
+{
+    std::vector<Card> offers;
+    const Vector2 size = {Theme::UPGRADE_CARD_WIDTH, Theme::UPGRADE_CARD_HEIGHT};
+    for (const auto& info : augmentCatalog()) {
+        if (info.id == AUG_NANO_REPAIR || playerEntity.getAugmentLevel(info.id) < Balance::AUG_MAX_LEVEL)
+            offers.emplace_back(Vector2{}, size, info.id);
+    }
+    for (const auto& info : abilityCatalog()) {
+        if (skills.level(info.id) < Balance::ABILITY_MAX_LEVEL)
+            offers.emplace_back(Vector2{}, size, info.id, skills.level(info.id) + 1);
+    }
+    std::shuffle(offers.begin(), offers.end(), augmentRng);
+    augmentCards.clear();
+    const std::size_t count = std::min(Balance::UPGRADE_OFFER_COUNT, offers.size());
+    const float centerX = (GAME_SCREEN_WIDTH - size.x) / 2.0f;
+    const float centerY = (GAME_SCREEN_HEIGHT - size.y) / 2.0f;
+    for (std::size_t index = 0; index < count; ++index) {
+        Card card = std::move(offers[index]);
+        const float row = static_cast<float>(index) - static_cast<float>(count - 1) / 2.0f;
+        card.setPosition({centerX, centerY + row * (size.y + Theme::UPGRADE_CARD_GAP)});
+        card.startIntroAnimation();
+        augmentCards.push_back(std::move(card));
+    }
+}
+
+bool Game::chooseUpgrade(std::size_t index)
+{
+    if (gameState != GAME_AUGMENT_SELECTION || index >= augmentCards.size() || playerEntity.getHealth() <= 0 ||
+        std::any_of(augmentCards.begin(), augmentCards.end(), [](const Card& card) { return card.hasStartedExit(); })) return false;
+    auto& card = augmentCards[index];
+    if (!card.isIntroComplete()) return false;
+    if (card.getAbilityId() != ABILITY_COUNT) {
+        if (!skills.upgrade(card.getAbilityId())) return false;
+    } else if (!applyAugment(playerEntity, card.getAugmentId()) && card.getAugmentId() != AUG_NANO_REPAIR) return false;
+    card.startExitAnimation();
+    return true;
+}
+
 void Game::resetRun()
 {
     skills.reset();
@@ -378,33 +417,7 @@ std::string Game::update()
 
         if ((int)gameTimer.getElapsedTime() % 20 == 0 && (int)gameTimer.getElapsedTime() > 0 && (int)gameTimer.getElapsedTime() != prevGameTimer) {
             
-            auto offers = augmentCatalog();
-            std::shuffle(offers.begin(), offers.end(), augmentRng);
-            
-            float cardWidth = 1200.0f;
-            float cardHeight = 300.0f;
-            float gap = 75.0f;
-            
-            float centerX = GAME_SCREEN_WIDTH / 2.0f - cardWidth / 2.0f;
-            float centerY = GAME_SCREEN_HEIGHT / 2.0f - cardHeight / 2.0f;
-            
-            std::vector<Vector2> cardPositions = {
-                {centerX, centerY - cardHeight - gap},   
-                {centerX, centerY},                       
-                {centerX, centerY + cardHeight + gap}     
-            };
-            
-            for (int i = 0; i < 3; i++) {
-                augmentCards.push_back(Card(
-                    cardPositions[i], 
-                    {cardWidth, cardHeight}, 
-                    offers[i].id
-                ));
-            }
-            
-            for (auto& card : augmentCards) {
-                card.startIntroAnimation();
-            }
+            createUpgradeOffer();
 
             ConfettiManager::GetInstance().startConfetti();
 
@@ -824,12 +837,11 @@ std::string Game::update()
         // Update confetti effect
         ConfettiManager::GetInstance().update();
         
-        for (auto& card : augmentCards) {
+        for (std::size_t index = 0; index < augmentCards.size(); ++index) {
+            auto& card = augmentCards[index];
             card.update();
-            if (card.isIntroComplete() && !card.hasStartedExit() && card.isClicked()) {
+            if (card.isIntroComplete() && card.isClicked() && chooseUpgrade(index)) {
                 PlaySound(ResourceManager::GetInstance().GetSound("button_click"));
-                applyAugment(playerEntity, card.getAugmentId());
-                card.startExitAnimation();
                 break;
             }
             if (card.isExitComplete()) {

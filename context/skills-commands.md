@@ -1,6 +1,6 @@
 # Skills prototype: commands and behavior
 
-Implemented on `dev` for the 17 October request. Source brief: [skills-context.md](skills-context.md). This is one scoped P5 feature item: 14 augments and 18 abilities, using existing textures and simple Raylib shapes. No generated assets, new dependencies, unlocks, ability drops, inventory, or shop connections.
+Implemented on `dev` for the 17 October request, extended with repeat-pick upgrades on 18 October. Source brief: [skills-context.md](skills-context.md). There are 14 augments and 18 abilities, using existing textures and simple Raylib shapes. The existing timed picker now offers both types. No generated assets, new dependencies, ability drops, inventory, or shop connections.
 
 ## Terminal
 
@@ -29,6 +29,8 @@ augment weapons-payload
 augment nano-repair
 skill equip laser-rings
 skill equip blink-drive
+skill upgrade space-collapse
+skill upgrade combat-drone
 skill cast nuclear-missile
 skill unequip laser-rings
 skill status
@@ -36,11 +38,46 @@ spawn lowlevel enemy 100
 spawn debris all
 ```
 
-`augment <key>` applies one level. Persistent augments cap at 10 levels; Nano Repair is an immediate consumable heal with no stacking level and reports when hull is full. The existing timed card offer now uses the same typed 14-entry catalog. No new acquisition flow is added.
+`augment <key>` applies one level. Persistent augments cap at 10 levels; Nano Repair is an immediate consumable heal with no stacking level and reports when hull is full. The existing timed picker offers up to three distinct choices from all 32 entries, excluding capped upgrades. At full progression, Nano Repair remains a selectable fallback even at full health so the run cannot get stuck. A successful pick locks every card during the exit animation.
 
 `skill equip <key>` enables an automatic ability or selects a manual ability for **Q**. Multiple automatic abilities may run together. The most recently equipped manual ability gets Q; every ability can also be activated once with `skill cast <key>` without equipping it. Manual targeted abilities use the mouse position, clamped to 90 world units. Blink travels at most 35 units toward it. Plasma follows ship facing. Q is separate from the existing Space equipment boost/guard.
 
 `skill unequip <key>` cancels that ability's effects but retains cooldown debt. Cooldowns start at activation. Pending console casts execute only after simulation resumes. Pause, console capture, card selection, and game over do not advance skills. Death, scene exit, and restart clear skill state; augments reset on a new run.
+
+## Repeat-pick ability upgrades (18 October)
+
+The first ability card learns/equips level 1. Each repeat grants one level, up to **5**. Cards show the resulting level, AUTO/Q mode and upgrade summary; the Q HUD and `skill status` expose the earned level. Selecting a manual ability makes it the Q ability. Automatic abilities can run together.
+
+`skill equip <key>` learns an unowned ability or upgrades an already equipped one. Re-equipping an unequipped ability restores its existing level without granting a free level. `skill upgrade <key>` explicitly grants one level and equips/selects it, including while unequipped. At the cap these commands can still select/equip the ability but grant no extra level. `skill cast` does not grant progression; an unlearned debug cast uses level-one stats.
+
+Picks never reset cooldowns, refresh protection, or replace live effects. Each cast snapshots its level; new stats apply on the next activation. Acid pools retain their original radius/damage until expiry. Unequip preserves earned levels and recharge debt; a new run clears all levels, drones and effects.
+
+All increments below are **per additional level**, relative to level-one values (additive, not compounded). TUNE in `Balance::ABILITY_GROWTH` and associated constants:
+
+| Ability | Improvement per additional level |
+|---|---|
+| Laser Rings | +1 blade; +8% orbit radius, +25% damage, +10% duration |
+| Deflector Shield | +1 absorbed hit; +15% duration |
+| Lightning Ring | +10% ring radius, +25% damage, +10% duration |
+| Blink Drive | +15% distance; -10% cooldown |
+| Nuclear Missile | +15% blast radius, +30% boss damage; -5% cooldown; same travel time |
+| Space Collapse | +1 collapse zone, +15% radius; always no scrap |
+| Radiant Halo | +15% radius, +30% damage; -5% cooldown |
+| Repulsor Pulse | +10% radius, +15% push distance; -5% cooldown |
+| Point-Defense Interceptor | +10% radius, +15% duration |
+| Scrap Magnet | +20% duration; -5% cooldown; collection frequency multiplier +0.10 |
+| Chain Lightning | +2 distinct targets, +10% jump range, +25% damage |
+| Hologram Clone | +15% duration; firing frequency multiplier +0.15; inherits primary weapon damage |
+| Combat Drone | +1 drone, +15 HP per drone, +25% shot damage |
+| Plasma Beam | +10% cone range, +25% damage, +10% duration |
+| Corrosive Trail | +15% pool radius, +25% damage, +10% emitter duration |
+| Singularity | +10% radius, +25% damage, +10% duration, +15% pull speed |
+| Realm Breaker | +15% length/width, +25% damage, +10% duration |
+| Armageddon | +1 blast per volley, +10% radius, +20% damage |
+
+Space Collapse keeps the first zone at the cursor; extra zones are evenly spaced on a ring at 1.5 times the upgraded radius. Levels 1-5 give 1/2/3/4/5 zones with radii 32/36.8/41.6/46.4/51.2. Overlaps erase each target once per cast.
+
+Combat Drone levels 1-5 summon 1/2/3/4/5 drones with 30/45/60/75/90 HP and 15/19/23/26/30 shot damage (round to nearest integer). Each pursues and fires independently, stops 15 units from its target, takes actual hostile projectile damage, and takes the strongest overlapping enemy's contact damage at most every 0.5 seconds. Collision radius is 3; extra drones start 10 units around the player. Destroyed drones vanish without rewards and return on the next normal activation; surviving drones expire after the existing 15 seconds. Health bars are cosmetic representations of that real HP.
 
 ## Ability behavior and provisional balance
 
@@ -81,4 +118,4 @@ Weapons Payload adds 15 percentage points of standard attack damage per level. C
 
 `GAME_EQUIPMENT_TESTS=ON` includes `tests/SkillChecks.cpp` in the existing native harness. It exercises all 32 IDs, real damage/reward application, all weapon patterns, all ability behaviors, command routing, malformed input, caps, pauses, cooldown debt, restart, and 30/144 FPS damage parity. The harness exports `skills-preview.png` next to the built tests using the production draw functions. Build/test results are recorded in `progress-tracker.md`.
 
-Human balance and feel review, polished effects, final naming, and acquisition/inventory/shop integration remain future work by request.
+Human balance and feel review, polished effects, final naming, ability drops, inventory and shop integration remain future work. Repeat-pick acquisition through the existing card flow is implemented.

@@ -3,6 +3,7 @@
 #include <string>
 #include <array>
 #include "Augment.hpp"
+#include "SkillSystem.hpp"
 
 class Card {
 private:
@@ -11,6 +12,7 @@ private:
     std::string title;
     std::string description;
     AugmentId augmentId = AUG_COUNT;
+    AbilityId abilityId = ABILITY_COUNT;
     
     float borderAnimationTime;
     float borderSpeed;
@@ -38,7 +40,9 @@ private:
 public:
     Card();
     Card(Vector2 position, Vector2 size, AugmentId id);
+    Card(Vector2 position, Vector2 size, AbilityId id, int nextLevel);
     AugmentId getAugmentId() const { return augmentId; }
+    AbilityId getAbilityId() const { return abilityId; }
     bool hasStartedExit() const { return hasExitStarted; }
     Card(Vector2 position, Vector2 size, const std::string& cardTitle, const std::string& cardDescription);
     

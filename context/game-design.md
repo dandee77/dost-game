@@ -8,6 +8,8 @@ Values marked **(SA)** are the current Space Ablaze values, kept so the game sti
 
 ## Design Pillars
 
+**18 October P5 repeat-pick extension:** Ability cards join the existing 20-second picker, with five earned levels per ability and capped upgrades excluded. First pick learns; repeats upgrade. This user request supersedes the earlier acquisition deferral only for the existing picker. All per-ability growth and drone health/contact numbers are documented in `skills-commands.md` under Repeat-pick ability upgrades and centralized in `Balance.hpp`. Growth uses additive fractions of base values; casts retain their activation stats. Space Collapse gains one larger erasure zone per level without scrap, and Combat Drone gains one drone per level with real health and stronger shots. No wave/shop system is added.
+
 **17 October P5 skills override:** The user's supplied `skills-context.md` supersedes the old nine-augment names below for this prototype. There are now 14 typed augments and 18 abilities. Provisional numbers, activation rules, and resolved assumptions are documented in `skills-commands.md`; executable values live in `Balance.hpp`. Rapid Fire adds burst shots; Overclocked Chambers reduces cooldown. Nano Repair heals 25% of current max hull; Reinforced Hull increases max/current hull. Singularity yields scrap; Space Collapse does not. No acquisition/shop work is included.
 
 1. **Readable chaos.** Many enemies, but the player always sees what hurts: toxic green is danger, gold is reward, sky blue is you.

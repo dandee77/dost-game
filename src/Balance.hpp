@@ -45,6 +45,36 @@ namespace Balance {
     inline constexpr float SKILL_RIFT_HALF_LENGTH = 25.0f, SKILL_RIFT_WIDTH = 6.0f;
     inline constexpr float SKILL_BARRAGE_VIEW_FRACTION = 0.85f;
     inline constexpr int SKILL_LOW_SCRAP = 2, SKILL_MID_SCRAP = 5;
+    // Repeat picks: additive fractions of level-one values, capped for the sprint. TUNE.
+    inline constexpr int ABILITY_MAX_LEVEL = 5;
+    inline constexpr std::size_t UPGRADE_OFFER_COUNT = 3;
+    struct AbilityGrowth { float radius, damage, duration, recharge, frequency; };
+    inline constexpr std::array<AbilityGrowth, 18> ABILITY_GROWTH = {{
+        {0.08f, 0.25f, 0.10f, 0.0f, 0.0f}, // Rings: +1 blade too
+        {0.0f, 0.0f, 0.15f, 0.0f, 0.0f},  // Shield: +1 hit too
+        {0.10f, 0.25f, 0.10f, 0.0f, 0.0f},
+        {0.15f, 0.0f, 0.0f, 0.10f, 0.0f}, // Blink: range and recharge
+        {0.15f, 0.30f, 0.0f, 0.05f, 0.0f},
+        {0.15f, 0.0f, 0.0f, 0.0f, 0.0f},  // Collapse: +1 distinct zone too
+        {0.15f, 0.30f, 0.0f, 0.05f, 0.0f},
+        {0.10f, 0.0f, 0.0f, 0.05f, 0.0f}, // Repulsor: stronger push too
+        {0.10f, 0.0f, 0.15f, 0.0f, 0.0f},
+        {0.0f, 0.0f, 0.20f, 0.05f, 0.10f}, // Magnet: uptime and collection rate
+        {0.10f, 0.25f, 0.0f, 0.0f, 0.0f},  // Chain: +2 targets too
+        {0.0f, 0.0f, 0.15f, 0.0f, 0.15f}, // Clone: duration and fire rate
+        {0.0f, 0.25f, 0.0f, 0.0f, 0.0f},  // Drones: +1 drone, +15 HP too
+        {0.10f, 0.25f, 0.10f, 0.0f, 0.0f},
+        {0.15f, 0.25f, 0.10f, 0.0f, 0.0f},
+        {0.10f, 0.25f, 0.10f, 0.0f, 0.0f},
+        {0.15f, 0.25f, 0.10f, 0.0f, 0.0f},
+        {0.10f, 0.20f, 0.0f, 0.0f, 0.0f}   // Barrage: +1 blast per volley too
+    }};
+    inline constexpr int SKILL_CHAIN_TARGETS_PER_LEVEL = 2;
+    inline constexpr float SKILL_FORCE_PER_LEVEL = 0.15f;
+    inline constexpr float SKILL_COLLAPSE_SPACING = 1.5f;
+    inline constexpr int SKILL_DRONE_HEALTH = 30, SKILL_DRONE_HEALTH_PER_LEVEL = 15;
+    inline constexpr float SKILL_DRONE_RADIUS = 3.0f, SKILL_DRONE_SPACING = 10.0f;
+    inline constexpr float SKILL_DRONE_STANDOFF = 15.0f, SKILL_DRONE_CONTACT_INTERVAL = 0.5f;
     // Fixed per-object sizes/rewards; no random scaling. TUNE in debris playtests.
     inline constexpr std::array<float, DEBRIS_KIND_COUNT> DEBRIS_RADII = {3.75f, 3.0f, 8.0f, 3.3f, 5.7f, 3.0f, 6.8f, 5.0f, 6.0f, 6.0f};
     inline constexpr std::array<int, DEBRIS_KIND_COUNT> DEBRIS_SCRAP_VALUES = {3, 2, 8, 2, 5, 2, 6, 4, 3, 5};

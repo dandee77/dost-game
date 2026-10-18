@@ -61,6 +61,154 @@ int runSkillChecks(const std::string& artifactDirectory)
     game.onSwitch();
     auto& player = game.playerEntity;
     auto& bullets = BulletManager::GetInstance().getBullets();
+    // Repeating an ability pick must change real combat, not only its label.
+    clear(game);
+    game.skills.equip(ABILITY_RADIANT_HALO);
+    game.skills.equip(ABILITY_RADIANT_HALO);
+    enemy("upgrade-halo", {0, -10}, 1000);
+    cast(game, ABILITY_RADIANT_HALO);
+    require(health("upgrade-halo") < 940, "Second ability pick increases actual halo damage");
+    for (const auto& info : abilityCatalog()) {
+        clear(game);
+        for (int pick = 1; pick <= Balance::ABILITY_MAX_LEVEL; ++pick) {
+            require(game.skills.upgrade(info.id), "Each ability accepts upgrades through the cap");
+            require(game.skills.level(info.id) == pick, "Each pick grants exactly one level");
+        }
+        require(!game.skills.upgrade(info.id) && game.skills.level(info.id) == 5, "Extra picks cannot overflow the cap");
+        cast(game, info.id);
+        const float debt = game.skills.cooldown(info.id);
+        game.skills.unequip(info.id, player);
+        game.skills.equip(info.id);
+        require(game.skills.level(info.id) == 5 && game.skills.cooldown(info.id) == debt,
+            "Unequip/re-equip preserves earned levels and recharge debt");
+        game.skills.reset();
+        require(game.skills.level(info.id) == 0, "Run reset removes earned ability levels");
+    }
+    clear(game);
+    require(!game.skills.upgrade(ABILITY_COUNT) && !game.skills.upgrade(static_cast<AbilityId>(-1)), "Upgrade rejects invalid IDs");
+    // Overlapping collapse zones may erase a target only once and never produce scrap.
+    for (int rank : {1, 2, 5}) {
+        clear(game);
+        for (int pick = 0; pick < rank; ++pick) game.skills.upgrade(ABILITY_SPACE_COLLAPSE);
+        enemy("center", {0, -30}, 5000);
+        enemy("expanded", {-40, -30}, 5000);
+        enemy("second-zone", {90, -30}, 5000);
+        enemy("overlap", {30, -30}, 5000);
+        cast(game, ABILITY_SPACE_COLLAPSE);
+        require(game.skills.flashes.size() == static_cast<std::size_t>(rank), "Collapse creates one visible zone per level");
+        require(health("center") == 0 && health("overlap") == 0, "Collapse retains its primary erasure zone");
+        require((health("expanded") == 0) == (rank > 1), "Upgraded collapse radius reaches previously safe targets");
+        require((health("second-zone") == 0) == (rank > 1), "Additional collapse reaches a separate target region");
+        require(game.killCounter.getCount() == (rank == 1 ? 2 : 4) && ScrapManager::GetInstance().pendingValue() == 0,
+            "Overlapping collapse counts kills once and never drops scrap");
+    }
+    // Upgrade an active shield without replenishing charges or restarting the cast.
+    clear(game); game.skills.equip(ABILITY_DEFLECTOR_SHIELD); cast(game, ABILITY_DEFLECTOR_SHIELD);
+    player.takeDamage(0.0f, {0, -1}, 1.0f);
+    const float shieldDebt = game.skills.cooldown(ABILITY_DEFLECTOR_SHIELD);
+    game.skills.upgrade(ABILITY_DEFLECTOR_SHIELD);
+    require(player.getDeflectorHits() == 2 && game.skills.cooldown(ABILITY_DEFLECTOR_SHIELD) == shieldDebt,
+        "Upgrading a live shield cannot refresh protection or cooldown");
+    require(game.skills.states[ABILITY_DEFLECTOR_SHIELD].castLevel == 1, "Existing effect retains activation level");
+    step(game, 16.0f); cast(game, ABILITY_DEFLECTOR_SHIELD);
+    require(player.getDeflectorHits() == 4, "Next shield cast gains its upgraded hit capacity");
+    clear(game); game.skills.upgrade(ABILITY_BLINK_DRIVE); game.skills.upgrade(ABILITY_BLINK_DRIVE);
+    cast(game, ABILITY_BLINK_DRIVE, {0, -1000});
+    require(player.getPosition().y < -40.0f && game.skills.cooldown(ABILITY_BLINK_DRIVE) < 4.0f,
+        "Blink gains real range and faster recharge");
+    clear(game); game.skills.upgrade(ABILITY_COMBAT_DRONE); game.skills.upgrade(ABILITY_COMBAT_DRONE);
+    enemy("drone-victim", {0, -25}, 1000); cast(game, ABILITY_COMBAT_DRONE);
+    require(game.skills.drones.size() == 2 && bullets.size() == 2, "Two drone picks summon two independently firing drones");
+    require(bullets.front().getDamage() == 19 && game.skills.drones.front().health == 45,
+        "Drone upgrades increase projectile damage and actual health");
+    bullets.clear();
+    const Vector2 droneAt = game.skills.drones.front().position;
+    Bullet droneHit(droneAt, {0, 1}, true); droneHit.configure(PROJECTILE_CANNON, 40, 1.0f, 0.0f);
+    BulletManager::GetInstance().addBullet(droneHit);
+    step(game, 0.01f);
+    require(bullets.empty() && game.skills.drones.front().health == 5, "Drone health absorbs real hostile projectile damage");
+    droneHit.position = droneHit.previousPosition = game.skills.drones.front().position;
+    BulletManager::GetInstance().addBullet(droneHit); step(game, 0.01f);
+    require(game.skills.drones.size() == 1, "Destroyed drone is removed independently of its squad");
+    game.skills.unequip(ABILITY_COMBAT_DRONE, player);
+    require(game.skills.drones.empty() && game.skills.level(ABILITY_COMBAT_DRONE) == 2,
+        "Unequip cleans up drones but preserves earned rank");
+    clear(game); game.skills.upgrade(ABILITY_CHAIN_LIGHTNING); game.skills.upgrade(ABILITY_CHAIN_LIGHTNING);
+    for (int i = 0; i < 9; ++i) enemy("up-chain" + std::to_string(i), {static_cast<float>(i * 5), -10}, 1000);
+    cast(game, ABILITY_CHAIN_LIGHTNING);
+    int upgradedChainHits = 0;
+    for (const auto& [id, object] : EnemyManager::GetInstance().getEnemies()) if (object->getHealth() == 956) ++upgradedChainHits;
+    require(upgradedChainHits == 8, "Second chain level hits eight distinct targets for increased damage");
+    // Old acid pools retain the radius/damage of their cast after a mid-effect upgrade.
+    clear(game); game.skills.upgrade(ABILITY_CORROSIVE_TRAIL); cast(game, ABILITY_CORROSIVE_TRAIL);
+    game.skills.upgrade(ABILITY_CORROSIVE_TRAIL);
+    require(game.skills.trails.front().radius == 8.0f && game.skills.trails.front().damage == 6,
+        "Existing pools are not retroactively retuned by a pick");
+    // Every other damaging ability uses upgraded combat tuning, not only larger visuals.
+    for (AbilityId id : {ABILITY_LASER_RINGS, ABILITY_LIGHTNING_RING, ABILITY_PLASMA_BEAM,
+        ABILITY_CORROSIVE_TRAIL, ABILITY_SINGULARITY, ABILITY_REALM_BREAKER}) {
+        clear(game); game.skills.upgrade(id); game.skills.upgrade(id);
+        Vector2 at = {0, -20};
+        if (id == ABILITY_LASER_RINGS) at = {19.44f, 0};
+        if (id == ABILITY_LIGHTNING_RING) at = {27.5f, 0};
+        if (id == ABILITY_CORROSIVE_TRAIL) at = {0, 9.2f};
+        enemy("scaled", at, 10000); cast(game, id, at);
+        require(health("scaled") < 10000 - Balance::ABILITIES[id].damage, "Upgraded skill increases real damage");
+    }
+    clear(game); game.skills.upgrade(ABILITY_REPULSOR_PULSE); game.skills.upgrade(ABILITY_REPULSOR_PULSE);
+    enemy("far-push", {0, -36}); cast(game, ABILITY_REPULSOR_PULSE);
+    require(EnemyManager::GetInstance().getEnemies().at("far-push")->getPosition().y < -60,
+        "Repulsor upgrades increase reach and push strength");
+    clear(game); game.skills.upgrade(ABILITY_INTERCEPTOR); game.skills.upgrade(ABILITY_INTERCEPTOR);
+    Bullet outerBullet({41, 0}, {0, 1}, true); BulletManager::GetInstance().addBullet(outerBullet);
+    cast(game, ABILITY_INTERCEPTOR);
+    require(bullets.empty() && game.skills.states[ABILITY_INTERCEPTOR].remaining > 8.0f,
+        "Interceptor upgrades improve real interception radius and duration");
+    clear(game); game.skills.upgrade(ABILITY_SCRAP_MAGNET); game.skills.upgrade(ABILITY_SCRAP_MAGNET);
+    cast(game, ABILITY_SCRAP_MAGNET); step(game, 5.2f);
+    ScrapManager::GetInstance().spawnScrap({1000, 1000}, 11); step(game, 0.3f);
+    require(game.harvestedScrap == 11, "Upgraded magnet still collects after level-one duration ends");
+    clear(game); game.skills.upgrade(ABILITY_HOLOGRAM_CLONE); game.skills.upgrade(ABILITY_HOLOGRAM_CLONE);
+    cast(game, ABILITY_HOLOGRAM_CLONE); step(game, 0.45f);
+    require(bullets.size() == 2, "Upgraded clone fires its second shot before the base half-second interval");
+    clear(game); game.skills.upgrade(ABILITY_NUCLEAR_MISSILE); game.skills.upgrade(ABILITY_NUCLEAR_MISSILE);
+    enemy("nuke-edge", {65, -30}, 5000); cast(game, ABILITY_NUCLEAR_MISSILE); step(game, 0.75f);
+    require(health("nuke-edge") == 0, "Upgraded nuclear blast reaches beyond original radius");
+    clear(game); game.skills.upgrade(ABILITY_ARMAGEDDON); game.skills.upgrade(ABILITY_ARMAGEDDON);
+    cast(game, ABILITY_ARMAGEDDON);
+    require(game.skills.flashes.size() == 2, "Upgraded barrage emits two separate blasts per volley");
+    // Actual card dispatch, one-pick lock, cap filtering, deterministic mixed offers.
+    clear(game);
+    for (int pick = 1; pick <= 2; ++pick) {
+        game.gameState = GAME_AUGMENT_SELECTION;
+        game.augmentCards.clear();
+        game.augmentCards.emplace_back(Vector2{}, Vector2{1200, 300}, ABILITY_SPACE_COLLAPSE, pick);
+        game.augmentCards.emplace_back(Vector2{}, Vector2{1200, 300}, ABILITY_COMBAT_DRONE, 1);
+        for (auto& card : game.augmentCards) { card.isAnimationComplete = true; card.isIntroPlaying = false; }
+        require(game.chooseUpgrade(0) && game.skills.level(ABILITY_SPACE_COLLAPSE) == pick, "Real card selection learns then upgrades ability");
+        require(!game.chooseUpgrade(0) && !game.chooseUpgrade(1) && game.skills.level(ABILITY_COMBAT_DRONE) == 0,
+            "One choice locks all cards until the selection exits");
+    }
+    clear(game);
+    std::set<int> offered;
+    for (int round = 0; round < 100; ++round) {
+        game.createUpgradeOffer(); std::set<int> distinct;
+        for (const auto& card : game.augmentCards) {
+            const int key = card.getAbilityId() == ABILITY_COUNT ? static_cast<int>(card.getAugmentId()) : AUG_COUNT + static_cast<int>(card.getAbilityId());
+            require(distinct.insert(key).second, "Offer never contains duplicate choices"); offered.insert(key);
+        }
+    }
+    require(offered.size() == 32, "Actual offers expose all augments and active abilities");
+    for (const auto& info : abilityCatalog()) for (int pick = 0; pick < 5; ++pick) game.skills.upgrade(info.id);
+    for (const auto& info : augmentCatalog()) if (info.id != AUG_NANO_REPAIR)
+        for (int pick = 0; pick < 10; ++pick) applyAugment(player, info.id);
+    game.createUpgradeOffer();
+    require(game.augmentCards.size() == 1 && game.augmentCards.front().getAugmentId() == AUG_NANO_REPAIR,
+        "Maxed abilities and augments are excluded; consumable repair remains a safe fallback");
+    game.gameState = GAME_AUGMENT_SELECTION;
+    game.augmentCards.front().isAnimationComplete = true; game.augmentCards.front().isIntroPlaying = false;
+    require(game.chooseUpgrade(0), "Full-health all-maxed run can still finish the picker");
+    clear(game);
     std::set<std::string> keys;
     for (const auto& info : augmentCatalog()) {
         require(keys.insert(info.key).second && findAugment(info.key) == info.id, "Unique augment command resolves");
@@ -240,12 +388,17 @@ int runSkillChecks(const std::string& artifactDirectory)
     game.executeDebugCommand("augment weapons-payload");
     game.executeDebugCommand("skill equip combat-drone");
     require(player.getAugmentLevel(AUG_WEAPONS_PAYLOAD) == 1 && game.skills.states[ABILITY_COMBAT_DRONE].equipped, "Real F5/startup command routing");
+    game.executeDebugCommand("skill upgrade combat-drone");
+    require(game.skills.level(ABILITY_COMBAT_DRONE) == 2, "F5 upgrade command grants exactly one level");
+    game.executeDebugCommand("skill upgrade combat-drone extra");
+    require(game.skills.level(ABILITY_COMBAT_DRONE) == 2, "Malformed upgrade command cannot grant a level");
     game.debugTools.input = "skill equip ";
     require(game.debugTools.completions().size() == 18, "Autocomplete exposes all eighteen abilities");
 #endif
     EquipmentTestAccess::restart(game);
     require(player.getMaxHealth() == 100 && player.getAugmentLevel(AUG_WEAPONS_PAYLOAD) == 0 &&
-        !game.skills.states[ABILITY_COMBAT_DRONE].equipped && game.skills.flashes.empty() && game.skills.trails.empty(), "Real restart clears augments, abilities and effects");
+        !game.skills.states[ABILITY_COMBAT_DRONE].equipped && game.skills.level(ABILITY_COMBAT_DRONE) == 0 &&
+        game.skills.drones.empty() && game.skills.flashes.empty() && game.skills.trails.empty(), "Real restart clears augments, abilities and effects");
     clear(game); cast(game, ABILITY_DEFLECTOR_SHIELD); game.onExit();
     require(player.getDeflectorHits() == 0 && !game.skills.isActive(ABILITY_DEFLECTOR_SHIELD), "Scene exit clears ability protection and effects");
     clear(game); cast(game, ABILITY_DEFLECTOR_SHIELD); player.health = 0; game.gameState = GAME_OVER; game.update();
@@ -269,6 +422,38 @@ int runSkillChecks(const std::string& artifactDirectory)
     Image capture = LoadImageFromTexture(preview.texture); ImageFlipVertical(&capture);
     require(ExportImage(capture, (artifactDirectory + "/skills-preview.png").c_str()), "Export native skills gallery");
     UnloadImage(capture); UnloadRenderTexture(preview);
+    // Native side-by-side upgrade preview: five levels using the production renderer.
+    RenderTexture2D upgradePreview = LoadRenderTexture(1800, 900);
+    BeginTextureMode(upgradePreview); ClearBackground(Theme::COLOR_PANEL);
+    int row = 0;
+    for (AbilityId id : {ABILITY_SPACE_COLLAPSE, ABILITY_COMBAT_DRONE, ABILITY_LASER_RINGS}) {
+        for (int rank = 1; rank <= 5; ++rank) {
+            clear(game);
+            for (int pick = 0; pick < rank; ++pick) game.skills.upgrade(id);
+            cast(game, id, {}, 0.01f);
+            const float x = static_cast<float>((rank - 1) * 360), y = static_cast<float>(row * 300);
+            Camera2D camera = {{x + 180, y + 160}, {}, 0.0f, id == ABILITY_SPACE_COLLAPSE ? 0.9f : 3.0f};
+            BeginMode2D(camera); game.skills.draw(); player.draw(); EndMode2D();
+            const std::string label = std::string(abilityCatalog()[id].name) + " Lv " + std::to_string(rank);
+            DrawText(label.c_str(), static_cast<int>(x + 12), static_cast<int>(y + 16), 18, WHITE);
+        }
+        ++row;
+    }
+    EndTextureMode();
+    capture = LoadImageFromTexture(upgradePreview.texture); ImageFlipVertical(&capture);
+    require(ExportImage(capture, (artifactDirectory + "/ability-upgrades-preview.png").c_str()), "Export native level comparisons");
+    UnloadImage(capture); UnloadRenderTexture(upgradePreview);
+    RenderTexture2D cardPreview = LoadRenderTexture(GAME_SCREEN_WIDTH, GAME_SCREEN_HEIGHT);
+    BeginTextureMode(cardPreview); ClearBackground(Theme::COLOR_PANEL);
+    int cardRow = 0;
+    for (AbilityId id : {ABILITY_INTERCEPTOR, ABILITY_SPACE_COLLAPSE, ABILITY_COMBAT_DRONE}) {
+        Card card({1320.0f, 555.0f + cardRow * 375.0f}, {1200.0f, 300.0f}, id, 2);
+        card.draw(); ++cardRow;
+    }
+    EndTextureMode();
+    capture = LoadImageFromTexture(cardPreview.texture); ImageFlipVertical(&capture);
+    require(ExportImage(capture, (artifactDirectory + "/ability-cards-preview.png").c_str()), "Export native upgrade cards");
+    UnloadImage(capture); UnloadRenderTexture(cardPreview);
     clear(game);
     TraceLog(LOG_WARNING, "PASS: %d skill checks", checks);
     return checks;
