@@ -37,6 +37,8 @@ If two files disagree: `project-overview.md` wins on **what** to build, `archite
 11. **Disclose AI use.** After each item, add a row to the AI Usage Log in `progress-tracker.md`. The competition requires this (Form 03) and organizers may ask for logs.
 12. **Update the docs in the same commit.** New class: `class-registry.md`. Finished item: `progress-tracker.md`. New pattern or Raylib trap: `library-docs.md`.
 
+Repository AI workflows live in `.agents/skills/`. Codex discovers these skills after a clone or pull; use the relevant skill when its description matches the task.
+
 ---
 
 ## Commands
