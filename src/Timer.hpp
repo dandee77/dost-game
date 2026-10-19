@@ -1,24 +1,23 @@
 #pragma once
 
-#include "raylib.h"
 #include <string>
 
 class Cooldown 
 {
 private:
     float cooldownDuration;
-    float lastUsedTime;
+    float elapsed = 0.0f;
+    bool active = false;
 
 public:
     bool isPaused;
-    float saveTime;
-    float pauseDuration;
 
     Cooldown();
     Cooldown(float cooldown);
 
     bool isOnCooldown() const;
     void startCooldown();
+    void update(float dt);
     float remainingCooldown() const;
     float getCooldownDuration() const { return cooldownDuration; }
     std::string remainingCooldownString() const;

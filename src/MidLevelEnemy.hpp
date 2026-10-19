@@ -19,4 +19,7 @@ public:
     void update() override;
     void draw() override;
     void destruct() override;
+
+protected:
+    void advanceCooldowns(float dt) override;
 };

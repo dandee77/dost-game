@@ -1,29 +1,33 @@
 #include "Timer.hpp"
 #include <algorithm>
+#include <cmath>
 #include <string>
 
 Cooldown::Cooldown() 
-    : cooldownDuration(0), lastUsedTime(0), isPaused(false), saveTime(0), pauseDuration(0) {}
+    : cooldownDuration(0.0f), isPaused(false) {}
 
 Cooldown::Cooldown(float cooldown) 
-    : cooldownDuration(cooldown), lastUsedTime(0), isPaused(false), saveTime(0), pauseDuration(0) {}
+    : cooldownDuration(std::max(0.0f, cooldown)), isPaused(false) {}
 
 bool Cooldown::isOnCooldown() const 
 {
-    float currentTime = GetTime();
-    return (currentTime - lastUsedTime) < cooldownDuration;
+    return active && elapsed < cooldownDuration;
 }
 
 void Cooldown::startCooldown() 
 {
-    lastUsedTime = GetTime();
+    elapsed = 0.0f;
+    active = true;
+}
+
+void Cooldown::update(float dt)
+{
+    if (!isPaused && active && dt > 0.0f && std::isfinite(dt)) elapsed += dt;
 }
 
 float Cooldown::remainingCooldown() const 
 {
-    float currentTime = isPaused ? saveTime : (GetTime() - pauseDuration);
-    float elapsedTime = currentTime - lastUsedTime;
-    return std::max(0.0f, cooldownDuration - elapsedTime);
+    return active ? std::max(0.0f, cooldownDuration - elapsed) : 0.0f;
 }
 
 std::string Cooldown::remainingCooldownString() const 
@@ -36,17 +40,15 @@ std::string Cooldown::remainingCooldownString() const
 
 void Cooldown::updateCooldownDuration(float newCooldownDuration) 
 {
-    cooldownDuration = newCooldownDuration;
+    cooldownDuration = std::max(0.0f, newCooldownDuration);
 }
 
 void Cooldown::pause() 
 {
     isPaused = true;
-    saveTime = GetTime() - pauseDuration;
 }
 
 void Cooldown::unpause() 
 {
     isPaused = false;
-    pauseDuration = GetTime() - saveTime;
 }

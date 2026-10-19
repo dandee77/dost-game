@@ -12,6 +12,7 @@ void DebrisManager::reset()
 }
 void DebrisManager::update(Vector2 playerPos, const GameTimer& gameTimer)
 {
+    debrisSpawnCooldown.update(GetFrameTime());
     const float elapsed = gameTimer.getElapsedTime();
     const float cooldown = std::max(Balance::DEBRIS_SPAWN_MIN, Balance::DEBRIS_SPAWN_START -
         elapsed / Balance::DEBRIS_SPAWN_RAMP_TIME * (Balance::DEBRIS_SPAWN_START - Balance::DEBRIS_SPAWN_MIN));

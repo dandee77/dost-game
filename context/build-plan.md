@@ -61,6 +61,14 @@ A1 ─> A2..A9 ─> 15, 26
 
 ## Phase 0: Foundation
 
+### P6 Pause, scrap, difficulty and automatic skills (user request, 19 Oct)
+**Specification:** `context-pause-scrap-difficulty-cards.md`; explicitly authorized ahead of numbered order. Implement one verified checkpoint at a time and follow its budget/push limiter.
+**Checkpoint 1:** audit and pause-safe timers. Classes: Cooldown, GameTimer, Enemy/MidLevelEnemy, EnemyManager, DebrisManager, KillCounter, Animator, Game.
+**Status:** Checkpoint 1 implemented and verified (Debug/Release/ASan/UBSan, native pause/reset/input tests, collision harness, 108.3 FPS in the rendered 80-enemy burst case). Remaining checkpoints are not implemented.
+**Done when:** gameplay cooldowns and animations freeze during pause/console/card selection, run time advances from simulation delta, game-over presentation cannot advance the world, and restarts clear timer debt.
+**Test:** native PauseChecks (including a real ten-second pause, native Esc/P, no resume shot, stun/recharge parity and run reset), full Debug/Release equipment and spatial suites, sanitizer suite, existing collision harness and rendered 80-enemy benchmark.
+**Remaining checkpoints:** progression/difficulty data; centralized scrap rewards and magnet; HUD and progression-triggered cards; difficulty UI; card descriptions; automatic/persistent skills and shield replacement; pause/settings UI; final integration/performance audit. Base healing remains a future docking dependency, not permission to build the entire dock in this item.
+
 ### P5.1 Repeat-pick ability upgrades (user-requested scope, 18 Oct)
 **Status:** Complete. Debug/sanitizer 10,054 native checks, Release 9,969 checks and 610,000 spatial queries passed; level/card previews and packaged startup commands checked. Human balance review pending.
 **18 October follow-up:** User removed the five-level ability cap. Physical size freezes at level 5; quantity and other numerical growth continue. Debug/Release/sanitizer builds and expanded native suites pass; live balance review remains pending.

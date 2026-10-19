@@ -130,9 +130,9 @@ Source order: includes (own header first), file-local constants in an anonymous 
 
 - Every movement, timer and interpolation uses `GetFrameTime()` (or a `dt` parameter passed down). Never assume 60 FPS.
 - Smooth follow uses the existing exponential pattern: `value += (target - value) * (1.0f - expf(-speed * dt));`
-- `update()` changes state; `draw()` only reads state and draws. Existing exceptions: `Animator::Update()` is called inside `Game::draw()` and `MainMenu::draw()`; keep it to **one call per frame**.
+- `update()` changes state; `draw()` only reads state and draws. Game advances Animator during simulation updates (only game-over text during game over). MainMenu still calls it in draw; keep it to **one call per frame**.
 - Do not remove items from a container while iterating with a range-for. Collect IDs, then remove after the loop (existing pattern), or iterate by index and decrement on erase.
-- Timers that must stop while paused use `GameTimer` or a `float` accumulated with `dt` in `update()`. `Cooldown` keeps running during pauses (see `class-registry.md`).
+- Timers use `GameTimer::update(dt)`, `Cooldown::update(dt)` or a float accumulated in their running owner. Do not advance simulation timers in paused, console-captured or selection frames. Querying a timer must not mutate it or read wall-clock time.
 
 ---
 

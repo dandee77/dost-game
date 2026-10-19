@@ -227,7 +227,7 @@ int runBarricadeChecks(const std::string& artifactDirectory)
     game.update();
     require(game.gameState == GAME_AUGMENT_SELECTION && !event.isActive(), "Two-minute augment transition freezes event until resume");
     game.gameState = GAME_RUNNING; game.augmentCards.clear(); game.gameTimer.setStartTime(121);
-    manager.enemySpawnCooldown.lastUsedTime = -100;
+    manager.enemySpawnCooldown = Cooldown(manager.enemySpawnCooldown.getCooldownDuration());
     testDebrisManager().debrisSpawnCooldown.startCooldown();
     game.update();
     require(event.isContaining() && enemies.size() > Balance::BARRICADE_SEGMENTS, "Game starts event while normal enemy spawning continues");

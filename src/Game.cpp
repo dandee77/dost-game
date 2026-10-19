@@ -399,7 +399,7 @@ std::string Game::update()
     }
 #endif
 
-    if (IsKeyPressed(KEY_P)) {
+    if (IsKeyPressed(KEY_P) || IsKeyPressed(KEY_ESCAPE)) {
         if (gameState == GAME_RUNNING) {
             gameTimer.pause();
             gameState = GAME_PAUSED;
@@ -407,6 +407,8 @@ std::string Game::update()
             gameTimer.unpause();
             gameState = GAME_RUNNING;
         }
+        // Consume the transition frame so resume input cannot also fire/move.
+        if (gameState == GAME_RUNNING || gameState == GAME_PAUSED) return "Game";
     }
 
     // std::cout << "Game Timer: " << (int)gameTimer.getElapsedTime() << " seconds" << std::endl;
@@ -414,6 +416,8 @@ std::string Game::update()
     switch (gameState) {
     case GAME_RUNNING:
     {
+        const float deltaTime = GetFrameTime();
+        gameTimer.update(deltaTime);
 #pragma region AugmentSelection
 
         if ((int)gameTimer.getElapsedTime() % 20 == 0 && (int)gameTimer.getElapsedTime() > 0 && (int)gameTimer.getElapsedTime() != prevGameTimer) {
@@ -433,7 +437,6 @@ std::string Game::update()
 
 #pragma region StartAnimation
 
-        float deltaTime = GetFrameTime();
         barricadeEvent.update(deltaTime, gameTimer.getElapsedTime(), playerEntity.getPosition());
         updateCameraZoom(deltaTime);
 
@@ -627,7 +630,7 @@ std::string Game::update()
                     bm.spawnImpact(bulletPosition, bm.getBullets()[i].getKind(), true,
                         bm.getBullets()[i].getDirection());
                     bm.removeBullet(i);
-                    playerEntity.takeContactDamage(GetTime(), bulletPosition, 3.0f,
+                    playerEntity.takeContactDamage(gameTimer.getElapsedTime(), bulletPosition, 3.0f,
                         incomingDamage);
                     if (playerEntity.getHealth() <= 0) {
                         deathInfo.killerType = KILLER_ENEMY_BULLET;
@@ -714,7 +717,7 @@ std::string Game::update()
             // player to enemy collision
             if (CheckCollisions(enemy->getPosition(), playerEntity.getPosition(), playerEntity.getHitbox().width)
                 && playerEntity.getPlayerState() == PLAYER_DEFAULT) {
-                playerEntity.takeContactDamage(GetTime(), enemy->getPosition(), enemy->getHitbox().width, enemy->getContactDamage());
+                playerEntity.takeContactDamage(gameTimer.getElapsedTime(), enemy->getPosition(), enemy->getHitbox().width, enemy->getContactDamage());
                 if (playerEntity.getHealth() <= 0) {
                     deathInfo.killerType = KILLER_ENEMY_COLLISION;
                     deathInfo.killerID = enemyId;
@@ -776,7 +779,7 @@ std::string Game::update()
         for (auto& [debrisId, debris] : DebrisManager::GetInstance().getDebris()) {
             if (CheckCollisions(debris->getPosition(), playerEntity.getPosition(), playerEntity.getHitbox().width)
                 && playerEntity.getPlayerState() == PLAYER_DEFAULT) {
-                playerEntity.takeDamage(GetTime(), debris->getPosition(), debris->getDebrisSize());
+                playerEntity.takeDamage(gameTimer.getElapsedTime(), debris->getPosition(), debris->getDebrisSize());
                 if (playerEntity.getHealth() <= 0) {
                     deathInfo.killerType = KILLER_DEBRIS;
                     deathInfo.killerID = debrisId;
@@ -830,6 +833,7 @@ std::string Game::update()
         killCounter.update();
         if (gameState == GAME_RUNNING && playerEntity.getHealth() > 0)
             harvestedScrap += ScrapManager::GetInstance().update(GetFrameTime(), playerEntity.getPosition());
+        if (gameState == GAME_RUNNING) Animator::GetInstance().Update();
         break;
     }
     
@@ -893,7 +897,7 @@ std::string Game::update()
             return "MainMenu";
         }
         
-        Animator::GetInstance().Update();
+        Animator::GetInstance().Update("game_over_text");
         break;
     }
     
@@ -1006,7 +1010,6 @@ void Game::draw()
 
 #pragma endregion ControlsGuide
 
-        Animator::GetInstance().Update();
         Animator::GetInstance().Draw(); 
 
         // std::cout << "Player Position: (" << playerEntity.getPosition().x << ", " << playerEntity.getPosition().y << ")" << std::endl;

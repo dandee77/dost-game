@@ -17,6 +17,7 @@
 void EnemyManager::update(Vector2 playerPos, const GameTimer& gameTimer, const Vector2* decoy, float decoyRange)
 {
     const float dt = GetFrameTime();
+    enemySpawnCooldown.update(dt);
     float elapsed = gameTimer.getElapsedTime(); 
 
     float newCooldown = std::max(0.025f, 1.25f - (elapsed / 250.0f) * 1.25f);
@@ -150,6 +151,7 @@ void EnemyManager::reset()
     crowdEnemies.clear();
     enemies.clear();
     enemyCounter = 0;
+    enemySpawnCooldown = Cooldown(enemySpawnCooldown.getCooldownDuration());
 }
 
 std::vector<std::string> EnemyManager::spawnBarricade(Vector2 center)

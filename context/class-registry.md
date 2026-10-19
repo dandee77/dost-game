@@ -140,6 +140,7 @@ All use the same pattern: `static X& GetInstance()` with a function-local static
 - Changed by: 22
 
 ### Game
+- P6 checkpoint 1: Esc/P consumes pause/resume transition frames. Running update advances GameTimer and world Animator; draw no longer advances animations. Game-over update advances only its text animation. No pause UI yet.
 - P5.1: `createUpgradeOffer()` mixes eligible typed augments/abilities; `chooseUpgrade(index)` applies one pick and locks the whole offer during exit. Capped passive augments are filtered; active abilities remain eligible beyond level 5 and Nano Repair remains available.
 - P5: owns `SkillSystem skills` and a seeded augment-offer generator. `updateSkills(dt, aim, activateSelected)` applies reported hits through existing damage/reward handling; returns whether Blink teleported. Console/startup commands use `executeDebugCommand`. Direct ability damage can award minimal scrap or suppress it for Space Collapse. Skill state clears in resetRun, death, exit and destruction; existing manager reset paths remain authoritative.
 - P4: `resetRun()` now centralizes run-container resets (including ScrapManager) and clears the run-local `harvestedScrap` counter; both entry/restart call it. Running/alive simulation consumes ScrapManager collection results and displays SCRAP in the safe-area HUD. Death/exit/destruction clear pickups. Full player/timer/camera reset consolidation remains item 05.
@@ -158,7 +159,7 @@ All use the same pattern: `static X& GetInstance()` with a function-local static
 - Gotchas:
   - File-level statics `prevGameTimer` and `gameOverTextStarted` survive between runs; `prevGameTimer` is never reset. Move them into the class during item 05.
   - `onSwitch()` loads 10 copies of `score_sound.wav` with `LoadSound` every time the scene starts and never unloads them (leak). Use `LoadSoundAlias` (item 05).
-  - In `GAME_OVER`, `update()` calls `Animator::Update()` and `draw()` calls it again, so animations run at double speed. Fix in item 05.
+  - P6 fixes the former double animation update: running world advances in update only; game over updates only its text entry.
   - The augment trigger is `(int)elapsed % 20 == 0`, tied to game time; replaced by wave clears in item 11.
   - The health bar width is `1000 * health / 100`; it breaks once max HP can change (item 08).
 - Changed by: 03 to 14, 17, 19, 22, 23, 24, 27
@@ -276,6 +277,7 @@ All use the same pattern: `static X& GetInstance()` with a function-local static
 ## Enemies
 
 ### Enemy
+- P6 checkpoint 1: protected virtual `advanceCooldowns(float dt)` advances knockback recharge; `updateWithStatus(dt)` calls it even while stunned, before suppressing movement/fire.
 - P5: owns stun/corrosion clocks; `applyStun`, `applyCorrosion`, `updateWithStatus(dt)`, `getContactDamage`, `isStunned`, `isCorroded`. Corrosion slows movement and halves contact/new projectile damage; stun prevents movement/fire. Barricade formations ignore both statuses to preserve their shared event clock. Temporary speed changes are restored after update.
 - P3: `canReceiveKnockback() const` is virtual; `getPreviousPosition() const` defaults to current position and is overridden for moving barricade sweeps. `BARRICADE_ENEMY` appended to EnemyType.
 - Files: src/Enemy.hpp, src/Enemy.cpp
@@ -342,6 +344,7 @@ All use the same pattern: `static X& GetInstance()` with a function-local static
 - Cleanup erases only tracked IDs and their animations without kill rewards. Reset before EnemyManager resets/reuses IDs. Game calls reset on restart, scene entry/exit, death and destruction.
 
 ### MidLevelEnemy
+- P6 checkpoint 1: overrides protected `advanceCooldowns(float dt)` to advance firing recharge together with the base knockback timer, including while stunned. Manager simulation owns advancement.
 - P5: fired enemy bullets capture `getContactDamage()` so corrosion weakens their damage without altering existing in-flight bullets.
 - Files: src/MidLevelEnemy.hpp, src/MidLevelEnemy.cpp
 - Status: existing (reskinned in item 15)
@@ -409,6 +412,7 @@ All use the same pattern: `static X& GetInstance()` with a function-local static
 ## Managers
 
 ### EnemyManager
+- P6 checkpoint 1: update advances spawn cooldown with simulation dt; reset clears old cooldown debt.
 - P5: `update(playerPos, gameTimer, decoy = nullptr, decoyRange = 0)` accepts a frame-local clone target. Nearby ordinary enemies steer/fire toward it. Despawn distance still uses the real player. Calls Enemy::updateWithStatus; no new singleton state.
 - P3: `std::vector<std::string> spawnBarricade(Vector2 center)` creates all event segments using the shared enemy ID counter, or none if capacity is insufficient. Returns IDs to the Game-owned event; no new singleton state. Crowd separation still accepts only LOW_LEVEL_ENEMY.
 - Files: src/EnemyManager.hpp, src/EnemyManager.cpp
@@ -442,6 +446,7 @@ All use the same pattern: `static X& GetInstance()` with a function-local static
 - Gotchas: a `std::vector<Bullet>` with erase-by-index. Callers iterating while removing must decrement the index (existing code does `i--`). Effects are capped by `Config::PROJECTILE_EFFECT_LIMIT`; despawn does not create an impact. Item 17 may add a boss bullet texture; if so, add a third texture parameter rather than a new manager.
 
 ### DebrisManager
+- P6 checkpoint 1: update advances spawn cooldown with simulation dt; reset leaves the new-run spawn cooldown ready.
 - Files: src/DebrisManager.hpp/.cpp
 - Status: renamed from AsteroidManager, 15 October.
 - Kind: run-state singleton; reset() is called by Game::resetRun().
@@ -616,6 +621,7 @@ All use the same pattern: `static X& GetInstance()` with a function-local static
 - Gotchas: fonts load with `LoadFontEx(path, 126, nullptr, 0)`, so glyphs are rasterized at 126 px; very large text is upscaled.
 
 ### Animator
+- P6 checkpoint 1: overload `Update(const std::string& name)` advances/removes only the named active entry; Game uses it for game-over text while world entries remain frozen. Normal `Update()` remains the single running-world update.
 - Files: src/Animator.hpp, src/Animator.cpp
 - Status: existing
 - Kind: singleton
@@ -702,6 +708,7 @@ All use the same pattern: `static X& GetInstance()` with a function-local static
 - Typed overload and `getAugmentId()` implemented in P5.
 
 ### KillCounter
+- P6 checkpoint 1: update advances its animation cooldown using simulation delta; reset clears cooldown debt as well as the count/tilt/scale.
 - Files: src/KillCounter.*
 - Status: existing
 - Kind: UI value owned by `Game`
@@ -709,9 +716,10 @@ All use the same pattern: `static X& GetInstance()` with a function-local static
 
 ### GameTimer
 - Files: src/GameTimer.*
-- Status: existing
+- Status: modified (P6 checkpoint 1)
 - Kind: value owned by `Game`
-- API: `start()`, `pause()`, `unpause()`, `reset()`, `setStartTime(float)`, `getElapsedTime()`, `getElapsedTimeString()` ("m:ss"), `isRunning()`, `draw(int screenWidth)` (top center)
+- API: `start()`, `pause()`, `unpause()`, `reset()`, `update(float dt)`, `setStartTime(float)`, `getElapsedTime()`, `getElapsedTimeString()` ("m:ss"), `isRunning()`, `draw(int screenWidth)` (top center)
+- Owns accumulated simulation elapsed time and started/running flags. Game calls update only while running. Invalid/non-finite deltas are ignored; invalid seek returns -1 without mutation. A debug seek larger than process uptime is valid and pausable. Reset cannot be undone by unpause alone.
 
 ---
 
@@ -721,8 +729,8 @@ All use the same pattern: `static X& GetInstance()` with a function-local static
 - Files: src/Timer.hpp, src/Timer.cpp
 - Status: existing
 - Kind: value
-- API: `Cooldown()`, `Cooldown(float seconds)`, `isOnCooldown()`, `startCooldown()`, `remainingCooldown()`, `getCooldownDuration()`, `remainingCooldownString()`, `updateCooldownDuration(float)`, `pause()`, `unpause()`
-- Gotchas: uses wall-clock `GetTime()`. `isOnCooldown()` ignores pausing. Cooldowns keep running while the game is paused or docked, so enemies may fire immediately on resume. Acceptable; do not "fix" without a decision.
+- API: `Cooldown()`, `Cooldown(float seconds)`, `isOnCooldown()`, `startCooldown()`, `update(float dt)`, `remainingCooldown()`, `getCooldownDuration()`, `remainingCooldownString()`, `updateCooldownDuration(float)`, `pause()`, `unpause()`
+- P6 checkpoint 1: explicit simulation elapsed time; construction is ready until started. Owner must advance once per running frame. Pause preserves remaining time for both queries; changing duration preserves elapsed time. Invalid/non-finite deltas are ignored. Old wall-clock lastUsedTime/saveTime/pauseDuration fields are removed; no global clock or singleton state.
 
 ### utils (Utils.hpp)
 - Files: src/Utils.hpp, src/Utils.cpp

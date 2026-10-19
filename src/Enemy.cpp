@@ -14,8 +14,14 @@ void Enemy::applyCorrosion(float duration)
     if (enemyType != BARRICADE_ENEMY) corrosionRemaining = std::max(corrosionRemaining, duration);
 }
 
+void Enemy::advanceCooldowns(float dt)
+{
+    knockbackCooldown.update(dt);
+}
+
 void Enemy::updateWithStatus(float dt)
 {
+    advanceCooldowns(dt);
     const bool stunned = isStunned();
     const float originalSpeed = speed;
     const Vector2 before = position;

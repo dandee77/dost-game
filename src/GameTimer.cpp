@@ -1,57 +1,41 @@
 #include "GameTimer.hpp"
 #include "ResourceManager.hpp"
 #include <string>
+#include <cmath>
 
-GameTimer::GameTimer() 
-    : startTime(0), isPaused(true), pausedTime(0), totalPausedDuration(0) {}
+GameTimer::GameTimer() = default;
 
 void GameTimer::start() {
-    startTime = GetTime();
-    isPaused = false;
-    pausedTime = 0;
-    totalPausedDuration = 0;
+    elapsed = 0.0f;
+    started = running = true;
 }
 
 void GameTimer::pause() {
-    if (!isPaused && startTime > 0) {
-        isPaused = true;
-        pausedTime = GetTime();
-    }
+    running = false;
 }
 
 void GameTimer::unpause() {
-    if (isPaused && startTime > 0) {
-        totalPausedDuration += GetTime() - pausedTime;
-        isPaused = false;
-        pausedTime = 0;
-    }
+    if (started) running = true;
 }
 
 int GameTimer::setStartTime(float time) {
-    if (time < 0) return -1; // Invalid time
-    // Calculate the start time so that elapsed time equals the desired time
-    startTime = GetTime() - time;
-    isPaused = false;
-    pausedTime = 0;
-    totalPausedDuration = 0;
+    if (time < 0.0f || !std::isfinite(time)) return -1;
+    elapsed = time;
+    started = running = true;
     return 0; // Success
 }
 
 void GameTimer::reset() {
-    startTime = 0;
-    isPaused = true;
-    pausedTime = 0;
-    totalPausedDuration = 0;
+    elapsed = 0.0f;
+    started = running = false;
+}
+
+void GameTimer::update(float dt) {
+    if (running && dt > 0.0f && std::isfinite(dt)) elapsed += dt;
 }
 
 float GameTimer::getElapsedTime() const {
-    if (startTime == 0) return 0.0f;
-
-    if (isPaused) {
-        return (pausedTime - startTime) - totalPausedDuration;
-    } else {
-        return (GetTime() - startTime) - totalPausedDuration;
-    }
+    return elapsed;
 }
 
 std::string GameTimer::getElapsedTimeString() const {

@@ -43,6 +43,13 @@ void Animator::Update() {
     }
 }
 
+void Animator::Update(const std::string& name) {
+    const auto found = animations.find(name);
+    if (found == animations.end() || !found->second.isActive) return;
+    found->second.animation->Update();
+    if (found->second.animation->IsComplete()) animations.erase(found);
+}
+
 void Animator::Draw() {
     for (AnimationLayer layer : {ANIMATION_WORLD, ANIMATION_FLYING}) {
         for (auto& [name, data] : animations) {

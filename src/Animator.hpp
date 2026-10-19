@@ -26,6 +26,7 @@ public:
     void StopAll();
     void PauseAll();
     void Update();
+    void Update(const std::string& name);
     void Draw();
     void Remove(const std::string& name);
 

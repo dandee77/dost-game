@@ -5,10 +5,9 @@
 class GameTimer
 {
 private:
-    float startTime;
-    bool isPaused;
-    float pausedTime;
-    float totalPausedDuration;
+    float elapsed = 0.0f;
+    bool running = false;
+    bool started = false;
 
 public:
     GameTimer();
@@ -17,12 +16,13 @@ public:
     void pause();
     void unpause();
     void reset();
+    void update(float dt);
 
     int setStartTime(float time);
 
     float getElapsedTime() const;
     std::string getElapsedTimeString() const;
-    bool isRunning() const { return !isPaused && startTime > 0; }
+    bool isRunning() const { return running; }
 
     void draw(int screenWidth); 
 };

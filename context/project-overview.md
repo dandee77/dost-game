@@ -87,6 +87,8 @@ Both modes use a fixed seed for wave composition so every player faces the same 
 
 ## Core Loop
 
+**19 October P6 work in progress:** The owner authorized `context-pause-scrap-difficulty-cards.md` ahead of the numbered plan. Its target is scrap-driven cards, difficulty selection, minimal shared volume settings, automatic/persistent skills and revised shields. Checkpoint 1 implements only pause-safe simulation timing and Esc/P transitions; the existing timed cards and skills remain until their checkpoints. Cargo, credits and docking remain deferred. Follow `progress-tracker.md` for the implemented state rather than treating the target specification as shipped behavior.
+
 ```
 Launch from the dock
   -> Wave starts: contaminated junk spawns around the player

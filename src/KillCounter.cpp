@@ -11,6 +11,7 @@ void KillCounter::increment() {
 }
 
 void KillCounter::update() {
+    cooldown.update(GetFrameTime());
     updateAnimation();
 }
 
@@ -18,7 +19,7 @@ void KillCounter::reset() {
     count = 0;
     tilt = 0.0f;
     scale = 1.0f;
-    cooldown.updateCooldownDuration(0.3f);
+    cooldown = Cooldown(cooldown.getCooldownDuration());
 }
 
 void KillCounter::updateAnimation() {

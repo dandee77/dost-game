@@ -9,6 +9,7 @@ int runCrowdChecks(const std::string& artifactDirectory);
 int runBarricadeChecks(const std::string& artifactDirectory);
 int runDebrisChecks(const std::string& artifactDirectory);
 int runSkillChecks(const std::string& artifactDirectory);
+int runPauseChecks();
 
 #ifdef _WIN32
 extern "C" __declspec(dllimport) int __stdcall PostMessageA(void*, unsigned int, unsigned long long, long long);
@@ -77,6 +78,7 @@ int main(int argc, char** argv)
     }
     resources.ProcessLoadedTextures();
     try {
+        checks += runPauseChecks();
         Game game;
         game.onSwitch();
         auto& player = game.playerEntity;

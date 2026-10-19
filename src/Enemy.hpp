@@ -54,6 +54,7 @@ public:
     bool isCorroded() const { return corrosionRemaining > 0.0f; }
 
 protected:
+    virtual void advanceCooldowns(float dt);
 
     std::string enemyID;
     EnemyType enemyType;

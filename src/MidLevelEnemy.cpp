@@ -42,6 +42,12 @@ MidLevelEnemy::MidLevelEnemy(std::string enemyID, EnemyType type, Vector2 spawnP
 }
 
 
+void MidLevelEnemy::advanceCooldowns(float dt)
+{
+    Enemy::advanceCooldowns(dt);
+    fireCooldown.update(dt);
+}
+
 void MidLevelEnemy::update()
 {
     float deltaTime = GetFrameTime();

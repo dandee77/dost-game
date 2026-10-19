@@ -1,5 +1,11 @@
 # Architecture
 
+## P6 checkpoint 1: pause-safe time (19 October)
+
+`GameTimer::update(dt)` advances run time only in Game's running branch. Cooldown values advance explicitly in their running owners: EnemyManager/DebrisManager spawning, Enemy::advanceCooldowns for knockback, MidLevelEnemy's override for shooting, and KillCounter::update. Enemy::updateWithStatus invokes cooldown advancement before suppressing stunned movement/fire, preserving recharge during stun. No simulation timer reads wall-clock time; Application's CRT time uniform remains cosmetic wall time.
+
+Game advances world Animator entries once per running update, never from draw. Pause, console capture and card selection freeze world animation; card/confetti UI keeps its existing selection update. Game over advances only `game_over_text` through `Animator::Update(name)` and its dedicated presentation effects. Esc and P consume opening/resume frames. The full pause/settings menu is still pending. Reset paths clear spawn/HUD cooldown debt; timers have no new singleton/global clock. Old current-loop descriptions below predate this checkpoint where they mention wall-clock timers or draw-time animation updates.
+
 ## P5 repeat-pick extension (18 October)
 
 `Game::createUpgradeOffer` samples eligible typed augment and ability cards using the existing seeded generator. `chooseUpgrade` applies the selected card once and locks the entire offer until its exit animation completes. Capped passive augments are excluded; ability cards remain eligible after level 5, and Nano Repair remains available. `Card` stores separate typed augment/ability IDs, and ability cards show the resulting level. No scene transitions or new singleton are involved.
