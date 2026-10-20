@@ -20,19 +20,29 @@ The original midpoint/final proposals were The Hoarder and The Core. Their ident
 
 The chemical mutation and World Tree are fictional story elements. Do not present them as established science. Retain the narrow environmental framing in project-overview.md; avoid implying orbital waste alone caused Earth's collapse or that one tree instantly repairs a planet.
 
-## 2. Intended presentation
+## 2. Confirmed presentation: story text, then moving footage
 
-Interpretation of the owner's reference: **an atmospheric illustrated introduction with restrained narration, followed by playable scenes that carry the story through place and action**. This is a proposed treatment, not a claim that the owner selected one precise reference trailer.
+**Owner clarification:** tell the story with a trailer-like rhythm: **story text -> animation/gameplay -> next story text -> next animation/gameplay**, building toward a final reveal. The text introduces an idea; the following moving scene shows it. This replaces the first draft's illustrated-panel-and-caption structure.
 
-- Tell the history through a small sequence of original illustrations with slow pans, layered movement and short captions.
-- Move from damaged Earth to abandoned orbit, then reveal the warm lights of a lived-in colony.
-- Present the player as a working pilot whose recovered scrap supports survival.
-- Let the hub establish what the player protects before asking them to enter a dangerous portal.
-- Use a calm narrator or short written captions. Narration is optional; all important meaning remains readable without sound.
-- Transition to actual gameplay quickly in the trailer: collecting, field choices, returning, paying for repairs and improving a build.
-- End on hope and responsibility, with the recovery of Earth still ahead.
+```text
+Short story card
+    -> animated scene or gameplay clip showing that idea
+Short story card
+    -> next animated scene or gameplay clip
+    -> repeat with rising intensity
+Final story line
+    -> hopeful visual / game-title reveal
+```
 
-Avoid lengthy dialogue trees, character lip-sync, walking cutscenes, a second art pipeline or cinematics that require a 3D engine. Original illustrated panels and existing 2D gameplay suit the current project scope.
+- **TEXT beats:** one short original sentence on a dark, atmospheric background. Text is the main visual; distant stars or subtle dust may move behind it.
+- **FOOTAGE beats:** fade the story card away, then show meaningful motion. Story sentences do not remain over busy combat. Gameplay HUD and accessibility subtitles may remain when needed.
+- **Narrative connection:** the clip must answer the preceding text: a line about humanity's new home leads to a colony reveal; a line about reclaiming wreckage leads to actual collection.
+- **Actual animation:** ships travel, thrusters burn, machinery moves, enemies attack, debris breaks or the camera reveals a moving environment. A stack of still images with text does not satisfy the intended treatment. Illustrated layers may support scenes, but each footage beat needs visible action.
+- **Pacing:** begin quiet and spacious, introduce the catastrophe, reveal the colony, then build momentum with flight and combat. Finish on purpose and hope.
+- **Audio:** music bridges the text/footage cuts; sound effects belong to visible actions. Voice-over is optional. The story remains understandable through the required text cards with sound off.
+- **Readability:** use brief text and a comfortable hold before cutting. Keep required story sentences out of gameplay shots so viewers can read first, then watch.
+
+This is an original story trailer using the existing premise and the game's own art/action. It does not require a walking character, dialogue system, new 3D engine or imitation of another title's script or footage.
 
 Production language and asset prompts describe composition, materials, lighting and mood directly. Do not name existing games, brands, filmmakers or artists in game content or AI asset prompts. This treatment must have its own narration, visual designs and music.
 
@@ -53,21 +63,26 @@ Do not add named NPCs, quest systems, reputation currencies or colony-building m
 
 ## 4. Intro storyboard: approximately 40 seconds
 
-Seven original panels, consistent palette and framing. Timing is an editorial target. Captions can double as the narration script. Keep existing skip/advance affordances; final startup placement follows the product flow rather than forcing a second intro after difficulty selection.
+Five text/footage pairs. Durations include transitions and are editorial targets. The text is mandatory; spoken delivery is optional. Preserve skip/advance controls and the established Start -> difficulty -> hub playable flow.
 
-| Time | Image/composition | Original narration/caption |
+| Time | Beat | Text or moving scene |
 |---|---|---|
-| 0-6 s | Earth from orbit; clouded atmosphere and quiet dark city outlines | “We left more than footprints behind. We left a world struggling to breathe.” |
-| 6-12 s | Broken panels, spent stages and discarded machinery circling the planet | “Above it, the things we discarded kept circling.” |
-| 12-18 s | Cleanup deployment; a faint chemical bloom threads between objects | “We sent a cleansing agent to reclaim the sky.” |
-| 18-24 s | Fused debris moves against its orbit; hostile silhouettes appear | “Instead, the wreckage began to move.” |
-| 24-30 s | Pull back to the mothership and glowing habitation modules | “Those who remained built a home among the stars.” |
-| 30-35 s | A protected seed inside a small lit greenhouse | “And kept one promise alive: someday, we would return.” |
-| 35-40 s | Collector ship leaves its berth toward the debris field | “Collector, bring back what we need. Help us find the way home.” |
+| 0-3 s | TEXT | “We scarred our world. Its orbit carried our waste.” |
+| 3-8 s | FOOTAGE | Slow orbital reveal: damaged Earth below, discarded panels and rocket stages drifting past. Clear objects moving at different depths |
+| 8-11 s | TEXT | “Our attempt to cleanse the sky awakened the wreckage.” |
+| 11-16 s | FOOTAGE | Cleanup pulse spreads through debris; fragments fuse and turn; a hostile shape lunges toward the camera |
+| 16-19 s | TEXT | “Humanity built a new home among the stars.” |
+| 19-24 s | FOOTAGE | Ship approaches the mothership; the camera reveals lit colony modules, docking beacons and moving service traffic |
+| 24-27 s | TEXT | “Collector, reclaim what we need to survive.” |
+| 27-32 s | FOOTAGE | Gameplay-style ship flight, a short fight, intact destruction animation and scrap absorption; show one readable action chain |
+| 32-35 s | TEXT | “One seed. One promise. A way back home.” |
+| 35-40 s | FOOTAGE | Greenhouse light reveals the seed; cut to the Collector launching toward Earth, then transition to the existing menu/entry destination |
 
 Suggested palette progression: muted Earth tones -> cold discarded metal -> contamination accent -> warm colony windows -> a restrained living-green seed accent. Use the established game palette where it already defines gameplay meaning.
 
-Animation can be limited to parallax layers, light flicker, gentle ship translation and crossfades. All text stays inside the CRT-safe region. Short title cards do not obscure gameplay or require reading a paragraph during a fight.
+Use economical 2D animation: moving ships/debris, thrusters, a cleanup pulse, enemy attack and actual collection. Camera pans and light flicker support those actions. Text cards stay inside the CRT-safe region and clear before footage begins.
+
+The in-game intro is a presentation sequence, not a secretly running expedition. It cannot grant scrap, advance mode timers, damage the player, spend currency or change gameplay RNG. In-engine staged animation and captured trailer footage are production options; this brief does not require adding a video-decoding library. Final implementation chooses the supported presentation path.
 
 ## 5. The hub carries the story
 
@@ -105,16 +120,18 @@ All modes remain accessible according to their actual implemented availability. 
 
 ## 7. Campaign ending
 
-Use the existing planned ending sequence as a small, hopeful payoff:
+Use the same text-then-moving-scene grammar for a small, hopeful payoff:
 
 1. The final threat falls; the immediate route is safe.
 2. Return to a wide view of the colony and the damaged planet below.
 3. A restoration shuttle descends carrying the protected seed.
 4. A small seedling appears in prepared soil. Fade to a message that recovery has begun.
 
-Original ending narration draft:
+Original ending card sequence:
 
-> “We could not undo what we had left behind. But we could choose what came next. A cleared path. A seed in the soil. A beginning.”
+1. TEXT: “We could not undo what we left behind.” -> FOOTAGE: the final wreckage settles and the colony comes into view.
+2. TEXT: “But we could choose what came next.” -> FOOTAGE: the restoration shuttle leaves the dock and descends.
+3. TEXT: “A cleared path. A seed. A beginning.” -> FOOTAGE: a small seedling in prepared soil, then the result transition.
 
 Do not show the whole planet becoming green instantly. The victory is the first successful restoration mission, with continued collection and care still necessary.
 
@@ -122,28 +139,31 @@ Stats/result handling must still follow the gameplay contract: final-boss death 
 
 ## 8. Trailer outline: 90 seconds
 
-This fits the project's existing 1-2 minute trailer target. It is separate from the required 3-5 minute gameplay demonstration video. Use original story panels plus captured real gameplay; do not imply scripted concept footage is already playable.
+This fits the existing 1-2 minute trailer target and remains separate from the 3-5 minute gameplay demonstration video. Use six story-card/footage pairs followed by the title. The longer footage sections may contain a few purposeful cuts; each starts after its text card clears.
 
-| Time | Picture/edit | Audio/text purpose |
+| Time | Beat | Story text / footage direction |
 |---|---|---|
-| 0-8 s | Damaged Earth and abandoned orbital machinery | Quiet opening; “What we leave behind does not disappear.” |
-| 8-16 s | Cleanup attempt; hostile debris wakes | Rising sound; “Our last attempt to clear the sky changed it.” |
-| 16-26 s | Mothership and inhabited colony reveal, then pilot ship | “Now, this is home.” Show human survival clearly |
-| 26-38 s | Real flight, shooting, destruction and collection | Establish readable core action; caption “Recover” |
-| 38-48 s | Actual scrap-triggered field card, then upgraded effect | Caption “Adapt in the field”; show one complete readable choice |
-| 48-59 s | Return meter ready -> return -> colony arrival | Caption “Make it home”; do not demonstrate returning with broken shield |
-| 59-69 s | Paid repair quote/confirmation and one real skill purchase | Show wallet deduction and resulting change; caption “Rebuild” |
-| 69-80 s | Portal/mode cuts, then an implemented boss threat | Escalate action; no invented final boss design or unavailable feature claim |
-| 80-86 s | Seed motif and the ship facing the planet | “Clear a path. Give tomorrow a chance.” |
-| 86-90 s | Working title placeholder, team/competition card as finalized | Clean ending; compose to loop into the orbital opening |
+| 0-3 s | TEXT | “What we leave behind does not disappear.” |
+| 3-15 s | FOOTAGE | Earth and moving orbital waste; cleanup deployment; contaminated fragments begin moving against their drift |
+| 15-18 s | TEXT | “When the wreckage awakened, we built a new home.” |
+| 18-30 s | FOOTAGE | Hostile debris closes in, then reveal the inhabited colony and Collector launch. Show the protected settlement before combat |
+| 30-33 s | TEXT | “What others discarded can keep us alive.” |
+| 33-45 s | FOOTAGE | Real flight, shooting, complete enemy/debris destruction and collection. Follow one pickup into the ship; make the recycling loop readable |
+| 45-48 s | TEXT | “Every recovery gives us another chance.” |
+| 48-60 s | FOOTAGE | Scrap triggers a field upgrade; show its effect, then eligible Return Home and safe arrival. Do not depict return with a broken shield |
+| 60-63 s | TEXT | “Repair. Rebuild. Face what waits beyond the dock.” |
+| 63-75 s | FOOTAGE | Paid repair and one skill purchase with visible currency deduction; portal launch; combat pressure and an actually implemented boss threat |
+| 75-78 s | TEXT | “Clear a path. Give tomorrow a chance.” |
+| 78-86 s | FOOTAGE | Short action climax, then a calmer seed/ship/Earth shot. Tease restoration without revealing the complete Campaign ending |
+| 86-90 s | TITLE | Final game title and approved team/competition text; hold for readability and fade toward the opening for looped playback |
 
-Gameplay should remain visible long enough to understand cause and effect. Avoid filling the trailer with text, cutscene panels or unreadable rapid UI cuts.
+Text occupies 18 seconds, footage 68 seconds and the final title 4 seconds. Keep narration optional and use music continuity to connect the alternating beats. Do not turn the text into a continuous voice-over paragraph or leave every sentence as an overlay throughout the footage. Native gameplay labels and accessible speech subtitles are separate from the story cards.
 
 For an early trailer before the full design is implemented, replace unavailable gameplay sections with truthful existing footage and shorten the edit within the required duration. Concept panels may show world/lore, but cannot substitute for proof that a mechanic works.
 
 ## 9. Asset and production handoff
 
-Planned materials: seven intro illustrations, four ending illustrations, existing colony/gameplay footage, optional narration, original/properly licensed music and transition sounds. Reuse visual elements across intro and trailer rather than demanding separate cinematic assets.
+Planned materials: reusable atmospheric card background/type treatment; five short intro animation sequences; six trailer footage blocks; ending motion scenes; optional narration; original/properly licensed music and effects. Counts describe edit beats, not a requirement for one new image per beat. Existing planned intro/ending illustration slots can supply layered scenery, but need the moving actions described above. Reuse colony/ship/environment visuals and verified gameplay captures.
 
 For each final asset record source/license, creator/tool, exact prompt if generated, date and edits in assets/ASSETS.md when asset production is authorized. This context session adds no asset files or provenance claims.
 
@@ -151,14 +171,24 @@ Example original visual direction, not an instruction to generate now:
 
 “Wide view of a human orbital settlement above a damaged planet, connected habitation modules with warm window lights, a central salvage mothership and a small collection ship, restrained industrial science-fiction illustration, readable silhouettes, quiet hopeful mood, room for a short lower caption.”
 
-Final format, resolution and typography follow ui-rules.md and the actual capture/export workflow. Captions remain legible without narration; music never masks essential spoken lines.
+Final format, resolution and typography follow ui-rules.md and the actual capture/export workflow. Story cards remain legible without narration; music never masks essential spoken lines.
+
+### Review checklist
+
+- [ ] Each required story card appears before its related footage and clears for the action.
+- [ ] Every footage beat contains visible animated action, not only a stationary illustration.
+- [ ] The story is understandable with sound off.
+- [ ] Text holds are readable at the actual display size; transitions are included in the 40/90-second totals.
+- [ ] Gameplay captures show functioning features and their true outcomes.
+- [ ] The in-game presentation cannot change the player's run state or resources.
+- [ ] Skip/advance moves cleanly through complete beats and reaches the proper menu/game destination.
 
 ## 10. Decisions still open
 
 - Final title and whether working names Bayanihan Dock/World Tree remain.
 - Final boss identities, appearances and exact connection to the contamination source.
-- Narration voice/language and whether the intro uses voice or captions only.
-- Exact illustration treatment and approved visual samples.
+- Optional narration voice/language; story text cards are required regardless.
+- Exact animation/art treatment and approved visual samples; alternating text/footage structure is confirmed.
 - Whether the intro plays once per launch or on first Campaign entry; preserve Start -> difficulty -> hub as the playable entry sequence.
 - Which completed modes/features can truthfully appear in the recorded trailer.
 

@@ -22,7 +22,7 @@ Normal field upgrades remain free. Shop inventory/prices are selected under the 
 
 Repair UI disables unaffordable/full components, offers an affordable hull patch when appropriate, and always allows Undock/Resume. Paid Reinforced Hull previews say “Maximum HP only; repair sold separately”; field-card previews retain the actual max/current HP effect. If a fixed rare offer is later learned through a field card, label it Owned and disable acquisition rather than rerolling or double-selling it.
 
-Intro/trailer treatment is in [todo/story-context.md](../todo/story-context.md); its narrative panels use the same safe area and type constraints. No new art is generated in this documentation session.
+Intro/trailer treatment is in [todo/story-context.md](../todo/story-context.md): a short story-text card clears, then its animated scene/gameplay clip plays; repeat with trailer pacing. Use the same safe area/type constraints. Required story sentences belong on their own beats, not continuously over combat. Footage needs moving action; narration is optional. No new art is generated in this documentation session.
 
 Preserve existing 3840x2160 canvas, 1280x720 initial window, CRT-safe regions, mapped mouse input, Button style and Theme tokens. No UI text at the cropped screen edge. Keep accepted red debris glow and complete destruction art. Proposed Q Return Home replaces the old manual-skill indicator only when implementation changes activation; F hub interaction avoids conflicting with E auto-fire.
 

@@ -78,7 +78,7 @@ Do **not** claim that space junk is a major driver of global warming. Say it is 
 
 All names below are working names. The team may rename them; record changes in `progress-tracker.md`.
 
-The existing story is expanded into an original presentation brief in [todo/story-context.md](../todo/story-context.md): atmospheric illustrated narration, colony reveal, gameplay-led trailer and a restrained ending. This is a proposed interpretation of the owner's storytelling reference, not a final approved art style. Keep the following story beats; boss identities remain provisional. Swarm and other playable modes remain available from the hub without a Campaign-clear unlock.
+The owner clarified the presentation in [todo/story-context.md](../todo/story-context.md): **short story text -> animated scene/gameplay -> next story text -> next scene**, with trailer pacing. Text cards clear before the related moving footage. The 40-second intro uses five pairs; the 90-second trailer uses six pairs and a final title. Narration is optional; text and moving action are required. Final art and boss identities remain provisional. Swarm and other playable modes remain available from the hub without a Campaign-clear unlock.
 
 **Intro cutscene (skippable, about 40 seconds):**
 

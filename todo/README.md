@@ -9,7 +9,7 @@ The owner requested this top-level handoff on **20 October 2026**. These files d
 | File | What remains to be done |
 |---|---|
 | [gameplay.md](gameplay.md) | Full detailed handoff: colony hub, five modes, field progression, random trade scrap, paid repairs, skill shop, shield/Return Home, UI, lifecycle and verification |
-| [story-context.md](story-context.md) | Story presentation, seven-panel intro, ending and 90-second trailer production; final boss content/art/voice still pending |
+| [story-context.md](story-context.md) | Alternating story text and animated/gameplay footage: 40-second intro, ending and 90-second trailer; final boss content/art/optional voice still pending |
 
 `gameplay.md` was formerly `context/todo.md`; `story-context.md` was formerly `context/story-context.md`. They have been moved, not copied. The original pause/scrap/difficulty specification is replaced by the gameplay handoff.
 

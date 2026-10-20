@@ -27,7 +27,7 @@ Affected older numbered items are reference work packages, with these revisions:
 
 The old dated timeline is historical planning, not proof these items are finished. All five modes remain requested; a submission cut needs team direction. Follow the tracker for delivered work and unresolved boss content.
 
-Narrative production reference: [todo/story-context.md](../todo/story-context.md) supplies the existing story, a proposed seven-panel 40-second intro and a 90-second trailer outline for items 20/21/30/31. It does not authorize asset generation or change the required separate gameplay demo.
+Narrative production reference: [todo/story-context.md](../todo/story-context.md) supplies the existing story and confirmed alternating text-card/animated-footage format: five pairs for a 40-second intro, six pairs plus title for a 90-second trailer. This replaces the earlier seven-panel presentation target for items 20/21/30/31; illustrations may supply scenery but need actual moving actions. No asset generation is authorized, and the separate gameplay demo remains required.
 
 ---
 
