@@ -1,5 +1,15 @@
 # Class Registry
 
+## 20 October design handoff: proposed integration only
+
+[todo/gameplay.md](../todo/gameplay.md) records remaining work. **No class was added or modified by this documentation session.** Existing implementation statuses below remain unchanged.
+
+Future work reuses Game/Player/SkillSystem/ScrapManager/Card/Button/DebugTools and the planned WaveDirector/Dock/UpgradeShop/DockShopUI/PauseOverlay boundaries. Game-owned run-progress data is proposed, not an existing RunProgress class. RunContext and RunRng entries below remain planned.
+
+The planned UpgradeShop target changes from seven parallel gear-stat lines to catalog-based skill rank purchases and rare acquisitions, with inventory/prices chosen under owner delegation. Dock services are paid, with atomic quote/completion handling. ScrapPickup/ScrapManager will need paired trade/salvage rewards; use existing owners, not another currency manager. Rank application takes explicit acquisition source for the paid Reinforced Hull no-heal rule. Planned Dock/HUD/WaveDirector responsibilities expand for the colony hub, return suspension and five mode objectives.
+
+When implementation occurs, update the actual entries and APIs. Do not mark a proposed type as implemented merely to match this handoff.
+
 Living document. It replaces the web project's UI registry: instead of components, it lists every **class**, what it owns, who owns it, its public API and its traps. Read it before creating or changing any class.
 
 Item 01 baseline import (14 October 2026): Debris, Button, GameTimer, MainMenu and Player use standard C++ brace initialization instead of C-style compound literals so MSVC can compile them. Public APIs, ownership and gameplay behavior are unchanged.

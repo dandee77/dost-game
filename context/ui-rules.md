@@ -1,5 +1,31 @@
 # UI Rules
 
+## 20 October target screens (design only)
+
+See [todo/gameplay.md](../todo/gameplay.md) sections 3-5 and 9-11 for behavior. These targets supersede conflicting old screen descriptions below; they do not describe newly shipped UI.
+
+| Surface | Target |
+|---|---|
+| S-03 Main menu | Start Game -> difficulty; retain shared minimal Settings access; modes chosen in hub |
+| S-12 Difficulty | Easy/Hard/Impossible, effects summary, explicit Confirm and Back |
+| S-13 Colony hub | Same pilot ship, safe navigation, visible inhabited colony, mothership, repair berth, shop and five labeled portals |
+| S-14 Portal preview | Objective, mode/difficulty, ending condition, Launch/Resume; crossing radius alone never launches |
+| S-04 Field HUD | Wallet and level progress at top center; distinct Return Home meter/50% tick/Q/block reason; hull/shield, objective/timer, MENU |
+| S-05 Field cards | NEW/UPGRADE, real changing stats, automatic/persistent tags; triggered by scrap, not wave clear or elapsed time |
+| S-06 Skill shop | Upgrade Owned and Rare Offers, shared card-stat preview, rank, price, Buy/disabled reason, sold and empty-stock states |
+| S-07 Pause | Resume/Settings/Quit to Main Menu with confirmation; resumes to original hub/field state |
+| Repair | Hull, affordable hull patch, shield or combined service; exact restoration/cost/post-purchase balance before confirmation; visible 3-second progress; no free repair |
+
+Mode portals are Swarm, Survival, Boss, Chaos and Campaign. Use names/shapes as well as color. The colony background should show human habitation without walking characters or an NPC-dialogue system. Use existing textures and shapes until assets are supplied; this session creates no assets.
+
+Normal field upgrades remain free. Shop inventory/prices are selected under the owner's delegation; paid repairs use the same wallet. Label currency “Trade Scrap” and progression “Salvage”; show separate aggregated gain feedback, e.g. “+3 Scrap / +2 Salvage”, with clear tutorial copy explaining both. Lifetime collected means trade earned, not available wallet. Return Home cannot say Ready while shield is offline. Meter maximum visibly increases with player level.
+
+Repair UI disables unaffordable/full components, offers an affordable hull patch when appropriate, and always allows Undock/Resume. Paid Reinforced Hull previews say “Maximum HP only; repair sold separately”; field-card previews retain the actual max/current HP effect. If a fixed rare offer is later learned through a field card, label it Owned and disable acquisition rather than rerolling or double-selling it.
+
+Intro/trailer treatment is in [todo/story-context.md](../todo/story-context.md); its narrative panels use the same safe area and type constraints. No new art is generated in this documentation session.
+
+Preserve existing 3840x2160 canvas, 1280x720 initial window, CRT-safe regions, mapped mouse input, Button style and Theme tokens. No UI text at the cropped screen edge. Keep accepted red debris glow and complete destruction art. Proposed Q Return Home replaces the old manual-skill indicator only when implementation changes activation; F hub interaction avoids conflicting with E auto-fire.
+
 How everything on screen is drawn: the canvas and safe area, the two coordinate spaces, fonts, colors, sizes, layout, sprites and screens. This file replaces three web files: **ui-rules** (how to compose screens), **ui-tokens** (now the `Theme.hpp` header, defined at the end of this file) and the visual half of **ui-registry** (sprite and asset tables).
 
 Why tokens became a header: in C++ the values must live in code. Writing them in two places (a doc and a header) guarantees drift, so `src/Theme.hpp` is the single source of truth after item 03 creates it. This file explains what each token is for.

@@ -1,5 +1,13 @@
 # Skills & Upgrades Context
 
+## 20 October target changes (not implemented)
+
+[todo/gameplay.md](../todo/gameplay.md) retains the existing skill identities and repeat-pick system while specifying the remaining automatic/persistent conversion, persistent Deflector, radius magnet and Nano Repair -> Shield Detonation replacement. Target combat catalog: 13 augments + 19 abilities = 32. Return Home is a separate baseline manual utility, not another card or combat-catalog entry.
+
+Owner confirmed normal level upgrades occur in the field and delegated shop inventory/prices. Selected shop: targeted owned ranks plus rare Singularity, Space Collapse, Nuclear Missile and Armageddon acquisition. Use the same rank/effect data and explicit acquisition source: paid Reinforced Hull increases maximum HP without healing; its field card retains max/current HP gain. Paid shield ranks do not refill. Q is proposed for Return Home; no manual combat quick-swap slot is planned.
+
+The descriptions below are the source skill brief/current prototype reference. Where they describe global vacuum, Nano Repair or manual actives, the dated handoff describes the future replacement; skills-commands.md still documents the current executable.
+
 Context file for all player skills in the game. It covers only the skill systems: the augment cards and the active abilities. Other project topics are intentionally left out.
 
 **Game type:** 2D top-down space shooter, swarm-style. The player's ship fights large crowds of enemies, so most skills are built around crowd control, area damage, survivability, and scaling the ship's firepower.

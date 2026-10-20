@@ -2,6 +2,33 @@
 
 The order in which the game is built between **14 October** and the **25 October 2026** submission. Each numbered item is one unit of work: one branch, one pull request, one entry in `progress-tracker.md`. Do not start an item until its dependencies meet the Definition of Done in `code-standards.md`.
 
+## 20 October handoff revision (documentation only)
+
+Pending work is collected in [todo/README.md](../todo/README.md), beside assets/build/context. This build plan remains at its required reference path; use the TODO index and latest gameplay brief to interpret superseded older work packages.
+
+The current owner request is to prepare context only. [todo/gameplay.md](../todo/gameplay.md) replaces the old pause/scrap/difficulty specification and defines the expanded hub/mode/progression/return/shop design for a teammate's later implementation brief. No code work is authorized by this documentation update.
+
+Completed P6 checkpoint 1 stays complete. The next future checkpoint is **T01: typed mode/difficulty and run-progress/return contracts**, after adopting/revising the clearly marked defaults. Follow TODO section 13 in dependency order; a single implementation brief may authorize the whole sequence while retaining one buildable checkpoint at a time.
+
+Affected older numbered items are reference work packages, with these revisions:
+
+| Older item | Current target replacement |
+|---|---|
+| 07 HUD/pause | Add return/XP/wallet/shield clarity and source-state-aware hub pause |
+| 11 WaveDirector | Five mode objectives; no timer/wave-clear upgrade cards |
+| 12 Scrap/cargo | Paired reward: random trade currency and fixed salvage XP/return charge; isolated loot RNG; no cargo cap |
+| 13 Dock/return | Safe colony hub; shield/charge-gated return; suspended expedition; paid repair/recharge transactions |
+| 14 Dock shop | Delegated owned-skill rank purchases and four priced rare abilities; no seven-line gear ladder |
+| 17-19 Bosses | Framework/content dependency; owner to define final roster, older bosses provisional |
+| 22 Main-menu modes | Start -> difficulty -> hub portals |
+| 23 Endless | Swarm normal-crowd endless; Chaos separately mixes bosses and swarms |
+| 24 Leaderboard | Separate mode/difficulty/rules identities; full UI remains later work |
+| 27 Tutorial | Hub interaction/portals, field scrap upgrades, shield-blocked Return Home |
+
+The old dated timeline is historical planning, not proof these items are finished. All five modes remain requested; a submission cut needs team direction. Follow the tracker for delivered work and unresolved boss content.
+
+Narrative production reference: [todo/story-context.md](../todo/story-context.md) supplies the existing story, a proposed seven-panel 40-second intro and a 90-second trailer outline for items 20/21/30/31. It does not authorize asset generation or change the required separate gameplay demo.
+
 ---
 
 ## Core Principle
@@ -62,12 +89,12 @@ A1 ─> A2..A9 ─> 15, 26
 ## Phase 0: Foundation
 
 ### P6 Pause, scrap, difficulty and automatic skills (user request, 19 Oct)
-**Specification:** `context-pause-scrap-difficulty-cards.md`; explicitly authorized ahead of numbered order. Implement one verified checkpoint at a time and follow its budget/push limiter.
+**Specification:** [todo/gameplay.md](../todo/gameplay.md), rewritten as the 20 October design handoff. The former implementation/push limiter is historical; this session is context-only.
 **Checkpoint 1:** audit and pause-safe timers. Classes: Cooldown, GameTimer, Enemy/MidLevelEnemy, EnemyManager, DebrisManager, KillCounter, Animator, Game.
 **Status:** Checkpoint 1 implemented and verified (Debug/Release/ASan/UBSan, native pause/reset/input tests, collision harness, 108.3 FPS in the rendered 80-enemy burst case). Remaining checkpoints are not implemented.
 **Done when:** gameplay cooldowns and animations freeze during pause/console/card selection, run time advances from simulation delta, game-over presentation cannot advance the world, and restarts clear timer debt.
 **Test:** native PauseChecks (including a real ten-second pause, native Esc/P, no resume shot, stun/recharge parity and run reset), full Debug/Release equipment and spatial suites, sanitizer suite, existing collision harness and rendered 80-enemy benchmark.
-**Remaining checkpoints:** progression/difficulty data; centralized scrap rewards and magnet; HUD and progression-triggered cards; difficulty UI; card descriptions; automatic/persistent skills and shield replacement; pause/settings UI; final integration/performance audit. Base healing remains a future docking dependency, not permission to build the entire dock in this item.
+**Remaining work:** TODO T01-T10 preserves unfinished progression, scrap, UI and skill requirements and adds the requested colony hub, mode contracts, Return Home and proposed skill shop. Base repair is now specified with the hub; no implementation occurred in this documentation revision.
 
 ### P5.1 Repeat-pick ability upgrades (user-requested scope, 18 Oct)
 **Status:** Complete. Debug/sanitizer 10,054 native checks, Release 9,969 checks and 610,000 spatial queries passed; level/card previews and packaged startup commands checked. Human balance review pending.

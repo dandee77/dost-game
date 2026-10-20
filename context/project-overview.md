@@ -2,6 +2,28 @@
 
 Read this file first in every session. It defines what the game is, why it exists, how it plays, which screens exist, and what is in and out of scope for the submission. For technical questions, `architecture.md` wins. For numbers, `game-design.md` wins.
 
+## 20 October product revision: design only
+
+The owner's current design handoff is [todo/gameplay.md](../todo/gameplay.md). No code was changed for this revision; the tracker distinguishes implemented behavior from targets. This dated revision supersedes conflicting older product descriptions below.
+
+**Confirmed flow:** Open game -> Start Game -> select difficulty -> spawn in the mothership's safe orbital hub -> prepare -> fly to a mode portal -> confirm launch. The player stays in the ship. The visible colony must communicate that humanity lives in space. This is a single-player hub, not multiplayer matchmaking.
+
+Requested modes are **Swarm** (endless normal crowds), **Survival** (fixed-duration survival), **Boss** (focused boss encounter), **Chaos** (bosses and swarms together), and **Campaign** (staged progression ending with a boss). The no-boss Swarm distinction, durations and schedules are proposed defaults in the handoff. Story/Endless below are older names/structures; their mechanics are references for Campaign/Swarm, not the complete new mode list. The owner will supply boss content; Hoarder/Core remain provisional references.
+
+**Confirmed field progression:** collected scrap fills level progress and presents normal upgrade cards in the field. Docking is not required. Scrap also powers a manual Return Home utility, usable at 50% of a maximum that grows with player level; a broken shield blocks it.
+
+**Economy follow-up:** the owner requires paid base health repair and random tradeable scrap by enemy (basic enemies 1-3), and delegated inventory/pricing. Selected design: each pickup carries random trade currency and fixed salvage progress for leveling/Return Home. No cargo cap, credit conversion or deposit. The shop sells targeted owned-skill ranks and rare Singularity/Space Collapse/Nuclear Missile/Armageddon acquisitions; a paid repair/recharge berth shares that currency. Exact ranges, costs and transaction rules are in game-design.md and TODO. These are selected initial tuning, not claims of tested balance.
+
+**Target hub loop:** return -> repair berth/skill shop -> resume the same expedition. Hub visits preserve the build and suspend the encounter in the existing Game scene. Switching modes begins a fresh run. No walking character, networking, cross-run progression or save system is added.
+
+Minimal shared volume settings, difficulty UI, hub/portal UI and visible pause UI are in the target scope. The older Settings-out-of-scope sentence and “remove Settings” guidance below are superseded for this scope. The old seven gear lines, credits and cargo loop are also superseded. Existing completed skills, art, equipment and pause timing remain the implementation baseline.
+
+Proposed controls: Q = Return Home, F = nearby hub interaction, E retains auto-fire; combat abilities become automatic/persistent. Proposed starter Deflector prevents a missing shield from making return unreachable. These are defaults to adopt or revise in the teammate's implementation brief.
+
+New target screen additions: S-12 Difficulty (menu panel), S-13 Colony Hub (Game state), S-14 Portal Preview (hub panel). S-05 becomes field level-up, S-06 becomes the skill shop, S-07 gains settings/quit confirmation. Mode selection moves from S-03 into S-13/S-14. Existing screen implementation labels below are historical unless the tracker reports completion.
+
+Success for this expanded scope requires a real objective for every enabled portal, correct return/shield/resource behavior, field upgrades, shop transactions and complete run resets. Adding portals alone does not complete five modes. Any submission scope reduction needs team direction.
+
 ---
 
 ## About the Project
@@ -56,6 +78,8 @@ Do **not** claim that space junk is a major driver of global warming. Say it is 
 
 All names below are working names. The team may rename them; record changes in `progress-tracker.md`.
 
+The existing story is expanded into an original presentation brief in [todo/story-context.md](../todo/story-context.md): atmospheric illustrated narration, colony reveal, gameplay-led trailer and a restrained ending. This is a proposed interpretation of the owner's storytelling reference, not a final approved art style. Keep the following story beats; boss identities remain provisional. Swarm and other playable modes remain available from the hub without a Campaign-clear unlock.
+
 **Intro cutscene (skippable, about 40 seconds):**
 
 1. Earth is dying. Smog over the cities, the seas rising.
@@ -70,7 +94,7 @@ All names below are working names. The team may rename them; record changes in `
 
 **Final boss (wave 10):** The Core, the biggest piece of junk, which absorbed the heart of the failed chemical. Destroying it stops the contamination.
 
-**Ending cutscene:** The orbit clears. A shuttle carries the World Tree seed down. The seed takes root and green spreads across the planet. Endless mode unlocks with the message that the junk keeps coming and someone has to keep collecting.
+**Ending cutscene:** A safe route through orbit opens. A shuttle carries the World Tree seed down; the first shoots suggest that restoration can begin. Further recovery takes time. Swarm remains available, with the message that the junk keeps coming and someone has to keep collecting; it is not newly unlocked by this ending.
 
 ---
 
@@ -87,7 +111,7 @@ Both modes use a fixed seed for wave composition so every player faces the same 
 
 ## Core Loop
 
-**19 October P6 work in progress:** The owner authorized `context-pause-scrap-difficulty-cards.md` ahead of the numbered plan. Its target is scrap-driven cards, difficulty selection, minimal shared volume settings, automatic/persistent skills and revised shields. Checkpoint 1 implements only pause-safe simulation timing and Esc/P transitions; the existing timed cards and skills remain until their checkpoints. Cargo, credits and docking remain deferred. Follow `progress-tracker.md` for the implemented state rather than treating the target specification as shipped behavior.
+**Current implementation versus target:** P6 checkpoint 1 implements only pause-safe simulation timing and Esc/P transitions; existing timed cards and skills remain until their checkpoints. [todo/gameplay.md](../todo/gameplay.md) now specifies the complete revised colony/field progression target. Follow `progress-tracker.md` for shipped behavior. The diagram below is the **superseded original cargo/wave loop**, retained as historical context; use the 20 October flow above and TODO for implementation.
 
 ```
 Launch from the dock

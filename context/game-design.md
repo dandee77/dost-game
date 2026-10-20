@@ -1,5 +1,102 @@
 # Game Design
 
+## 20 October proposed tuning ledger (not implemented or playtested)
+
+The new product contract is [todo/gameplay.md](../todo/gameplay.md). The owner confirmed the hub/field progression/return direction, then required **paid base health repair** and **random trade scrap by enemy**, delegating shop inventory/prices to the author. The economy values below are selected design defaults, not playtested balance. The owner's 100/1,000 progression examples remain provisional. This ledger supersedes older cargo/credits, free-repair, one-value reward, wave-card and P6 base-30 targets.
+
+### Progression and Return Home
+
+| Quantity | Proposed value/formula |
+|---|---|
+| Starting player level/progress | 1 / 0 |
+| First field-upgrade requirement | 100 scrap |
+| Difficulty growth g | Easy 0.05; Hard 0.10; Impossible 0.15 |
+| Requirement at player level L | round half up of `100 * (1 + g)^(L - 1)` |
+| Return maximum | `1000 + modeGrowth * (L - 1)` |
+| Return availability | `ceil(maximum / 2)` and online shield with positive points |
+| Return growth per player level | Swarm 50; Survival 75; Boss 100; Chaos 125; Campaign 100 |
+| Charge per collected salvage point | 1, capped at current maximum; independent of random trade value |
+| Successful manual return | Drain current charge to zero; no wallet/XP cost |
+| Level-up capacity adjustment | Preserve absolute charge; recalculate maximum/threshold |
+| Low/mid salvage progress | Fixed 2 / 5; currency rolls listed separately below |
+| Owned standard rank r -> r+1 price | `100 + 50*r`; rank 1 -> 2 costs 150 |
+| Owned rare rank r -> r+1 price | `200 + 75*r`; rank 1 -> 2 costs 275 |
+| Rare acquisition prices | Singularity 240; Space Collapse 280; Nuclear Missile 320; Armageddon 400 |
+| Rare stock | Three distinct unowned entries from those four, fixed for the run; fewer if insufficient eligible entries |
+| Hull repair | `ceil(missingHP / 5)` trade scrap; restores quoted hull after 3 uninterrupted service seconds |
+| Affordable hull patch | Spend up to wallet/needed repair cost; 5 HP per paid scrap, clamped; minimum price 1 |
+| Shield recharge | `ceil(missingShield / 5)` trade scrap; restores shield/reboot after 3 service seconds |
+| Full service | Sum of hull + shield quotes, same 3 seconds; no charge for already-full components |
+
+Each pickup stores `tradeValue` and `salvageValue`. Wallet and totalCollected increase by trade value; levelProgress and returnCharge increase by salvage value. Currency luck affects buying power without changing progression pace. Spending never subtracts XP/charge or lifetime trade collected. No cargo cap, credits conversion or deposit multiplier.
+
+### Selected enemy currency ranges
+
+All ranges are uniform inclusive integers; one stored roll per enemy from a separate seeded loot RNG. Values do not multiply with difficulty or player level.
+
+| Tier | Trade minimum | Trade maximum | Expected trade | Fixed salvage |
+|---|---:|---:|---:|---:|
+| Low/basic | 1 | 3 | 2 | 2 |
+| Mid/ranged | 3 | 7 | 5 | 5 |
+| High/heavy | 8 | 12 | 10 | 10 |
+| Elite, only if future content exists | 15 | 25 | 20 | 20 |
+| Standard boss | 120 | 180 | 150 | 100 |
+| Campaign final boss | 200 | 300 | 250 | 200 |
+
+Assign once at spawn, store across suspension, materialize only on reward-eligible death, credit only on collection. No currency reroll at kill/collection/merge. Summing/splitting preserves both fields. Existing ordinary debris keeps fixed per-kind yields for both fields. Barricades, cleanup/despawn and Space Collapse yield zero for both; Singularity follows normal rules. These reward tiers do not authorize new enemy/boss content.
+
+Paid hull service clears harmful player statuses only on completion of actual healing; shield-only service does not. Debit and service effects commit atomically after the 3-second duration, never on panel opening. Cancel means no cost and no healing. Pause freezes service. Zero wallet permits launch/resume but no free repair. Example: missing 37 HP costs 8; wallet 3 buys 15 HP for 3. Fractional positive shield deficits round up to at least 1 scrap.
+
+The shop sells all eligible owned standard ranks, owned rare ranks and the four rare acquisitions above. No standard first acquisition, weapon shop, consumable, reroll or permanent unlock is added. Paid Reinforced Hull grants max HP only; the field card retains its max/current-HP increase. Paid shield capacity never refills current points. Pass acquisition source through the same rank API and display the real resulting effect.
+
+### Level and return examples
+
+| Player level | Easy requirement | Hard requirement | Impossible requirement |
+|---|---:|---:|---:|
+| 1 | 100 | 100 | 100 |
+| 2 | 105 | 110 | 115 |
+| 5 | 122 | 146 | 175 |
+| 10 | 155 | 236 | 352 |
+
+Return cells below show **maximum / minimum usable charge**:
+
+| Level | Swarm | Survival | Boss | Chaos | Campaign |
+|---|---|---|---|---|---|
+| 1 | 1000 / 500 | 1000 / 500 | 1000 / 500 | 1000 / 500 | 1000 / 500 |
+| 2 | 1050 / 525 | 1075 / 538 | 1100 / 550 | 1125 / 563 | 1100 / 550 |
+| 5 | 1200 / 600 | 1300 / 650 | 1400 / 700 | 1500 / 750 | 1400 / 700 |
+| 10 | 1450 / 725 | 1675 / 838 | 1900 / 950 | 2125 / 1063 | 1900 / 950 |
+
+The return target moves as levels rise. At 2 salvage per basic enemy, the initial 500 threshold requires 250 collected kills before growth. Those kills yield expected trade 500, possible 250-750. Measure actual first-return time, repair burden and purchases per visit; do not promise these values are balanced.
+
+### Retained shield target and new utility gate
+
+Deflector: rank-1 maximum 20, +5 per rank; online regeneration 2 points/s, +10% of base per rank. A hit against positive points is entirely absorbed even if it breaks the shield. Offline delay 10 s, minus 1 s/rank to a 5 s floor; restart at 50%, then restore the remaining half over 3 simulation seconds. No concurrent normal regeneration during that special restoration phase. Zero/offline shield blocks return; positive online shield permits it.
+
+Proposed starter Deflector rank 1 guarantees the utility has a normal-play shield. Rank increases preserve current points and elapsed cooldown debt; no free revival. Paid shield recharge/full service restores shield and clears reboot; hull-only repair does not. Hull has no passive field regeneration; Reinforced Hull's max/current-HP exception applies to free field cards only.
+
+Replace Nano Repair with Shield Detonation: 50 damage, radius 35, 18 s internal cooldown; +25% damage/rank, +10% radius/rank through rank 5, -10% cooldown with positive high-rank continuation. Trigger once on actual break, not repair/reset/upgrade. Combat catalog remains 32; Return Home is separate.
+
+### Modes, pickups and scaling
+
+| Quantity | Proposed initial tuning |
+|---|---|
+| Survival duration | 300 combat seconds |
+| Campaign outline | 10 waves; boss content slots at 5 and 10; final boss ends campaign |
+| Chaos boss schedule | First at 180 combat seconds, subsequent at least 180 seconds after previous boss death, one living boss maximum |
+| Swarm | Endless normal-wave schedule; no bosses by default |
+| Boss mode | One designated boss encounter; roster/yield/content pending owner |
+| Enemy HP difficulty baseline | Easy 1.00, Hard 1.25, Impossible 1.50 |
+| Spawn HP | base HP * encounter factor * difficulty baseline * `(1+g)^(L-1)`, round half up, min 1 |
+| Effective HP scaling safety bound | Proposed 50x total; apply each factor once |
+| Enemy damage baseline multiplier | 1.0 for all difficulties |
+| Ordinary enemy pickup cap | 500, no expiry, value-preserving local merging |
+| Existing debris orb budget | Preserve 150 and accepted visual/homing behavior |
+| Magnet | 60-unit base radius, existing 15 s cooldown / 5 s duration; pull faster than upgraded ship |
+| Magnet speed relation | `max(basePullSpeed, currentShipTopSpeed * 1.25)` |
+
+Enemy HP is snapshotted at spawn, not recalculated on player level-up. Shield/skill rank and player level are separate concepts. All numbers become Balance entries marked TUNE during implementation; none are changed in src by this documentation session. Preserve existing ability growth formulas in skills-commands.md except the explicitly revised shield, activation, magnet and Nano Repair replacement contracts.
+
 The single source for gameplay rules and numbers. Code reads numbers from `src/Balance.hpp`; this file explains them. When a number changes, change both in the same commit. Values marked **TUNE** are first guesses for the item-28 balance pass.
 
 Values marked **(SA)** are the current Space Ablaze values, kept so the game still feels like Space Ablaze.
@@ -253,6 +350,8 @@ Estimated Story income: about 900 to 1,100 credits by wave 10 (TUNE). That buys 
 ---
 
 ## Gear Upgrades (Dock Shop)
+
+**Historical plan, superseded:** the seven gear lines and credit prices below are not the current shop specification. Use the 20 October ledger above and TODO section 9 for skill purchases and paid hull/shield services.
 
 Bought with credits at the dock. Effects persist for the run. Max level 5 each.
 
