@@ -16,6 +16,7 @@ Record date, stable task ID, actual result, evidence/commit when known and anyth
 | 2026-10-21 | DOC-04 | Suggested-title folder created with meanings and recommendation | [Suggested names](../05-suggested-names/README.md); local document checked. The game title remains undecided; see PREP-17 |
 | 2026-10-21 | DOC-05 | Task list, idea register, completion history and recurring maintenance instructions created | This folder; links/scope/checklist reconciliation verified for the documentation change. Runtime work remains pending |
 | 2026-10-21 | DOC-06 | Upgrade review package written; confirmations, deferrals and later review questions recorded | [Upgrade folder](../07-upgrade-proposals/README.md); detailed family/stats, attributes, Luck, rarity and Blink data remain drafts. Six new review/data tasks stay open; no runtime feature implemented |
+| 2026-10-21 | DOC-07 | Initial dual-repository publication configured and verified | [Sync procedure](repository-sync.md); both remote branches returned 10c92bc1ed802bdd27dccb305b4215ad9aaf2631, the initial 30-path Markdown-only publication. Owner repository default branch verified as docs/context-preparation; future edits require refreshing the publication branch |
 
 ## Delivered implementation baseline to preserve
 
