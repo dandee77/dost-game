@@ -7,6 +7,7 @@
 | [tasks.md](tasks.md) | Open work, priorities, dependencies and completion conditions |
 | [ideas.md](ideas.md) | Suggestions, questions and alternatives requiring review before adoption |
 | [completed.md](completed.md) | Dated completion records and links to evidence |
+| [repository-sync.md](repository-sync.md) | Two-repository context publication, branch selection and remote verification |
 
 ## Update this folder whenever work changes
 

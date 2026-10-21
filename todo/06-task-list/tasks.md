@@ -96,3 +96,5 @@ These checked tasks concern documentation only. Evidence and historical implemen
 - [x] **DOC-05 — P1 — Owner: context author.** Create this task-list folder, populate attention/idea/history registers and connect its maintenance rules to the required session context.
 
 - [x] **DOC-06 — P1 — Owner: context author.** Write the upgrade review package and record confirmations, deferrals and later review questions. This completes draft documentation, not PREP-22 through PREP-27 approval or implementation.
+
+- [x] **DOC-07 — P1 — Owner: context author.** Configure and verify initial context publication to both authorized repositories on docs/context-preparation; record the initial matching remote hashes and future refresh/push procedure in repository-sync.md. Subsequent publications still require verification.
