@@ -20,6 +20,16 @@ Some chemical agents can cause DNA mutations. This supports the broad distinctio
 
 ESA reported lichens surviving a limited space-exposure experiment and retaining photosynthetic ability after return. Survival after exposure does not establish sustained feeding, growth or propulsion in open vacuum. Protected orbital biological cores in the story are a proposed fictional accommodation, not a demonstrated extrapolation from that experiment. [ESA: Lichen survives in space](https://www.esa.int/Science_Exploration/Human_and_Robotic_Exploration/Lichen_survives_in_space).
 
+### Scrap armor: real analogy and fictional extension
+
+Some caddisfly larvae bind environmental fragments with silk to form protective cases. This supplies a real analogy for an organism wearing collected material around its body rather than turning that material into living tissue. It does not establish metal-armored space creatures. [National Park Service: Caddisflies](https://www.nps.gov/romo/caddisflies.htm).
+
+Evolution concerns changes in populations over generations. Heritable variation that improves survival and reproduction can become more common through natural selection. An individual attaching a new shell is not itself an example of genetic evolution, and mutations do not inherently produce improvements. [National Library of Medicine: Gene variants and evolution](https://medlineplus.gov/genetics/understanding/mutationsanddisorders/evolution/).
+
+**Fictional extension selected for this story:** chemical-induced changes disrupt an already engineered organism's intake and binding behavior. It gathers material indiscriminately, digests suitable fractions, and fastens retained fragments into armor with a biological matrix. Subsequent generations favor some useful inherited gathering/binding traits under local conditions. Exact anatomy, binding strength, generation rate, nine-year adaptation scale and orbital support remain speculative; none is established by the case-building analogy.
+
+Use “mutated after exposure, then evolved across generations” in detailed lore. Short dramatic lines may call them evolved creatures, but footage and longer text must not imply a chemical purposefully designed ideal armor in one instant. Different individuals can be harmed, unchanged or differently affected. Metal is incorporated mechanically, not genetically transformed into flesh.
+
 ## 2. What the game invents
 
 | Story statement | Status | Writing rule |
@@ -58,6 +68,7 @@ Both the special seed and World Tree plot are removed from active canon. This pa
 - [ ] Every factual scientific statement has a source that directly supports it.
 - [ ] No warming percentage is invented or inferred from an ozone/particle measurement.
 - [ ] Waste-eaters predate the separate atmospheric treatment; DNA changes occur in biology, not metal.
+- [ ] Uncontrolled intake, limited digestion and scrap bound as external armor are distinct; evolution refers to inherited population change across generations.
 - [ ] Protected orbital life and physical transport of exposure are clear; mutations are not depicted as universally identical.
 - [ ] Future technology and fictional dates are distinguishable from real findings.
 - [ ] Five development years and fewer than ten collapse years remain consistent.

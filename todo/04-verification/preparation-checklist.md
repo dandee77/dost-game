@@ -24,6 +24,7 @@
 | Scientific framing | [Science notes](../01-story/science-notes.md) | Primary sources support narrow atmospheric claims; no invented warming percentage |
 | Grounded fiction | Science notes | Living waste-eaters predate the treatment; fictional DNA/behavior changes affect biology, while scrap stays nonliving |
 | Retired plot | Active story/overview/UI briefs | No tree quest, magical seed ending or radiation origin remains outside explicit historical explanation |
+| Scrap armor | World section 4.1/science notes | Uncontrolled intake differs from digestion; binding creates nonliving armor; evolution occurs across generations; no new combat armor system is implied |
 | Biological continuity | World/science notes | Protected orbital cores and physical contamination transport are clear; no claim of an atmosphere spreading through vacuum |
 | Narrative theme | [Theme and slogans](../01-story/narrative-theme.md) | Neglect has consequences; organisms do not judge humanity; recovery demonstrates sustained responsibility |
 | Colony purpose | World/story | Humans inhabit reused stations; player stays in the ship; repairs and salvage support survival |

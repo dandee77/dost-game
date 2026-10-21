@@ -12,7 +12,7 @@ The first version does not require collecting particular materials to buy a skil
 
 ### Biological-enemy continuity
 
-The revised enemies are living waste-eaters inside scavenged shells. Recoverable scrap comes from the nonliving shell, carried material and attached equipment. Sealed collection separates it from biological remains; tissue is not a seventh resource or a required harvesting action. Existing red pickup effects are resource feedback, not blood. Purification Media remains processed filtration stock, not a mutation cure. All six families and reward/price amounts below remain unchanged.
+The revised enemies are living waste-eaters inside scavenged shells. Their altered intake gathers material indiscriminately; digestible fractions feed the body, while retained fragments are bound into external armor. Recoverable scrap comes from that nonliving shell, carried material and attached equipment. This explains why scrap survives the creature's destruction without implying that every material was digested or converted into tissue. Sealed collection separates it from biological remains; tissue is not a seventh resource or a required harvesting action. Existing red pickup effects are resource feedback, not blood. Purification Media remains processed filtration stock, not a mutation cure. All six families and reward/price amounts below remain unchanged.
 
 ## 2. Six proposed families
 

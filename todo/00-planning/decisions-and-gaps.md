@@ -28,6 +28,7 @@ The teammate's later instruction may authorize a complete implementation sequenc
 | D14 | Alternating story cards and moving footage | Confirmed presentation | [Story/trailer](../01-story/story-context.md) |
 | D15 | Intro before menu once per launch; 40-second intro, 24-second ending, 90-second trailer | Proposed pacing/placement | Story/trailer |
 | D16 | Neglect and postponed responsibility lead to catastrophe; survivors earn hope through sustained recovery | Confirmed theme; slogan wording drafted | [Theme and slogans](../01-story/narrative-theme.md) |
+| D17 | Altered organisms collect indiscriminately and bind retained scrap as armor; inherited traits change across subsequent generations | Confirmed armor direction; detailed biology remains a fictional proposal | [World section 4.1](../01-story/world-and-campaign.md) |
 
 Paid repairs, random trade drops and the shop price list are already specified. They need balance measurements later, not another empty “decide a shop” task.
 

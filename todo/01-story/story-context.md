@@ -17,7 +17,7 @@ No walking avatar, dialogue tree, new 3D environment or video-decoding library i
 
 ## 2. Story essentials
 
-Earth suffers prolonged climate disruption and waste accumulation. Scientists first engineer living waste-eaters, provisionally called Scavengers, for terrestrial facilities and protected orbital recovery pods. Humanity relies on them while continuing wasteful habits. A separate atmospheric treatment is developed in 2718 and released after five years in 2723. Unexpected exposure changes the creatures' DNA and behavior, making them hostile to humans. Scrap is their shelter and armor, not living metal. Transported organisms and residues spread exposure into orbit.
+Earth suffers prolonged climate disruption and waste accumulation. Scientists first engineer living waste-eaters, provisionally called Scavengers, for terrestrial facilities and protected orbital recovery pods. Humanity relies on them while continuing wasteful habits. A separate atmospheric treatment is developed in 2718 and released after five years in 2723. Unexpected exposure changes the creatures' DNA and behavior, making them hostile to humans. They take in material indiscriminately, digest suitable fractions and bind retained scrap into external armor. Across later generations, useful inherited shell-building traits become more common. Scrap remains nonliving. Transported organisms and residues spread exposure into orbit.
 
 By 2732, survivor estimates put population loss at roughly 99%, following nine years of attacks and infrastructure collapse. Selected existing orbital stations become defensible refuges. In 2733, the player joins **H.O.P.E. Colony — Habitat for Orbital Preservation and Endurance** as a cadet salvage pilot. Clear routes, recover useful materials and isolate the concentrated sources that keep the wreckage dangerous.
 
@@ -34,7 +34,7 @@ Proposed placement: once per application launch, after Loading and before Main M
 | 0-3 s | TEXT | “We asked life to clean up after us.” |
 | 3-8 s | FOOTAGE | Show a benign waste-eater processing selected refuse, then its protected orbital recovery pod. More waste arrives. Cut to an atmospheric-treatment trial labeled 2718: a separate program begins |
 | 8-11 s | TEXT | “Five years later, our treatment changed them.” |
-| 11-16 s | FOOTAGE | Show the 2723 atmospheric release, then a waste-eater changing behavior and lunging from a scrap shell. A contaminated transport reaches an orbital pod; its living core moves. No chemical wave crosses vacuum |
+| 11-16 s | FOOTAGE | Show the 2723 release, then an altered waste-eater pulling fragments against its body and binding them into a rough shell before lunging. A contaminated transport reaches an orbital pod; its living core moves. No chemical wave crosses vacuum |
 | 16-19 s | TEXT | “By 2732, only one in a hundred remained.” |
 | 19-24 s | FOOTAGE | Abandoned surface routes give way to evacuation craft and patched orbital stations. Construction arms link reused modules; warm windows reveal people still surviving |
 | 24-27 s | TEXT | “H.O.P.E. became our home. You became its cadet.” |
@@ -97,7 +97,7 @@ The separate gameplay demonstration remains a different deliverable. This traile
 | 0-3 s | TEXT | “We kept the habits. We postponed the consequences.” |
 | 3-15 s | FOOTAGE | Living waste-eaters process refuse on Earth and inside orbital pods; incoming waste keeps increasing. Show the separate atmospheric project labeled 2718, then five years of development ending at a 2723 deployment display |
 | 15-18 s | TEXT | “2723. The treatment changed more than the sky.” |
-| 18-30 s | FOOTAGE | Atmospheric exposure reaches the waste-eaters. Altered creatures move inside scrap armor and attack a service vehicle. Exposed organisms/residues travel with cargo to orbital recovery pods. End on evacuation and abandoned infrastructure |
+| 18-30 s | FOOTAGE | Atmospheric exposure reaches the waste-eaters. Show uncontrolled gathering: digestible refuse disappears into the body while plates remain fixed in a fibrous outer casing. Cut across later years to descendants wearing varied scrap shells and attacking service equipment. Exposed organisms/residues travel with cargo to orbital recovery pods. End on evacuation and abandoned infrastructure |
 | 30-33 s | TEXT | “One in a hundred survived. H.O.P.E. gave us a home.” |
 | 33-45 s | FOOTAGE | Reused stations connect, habitation lights brighten and a cadet ship leaves the mothership. Move into real flight, shooting and collected salvage |
 | 45-48 s | TEXT | “Recover what we need. Return when you can.” |
@@ -133,6 +133,7 @@ For every asset produced later, record source/license, creator/tool, prompt when
 - [ ] Sound-off viewing communicates catastrophe, refuge, cadet mission and recovery purpose.
 - [ ] Text holds are readable at the real display size, within the CRT safe area.
 - [ ] Intro/ending/trailer intervals total 40/24/90 seconds, including transitions.
+- [ ] A clear gathering/binding shot explains the scrap-monster silhouette; later adaptation is separated from immediate mutation.
 - [ ] Beneficial organisms visibly predate the atmospheric project; living cores explain hostile scrap movement.
 - [ ] The theme connects neglect to consequences and recovery to sustained responsibility.
 - [ ] Dates, colony name, source mechanics and scientific framing match world-and-campaign.md.
