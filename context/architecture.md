@@ -1,5 +1,45 @@
 # Architecture
 
+## 21 October upgrade integration proposal — not implemented
+
+See [upgrade review](../todo/07-upgrade-proposals/README.md). Keep one authoritative derived-stat path using source records for field card ranks and paid numeric counts. A quarter-strength purchase cannot invoke a full-rank grant and retain its side effects. Cannon branch/tier is run-local equipment state; upgrades are atomic hub transactions and live attacks retain their launch snapshots. Deflector has one live shield state: paid capacity changes its maximum without full-rank/reboot/heal effects. Do not add a second shield manager.
+
+Legendary Blink belongs in the existing damage/skill ownership flow. Intercept a validated direct hit once before shield/hull damage, query bounded legal on-screen destinations, and commit teleport/protection/cooldown together only if safe. Its protected window and cooldown cannot refresh through upgrades, hub entry or repeat collision callbacks. New position is the start of subsequent movement; no sweep/pickup credit along the teleport path.
+
+The proposed Luck source snapshots reward quality at enemy spawn using a separate Luck RNG alongside the existing base loot stream; final values survive suspension and cannot reroll on death/collection. Skill rarity uses the independent card stream and is unaffected by Luck. Owner choices, not proposed tables, determine eventual adopted scope; no new class/singleton or save system is mandated by this context update.
+
+## 21 October preparation alignment
+
+The foldered handoff starts at [todo/README.md](../todo/README.md). Story/source contracts are in [world and campaign](../todo/01-story/world-and-campaign.md); material labels are in [scrap types](../todo/03-economy/scrap-types.md). These are future integration requirements, not new classes implemented in this session.
+
+Keep source-shutdown state inside the existing planned encounter/run ownership. It survives hub suspension, ends future source adds and resolves only after required hostiles; no second quest singleton or loot-dependent victory system. The material label travels with the existing paired reward through spawn, destruction, pickup, merge and collection. Different labels merge to Mixed Salvage while preserving trade/salvage totals; no six-currency inventory subsystem. Presentation-only intro/ending clocks cannot mutate run state or RNG. Frozen results are owned by the run/result flow, not a cutscene's repeated completion callback.
+
+## 20 October target integration: colony and expeditions (not implemented)
+
+[todo/02-gameplay/gameplay.md](../todo/02-gameplay/gameplay.md) defines the new flow; this section supersedes conflicting older target connections below. The existing P6/P5 implementation notes remain the current-code baseline.
+
+- MainMenu confirms typed difficulty before creating a Game run. Game begins in a safe hub; a portal selects the typed mode. Difficulty and mode are different fields.
+- Keep hub, field, dock/shop, card selection, pause and results within the existing Game lifecycle. Calling onSwitch/resetRun for a dock visit would erase the run and is forbidden.
+- Game owns one run-progress value: collected trade total, spendable wallet, player level, progress, queued picks and return charge. Each pickup stores tradeValue/salvageValue; collection updates wallet/total by trade and progress/charge by salvage once. Merge both fields independently.
+- Retain the existing ScrapManager and accepted debris lifecycle. Add ordinary-enemy pickup behavior and centralized reward finalization rather than another pickup manager. Space Collapse/barricade/despawn exclusions remain explicit.
+- Reuse SkillSystem/Player rank APIs for both field choices and paid skill upgrades. Adapt the planned UpgradeShop/DockShopUI to this catalog; do not implement the obsolete parallel gear-stat ladder.
+- Extend the planned WaveDirector with mode-specific objective/schedule data. Do not create a Scene per mode, duplicate EnemyManager, or treat an unavailable boss as a completed mode.
+- Return Home is a Game-owned utility outside the 32-entry combat catalog. It queries the same persistent Deflector state used by damage handling. Equipment prototype shields do not silently supply a second eligibility source.
+- Validate return after that frame's damage, scrap and level thresholds. Death or a shield break wins; queued cards precede return. Commit charge consumption and hub transition once; failed requests mutate neither.
+- Suspend one existing field world in memory. Preserve entities, HP, projectile positions, pickups, pending explosions, skill snapshots, clocks and director/RNG state. Keep field and hub player positions separate. No save-file system is required.
+- Freeze field updates while at home. Paid hull/shield/full-service jobs quote their respective deficits, freeze/cancel correctly and debit atomically with the quoted effect on completion. No free heal on hub entry. Paid hull repair clears harmful player statuses; shield-only service does not. No service resets offensive cooldowns.
+- Use the same rank API with an explicit field/shop acquisition source: paid Reinforced Hull changes max HP without healing current HP, while its field card retains the original max/current grant. Cards/shop previews reflect that difference. Other skill rank snapshots remain unchanged.
+- Only true new-run/death/quit paths clear the world, run economy, return requests, shop stock, card queues and effects. Session volume/difficulty preference survive. Detailed lifecycle matrix is in TODO section 12.
+- Separate encounter, loot, offers, shop and cosmetic RNG streams. Assign enemy trade value once at spawn; retain it across death finalization/suspension and never reroll at collection. Record mode/difficulty/seed/rules and terminal outcome. Combat time excludes hub, pause and modal choice time.
+
+Suggested future states are HUB, PORTAL_PREVIEW, RUNNING, AUGMENT_SELECTION, PAUSED, DOCKED and RESULT/GAME_OVER; these names are design proposals, not declarations already present in Game.hpp. Pause remembers its source state and resumes to that state. No new singleton is required.
+
+## P6 checkpoint 1: pause-safe time (19 October)
+
+`GameTimer::update(dt)` advances run time only in Game's running branch. Cooldown values advance explicitly in their running owners: EnemyManager/DebrisManager spawning, Enemy::advanceCooldowns for knockback, MidLevelEnemy's override for shooting, and KillCounter::update. Enemy::updateWithStatus invokes cooldown advancement before suppressing stunned movement/fire, preserving recharge during stun. No simulation timer reads wall-clock time; Application's CRT time uniform remains cosmetic wall time.
+
+Game advances world Animator entries once per running update, never from draw. Pause, console capture and card selection freeze world animation; card/confetti UI keeps its existing selection update. Game over advances only `game_over_text` through `Animator::Update(name)` and its dedicated presentation effects. Esc and P consume opening/resume frames. The full pause/settings menu is still pending. Reset paths clear spawn/HUD cooldown debt; timers have no new singleton/global clock. Old current-loop descriptions below predate this checkpoint where they mention wall-clock timers or draw-time animation updates.
+
 ## P5 repeat-pick extension (18 October)
 
 `Game::createUpgradeOffer` samples eligible typed augment and ability cards using the existing seeded generator. `chooseUpgrade` applies the selected card once and locks the entire offer until its exit animation completes. Capped passive augments are excluded; ability cards remain eligible after level 5, and Nano Repair remains available. `Card` stores separate typed augment/ability IDs, and ability cards show the resulting level. No scene transitions or new singleton are involved.

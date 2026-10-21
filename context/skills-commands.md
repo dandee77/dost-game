@@ -1,6 +1,10 @@
 # Skills prototype: commands and behavior
 
+**20 October documentation notice:** commands and implemented behavior below remain the current prototype. [todo/02-gameplay/gameplay.md](../todo/02-gameplay/gameplay.md) describes future field scrap progression, automatic/persistent skills, shield replacement, Return Home and a proposed hub skill shop. Those commands/features are not available merely because they are specified. Do not remove existing native/debug coverage before the intentional replacement contracts are implemented. The proposed Return Home utility is outside the 32-entry combat catalog.
+
 Implemented on `dev` for the 17 October request, extended with repeat-pick upgrades on 18 October. Source brief: [skills-context.md](skills-context.md). There are 14 augments and 18 abilities, using existing textures and simple Raylib shapes. The existing timed picker now offers both types. No generated assets, new dependencies, ability drops, inventory, or shop connections.
+
+**21 October review notice:** the [new upgrade/automatic-skill proposal](../todo/07-upgrade-proposals/README.md) records later target changes, including Legendary reactive Blink. The prototype commands and values below are not modified by this context session and must not be mistaken for the proposed future behavior.
 
 ## Terminal
 

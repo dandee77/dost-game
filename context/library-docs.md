@@ -325,7 +325,7 @@ Each was found by reading the Space Ablaze source. The build-plan item that fixe
 | Pitfall | Effect | Fix / item |
 |---|---|---|
 | `EnemyManager::update` prints the spawn rate with `std::cout` every frame | Slower frames, flooded console | Remove (05) |
-| `Animator::Update()` runs in `Game::draw()` **and** in `Game::update()` during `GAME_OVER` | Game-over animations run at double speed | Remove the call in `update()` (05) |
+| Game used to advance Animator in both draw and game-over update | Advanced paused worlds and doubled game-over animation | Fixed in P6 checkpoint 1: world update only during running simulation; targeted game-over text update |
 | `Animator::IsCompleted(name)` dereferences `find()` without checking | Crash or undefined behavior if the animation was already erased (completed non-looping animations are erased in `Update()`) | Add `Animator::has(name)`; check before `IsCompleted` (05) |
 | `Animator::Draw()` iterates an `unordered_map` | Draw order between animated objects is random and can change when entries are added | Draw bosses directly or add a layer (17) |
 | `Game.cpp` file statics `prevGameTimer`, `gameOverTextStarted` | `prevGameTimer` survives restarts | Move into `Game`, reset in `resetRun()` (05) |
@@ -338,7 +338,7 @@ Each was found by reading the Space Ablaze source. The build-plan item that fixe
 | `MainMenu` returns `"Settings"` and `"Credits"`, which are not registered | Error log, falls back to the menu | Remove Settings; add `CreditsScene` (22, 25) |
 | `Game` holds `Button*` created with `new` | Manual memory management | Values (07) |
 | `CollisionSystem.*` and `Pause.*` are empty; `SpatialGrid` is unused | Misleading names | Fill (06, 07); leave `SpatialGrid` unused |
-| `Cooldown` uses wall-clock `GetTime()` and `isOnCooldown()` ignores pause | Cooldowns elapse while paused or docked | Accepted; do not rely on `Cooldown` for pause-aware timers |
+| Cooldown previously read wall-clock time and ignored pause in its readiness query | Enemies/spawns could fire immediately on resume | Fixed in P6 checkpoint 1: explicit update(dt) in running owners; no GetTime reads |
 | `Application` calls `DrawFPS` on the real window | FPS counter appears in recorded videos if debug tools are enabled | Fixed (04): guarded with `GAME_DEBUG`; release with the option OFF |
 | `rand()` used for augment offers | Not seeded per run | `RunRng` (09) |
 | `MainMenu` calls `exit(0)` after the exit animation | Skips cleanup; acceptable for a game | Leave |

@@ -1,5 +1,21 @@
 # Skills & Upgrades Context
 
+## 21 October owner follow-up — automatic roster and purchase review
+
+[Automatic skills and rarities](../todo/07-upgrade-proposals/automatic-skills-and-rarities.md) lists all 19 target combat abilities and proposed grades. The owner confirms automatic combat and **Legendary reactive Blink**, with Return Home as the only manually activated utility skill. Proposed Blink has a 30-second base cooldown, rank reduction/floor, legal visible-screen rescue and fixed protected window; exact numbers are pending review in game-design.md. Current prototype commands/behavior below remain historical implementation evidence.
+
+[Weapon tree](../todo/07-upgrade-proposals/weapon-tree.md) adds mothership-only cannon tiers and one branch/run. [Attributes and Luck](../todo/07-upgrade-proposals/attributes-and-luck.md) replaces full-rank numeric-augment shop grants with confirmed quarter-strength purchases while retaining full field cards and Deflector cards. Discrete projectile/direction cards stay field-only in the draft. Luck is proposed workshop-only, not a 33rd combat entry. Other owned combat skills retain whole-rank offers except Deflector's capacity-only shop route and Blink's separate draft premium price.
+
+These details supersede older contradictory shop/activation targets; no code, catalog implementation or debug command changes are made here. Other rarity assignments, persistence changes and card weights require owner review.
+
+## 20 October target changes (not implemented)
+
+[todo/02-gameplay/gameplay.md](../todo/02-gameplay/gameplay.md) retains the existing skill identities and repeat-pick system while specifying the remaining automatic/persistent conversion, persistent Deflector, radius magnet and Nano Repair -> Shield Detonation replacement. Target combat catalog: 13 augments + 19 abilities = 32. Return Home is a separate baseline manual utility, not another card or combat-catalog entry.
+
+Owner confirmed normal level upgrades occur in the field and delegated shop inventory/prices. Selected shop: targeted owned ranks plus rare Singularity, Space Collapse, Nuclear Missile and Armageddon acquisition. Use the same rank/effect data and explicit acquisition source: paid Reinforced Hull increases maximum HP without healing; its field card retains max/current HP gain. Paid shield ranks do not refill. Q is proposed for Return Home; no manual combat quick-swap slot is planned.
+
+The descriptions below are the source skill brief/current prototype reference. Where they describe global vacuum, Nano Repair or manual actives, the dated handoff describes the future replacement; skills-commands.md still documents the current executable.
+
 Context file for all player skills in the game. It covers only the skill systems: the augment cards and the active abilities. Other project topics are intentionally left out.
 
 **Game type:** 2D top-down space shooter, swarm-style. The player's ship fights large crowds of enemies, so most skills are built around crowd control, area damage, survivability, and scaling the ship's firepower.
