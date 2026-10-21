@@ -2,13 +2,13 @@
 
 Read this file first in every session. It defines what the game is, why it exists, how it plays, which screens exist, and what is in and out of scope for the submission. For technical questions, `architecture.md` wins. For numbers, `game-design.md` wins.
 
-## 20 October product revision: design only
+## 20-21 October product revision: design only
 
-The owner's current design handoff is [todo/gameplay.md](../todo/gameplay.md). No code was changed for this revision; the tracker distinguishes implemented behavior from targets. This dated revision supersedes conflicting older product descriptions below.
+The owner's current design handoff is [todo/02-gameplay/gameplay.md](../todo/02-gameplay/gameplay.md). No code was changed for this revision; the tracker distinguishes implemented behavior from targets. This revision and the current story/screen sections below supersede the original cargo/deposit/two-mode/tree design.
 
 **Confirmed flow:** Open game -> Start Game -> select difficulty -> spawn in the mothership's safe orbital hub -> prepare -> fly to a mode portal -> confirm launch. The player stays in the ship. The visible colony must communicate that humanity lives in space. This is a single-player hub, not multiplayer matchmaking.
 
-Requested modes are **Swarm** (endless normal crowds), **Survival** (fixed-duration survival), **Boss** (focused boss encounter), **Chaos** (bosses and swarms together), and **Campaign** (staged progression ending with a boss). The no-boss Swarm distinction, durations and schedules are proposed defaults in the handoff. Story/Endless below are older names/structures; their mechanics are references for Campaign/Swarm, not the complete new mode list. The owner will supply boss content; Hoarder/Core remain provisional references.
+Requested modes are **Swarm** (endless normal crowds), **Survival** (fixed-duration survival), **Boss** (focused boss encounter), **Chaos** (bosses and swarms together), and **Campaign** (staged progression ending with a boss). The no-boss Swarm distinction, durations and schedules are proposed defaults in the handoff. Older Story/Endless references in historical planning map to Campaign/Swarm; they are not the complete new mode list. The owner will supply final boss identities and attacks; previous boss names are not approved content.
 
 **Confirmed field progression:** collected scrap fills level progress and presents normal upgrade cards in the field. Docking is not required. Scrap also powers a manual Return Home utility, usable at 50% of a maximum that grows with player level; a broken shield blocks it.
 
@@ -16,11 +16,11 @@ Requested modes are **Swarm** (endless normal crowds), **Survival** (fixed-durat
 
 **Target hub loop:** return -> repair berth/skill shop -> resume the same expedition. Hub visits preserve the build and suspend the encounter in the existing Game scene. Switching modes begins a fresh run. No walking character, networking, cross-run progression or save system is added.
 
-Minimal shared volume settings, difficulty UI, hub/portal UI and visible pause UI are in the target scope. The older Settings-out-of-scope sentence and “remove Settings” guidance below are superseded for this scope. The old seven gear lines, credits and cargo loop are also superseded. Existing completed skills, art, equipment and pause timing remain the implementation baseline.
+Minimal shared volume settings, difficulty UI, hub/portal UI and visible pause UI are in the target scope. The original blanket Settings exclusion, seven gear lines, credits and cargo loop are superseded. Existing completed skills, art, equipment and pause timing remain the implementation baseline.
 
 Proposed controls: Q = Return Home, F = nearby hub interaction, E retains auto-fire; combat abilities become automatic/persistent. Proposed starter Deflector prevents a missing shield from making return unreachable. These are defaults to adopt or revise in the teammate's implementation brief.
 
-New target screen additions: S-12 Difficulty (menu panel), S-13 Colony Hub (Game state), S-14 Portal Preview (hub panel). S-05 becomes field level-up, S-06 becomes the skill shop, S-07 gains settings/quit confirmation. Mode selection moves from S-03 into S-13/S-14. Existing screen implementation labels below are historical unless the tracker reports completion.
+New target screen additions: S-12 Difficulty (menu panel), S-13 Colony Hub (Game state), S-14 Portal Preview (hub panel). S-05 becomes field level-up, S-06 becomes the skill shop, S-07 gains settings/quit confirmation. Mode selection moves from S-03 into S-13/S-14. The screen table below lists target responsibilities; the tracker reports actual completion.
 
 Success for this expanded scope requires a real objective for every enabled portal, correct return/shield/resource behavior, field upgrades, shop transactions and complete run resets. Adding portals alone does not complete five modes. Any submission scope reduction needs team direction.
 
@@ -60,75 +60,54 @@ Fill in names. Maximum five members (plus one coach in the Student category).
 
 ## The Pitch
 
-Climate change is usually discussed as something happening on the ground and in the lower atmosphere. The game points at a less visible source: the junk humanity leaves in orbit.
+Humanity survives in reused orbital stations after an experimental atmospheric remediation program turns terrestrial waste and orbital machinery into hostile scrap assemblies. As a cadet salvage pilot, clear routes, recover useful material and isolate the concentrated sources that keep the wreckage dangerous.
 
-The pitch must stay scientifically honest because the judges are from a science department. Keep the claim narrow:
+**Climate framing:** research has detected spacecraft-reentry metals in stratospheric particles and modeled possible ozone/radiative effects. It does not establish a percentage of present global warming caused by orbital debris. Keep this as one environmental concern within a wider crisis. [NOAA paper repository](https://repository.library.noaa.gov/view/noaa/58476), [NOAA modeling summary](https://www.csl.noaa.gov/news/2025/427_0428.html). Detailed sources and fictional boundaries: [science notes](../todo/01-story/science-notes.md).
 
-- Satellites burning up on reentry release aluminum oxide particles that can linger in the upper atmosphere for decades and may deplete ozone ([AGU, Geophysical Research Letters, 2024](https://agupubs.onlinelibrary.wiley.com/doi/10.1029/2024GL109280)).
-- Studies are modeling how reentry aluminum oxide accumulates in the stratosphere and affects upper-atmosphere temperatures ([NOAA repository](https://repository.library.noaa.gov/view/noaa/71517)).
-- Rocket launch soot (black carbon) warms the upper atmosphere far more efficiently than soot from ground sources.
-
-Do **not** claim that space junk is a major driver of global warming. Say it is an emerging, under-studied contributor, and that orbit is part of the environment we are responsible for.
-
-**Circular Economy angle:** every enemy is junk. Destroying it yields scrap, scrap is recycled at the dock into better gear, and better gear clears more junk. The core loop is a recycling loop.
+**Circular economy:** recovered material supports ship maintenance and repurposed skill systems. The game abstracts salvage into trade currency and progression; shooting waste is a combat fiction, not a claim that it is efficient real-world recycling.
 
 ---
 
 ## Story
 
-All names below are working names. The team may rename them; record changes in `progress-tracker.md`.
+**21 October canon supersedes the previous seed/tree narrative.** Full detail: [world and campaign](../todo/01-story/world-and-campaign.md). The settlement is **H.O.P.E. Colony — Habitat for Orbital Preservation and Endurance**. Its mothership is the operational heart of a refuge assembled from existing stations. The player is a cadet salvage pilot and remains inside the ship.
 
-The owner clarified the presentation in [todo/story-context.md](../todo/story-context.md): **short story text -> animated scene/gameplay -> next story text -> next scene**, with trailer pacing. Text cards clear before the related moving footage. The 40-second intro uses five pairs; the 90-second trailer uses six pairs and a final title. Narration is optional; text and moving action are required. Final art and boss identities remain provisional. Swarm and other playable modes remain available from the hub without a Campaign-clear unlock.
+Proposed chronology: scientists develop a remediation medium in **2718**, release it into the atmosphere after five years in **2723**, and survivor estimates record approximately **99% population loss by 2732**. The player begins service in **2733**. The owner's required five-year development and under-decade collapse are preserved.
 
-**Intro cutscene (skippable, about 40 seconds):**
+The future medium combines a chemical carrier with autonomous recycling machinery. Unanticipated interactions with mixed waste defeat its containment and control systems. Failed assemblies recruit scrap, consume available energy and defend contaminated sites. Surface waste and contaminated orbital hardware both become threats. Transport through cargo, deployment equipment and contaminated surfaces explains orbital spread; atmospheric clouds do not magically flow through vacuum. This is explicitly speculative technology, not proven chemistry or a radiation accident.
 
-1. Earth is dying. Smog over the cities, the seas rising.
-2. Above it, an orbit choked with dead satellites, rocket stages and debris.
-3. As a last resort, humanity detonates an experimental cleansing chemical in orbit to dissolve the junk.
-4. It goes wrong. The chemical fuses with the debris and the radiation around it. The junk mutates and turns hostile.
-5. The surface becomes uninhabitable. The last humans live on **Bayanihan Dock**, a giant orbital station.
-6. Scientists find a seed that can still regrow life on Earth: the **World Tree** (a Narra seed). It can only be planted once the orbit is clean.
-7. You are a **Collector**, one of the dock's garbage-collection pilots. Clear the orbit. Bring back the scrap. Find the source.
+The campaign targets concentrated source sites that keep producing contamination and hostile assemblies. Proposed ten-wave outline retains boss slots at five and ten, now two source sectors; identities and attacks remain owner content. Defeating a source guardian stops that site's future emissions/adds. Remaining required hostiles must still be cleared. No random loot or purification item is needed to complete the objective.
 
-**Midpoint (wave 5):** The Hoarder, a giant mass of fused junk, guards the inner orbit.
+The ending opens a corridor for survey, containment and cleanup teams. Earth remains damaged and climate recovery takes time. No special tree, seed quest or instant cure remains. Other modes are repeatable operations and are not locked behind Campaign completion.
 
-**Final boss (wave 10):** The Core, the biggest piece of junk, which absorbed the heart of the failed chemical. Destroying it stops the contamination.
-
-**Ending cutscene:** A safe route through orbit opens. A shuttle carries the World Tree seed down; the first shoots suggest that restoration can begin. Further recovery takes time. Swarm remains available, with the message that the junk keeps coming and someone has to keep collecting; it is not newly unlocked by this ending.
+Presentation remains **short story card -> moving animation/gameplay -> next card -> next scene**. [Story and trailer](../todo/01-story/story-context.md) specifies a proposed 40-second intro before the menu once per application launch, 24-second ending and 90-second trailer. All sequences have explicit skip/input/result rules. Final title, boss content, art and optional voice remain pending.
 
 ---
-
 ## Game Modes
 
-| Mode | Goal | Ends when | Leaderboard ranks by |
-|---|---|---|---|
-| **Story** | Clear 10 waves; defeat The Hoarder (wave 5) and The Core (wave 10) | The Core is destroyed (victory) or the player dies | Score, then clear time |
-| **Endless** | Survive as many waves as possible | The player dies | Score, then waves cleared |
+| Mode | Goal | Ends when |
+|---|---|---|
+| Swarm | Endless normal-enemy salvage patrol; no bosses by default | Death or voluntary hub retirement |
+| Survival | Survive 300 combat seconds | Deadline reached alive, or death |
+| Boss | Defeat one authored boss encounter and required adds | Encounter complete, or death |
+| Chaos | Endless swarms with scheduled bosses | Death or retirement; boss death does not end the run |
+| Campaign | Ten-wave proposed route with source bosses at five and ten | Final source encounter complete, or death |
 
-Both modes use a fixed seed for wave composition so every player faces the same waves (fair competition, Esports Potential criterion). Endless is available from the start so judges can play it without finishing Story.
+Exact encounter tables and boss content remain to be authored. Same mode/difficulty/seed/rules and equivalent decisions reproduce the plan; player-level scaling means different decisions can change effective enemy HP. Separate mode/difficulty/rules leaderboard identities are required. See [decisions and gaps](../todo/00-planning/decisions-and-gaps.md) for scoring and schedule work still missing.
 
 ---
 
 ## Core Loop
 
-**Current implementation versus target:** P6 checkpoint 1 implements only pause-safe simulation timing and Esc/P transitions; existing timed cards and skills remain until their checkpoints. [todo/gameplay.md](../todo/gameplay.md) now specifies the complete revised colony/field progression target. Follow `progress-tracker.md` for shipped behavior. The diagram below is the **superseded original cargo/wave loop**, retained as historical context; use the 20 October flow above and TODO for implementation.
+Open game -> optional intro -> Start Game -> difficulty -> HOPE hub in the ship -> preview/choose a portal -> launch.
 
-```
-Launch from the dock
-  -> Wave starts: contaminated junk spawns around the player
-  -> Shoot enemies; they explode and drop scrap
-  -> Fly over scrap to collect it (cargo hold has a limit)
-  -> Wave cleared: pick 1 of 3 augment cards (free, random)
-  -> "Return to dock" phase: an arrow points home, no enemies spawn
-  -> Dock: scrap is deposited and converted to credits
-  -> Dock shop: spend credits on gear upgrades, repair the hull
-  -> Launch -> next wave (harder; boss every 5 waves)
-```
+During the expedition, defeat threats and collect scrap. The random trade amount enters one wallet; fixed salvage independently advances field levels and Return Home. Choose normal upgrade cards in the field. At sufficient charge with an online positive shield, Return Home suspends the encounter. Pay for repairs or skill upgrades, then Resume that same expedition. Selecting another mode starts a fresh run after the existing-run confirmation. No cargo deposit or credits conversion remains.
 
-**Risk and reward:** scrap you are carrying is lost if you die. Scrap only becomes credits at the dock.
+Six proposed material families add recognizable resource flavor: Recovered Alloys, Electronic Components, Polymer Stock, Power Modules, Structural Composites and Purification Media. They do not create six currencies or crafting gates. See [scrap types](../todo/03-economy/scrap-types.md).
+
+Current delivered behavior remains in the progress tracker; writing this loop does not implement it. P6 checkpoint 1's pause-safe timing and existing combat/skills/equipment/debris remain the baseline.
 
 ---
-
 ## Controls
 
 | Input | Action |
@@ -137,63 +116,64 @@ Launch from the dock
 | Mouse | Aim (the ship turns toward the cursor) |
 | Left mouse button | Shoot |
 | E | Toggle auto-fire |
+| Q | Return Home when shield and charge permit (target) |
+| F | Nearby hub interaction (target) |
 | P or Esc | Pause |
 | Mouse click | Menus, augment cards, shop |
-| Space / Enter / click | Skip cutscene slide |
+| Space / Enter / click | Advance one presentation beat; Esc skips the sequence (proposed) |
 | F5 | Debug console with autocomplete, debug builds only (see `architecture.md`) |
 
 ---
 
 ## Screens
 
-Screen IDs are used in `build-plan.md`, `ui-rules.md` and `class-registry.md`.
+These are target screen responsibilities; existing classes are not proof that every listed flow works. See class-registry.md and progress-tracker.md for current delivery.
 
-| ID | Screen | Implemented as | Purpose |
-|---|---|---|---|
-| S-01 | Loading | `LoadingScreen` scene (exists) | Load textures with a progress readout |
-| S-02 | Intro cutscene | `IntroCutscene` scene (planned) | Story slides, skippable; shown once per launch before the menu |
-| S-03 | Main menu | `MainMenu` scene (exists, modified) | Story, Endless, Leaderboard, Credits, Exit |
-| S-04 | Gameplay HUD | `Game` scene, `GAME_RUNNING` | Health, cargo, credits, wave, timer, boss bar, dock arrow |
-| S-05 | Augment pick | `Game`, `GAME_AUGMENT_SELECTION` (exists) | Choose 1 of 3 cards after each wave |
-| S-06 | Dock shop | `Game`, `GAME_DOCKED` (planned) | Deposit scrap, buy gear, repair, launch |
-| S-07 | Pause | `Game`, `GAME_PAUSED` (exists, no UI yet) | Resume, quit to menu |
-| S-08 | Game over | `Game`, `GAME_OVER` (exists, modified) | Stats, name entry if on the leaderboard, restart, menu |
-| S-09 | Ending cutscene | `EndingCutscene` scene (planned) | Story victory |
-| S-10 | Leaderboard | `LeaderboardScene` (planned) | Top 10 per mode |
-| S-11 | Credits | `CreditsScene` (planned) | Team, tools, AI disclosure, asset licenses |
+| ID | Screen | Target responsibility |
+|---|---|---|
+| S-01 | Loading | Load existing assets and enter optional intro/menu |
+| S-02 | Intro | Skippable story cards and animation, once per application launch |
+| S-03 | Main menu | Start Game, Leaderboard, Credits, settings access and Exit |
+| S-04 | Gameplay HUD | Hull, shield, wallet, salvage level, Return Home, mode objective and boss status |
+| S-05 | Field upgrade | Mandatory queued level-up choices; no timed/wave-clear trigger |
+| S-06 | Skill shop | Owned-skill ranks and eligible rare acquisitions; shared trade wallet |
+| S-07 | Pause | Resume, volume/settings and quit confirmation; respects originating hub/field state |
+| S-08 | Results | Victory/defeat/retirement, final stats, eligible name entry, restart/menu |
+| S-09 | Ending | Source containment and beginning of restoration; then finalized results |
+| S-10 | Leaderboard | Local rankings separated by mode/difficulty/rules |
+| S-11 | Credits | Team, tools, AI disclosure and licenses |
+| S-12 | Difficulty | Explicit selection before first hub arrival |
+| S-13 | Colony hub | Safe ship flight, paid repair berth, workshop, portals and same-expedition Resume |
+| S-14 | Portal preview | Mode objective and launch/reset confirmation |
 
-`Settings` is linked from the current menu but does not exist. Remove the button (out of scope).
+Hub, shop, repairs, pause and cards remain Game states/panels, not scene switches that reset the expedition. Screen IDs name user experiences, not a requirement to create a class per row.
 
 ---
 
-## Features In Scope (submission, 25 October)
+## Features In Scope
 
-- Story mode with 10 waves, 2 bosses, intro and ending cutscenes
-- Endless mode with scaling waves and repeating bosses
-- Three enemy tiers with Space Ablaze behaviors (homing swarmer, strafing shooter, new charging tank) reskinned as contaminated junk
-- Debris hazards (the current debris, reskinned)
-- Scrap drops, magnet pickup, cargo limit, deposit at the dock
-- Dock shop with 7 gear upgrades (5 levels each) and a hull repair
-- Fourteen augments and eighteen abilities from `skills-context.md` (P5). The 18 October user-requested extension adds abilities to the existing timed cards, with repeat-pick upgrades at every level; physical size stops growing at level 5 while counts and other stats continue. Shop/drop/inventory wiring remains deferred; timed cards remain until waves are implemented.
-- Local leaderboard per mode with name entry
-- In-game tutorial prompts for the first wave
-- Credits screen with AI and asset disclosure
-- All art and audio original (team-made or AI-generated) with provenance recorded
-- Debug console and overlay for testing and recording the videos
+- Five requested mode objectives, with honest availability until their content exists.
+- Ship-based HOPE hub, portals, field upgrades, shield-gated Return Home and same-expedition suspension/resume.
+- Random trade/fixed salvage rewards, material flavor, paid hull/shield service and targeted skill shop.
+- Existing accepted ship/enemy/debris/equipment/skill/art/performance work retained as the baseline.
+- Proposed automatic combat skills, starter Deflector and Shield Detonation replacement described in the gameplay handoff.
+- Intro/ending, local leaderboard, credits, tutorial and minimal shared volume controls.
+- Original/licensed production assets and required disclosures, trailer, separate demo and submission materials.
+
+All are target scope, not a declaration of completion. Full boss content, spawn tables, score rules, loadout integration, targeting, UI/audio and release verification remain visible in the gap register. A smaller submission scope requires team direction.
 
 ## Features Out of Scope
 
-- Online leaderboards or networking
-- Multiplayer (the rules allow PVE with leaderboards)
-- Settings screen (volume, key rebinding)
-- Controller support
-- Save games mid-run
-- Mobile or web builds
-- Localization (English in game; Filipino words used as names and flavor only)
+- Networking, multiplayer, online accounts or online leaderboards.
+- Walking avatars, playable ground combat or colony-building simulation.
+- Persistent ship progression, cross-run banking or mid-run save games.
+- Material-specific crafting, inventory management or player trading.
+- Controller support, mobile/web builds, key-rebinding UI and localization for this preparation scope.
 
+Minimal volume controls are in scope; the previous blanket Settings exclusion is retired.
 ## After Submission (before the 26 November finals)
 
-Only after the 25 October submission: polish pass, extra augment and upgrade options, a third boss phase, better VFX, settings screen, Filipino voice lines, balance from playtests. Track these under "Finals Backlog" in `build-plan.md`.
+Only after the 25 October submission: polish pass, extra augment and upgrade options, a third boss phase, better VFX, expanded settings, Filipino voice lines, balance from playtests. Track these under "Finals Backlog" in `build-plan.md`.
 
 ---
 
@@ -226,16 +206,16 @@ Rule 7 says the source code must not contain code from games previously publishe
 | Esports Potential | 20% | Fixed-seed waves, clear score formula, leaderboards, bosses as spectator moments |
 | Graphics and Art | 10% | Consistent AI-assisted pixel art, contamination palette, CRT shader |
 | Music and Sound | 10% | Distinct music for menu, waves and bosses; impact SFX |
-| Creativity and Innovation | 20% | Scrap economy loop, orbital-junk theme, Filipino setting |
+| Creativity and Innovation | 20% | Scrap economy loop, orbital-junk theme, survivor-colony setting |
 | Game Feedback (audience vote) | 20% | Trailer and live demo appeal |
 
 ---
 
 ## Target Players
 
-- **The judge.** Plays for 3 to 5 minutes at a booth. Must understand the goal within 20 seconds and see a boss or upgrade within 5 minutes. Endless mode and the tutorial prompts serve this player.
+- **The judge.** Plays for 3 to 5 minutes at a booth. Must understand the goal within 20 seconds and see a boss or upgrade within 5 minutes. The hub, clear portal objectives and tutorial prompts serve this player.
 - **The audience voter.** Watches a trailer on loop. Needs readable action and clear contrast: toxic-green enemies, gold scrap, sky-blue player.
-- **The competitive player.** Replays Endless to climb the leaderboard. Needs deterministic waves and a score formula that rewards skill.
+- **The competitive player.** Replays supported modes to climb separate leaderboards. Needs deterministic waves and a score formula that rewards skill.
 
 ---
 
@@ -243,8 +223,8 @@ Rule 7 says the source code must not contain code from games previously publishe
 
 1. The game builds from a clean clone on a Windows laptop and runs at 60 FPS with 80 enemies on screen.
 2. A new player can finish wave 1 without instructions outside the game.
-3. Story mode can be completed from intro to ending cutscene without crashes.
-4. Endless mode reaches wave 15 without crashes or runaway memory.
+3. Campaign can be completed from hub launch through source clearance, ending and results without crashes.
+4. Swarm and Chaos sustain their approved target load without crashes or runaway memory; finite modes resolve their objectives correctly.
 5. Restarting a run resets every enemy, bullet, scrap pickup, upgrade and timer.
 6. Every art, music, sound and font file has a provenance row in `assets/ASSETS.md`.
 7. Forms 01 to 03, the synopsis, the trailer and the gameplay video are submitted by 24 October, leaving 25 October as a buffer.

@@ -1,22 +1,32 @@
 # TODO: Colony Hub, Game Modes, Scrap Progression and Return Home
 
-Design handoff updated **20 October 2026**. This replaces the former pause/scrap/difficulty context file. It describes the intended game and remaining work, **not an instruction to start implementing features in this documentation session**. The owner authorized publishing the documentation; their teammate will supply later implementation instructions. Start with [README.md](README.md) for the full remaining-work index.
+Design handoff updated **20 October 2026**. This replaces the former pause/scrap/difficulty context file. It describes the intended game and remaining work, **not an instruction to start implementing features in this documentation session**. The owner authorized publishing the documentation; their teammate will supply later implementation instructions. Start with [README.md](../README.md) for the full remaining-work index.
 
-No feature below is implemented merely because it is described here. Read [progress-tracker.md](../context/progress-tracker.md) for implementation status. This session changes documentation only, under `context/` and the owner-requested top-level `todo/`.
+No feature below is implemented merely because it is described here. Read [progress-tracker.md](../../context/progress-tracker.md) for implementation status. This session changes documentation only, under `context/` and the owner-requested top-level `todo/`.
+
+## 21 October narrative and material addendum
+
+This handoff now lives in a topic folder. [World and campaign](../01-story/world-and-campaign.md) defines **H.O.P.E. Colony — Habitat for Orbital Preservation and Endurance**, the cadet pilot, failed atmospheric remediation, reused orbital refuges and source-containment campaign. [Science notes](../01-story/science-notes.md) separates primary-source environmental facts from the fictional recycler failure. The old special-tree restoration plot is retired.
+
+The proposed campaign retains ten waves and boss slots five/ten. Each guardian disables its source emitter on death; existing required adds must still be cleared before the sector completes. Source shutdown does not reroll loot, lower existing HP or require a special drop. The final sector opens a cleanup corridor, not an instantly restored Earth. No-loot effects still resolve objectives; same-step player death takes priority over victory as below. Final boss identities/attacks remain owner content.
+
+[Scrap types](../03-economy/scrap-types.md) proposes six material families over the existing paired trade/salvage economy. Types carry no reward multipliers or crafting gates. A profile assigns the dominant material; a mixed merged pickup displays Mixed Salvage while preserving both totals. Ordinary debris yields, accepted art, random enemy currency ranges, fixed salvage, repair costs and skill prices stay unchanged.
+
+[Decisions and gaps](../00-planning/decisions-and-gaps.md) records remaining specifications beyond art: boss content, spawn tables, equipment access, card distribution, auto-targeting/mobility, geometry, scoring/results, tutorial/audio and performance limits. Their proposed defaults are preparation choices, not delivered features.
 
 ## 1. How to use this handoff
 
 Read this file with:
 
-- [project-overview.md](../context/project-overview.md): product scope, story, competition and screen map.
-- [story-context.md](story-context.md): existing story, original narration and proposed intro/trailer treatment.
-- [architecture.md](../context/architecture.md): current ownership, scene lifecycle, simulation and proposed integration boundaries.
-- [game-design.md](../context/game-design.md): authoritative proposed tuning ledger for this revision, plus existing combat numbers.
-- [class-registry.md](../context/class-registry.md): existing classes and planned classes; do not duplicate systems.
-- [ui-rules.md](../context/ui-rules.md): canvas, safe area, art constraints and proposed screen requirements.
-- [skills-context.md](../context/skills-context.md) and [skills-commands.md](../context/skills-commands.md): skill identities, existing behavior and rank formulas.
-- [code-standards.md](../context/code-standards.md), [library-docs.md](../context/library-docs.md), [collision-performance.md](../context/collision-performance.md), and [crowd-performance.md](../context/crowd-performance.md): implementation and verification constraints.
-- [build-plan.md](../context/build-plan.md): dependency checkpoints for later implementation.
+- [project-overview.md](../../context/project-overview.md): product scope, story, competition and screen map.
+- [story-context.md](../01-story/story-context.md): revised story cards, animation, ending and trailer treatment.
+- [architecture.md](../../context/architecture.md): current ownership, scene lifecycle, simulation and proposed integration boundaries.
+- [game-design.md](../../context/game-design.md): authoritative proposed tuning ledger for this revision, plus existing combat numbers.
+- [class-registry.md](../../context/class-registry.md): existing classes and planned classes; do not duplicate systems.
+- [ui-rules.md](../../context/ui-rules.md): canvas, safe area, art constraints and proposed screen requirements.
+- [skills-context.md](../../context/skills-context.md) and [skills-commands.md](../../context/skills-commands.md): skill identities, existing behavior and rank formulas.
+- [code-standards.md](../../context/code-standards.md), [library-docs.md](../../context/library-docs.md), [collision-performance.md](../../context/collision-performance.md), and [crowd-performance.md](../../context/crowd-performance.md): implementation and verification constraints.
+- [build-plan.md](../../context/build-plan.md): dependency checkpoints for later implementation.
 
 The dated 20 October sections in those files align the old plan with this request. Older sections remain useful for unchanged mechanics and historical implementation evidence. They must not silently restore cargo caps, credits conversion, timed cards, main-menu mode selection, or a separate scene that resets the run when docking.
 

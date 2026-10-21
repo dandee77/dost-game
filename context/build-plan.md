@@ -2,11 +2,17 @@
 
 The order in which the game is built between **14 October** and the **25 October 2026** submission. Each numbered item is one unit of work: one branch, one pull request, one entry in `progress-tracker.md`. Do not start an item until its dependencies meet the Definition of Done in `code-standards.md`.
 
+## 21 October context preparation checkpoint
+
+Current work is documentation only. Pending briefs are organized into planning, story, gameplay, economy and verification folders under [todo/](../todo/README.md). Read the [gap register](../todo/00-planning/decisions-and-gaps.md) and [preparation checklist](../todo/04-verification/preparation-checklist.md) before a later implementation instruction. Required shared context files stay here; completed work is not reopened.
+
+HOPE/source-containment canon replaces the old settlement/tree story. The [world brief](../todo/01-story/world-and-campaign.md) and [revised storyboard](../todo/01-story/story-context.md) govern items 17-21/30-31. [Material families](../todo/03-economy/scrap-types.md) extend T01/T02 metadata and presentation without changing reward amounts or adding crafting. Actual boss content, mode spawn tables and other blocking design data remain pending; folders and detailed briefs do not constitute implemented features.
+
 ## 20 October handoff revision (documentation only)
 
 Pending work is collected in [todo/README.md](../todo/README.md), beside assets/build/context. This build plan remains at its required reference path; use the TODO index and latest gameplay brief to interpret superseded older work packages.
 
-The current owner request is to prepare context only. [todo/gameplay.md](../todo/gameplay.md) replaces the old pause/scrap/difficulty specification and defines the expanded hub/mode/progression/return/shop design for a teammate's later implementation brief. No code work is authorized by this documentation update.
+The current owner request is to prepare context only. [todo/02-gameplay/gameplay.md](../todo/02-gameplay/gameplay.md) replaces the old pause/scrap/difficulty specification and defines the expanded hub/mode/progression/return/shop design for a teammate's later implementation brief. No code work is authorized by this documentation update.
 
 Completed P6 checkpoint 1 stays complete. The next future checkpoint is **T01: typed mode/difficulty and run-progress/return contracts**, after adopting/revising the clearly marked defaults. Follow TODO section 13 in dependency order; a single implementation brief may authorize the whole sequence while retaining one buildable checkpoint at a time.
 
@@ -27,7 +33,7 @@ Affected older numbered items are reference work packages, with these revisions:
 
 The old dated timeline is historical planning, not proof these items are finished. All five modes remain requested; a submission cut needs team direction. Follow the tracker for delivered work and unresolved boss content.
 
-Narrative production reference: [todo/story-context.md](../todo/story-context.md) supplies the existing story and confirmed alternating text-card/animated-footage format: five pairs for a 40-second intro, six pairs plus title for a 90-second trailer. This replaces the earlier seven-panel presentation target for items 20/21/30/31; illustrations may supply scenery but need actual moving actions. No asset generation is authorized, and the separate gameplay demo remains required.
+Narrative production reference: [todo/01-story/story-context.md](../todo/01-story/story-context.md) supplies the revised source-containment story and confirmed alternating text-card/animated-footage format: five pairs for a 40-second intro, six pairs plus title for a 90-second trailer. This replaces the earlier seven-panel presentation target for items 20/21/30/31; illustrations may supply scenery but need actual moving actions. No asset generation is authorized, and the separate gameplay demo remains required.
 
 ---
 
@@ -89,7 +95,7 @@ A1 ─> A2..A9 ─> 15, 26
 ## Phase 0: Foundation
 
 ### P6 Pause, scrap, difficulty and automatic skills (user request, 19 Oct)
-**Specification:** [todo/gameplay.md](../todo/gameplay.md), rewritten as the 20 October design handoff. The former implementation/push limiter is historical; this session is context-only.
+**Specification:** [todo/02-gameplay/gameplay.md](../todo/02-gameplay/gameplay.md), rewritten as the 20 October design handoff. The former implementation/push limiter is historical; this session is context-only.
 **Checkpoint 1:** audit and pause-safe timers. Classes: Cooldown, GameTimer, Enemy/MidLevelEnemy, EnemyManager, DebrisManager, KillCounter, Animator, Game.
 **Status:** Checkpoint 1 implemented and verified (Debug/Release/ASan/UBSan, native pause/reset/input tests, collision harness, 108.3 FPS in the rendered 80-enemy burst case). Remaining checkpoints are not implemented.
 **Done when:** gameplay cooldowns and animations freeze during pause/console/card selection, run time advances from simulation delta, game-over presentation cannot advance the world, and restarts clear timer debt.

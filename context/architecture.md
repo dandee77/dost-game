@@ -1,8 +1,14 @@
 # Architecture
 
+## 21 October preparation alignment
+
+The foldered handoff starts at [todo/README.md](../todo/README.md). Story/source contracts are in [world and campaign](../todo/01-story/world-and-campaign.md); material labels are in [scrap types](../todo/03-economy/scrap-types.md). These are future integration requirements, not new classes implemented in this session.
+
+Keep source-shutdown state inside the existing planned encounter/run ownership. It survives hub suspension, ends future source adds and resolves only after required hostiles; no second quest singleton or loot-dependent victory system. The material label travels with the existing paired reward through spawn, destruction, pickup, merge and collection. Different labels merge to Mixed Salvage while preserving trade/salvage totals; no six-currency inventory subsystem. Presentation-only intro/ending clocks cannot mutate run state or RNG. Frozen results are owned by the run/result flow, not a cutscene's repeated completion callback.
+
 ## 20 October target integration: colony and expeditions (not implemented)
 
-[todo/gameplay.md](../todo/gameplay.md) defines the new flow; this section supersedes conflicting older target connections below. The existing P6/P5 implementation notes remain the current-code baseline.
+[todo/02-gameplay/gameplay.md](../todo/02-gameplay/gameplay.md) defines the new flow; this section supersedes conflicting older target connections below. The existing P6/P5 implementation notes remain the current-code baseline.
 
 - MainMenu confirms typed difficulty before creating a Game run. Game begins in a safe hub; a portal selects the typed mode. Difficulty and mode are different fields.
 - Keep hub, field, dock/shop, card selection, pause and results within the existing Game lifecycle. Calling onSwitch/resetRun for a dock visit would erase the run and is forbidden.

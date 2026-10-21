@@ -2,7 +2,7 @@
 
 ## 20 October design handoff: proposed integration only
 
-[todo/gameplay.md](../todo/gameplay.md) records remaining work. **No class was added or modified by this documentation session.** Existing implementation statuses below remain unchanged.
+[todo/02-gameplay/gameplay.md](../todo/02-gameplay/gameplay.md) records remaining work. **No class was added or modified by this documentation session.** Existing implementation statuses below remain unchanged.
 
 Future work reuses Game/Player/SkillSystem/ScrapManager/Card/Button/DebugTools and the planned WaveDirector/Dock/UpgradeShop/DockShopUI/PauseOverlay boundaries. Game-owned run-progress data is proposed, not an existing RunProgress class. RunContext and RunRng entries below remain planned.
 

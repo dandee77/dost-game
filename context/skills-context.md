@@ -2,7 +2,7 @@
 
 ## 20 October target changes (not implemented)
 
-[todo/gameplay.md](../todo/gameplay.md) retains the existing skill identities and repeat-pick system while specifying the remaining automatic/persistent conversion, persistent Deflector, radius magnet and Nano Repair -> Shield Detonation replacement. Target combat catalog: 13 augments + 19 abilities = 32. Return Home is a separate baseline manual utility, not another card or combat-catalog entry.
+[todo/02-gameplay/gameplay.md](../todo/02-gameplay/gameplay.md) retains the existing skill identities and repeat-pick system while specifying the remaining automatic/persistent conversion, persistent Deflector, radius magnet and Nano Repair -> Shield Detonation replacement. Target combat catalog: 13 augments + 19 abilities = 32. Return Home is a separate baseline manual utility, not another card or combat-catalog entry.
 
 Owner confirmed normal level upgrades occur in the field and delegated shop inventory/prices. Selected shop: targeted owned ranks plus rare Singularity, Space Collapse, Nuclear Missile and Armageddon acquisition. Use the same rank/effect data and explicit acquisition source: paid Reinforced Hull increases maximum HP without healing; its field card retains max/current HP gain. Paid shield ranks do not refill. Q is proposed for Return Home; no manual combat quick-swap slot is planned.
 

@@ -1,8 +1,16 @@
 # Game Design
 
+## 21 October material and campaign alignment (proposed; not implemented)
+
+[Scrap types](../todo/03-economy/scrap-types.md) classifies recoveries into **six** families: Recovered Alloys, Electronic Components, Polymer Stock, Power Modules, Structural Composites and Purification Media. A family is fixed by content profile, not a random price multiplier. Existing trade ranges, fixed salvage, debris yields and prices below are unchanged. Single-family merged pickups retain the label; different families display Mixed Salvage with conserved trade/salvage totals. There are no per-family wallets, recipes, conversion rates or statistics in the selected minimum scope.
+
+The ten-wave Campaign proposal now represents two source sectors, with guardians at five and ten. Guardian death stops that source's future emissions/adds; remaining required hostiles still block completion. No global HP reduction, reward reroll or purification-item requirement is introduced. Source shutdown flags persist through hub visits and reset with a fresh run. Same-step player death takes priority over victory. See [world and campaign](../todo/01-story/world-and-campaign.md).
+
+Remaining numerical design gaps are explicit in [decisions and gaps](../todo/00-planning/decisions-and-gaps.md): complete spawn budgets, boss stats/attacks, auto-target ranges, arena dimensions, scoring weights and high-rank/performance limits. Existing prototype values are not automatically approved answers for those new systems. Adopt the proposed card distribution/targeting policy there before adding corresponding numeric tables here.
+
 ## 20 October proposed tuning ledger (not implemented or playtested)
 
-The new product contract is [todo/gameplay.md](../todo/gameplay.md). The owner confirmed the hub/field progression/return direction, then required **paid base health repair** and **random trade scrap by enemy**, delegating shop inventory/prices to the author. The economy values below are selected design defaults, not playtested balance. The owner's 100/1,000 progression examples remain provisional. This ledger supersedes older cargo/credits, free-repair, one-value reward, wave-card and P6 base-30 targets.
+The new product contract is [todo/02-gameplay/gameplay.md](../todo/02-gameplay/gameplay.md). The owner confirmed the hub/field progression/return direction, then required **paid base health repair** and **random trade scrap by enemy**, delegating shop inventory/prices to the author. The economy values below are selected design defaults, not playtested balance. The owner's 100/1,000 progression examples remain provisional. This ledger supersedes older cargo/credits, free-repair, one-value reward, wave-card and P6 base-30 targets.
 
 ### Progression and Return Home
 

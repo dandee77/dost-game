@@ -1,8 +1,14 @@
 # UI Rules
 
+## 21 October narrative and material presentation
+
+Use **H.O.P.E. Colony** on arrival/story cards and **HOPE** where space is limited. Full expansion: **Habitat for Orbital Preservation and Endurance**. The player stays in the ship; show reused inhabited station modules, safe service approaches and Earth beyond. No special-tree/seed quest art or radiation-origin imagery is required. Source shutdown and survey/containment craft replace the old ending motif. Detailed motion beats and playback rules: [story context](../todo/01-story/story-context.md).
+
+The six proposed [scrap families](../todo/03-economy/scrap-types.md) are optional flavor labels on the same trade/salvage pickups. Do not add six HUD meters, material-specific prices or compulsory new pickup art. Mixed bundles use Mixed Salvage. Preserve accepted destruction frames and red glow pickups; future icons distinguish shape as well as color. The main combat readout remains Trade Scrap, Salvage progress, shield and Return Home readiness. Source-isolation notices must not hide required surviving-hostile counts.
+
 ## 20 October target screens (design only)
 
-See [todo/gameplay.md](../todo/gameplay.md) sections 3-5 and 9-11 for behavior. These targets supersede conflicting old screen descriptions below; they do not describe newly shipped UI.
+See [todo/02-gameplay/gameplay.md](../todo/02-gameplay/gameplay.md) sections 3-5 and 9-11 for behavior. These targets supersede conflicting old screen descriptions below; they do not describe newly shipped UI.
 
 | Surface | Target |
 |---|---|
@@ -22,7 +28,7 @@ Normal field upgrades remain free. Shop inventory/prices are selected under the 
 
 Repair UI disables unaffordable/full components, offers an affordable hull patch when appropriate, and always allows Undock/Resume. Paid Reinforced Hull previews say “Maximum HP only; repair sold separately”; field-card previews retain the actual max/current HP effect. If a fixed rare offer is later learned through a field card, label it Owned and disable acquisition rather than rerolling or double-selling it.
 
-Intro/trailer treatment is in [todo/story-context.md](../todo/story-context.md): a short story-text card clears, then its animated scene/gameplay clip plays; repeat with trailer pacing. Use the same safe area/type constraints. Required story sentences belong on their own beats, not continuously over combat. Footage needs moving action; narration is optional. No new art is generated in this documentation session.
+Intro/trailer treatment is in [todo/01-story/story-context.md](../todo/01-story/story-context.md): a short story-text card clears, then its animated scene/gameplay clip plays; repeat with trailer pacing. Use the same safe area/type constraints. Required story sentences belong on their own beats, not continuously over combat. Footage needs moving action; narration is optional. No new art is generated in this documentation session.
 
 Preserve existing 3840x2160 canvas, 1280x720 initial window, CRT-safe regions, mapped mouse input, Button style and Theme tokens. No UI text at the cropped screen edge. Keep accepted red debris glow and complete destruction art. Proposed Q Return Home replaces the old manual-skill indicator only when implementation changes activation; F hub interaction avoids conflicting with E auto-fire.
 
@@ -143,7 +149,7 @@ Semantic colors make the action readable in a 3-second glance and in a trailer.
 | `COLOR_DANGER` | `{255,50,50,255}` | Damage and threat | Kill counter (SA), enemy bullets tint, low-health warning, "Killed by" |
 | `COLOR_TOXIC` | `{120,255,90,255}` | Contamination | Enemy glow and tint, windup flash, boss attacks telegraph, toxic UI accents |
 | `COLOR_SCRAP` | `{255,196,64,255}` | Reward | Scrap pickups, cargo and credit numbers, buy buttons when affordable |
-| `COLOR_LIFE` | `{90,200,120,255}` | The World Tree, hope | Ending cutscene, victory screen, heal effects |
+| `COLOR_LIFE` | `{90,200,120,255}` | Restoration, life support, hope | Ending cutscene, victory screen, heal effects |
 | `COLOR_PANEL` | `{20,20,30,255}` | Panels | Card background (SA), shop rows, pause box |
 | `COLOR_PANEL_LINE` | `{60,60,80,255}` | Panel borders | Card inner border (SA), dividers |
 | `COLOR_OVERLAY` | `Fade(BLACK, 0.7f)` | Dimming | Behind pause, shop, game over; kill counter box (SA) |
@@ -260,7 +266,7 @@ New sheets (planned). Sizes are recommendations; record the final ones here and 
 | `boss_core_destruct` | 256 x 256 | 12 | 60 | |
 | `boss_bullet` | 32 x 32 | 1 | 6 x 6 | Large toxic orb |
 | `scrap_small`, `scrap_medium`, `scrap_large` | 16 x 16 | 1 | 2, 3, 4 | Gold metal bits (values 1, 5, 10) |
-| `dock` | 256 x 256 | 1 | 40 | Bayanihan Dock station, top-down |
+| `dock` | 256 x 256 | 1 | 40 | HOPE Colony mothership berth, top-down |
 | `dock_arrow` | 64 x 64 | 1 | screen 120 | Chevron |
 | `cutscene_01` to `cutscene_07` | 1920 x 1080 | 1 | full screen | Intro slides |
 | `ending_01` to `ending_04` | 1920 x 1080 | 1 | full screen | Ending slides |
