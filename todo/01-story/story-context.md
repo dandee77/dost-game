@@ -7,7 +7,7 @@
 The owner's confirmed format is **short story text -> animation/gameplay -> next story text -> next moving scene**, with rising trailer pacing. Text introduces an idea; the next shot demonstrates it. Narration is optional. Story cards and meaningful moving action are required.
 
 - TEXT: a short original sentence, high contrast, comfortable reading hold inside the CRT-safe area. Subtle background movement is allowed.
-- FOOTAGE: story text clears before action begins. Ships move, machinery works, waste assembles, enemies attack or salvage is collected. Panning over an otherwise static image cannot be the only movement in every shot.
+- FOOTAGE: story text clears before action begins. Ships move, machinery works, living waste-eaters move inside scrap shells, enemies attack or salvage is collected. Panning over an otherwise static image cannot be the only movement in every shot.
 - CONNECTION: an idea about the colony is followed by the inhabited colony; an idea about recovery is followed by actual recovery.
 - AUDIO: music bridges cuts; effects follow visible events. Understandable with sound off. Optional narration follows the text rather than introducing essential off-screen facts.
 - TIMING: intervals below include fades. Keep most of each three-second text interval fully readable; do not spend it on a slow typewriter reveal.
@@ -17,11 +17,13 @@ No walking avatar, dialogue tree, new 3D environment or video-decoding library i
 
 ## 2. Story essentials
 
-Earth suffers prolonged climate disruption and waste accumulation. In 2718, scientists develop an experimental remediation medium; after five years they deploy it into the atmosphere. The system fails in contact with mixed waste. In this fictional future, failed autonomous recycling machinery reshapes contaminated trash into hostile assemblies.
+Earth suffers prolonged climate disruption and waste accumulation. Scientists first engineer living waste-eaters, provisionally called Scavengers, for terrestrial facilities and protected orbital recovery pods. Humanity relies on them while continuing wasteful habits. A separate atmospheric treatment is developed in 2718 and released after five years in 2723. Unexpected exposure changes the creatures' DNA and behavior, making them hostile to humans. Scrap is their shelter and armor, not living metal. Transported organisms and residues spread exposure into orbit.
 
 By 2732, survivor estimates put population loss at roughly 99%, following nine years of attacks and infrastructure collapse. Selected existing orbital stations become defensible refuges. In 2733, the player joins **H.O.P.E. Colony — Habitat for Orbital Preservation and Endurance** as a cadet salvage pilot. Clear routes, recover useful materials and isolate the concentrated sources that keep the wreckage dangerous.
 
 Dates are proposed. Five development years, collapse in less than a decade, cadet role and the source-cleanup campaign are the owner's direction. Orbit remains contaminated; screened stations are locally safer, not a claim that space is clean. No radiation accident, special seed or magical planet-restoration object drives the story.
+
+Theme: dependence on cleanup delayed responsibility until the consequences became unavoidable. Selected tagline: **“We kept throwing it away. Until it came back for us.”** See [narrative theme](narrative-theme.md) for slogans, tone and an optional synopsis passage. The timed script below uses shorter lines that fit its reading windows.
 
 ## 3. Intro: 40 seconds, five pairs
 
@@ -29,20 +31,20 @@ Proposed placement: once per application launch, after Loading and before Main M
 
 | Time | Beat | Text or moving scene |
 |---|---|---|
-| 0-3 s | TEXT | “2718. A damaged world. A chance to repair it.” |
-| 3-8 s | FOOTAGE | Show damaged surface infrastructure, discarded machinery and laboratory recycling equipment beginning a controlled trial. Establish both environmental crisis and human effort |
-| 8-11 s | TEXT | “Five years later, the cure escaped our control.” |
-| 11-16 s | FOOTAGE | Atmospheric deployment over Earth; failed machinery draws nearby ground waste together. Cut to contaminated orbital hardware beginning to move. No magical wave crosses vacuum |
+| 0-3 s | TEXT | “We asked life to clean up after us.” |
+| 3-8 s | FOOTAGE | Show a benign waste-eater processing selected refuse, then its protected orbital recovery pod. More waste arrives. Cut to an atmospheric-treatment trial labeled 2718: a separate program begins |
+| 8-11 s | TEXT | “Five years later, our treatment changed them.” |
+| 11-16 s | FOOTAGE | Show the 2723 atmospheric release, then a waste-eater changing behavior and lunging from a scrap shell. A contaminated transport reaches an orbital pod; its living core moves. No chemical wave crosses vacuum |
 | 16-19 s | TEXT | “By 2732, only one in a hundred remained.” |
 | 19-24 s | FOOTAGE | Abandoned surface routes give way to evacuation craft and patched orbital stations. Construction arms link reused modules; warm windows reveal people still surviving |
 | 24-27 s | TEXT | “H.O.P.E. became our home. You became its cadet.” |
 | 27-32 s | FOOTAGE | Mothership reveal; cadet ship launches from its berth, defeats a small threat and collects salvage. Show a recognizable ship and colony landmark |
 | 32-35 s | TEXT | “Silence the sources. Give Earth another chance.” |
-| 35-40 s | FOOTAGE | A distant source assembly emits contaminated fragments; cadet approaches. Cut to a survey craft waiting beside HOPE and damaged Earth beyond, then transition to Main Menu |
+| 35-40 s | FOOTAGE | An infested source nest releases scrap-covered organisms; cadet approaches. Cut to a survey craft waiting beside HOPE and damaged Earth beyond, then transition to Main Menu |
 
-“The cure” is dramatic in-world language for the attempted recovery treatment, not a scientific claim of an actual climate cure. The longer canon makes that distinction explicit. Keep the short intro readable; it does not need to explain every chemical or economic rule.
+The five-year interval refers to atmospheric-treatment development, not the invention of the waste-eaters. Those organisms were already deployed. The intro compresses a spreading catastrophe into selected shots; it must not imply every exposed creature transforms identically at the same instant.
 
-Suggested visual progression: damaged industrial Earth -> controlled laboratory light -> unstable machinery -> warm inhabited stations -> purposeful pilot launch. Preserve existing gameplay meanings for danger, player, reward and healing colors.
+Suggested visual progression: damaged industrial Earth -> useful biological processing -> altered organisms in scrap shells -> warm inhabited stations -> purposeful pilot launch. Preserve existing gameplay meanings for danger, player, reward and healing colors.
 
 ## 4. Hub storytelling and interface copy
 
@@ -78,10 +80,10 @@ Trigger after final guardian death, source shutdown and all required hostile res
 | Time | Beat | Text or moving scene |
 |---|---|---|
 | 0-3 s | TEXT | “The source fell. The damage remained.” |
-| 3-8 s | FOOTAGE | Source machinery powers down. Contaminated fragments stop being ejected; the route remains littered and Earth is still damaged |
+| 3-8 s | FOOTAGE | The guardian falls and source dispersal equipment shuts down. The infested nest stops releasing new threats; the route remains littered and Earth is still damaged |
 | 8-11 s | TEXT | “For the first time, we could hold the route.” |
 | 11-16 s | FOOTAGE | Survey and containment craft leave HOPE, fly through the cleared corridor and approach a prepared surface landing zone |
-| 16-19 s | TEXT | “Recovery was no miracle. It was our next mission.” |
+| 16-19 s | TEXT | “We survived the consequences. Now we must change.” |
 | 19-24 s | FOOTAGE | A cleanup crew's remote equipment seals contaminated wreckage; habitat lights come on in a small secured area. End on the damaged planet with the colony above, then show the recorded result |
 
 No whole-planet green flash, universal chemical neutralization or instantaneous climate repair. The achievement is a defensible foothold for continued recovery. A remote cleanup device is cinematic scenery, not a promised playable ground system.
@@ -92,10 +94,10 @@ The separate gameplay demonstration remains a different deliverable. This traile
 
 | Time | Beat | Text or moving scene |
 |---|---|---|
-| 0-3 s | TEXT | “2718. We believed we could repair our world.” |
-| 3-15 s | FOOTAGE | Damaged Earth and discarded orbital equipment; controlled research trial, then development montage. A diegetic 2723 deployment display identifies the five-year jump |
-| 15-18 s | TEXT | “Five years of work. One release we could not contain.” |
-| 18-30 s | FOOTAGE | Atmospheric treatment fails among terrestrial waste; machinery recruits metal into hostile shapes. Contaminated cargo and orbital equipment establish the second front. End on evacuation and empty infrastructure |
+| 0-3 s | TEXT | “We kept the habits. We postponed the consequences.” |
+| 3-15 s | FOOTAGE | Living waste-eaters process refuse on Earth and inside orbital pods; incoming waste keeps increasing. Show the separate atmospheric project labeled 2718, then five years of development ending at a 2723 deployment display |
+| 15-18 s | TEXT | “2723. The treatment changed more than the sky.” |
+| 18-30 s | FOOTAGE | Atmospheric exposure reaches the waste-eaters. Altered creatures move inside scrap armor and attack a service vehicle. Exposed organisms/residues travel with cargo to orbital recovery pods. End on evacuation and abandoned infrastructure |
 | 30-33 s | TEXT | “One in a hundred survived. H.O.P.E. gave us a home.” |
 | 33-45 s | FOOTAGE | Reused stations connect, habitation lights brighten and a cadet ship leaves the mothership. Move into real flight, shooting and collected salvage |
 | 45-48 s | TEXT | “Recover what we need. Return when you can.” |
@@ -131,6 +133,8 @@ For every asset produced later, record source/license, creator/tool, prompt when
 - [ ] Sound-off viewing communicates catastrophe, refuge, cadet mission and recovery purpose.
 - [ ] Text holds are readable at the real display size, within the CRT safe area.
 - [ ] Intro/ending/trailer intervals total 40/24/90 seconds, including transitions.
+- [ ] Beneficial organisms visibly predate the atmospheric project; living cores explain hostile scrap movement.
+- [ ] The theme connects neglect to consequences and recovery to sustained responsibility.
 - [ ] Dates, colony name, source mechanics and scientific framing match world-and-campaign.md.
 - [ ] Actual gameplay footage shows valid costs, shield/return conditions and available modes.
 - [ ] All skip/advance paths consume input and enter their destination once.

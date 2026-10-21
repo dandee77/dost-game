@@ -16,6 +16,7 @@ todo/
   01-story/
     world-and-campaign.md
     science-notes.md
+    narrative-theme.md
     story-context.md
   02-gameplay/
     gameplay.md
@@ -32,8 +33,9 @@ Read the required context references first, then the planning register, world/sc
 | File | What remains to be done |
 |---|---|
 | [Decisions and gaps](00-planning/decisions-and-gaps.md) | Confirmed/proposed choices, missing non-art systems, priorities, boss/schedule templates and tutorial/result proposals |
-| [World and campaign](01-story/world-and-campaign.md) | HOPE acronym, 2718-2733 timeline, fictional mechanism, colony functions and source-boss campaign |
+| [World and campaign](01-story/world-and-campaign.md) | HOPE acronym, 2718-2733 timeline, biological waste-eater origin, colony functions and source-boss campaign |
 | [Science notes](01-story/science-notes.md) | Primary-source environmental framing, fictional boundaries and explanation of retired narrative terms |
+| [Narrative theme](01-story/narrative-theme.md) | Neglect, postponed responsibility, consequences, hopeful recovery and original slogan options |
 | [Scrap types](03-economy/scrap-types.md) | Six proposed material families, existing debris mapping, one-wallet economy and reward conservation |
 | [Preparation checklist](04-verification/preparation-checklist.md) | Documentation review, checkpoint content gates and later runtime acceptance scenarios |
 | [gameplay.md](02-gameplay/gameplay.md) | Full detailed handoff: colony hub, five modes, field progression, random trade scrap, paid repairs, skill shop, shield/Return Home, UI, lifecycle and verification |

@@ -10,6 +10,10 @@ The first version does not require collecting particular materials to buy a skil
 
 **Example:** a basic enemy's recovered alloy pickup can contain 3 Trade Scrap and 2 Salvage. An electronic pickup from a mid-tier enemy can contain 4 Trade Scrap and 5 Salvage. The material names do not multiply either reward. Buying a 150-scrap skill rank spends 150 from the one wallet regardless of which families produced it.
 
+### Biological-enemy continuity
+
+The revised enemies are living waste-eaters inside scavenged shells. Recoverable scrap comes from the nonliving shell, carried material and attached equipment. Sealed collection separates it from biological remains; tissue is not a seventh resource or a required harvesting action. Existing red pickup effects are resource feedback, not blood. Purification Media remains processed filtration stock, not a mutation cure. All six families and reward/price amounts below remain unchanged.
+
 ## 2. Six proposed families
 
 | ID for later data | Player-facing label | Recognizable source | Colony use in the fiction | Suggested visual distinction |

@@ -23,10 +23,11 @@ The teammate's later instruction may authorize a complete implementation sequenc
 | D09 | Failed remediation affects terrestrial and orbital waste; near extinction in under a decade | Confirmed premise | World and campaign |
 | D10 | No special tree/seed solution or radiation origin; source isolation enables gradual restoration | Confirmed direction | World and campaign |
 | D11 | 2718 breakthrough, 2723 release, 2732 collapse estimate, 2733 cadet deployment | Proposed exact dates | World and campaign |
-| D12 | Chemical carrier plus failed autonomous recyclers, with energy/feedstock limits | Proposed science-fiction mechanism | [Science notes](../01-story/science-notes.md) |
+| D12 | Earlier engineered waste-eaters mutate after exposure to the separate atmospheric treatment; living organisms occupy scrap shells | Confirmed fictional origin; space support and exact creature design proposed | [Science notes](../01-story/science-notes.md) |
 | D13 | Six material families, single currency, no crafting gate | Proposed taxonomy and minimum scope | [Scrap types](../03-economy/scrap-types.md) |
 | D14 | Alternating story cards and moving footage | Confirmed presentation | [Story/trailer](../01-story/story-context.md) |
 | D15 | Intro before menu once per launch; 40-second intro, 24-second ending, 90-second trailer | Proposed pacing/placement | Story/trailer |
+| D16 | Neglect and postponed responsibility lead to catastrophe; survivors earn hope through sustained recovery | Confirmed theme; slogan wording drafted | [Theme and slogans](../01-story/narrative-theme.md) |
 
 Paid repairs, random trade drops and the shop price list are already specified. They need balance measurements later, not another empty “decide a shop” task.
 
@@ -103,6 +104,6 @@ Only one finalized result may be submitted once. Ending skip, repeated result-me
 
 ## 8. Remaining decisions to discuss with the owner
 
-The next useful review is concrete: accept/revise the proposed chronology and recycler mechanism; approve/revise the six scrap families; supply the boss concepts; choose the final game title. The team can author spawn schedules, targeting matrices, geometry, score values and technical limits from the templates before coding. Existing paid repair and shop prices need a later playtest, not speculative reapproval now.
+The next useful review is concrete: review the proposed chronology, final Scavenger name/body plan and protected orbital core; approve/revise the six scrap families; supply the boss concepts; choose the final game title. The biological origin and neglect theme are now owner-selected; do not reopen the retired autonomous-machine premise. The team can author spawn schedules, targeting matrices, geometry, score values and technical limits from the templates before coding. Existing paid repair and shop prices need a later playtest, not speculative reapproval now.
 
 Preparation is ready for an implementation brief only when blocking content and data have an explicit owner, an adopted default or a documented deferral that is visible in the product scope. “Everything is done” cannot mean merely that all missing details have a heading.

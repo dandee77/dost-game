@@ -60,7 +60,7 @@ Fill in names. Maximum five members (plus one coach in the Student category).
 
 ## The Pitch
 
-Humanity survives in reused orbital stations after an experimental atmospheric remediation program turns terrestrial waste and orbital machinery into hostile scrap assemblies. As a cadet salvage pilot, clear routes, recover useful material and isolate the concentrated sources that keep the wreckage dangerous.
+Humanity survives in reused orbital stations after an experimental atmospheric treatment mutates engineered waste-eating organisms already deployed on Earth and in orbital cleanup systems. As a cadet salvage pilot, clear routes, recover useful material and isolate the concentrated sources that keep the wreckage dangerous.
 
 **Climate framing:** research has detected spacecraft-reentry metals in stratospheric particles and modeled possible ozone/radiative effects. It does not establish a percentage of present global warming caused by orbital debris. Keep this as one environmental concern within a wider crisis. [NOAA paper repository](https://repository.library.noaa.gov/view/noaa/58476), [NOAA modeling summary](https://www.csl.noaa.gov/news/2025/427_0428.html). Detailed sources and fictional boundaries: [science notes](../todo/01-story/science-notes.md).
 
@@ -74,9 +74,11 @@ Humanity survives in reused orbital stations after an experimental atmospheric r
 
 Proposed chronology: scientists develop a remediation medium in **2718**, release it into the atmosphere after five years in **2723**, and survivor estimates record approximately **99% population loss by 2732**. The player begins service in **2733**. The owner's required five-year development and under-decade collapse are preserved.
 
-The future medium combines a chemical carrier with autonomous recycling machinery. Unanticipated interactions with mixed waste defeat its containment and control systems. Failed assemblies recruit scrap, consume available energy and defend contaminated sites. Surface waste and contaminated orbital hardware both become threats. Transport through cargo, deployment equipment and contaminated surfaces explains orbital spread; atmospheric clouds do not magically flow through vacuum. This is explicitly speculative technology, not proven chemistry or a radiation accident.
+Before 2718, scientists had already engineered waste-eating creatures, provisionally called Scavengers, for ground facilities and protected orbital cleanup systems. The later atmospheric treatment unexpectedly changes their DNA and disrupts feeding, growth and defensive behavior. They become hostile and gather scrap around living cores; the metal itself stays nonliving. Exposed organisms, contaminated cargo and residue on serviced hardware carry the disaster into orbit. Protected cores and repurposed propulsion support the fictional space creatures; an atmospheric cloud does not cross vacuum. This biological mechanism supersedes the earlier autonomous-machine proposal and remains science fiction.
 
-The campaign targets concentrated source sites that keep producing contamination and hostile assemblies. Proposed ten-wave outline retains boss slots at five and ten, now two source sectors; identities and attacks remain owner content. Defeating a source guardian stops that site's future emissions/adds. Remaining required hostiles must still be cleared. No random loot or purification item is needed to complete the objective.
+The campaign targets infested nests and concentrated residue sites that keep spreading exposure and hostile organisms. Proposed ten-wave outline retains boss slots at five and ten, now two source sectors; identities and attacks remain owner content. Defeating a source guardian stops that site's future emissions/adds. Remaining required hostiles must still be cleared. No random loot or purification item is needed to complete the objective.
+
+**Narrative theme:** humanity used cleanup inventions to postpone changing wasteful habits. The catastrophe is the accumulated consequence of neglect and overreliance on fixes after the damage. The survivors now choose sustained responsibility. Draft tagline: **“We kept throwing it away. Until it came back for us.”** See [theme and slogans](../todo/01-story/narrative-theme.md).
 
 The ending opens a corridor for survey, containment and cleanup teams. Earth remains damaged and climate recovery takes time. No special tree, seed quest or instant cure remains. Other modes are repeatable operations and are not locked behind Campaign completion.
 

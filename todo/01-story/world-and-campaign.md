@@ -11,8 +11,8 @@
 | Short UI name | **HOPE** or **HOPE Colony** | Use the short form on small labels; same location |
 | Mothership | Colony's operations vessel and player arrival landmark | Confirmed hub concept; not the whole human population in one ship |
 | Pilot | A newly assigned **cadet salvage pilot** | Confirmed role; “Collector” may be an occupational call sign, not a separate protagonist |
-| Enemy origin | Failed atmospheric remediation contaminates surface waste and orbital debris | Confirmed premise |
-| Mechanism | Advanced chemical treatment with autonomous micro-recycling machinery loses containment/control | Proposed fiction, chosen to give scrap motion and energy requirements |
+| Enemy origin | Engineered waste-eating creatures on Earth and in orbital cleanup installations mutate after exposure to the later atmospheric treatment | Confirmed owner revision |
+| Mechanism | Unexpected chemical exposure changes the creatures' DNA and disrupts feeding, growth and defensive behavior; they become hostile to humans | Confirmed fictional premise; detailed biology remains invented |
 | Catastrophe | Approximately 99% of humanity dies within less than a decade | Confirmed fictional scale; an in-world estimate, not a factual prediction |
 | Hope | Human cooperation, containment, recovered resources and gradual restoration | Confirmed replacement for the retired magical-tree solution |
 | Dates | Research breakthrough 2718; release 2723; collapse estimate 2732; player deployment 2733 | Proposed exact chronology |
@@ -21,30 +21,35 @@ The colony acronym belongs to a place, not automatically the final game title. N
 
 ## 2. Story in prose
 
-By 2718, generations of warming, pollution and poorly managed waste had made Earth's recovery increasingly difficult. Humanity's discarded machinery also circled overhead. Reentering debris was another environmental concern in a much larger crisis, not the sole cause of global warming.
+Long before the final experiment, humanity learned to make its waste disappear from sight. It never learned to stop producing so much of it. Discarded goods accumulated on Earth, obsolete machinery filled orbital routes, and climate damage deepened while each new cleanup project bought another delay.
 
-That year, scientists developed an experimental remediation medium: a chemical carrier paired with advanced autonomous recycling machinery. It was designed to process selected pollutants and waste within a wider climate-recovery program. It was never intended to make the world livable in a single day. For five years, researchers refined the system and prepared atmospheric deployment.
+Scientists engineered biological waste-eaters, provisionally called **Scavengers**. They were living creatures designed to break down selected waste and separate recoverable material. Ground facilities used them to process refuse. Orbital crews deployed them inside protected recovery pods and adapted station equipment to work through collected space debris. Their success became an excuse to keep discarding: cleanup capacity grew, but so did the waste it was expected to absorb.
 
-In 2723, the release began. Controlled trials had missed what would happen when the medium encountered the enormous variety of aged alloys, industrial residues, batteries and discarded electronics already spread across the world. Its safeguards failed under conditions the project had not reproduced at scale. Instead of remaining within approved processing sites, contaminated recycling assemblies began recruiting nearby waste into larger structures.
+In 2718, a separate scientific program developed an atmospheric treatment intended to help climate recovery. For five years, researchers refined it. The Scavengers were already widespread by then. Trials failed to reveal the full interaction between the treatment, residues in waste, and the organisms exposed to them. Society trusted another intervention to buy time while neglecting the harder work of reducing pollution and waste at their sources.
 
-People called it mutation. The wreckage did not become biological life. Failed machinery reshaped it, supplied movement, and treated operating equipment and approaching humans as competing material or threats. Concentrated processing sites became sources of fresh contamination. Scrap creatures carried contaminated fragments outward; damaged factories, dumps and collection sites fed the cycle.
+In 2723, the atmospheric release began. In this fictional setting, exposure caused DNA changes in the Scavengers and disrupted their normal feeding, growth and defensive behavior. They escaped their intended limits and attacked people, operating equipment and settlements. The change spread through exposed populations over the following years; it was not a single flash that gave every creature an identical mutation.
 
-The disaster spread through surface waste and contaminated orbital infrastructure. Deployment equipment, infected cargo and maintenance traffic carried the failure into space; the chemical did not simply travel through the vacuum as an atmospheric cloud. By 2732, survivor estimates placed the loss of human life at roughly 99%. Attacks, destroyed supply chains and failing shelter compounded the existing environmental crisis.
+The creatures gathered fragments around their living bodies. Plates became shells, cables became bindings, and discarded equipment became shelter or repurposed propulsion. The metal never became alive: something living was moving inside it. Waste sites became feeding grounds and nests. Concentrated treatment residues at infested processing sites sustained exposure and made containment increasingly difficult.
 
-Survivors reclaimed stations that were still defensible. They linked habitation modules, repaired life-support systems and established screened approaches around selected orbital refuges. Orbit was dangerous too, but some stations could isolate incoming material more effectively than settlements surrounded by contaminated waste on the surface. Their central refuge became H.O.P.E. Colony: Habitat for Orbital Preservation and Endurance.
+Earth's atmosphere did not carry a cloud through the vacuum of space. Exposed organisms, contaminated cargo and residues on serviced hardware reached orbital cleanup installations through existing transport routes. The same waste-processing network that had been trusted to protect humanity helped spread the disaster. Orbital Scavengers sheltered living cores inside damaged recovery pods and scrap shells; their ability to function there remains part of the future technology of this setting.
 
-In 2733, you join its salvage fleet as a cadet. Every cleared route protects an approach to home. Every recovered component can become a repair, a filter, a weapon system or a spare part. Your missions lead toward the concentrated sources that keep reactivating the wreckage. Defeating their guardians and isolating those sources gives recovery teams a chance to contain the contamination and reopen a route to Earth.
+By 2732, survivor estimates placed the loss of human life at roughly 99%. Attacks, ruined food and supply systems, exposure and collapsing shelter compounded the environmental crisis. Humanity had built systems to consume its garbage and treated them as permission to avoid changing its habits. The catastrophe grew from that dependence and the neglected risks of combining interventions.
 
-The campaign ends with an opportunity to rebuild. Earth still needs cleanup, functioning infrastructure and years of climate recovery. Humanity has earned a foothold, not a miracle.
+Survivors reclaimed stations that could still be screened and defended. They linked habitation modules, repaired life support and established isolated approaches. Some orbital sites were easier to protect than settlements surrounded by infested surface waste, but space was never clean or universally safe. Their refuge became **H.O.P.E. Colony: Habitat for Orbital Preservation and Endurance**.
 
+In 2733, you join its salvage fleet as a cadet. Recovered material keeps its ships, filters and shelters functioning. Your campaign leads toward the heavily contaminated nests and source sites that keep surrounding routes dangerous. Defeat their guardians, isolate the sources, and give cleanup teams a corridor they can hold.
+
+The survivors cannot undo the neglect that brought them here. They can choose to stop repeating it. The campaign ends with a foothold for sustained cleanup and recovery, not another promise that a single invention will repair Earth overnight.
+
+Theme and approved draft slogans: [narrative theme](narrative-theme.md).
 ## 3. Timeline and what the audience must understand
 
 | Date | Event | Narrative consequence | Presentation priority |
 |---|---|---|---|
-| Before 2718 | Climate disruption and waste accumulation continue | Establish collective environmental responsibility | Brief establishing images; no fabricated warming percentage |
-| 2718 | Remediation breakthrough | Scientists believe a useful recovery tool is possible | Date card or laboratory screen in longer trailer |
-| 2718-2723 | Five years of development | Failure comes from inadequate scale/containment knowledge, not intentional evil | Mention five years in text; montage implies elapsed time |
-| 2723 | Atmospheric deployment and unexpected failure | Surface and later orbital waste become hostile assemblies | Show ground waste as well as orbital debris |
+| Before 2718 | Engineered Scavengers are deployed in ground facilities and protected orbital cleanup systems; waste and climate pressure continue | Establish useful biology followed by dependence and neglect | Show a living waste-eater working before it becomes hostile |
+| 2718 | Separate atmospheric-treatment breakthrough | Scientists believe a climate-recovery tool is possible | Date card or laboratory screen in longer trailer |
+| 2718-2723 | Five years of development | Interaction with established waste-eaters is missed; cleanup is relied on instead of sufficient prevention | Mention five years in text; montage implies elapsed time |
+| 2723 | Atmospheric deployment and unexpected failure | Exposed waste-eaters mutate on Earth; transport spreads exposure to orbital populations | Show ground waste as well as orbital debris |
 | 2723-2732 | Cascading attacks and infrastructure collapse | Approximately 99% estimated population loss over nine years | Restrained text and abandoned infrastructure; no graphic suffering required |
 | By 2732 | Survivors adapt existing stations | Colony is reused infrastructure, not a new city built overnight | Patched modules, mismatched trusses and working life support |
 | 2733 | Cadet deployment | Player begins recovery operations | First playable hub arrival after Start/difficulty |
@@ -52,20 +57,22 @@ The campaign ends with an opportunity to rebuild. Earth still needs cleanup, fun
 
 Dates are a proposed chronology. If changed, update every storyboard date and keep the five-year development and under-ten-year collapse intervals. Do not quietly turn the 99% figure into a real scientific forecast.
 
-## 4. What the failed technology can and cannot do
+## 4. What the organisms can and cannot do
 
-This is a fictional future system. The technical limits make the world coherent; they do not assert that hostile scrap is possible with present chemistry.
+The owner selected a biological origin. The limits below are proposed world rules, not claims that such creatures can be made today. The earlier autonomous-machine origin is superseded; machinery now supplies shelter, tools and movement for a living organism.
 
-1. **Feedstock:** assemblies need available material. They cannot create unlimited mass. Visible bodies are recognizable waste held together by the failed processing system.
-2. **Energy:** captured batteries, power equipment and processing nodes power motion. The chemical carrier alone is not an inexhaustible fuel. Small enemies may exhaust local reserves in the fiction; this does not add a battery mechanic to combat.
-3. **Instructions:** damaged sorting and containment behavior recruits machinery, defends contaminated sites and attacks intrusions. The enemies do not need supernatural intelligence.
-4. **Concentration:** large sources retain equipment, feedstock and reactive medium. They support bigger assemblies and repeated contamination. A source is a physical site, not an invisible curse covering the map.
-5. **Transport:** on Earth, released particles/residues and contaminated machinery spread through infrastructure and waste routes. In orbit, contaminated surfaces, particles and cargo carry it. No atmosphere-dependent chemical fog is drawn spreading through vacuum as real physics.
-6. **Neutralization:** combat disables moving assemblies; sealed collection and processing recover useful fractions. Source isolation prevents further local release. Debris can still require cleanup after enemies stop moving.
-7. **Limits of victory:** one destroyed boss cannot repair the ozone layer, remove greenhouse gases or clean every region of Earth. The campaign covers a critical operational corridor.
+1. **Life and DNA:** Scavengers are biological before the atmospheric release. The fictional treatment causes mutations in those organisms. Metal, plastic and satellites do not acquire DNA or become living tissue.
+2. **Waste processing:** they consume selected digestible fractions and separate or carry other materials. “Eats garbage” is the public shorthand, not a claim that every material is edible or that waste vanishes without byproducts. Metals can remain as shells and salvage.
+3. **Needs:** active bodies require water, nutrients, energy and a suitable internal environment. Their ability to use recovery equipment and survive within protected cores is speculative. They do not reproduce or move forever without supplies.
+4. **Hostility:** the fictional exposure disrupts feeding and defensive behavior. They attack humans approaching nests and damage inhabited equipment. Their aggression is not evidence that ordinary DNA changes inevitably create intelligent predators. They have no moral judgment about humanity.
+5. **Space:** original orbital cleanup used protected pods/processing chambers. Mutated descendants retain a protected living core, stored resources and scavenged support hardware. Exterior shells may move in vacuum; living tissue does not casually breathe space. Lost protection leads toward inactivity or death in the fiction, without adding an oxygen meter to gameplay.
+6. **Movement:** orbital enemies repurpose recovery thrusters or other onboard propulsion; ground organisms crawl or manipulate waste. They do not swim through empty space by pushing against nonexistent air. Existing shooter movement remains the gameplay abstraction.
+7. **Spread:** treatment exposure starts in the atmosphere and on contaminated surfaces. Cargo and transported organisms carry it to orbit. Broad exposure affects the deployed populations over time; no magical simultaneous signal reaches every organism everywhere.
+8. **Sources:** large infested waste sites retain concentrated treatment residues, feedstock and nests. Bosses are heavily altered organisms guarding or occupying these sites. Residue dispersal and local offspring explain renewed threats; no unlimited mass or chemical production appears from nothing.
+9. **Containment:** combat stops immediate threats; isolating an infested source stops its local dispersal and scripted reinforcements. Existing enemies do not instantly die or revert to their original biology. Recovery crews still have waste, residues and infrastructure to manage.
+10. **Salvage:** collect the recoverable nonliving fraction through sealed handling. Biological tissue is not a new currency, consumable, crafting material or corpse-harvesting requirement.
 
-Use “contaminated scrap,” “reactive residue,” “failed recyclers” and “source site” in briefing text. “Mutation” is allowed as survivor shorthand, with the non-biological meaning clear in the lore. No real chemical formula or real substance is named as the cause.
-
+Use “Scavengers” for the original waste-eaters and “mutated Scavengers” for their hostile descendants. “Scrap creatures” remains survivor slang for their metal-covered silhouettes. No real organism, gene, mutagen, chemical formula or laboratory procedure is prescribed. Exact species design, body plan and final names remain content decisions.
 ## 5. How HOPE operates
 
 The player remains inside their ship. The safe hub is a protected orbital approach around a mothership, with inhabited station modules and Earth visible behind it. Docking services are places in that space, not an unexplained walking interior.
@@ -91,9 +98,11 @@ Keep the existing **provisional ten-wave campaign with boss encounters at waves 
 | Stage | Player objective | Source relationship | Resolution |
 |---|---|---|---|
 | Waves 1-4: approach sector | Clear the scheduled encounters | Defend the path to an orbital processing relay | Each wave clears only when required hostiles are resolved |
-| Wave 5: first source sector | Defeat Guardian A and its required adds | Relay redistributes contaminated salvage into the approach | Stop source emissions, finish remaining required hostiles, then mark sector contained |
+| Wave 5: first source sector | Defeat Guardian A and its required adds | An infested processing relay spreads exposed organisms and residue into the approach | Stop source emissions, finish remaining required hostiles, then mark sector contained |
 | Waves 6-9: return corridor | Clear the deeper scheduled encounters | Reach the deployment/recovery infrastructure controlling a surface approach | No need to implement a separate ground-flight game |
-| Wave 10: primary source sector | Defeat Guardian B and required adds | Main local concentration supports repeated reactivation along the corridor | Contain source, resolve encounter once, enter victory sequence |
+| Wave 10: primary source sector | Defeat Guardian B and required adds | A major nest and residue reservoir sustain new threats along the corridor | Contain source, resolve encounter once, enter victory sequence |
+
+**Biological source interpretation:** each source sector includes a nest and contaminated processing infrastructure. Guardian defeat triggers isolation of that sector's dispersal equipment and nest exits. This is encounter logic and presentation, not a new breeding simulation or a claim that one organism's death sterilizes the region.
 
 **Proposed source-resolution contract:** defeating a guardian disables that sector's scripted source emitter immediately. It stops future source-created adds; it does not erase existing enemies, reduce every enemy's HP, reroll loot or clear unrelated pickups. Required surviving hostiles must still be defeated. Their destruction then permits the sector to finalize. Ordinary spawns already scheduled for later sectors retain their authored budgets.
 
@@ -120,7 +129,8 @@ The economy still has one trade wallet. Family labels explain recovered material
 
 ## 8. Content that remains to be authored
 
-- Boss names, silhouettes, attacks, phases, telegraphs, movement constraints and source-site designs.
+- Original and mutated Scavenger appearance, protected orbital core, final creature name, and how each existing enemy silhouette contains the organism.
+- Boss names, silhouettes, attacks, phases, telegraphs, movement constraints and nest/source-site designs.
 - Approved enemy-to-material mapping if the six proposed families change.
 - Final game title and optional narrator; the HOPE settlement name is already selected.
 - Final source-neutralization visual/audio treatment using the existing 2D production pipeline.

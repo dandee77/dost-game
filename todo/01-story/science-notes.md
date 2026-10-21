@@ -12,28 +12,36 @@ A later modeling study examined possible accumulation and radiative effects unde
 
 **Safe framing:** “Waste in orbit is an environmental responsibility too. Researchers are studying how reentry particles affect the upper atmosphere.” Avoid “space junk causes X percent of global warming,” “all orbital waste is heating Earth,” or “removing space debris reverses climate change.” Objects merely remaining in orbit and particles released on reentry are not the same phenomenon.
 
+### Biological inspiration for the revised premise
+
+A published study identified a bacterium capable of degrading and using PET plastic. That supports a limited real example of biological waste processing; it does not demonstrate an animal that eats all garbage or thrives on orbital scrap. [Yoshida et al., 2016, primary paper abstract](https://pubmed.ncbi.nlm.nih.gov/26965627/).
+
+Some chemical agents can cause DNA mutations. This supports the broad distinction between changing a living organism and making metal alive. It does not establish that exposure reliably produces large, aggressive creatures or any particular behavior. [National Human Genome Research Institute: Mutagen](https://www.genome.gov/genetics-glossary/Mutagen).
+
+ESA reported lichens surviving a limited space-exposure experiment and retaining photosynthetic ability after return. Survival after exposure does not establish sustained feeding, growth or propulsion in open vacuum. Protected orbital biological cores in the story are a proposed fictional accommodation, not a demonstrated extrapolation from that experiment. [ESA: Lichen survives in space](https://www.esa.int/Science_Exploration/Human_and_Robotic_Exploration/Lichen_survives_in_space).
+
 ## 2. What the game invents
 
 | Story statement | Status | Writing rule |
 |---|---|---|
-| Scientists discover a remediation medium in 2718 | Fictional future event; date proposed | Describe it as experimental and intended to support a larger recovery program |
+| Waste-eaters already exist when scientists develop a separate atmospheric treatment in 2718 | Fictional future event; date proposed | Describe it as experimental and intended to support a larger recovery program |
 | Atmospheric deployment follows five years later | Fictional chronology | Show development, release and failure as separate events |
-| Chemical carrier plus autonomous recyclers assemble hostile wreckage | Speculative technology, not established chemistry | Explain motion through machinery, energy and feedstock; never say ordinary metal genetically mutates |
+| Chemical exposure changes engineered waste-eaters' DNA and behavior | Confirmed fictional premise, not a demonstrated organism or predictable effect | Biological cores are alive; scavenged shells remain nonliving |
 | Approximately 99% die in nine years | Fictional survivor estimate | Include infrastructure collapse and exposure, not just direct monster attacks |
 | Selected orbital stations offer refuge | Setting choice | Local isolation and screened routes make them viable; orbit still contains hazards |
-| Concentrated source sites continually produce contamination | Fictional encounter premise | Sources have physical equipment, supplies and a shutdown condition |
+| Concentrated source sites continually produce contamination | Fictional encounter premise | Infested nests and residue reservoirs have supplies, dispersal equipment and a shutdown condition |
 | Boss defeat permits restoration missions | Gameplay and story outcome | Containment opens a corridor; climate recovery remains unfinished |
 
-Do not describe the mechanism as already possible. Real chemicals can corrode, react with or change materials; those facts do not establish autonomous attacking metal. The proposed micro-recycling machinery is the additional science-fiction assumption. “Mutation” is a survivor's word for changing scrap assemblies, not a biological claim.
+The fictional Scavengers, their broad waste-processing abilities, hostile mutation and active orbital existence are not established science. Mutation now means a change in the organisms' DNA within the story; it is no longer shorthand for a machine rearranging scrap. The earlier autonomous-recycler explanation is retired. Mutation does not automatically mean stronger, larger, hostile or directed toward a useful outcome.
 
 The medium has no real-world chemical name, molecular formula, synthesis recipe or claimed environmental safety rating. “Remediation medium” is a functional fictional label. Avoid implying that spraying an unspecified chemical is a proven solution to climate change.
 
 ## 3. Continuity rules for writers and artists
 
-- Show contaminated terrestrial waste as well as orbital machinery. The catastrophe cannot originate solely in distant space if the intended story includes trash throughout Earth's cities and industrial sites.
+- Show benign waste-eaters before exposure, then altered creatures among terrestrial waste and orbital machinery. The catastrophe cannot originate solely in distant space if the intended story includes trash throughout Earth's cities and industrial sites.
 - Do not show airborne clouds freely behaving as an atmosphere in empty space. Use attached residues, drifting particles, contaminated cargo or contained machinery in orbital shots.
 - Keep light from working equipment visually distinct from radiation symbols. The failed project is not a nuclear accident explanation.
-- A boss may carry a source reactor/processing core as fictional machinery; “core” does not automatically mean a radioactive core.
+- A boss contains a living organism and occupies an infested source site. Its protected biological core is not a nuclear core. Keep ordinary machinery and the creature visually distinguishable.
 - Quarantine, filtration and isolation reduce local risk in the story; they do not give a chemical guarantee or instant universal cure.
 - Recovered purification media are usable filtration stock after controlled processing, not a magical antidote to all contamination.
 - Show long-term restoration through surveying, containment equipment, working shelters and cleanup teams. Small greenhouse plants may illustrate ordinary food production but are not a central quest object.
@@ -49,6 +57,8 @@ Both the special seed and World Tree plot are removed from active canon. This pa
 
 - [ ] Every factual scientific statement has a source that directly supports it.
 - [ ] No warming percentage is invented or inferred from an ozone/particle measurement.
+- [ ] Waste-eaters predate the separate atmospheric treatment; DNA changes occur in biology, not metal.
+- [ ] Protected orbital life and physical transport of exposure are clear; mutations are not depicted as universally identical.
 - [ ] Future technology and fictional dates are distinguishable from real findings.
 - [ ] Five development years and fewer than ten collapse years remain consistent.
 - [ ] The ending promises a start to recovery, not an instant repaired planet.

@@ -22,8 +22,10 @@
 | Under-decade collapse | World | 2732 minus 2723 equals nine; approximately 99% is explicitly fiction |
 | Surface and orbital catastrophe | World | Both waste sources and a plausible fictional transport route are described |
 | Scientific framing | [Science notes](../01-story/science-notes.md) | Primary sources support narrow atmospheric claims; no invented warming percentage |
-| Grounded fiction | Science notes | Hostile assemblies require fictional machinery, energy and material; no claim of proven living metal |
+| Grounded fiction | Science notes | Living waste-eaters predate the treatment; fictional DNA/behavior changes affect biology, while scrap stays nonliving |
 | Retired plot | Active story/overview/UI briefs | No tree quest, magical seed ending or radiation origin remains outside explicit historical explanation |
+| Biological continuity | World/science notes | Protected orbital cores and physical contamination transport are clear; no claim of an atmosphere spreading through vacuum |
+| Narrative theme | [Theme and slogans](../01-story/narrative-theme.md) | Neglect has consequences; organisms do not judge humanity; recovery demonstrates sustained responsibility |
 | Colony purpose | World/story | Humans inhabit reused stations; player stays in the ship; repairs and salvage support survival |
 | Source campaign | World/gameplay | Source stop, remaining-hostile resolution, no-loot kill and local recovery consequence agree |
 | Trailer grammar | [Storyboard](../01-story/story-context.md) | Text then moving footage; intro 40 seconds, ending 24, trailer 90; no timing gaps |
@@ -31,6 +33,7 @@
 
 ## 3. Economy review
 
+- [ ] Biological remains do not create a new currency, pickup or corpse-harvesting requirement.
 - [ ] Six proposed material families map to recognizable sources; Mixed Salvage is a display label, not a seventh resource.
 - [ ] Material families introduce no exchange multiplier, random reroll, crafting prerequisite or second wallet.
 - [ ] Enemy trade ranges and fixed salvage values agree with game-design.md.
