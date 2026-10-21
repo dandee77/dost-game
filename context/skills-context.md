@@ -1,5 +1,13 @@
 # Skills & Upgrades Context
 
+## 21 October owner follow-up — automatic roster and purchase review
+
+[Automatic skills and rarities](../todo/07-upgrade-proposals/automatic-skills-and-rarities.md) lists all 19 target combat abilities and proposed grades. The owner confirms automatic combat and **Legendary reactive Blink**, with Return Home as the only manually activated utility skill. Proposed Blink has a 30-second base cooldown, rank reduction/floor, legal visible-screen rescue and fixed protected window; exact numbers are pending review in game-design.md. Current prototype commands/behavior below remain historical implementation evidence.
+
+[Weapon tree](../todo/07-upgrade-proposals/weapon-tree.md) adds mothership-only cannon tiers and one branch/run. [Attributes and Luck](../todo/07-upgrade-proposals/attributes-and-luck.md) replaces full-rank numeric-augment shop grants with confirmed quarter-strength purchases while retaining full field cards and Deflector cards. Discrete projectile/direction cards stay field-only in the draft. Luck is proposed workshop-only, not a 33rd combat entry. Other owned combat skills retain whole-rank offers except Deflector's capacity-only shop route and Blink's separate draft premium price.
+
+These details supersede older contradictory shop/activation targets; no code, catalog implementation or debug command changes are made here. Other rarity assignments, persistence changes and card weights require owner review.
+
 ## 20 October target changes (not implemented)
 
 [todo/02-gameplay/gameplay.md](../todo/02-gameplay/gameplay.md) retains the existing skill identities and repeat-pick system while specifying the remaining automatic/persistent conversion, persistent Deflector, radius magnet and Nano Repair -> Shield Detonation replacement. Target combat catalog: 13 augments + 19 abilities = 32. Return Home is a separate baseline manual utility, not another card or combat-catalog entry.

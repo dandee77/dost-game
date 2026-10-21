@@ -1,5 +1,13 @@
 # UI Rules
 
+## 21 October upgrade review UI — proposed, not implemented
+
+The [upgrade review](../todo/07-upgrade-proposals/README.md) adds a mothership weapon tree and quarter-strength numeric attributes. Show current parent/branch/tier, exact next effect/price, remaining wallet and the run-long branch lock before purchase. Five tiers refer to equipment progression, not the rarity color of a skill card. Disable sibling branches with a readable reason; do not advertise an unavailable weapon profile as finished.
+
+Attribute previews show full-card versus purchased gain and preserve fractional capacity/+percentage-point meaning. Deflector remains a field card; shop capacity does not display a full ability-rank gain. Discrete shot/direction/piercing cards do not offer fractional purchases. Luck is proposed visible in workshop details, absent from the permanent combat HUD; describe trade quality within existing ranges, not a new item-drop table.
+
+Blink's card is Legendary and automatic. Its status shows readiness/cooldown and a separate short protected window; no manual Blink button. Failure to find a safe destination cannot display a successful rescue. Other rarity assignments and weights remain review proposals. Reuse established UI/theme ownership; no new asset, color constant or rendered interface is created by this context update.
+
 ## 21 October narrative and material presentation
 
 Use **H.O.P.E. Colony** on arrival/story cards and **HOPE** where space is limited. Full expansion: **Habitat for Orbital Preservation and Endurance**. The player stays in the ship; show reused inhabited station modules, safe service approaches and Earth beyond. No special-tree/seed quest art or radiation-origin imagery is required. Source shutdown and survey/containment craft replace the old ending motif. The latest creature origin is biological: an altered waste-eater moves inside a shell formed by binding indiscriminately collected fragments around its body. Retain the accepted canister/appliance/metal-cluster silhouettes; the bulk of each visible enemy can be nonliving external armor concealing the organism. A later story close-up can show fibrous joins and gathering behavior without requiring a sprite redesign or new armor mechanic. Future narrative shots establish benign organisms before exposure, then altered movement and protected orbital cores. Preserve accepted enemy/debris art in this context-only session; organic seams or core reveals are later art-direction proposals, not replacement assets required now. Detailed motion beats and playback rules: [story context](../todo/01-story/story-context.md).

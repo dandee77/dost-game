@@ -4,6 +4,14 @@ Design handoff updated **20 October 2026**. This replaces the former pause/scrap
 
 No feature below is implemented merely because it is described here. Read [progress-tracker.md](../../context/progress-tracker.md) for implementation status. This session changes documentation only, under `context/` and the owner-requested top-level `todo/`.
 
+## 21 October weapon/attribute/rarity follow-up
+
+Read the [upgrade proposal folder](../07-upgrade-proposals/README.md) before the older shop/skill contracts below. Confirmed: mothership cannon tiers, one branch per run, numeric purchases at 25% of field-card gains, shield cards retained, automatic combat abilities and Legendary reactive Blink. All detailed new family stats/prices/rarities and exact Blink/Luck rules are review proposals, not implemented or silently approved. The [game-design review ledger](../../context/game-design.md) is the numeric authority.
+
+Proposed five-tier path count is 1/3/6/6/6. Weapon Tree, Attributes, Owned Skills and Special Offers become the shop's sections. Numeric-augment full-rank purchases are superseded; Deflector gets a capacity-only purchase node, while ordinary eligible combat skills retain whole-rank upgrades. New primary family choices never appear in field cards. The retained field attack-attribute effects versus hub-only cannon evolution is an explicit interpretation awaiting owner review.
+
+The owner deferred bosses, mode schedules, final names, hub/arena layouts and broad economy review. Their existing proposals remain references but are not decisions to obtain during this session. No further questions are to be sent during preparation; collect remaining choices in the upgrade review checklist.
+
 ## 21 October narrative and material addendum
 
 This handoff now lives in a topic folder. [World and campaign](../01-story/world-and-campaign.md) defines **H.O.P.E. Colony — Habitat for Orbital Preservation and Endurance**, the cadet pilot, failed atmospheric remediation, reused orbital refuges and source-containment campaign. [Science notes](../01-story/science-notes.md) separates primary-source environmental facts from the fictional mutation of engineered waste-eating organisms after atmospheric-treatment exposure. The old special-tree restoration plot and autonomous-machine origin are retired. Hostile creatures are living waste-eaters inside scrap shells; concentrated sources are infested nests and treatment-residue sites. The [narrative theme](../01-story/narrative-theme.md) connects neglect to consequences and recovery to responsibility. These are context changes, not new biological simulation mechanics.
@@ -278,7 +286,7 @@ Selected initial enemy rewards (uniform inclusive integer currency ranges; all T
 | Standard boss | 120-180 | 150 | 100 |
 | Final campaign boss | 200-300 | 250 | 200 |
 
-One currency roll per enemy, not one roll per projectile, particle, damage tick or pickup. Assign and store the reward at spawn with a seeded loot RNG isolated from encounter/card/shop/cosmetic RNG; death materializes it only if reward-eligible, collection credits it. Suspended encounters retain the assigned result. Restart/menu visits cannot reroll the same surviving enemy.
+One base currency roll per enemy, not one per projectile, particle, damage tick or pickup. The new pending-review Luck node may add one separate spawn-time comparison for eligible tiers; it never rerolls existing rewards or changes salvage. Assign and store the reward at spawn with a seeded loot RNG isolated from encounter/card/shop/cosmetic RNG; death materializes it only if reward-eligible, collection credits it. Suspended encounters retain the assigned result. Restart/menu visits cannot reroll the same surviving enemy.
 
 Use integer uniform sampling, not modulo-biased random arithmetic. Identical seed and spawn order reproduce loot. Difficulty/player level do not multiply rewards. The elite row is a future reward classification, not permission to add an elite enemy. Boss identity/attacks remain owner content; these explicit rewards are the delegated economy defaults.
 
@@ -377,7 +385,7 @@ There must be one authoritative normal-play Deflector state: rank, max points, c
 
 Equipment prototype shields currently have separate behavior. Keep their debug compatibility as needed, but do not let them become a second hidden shield bar or alternative Return Home gate. Final consolidation belongs to the implementation checkpoint.
 
-**Proposed starter grant:** Deflector rank 1, full 20 points, before first launch. The original ship/weapon appearance remains the baseline apart from the intentional shield presentation. Its first field/shop card is therefore an upgrade, not a duplicate acquisition.
+**Proposed starter grant:** Deflector rank 1, full 20 points, before first launch. The original ship/weapon appearance remains the baseline apart from the intentional shield presentation. Its first field card is therefore a full-rank upgrade, not a duplicate acquisition. The proposed shop capacity node grants only +1.25 maximum per purchase and does not grant a full Deflector rank.
 
 ### 8.2 Retained shield target
 
@@ -416,8 +424,8 @@ Do not rebuild existing skill effects. Retain all compatible damage, count, area
 | Nuclear Missile, Space Collapse, Singularity, Armageddon | Automatic bounded dense-group target selection; deterministic ties |
 | Chain Lightning | Automatic valid nearby enemy then existing chain logic |
 | Plasma Beam, Realm Breaker | Automatic aim toward a valid enemy, not a manual cast slot |
-| Blink Drive | Automatic escape from nearby danger; choose a legal destination without bypassing barricade collision rules |
-| Hologram Clone, Combat Drone | Automatic existing decoy/companion behavior during combat |
+| Blink Drive | Legendary incoming-direct-hit interception; cancel triggering damage only if a legal safer visible-screen destination exists. See the new review contract for cooldown/protection proposals |
+| Hologram Clone, Combat Drone | Automatic decoy/companion behavior; new persistent-until-destroyed drone proposal awaits review, clone remains temporary |
 | Corrosive Trail | Automatic trail window while combat movement can place useful pools |
 
 Proposed default: when no valid target/trigger exists, remain ready instead of wasting an activation. Use stable IDs for targeting ties, bounded spatial queries and tuning entries for danger/range decisions. Final targeting numbers require playtest; do not use an O(n²) density calculation every frame.
@@ -430,23 +438,23 @@ All abilities owned in the run can coexist under the current prototype ownership
 
 **Field cards:** frequent free random decisions as player level rises. The player stays in the encounter and chooses one of up to three distinct options.
 
-**Hub shop, delegated design:** spend wallet for a deliberate build choice: buy a specific owned skill's next rank, or acquire a rare offered skill. Returning creates access to targeted purchases; it is never required for normal progression. Paid repair/recharge services share this currency at the neighboring berth.
+**Hub shop, revised review direction:** spend wallet for cannon branch/tier, a quarter-strength numeric attribute, an eligible whole combat-skill rank or an eligible special acquisition. Returning creates access to targeted purchases; it is never required for normal progression. Paid repair/recharge services share this currency at the neighboring berth.
 
-The two systems can upgrade the same skill because their costs and selection methods differ. Both call the same skill/augment acquisition function. A shop must not maintain parallel damage bonuses, separate ranks or its own effect implementation.
+The two systems can upgrade the same skill because their costs and selection methods differ. Both feed the same authoritative effect/stat calculation using explicit acquisition source. Paid numeric counts are separate source records, not fake full ranks or an independent duplicate damage system. A whole combat-skill rank still uses its shared rank function.
 
 ### 9.2 Initial shop specification
 
-Two tabs or clearly separated sections:
+Revised proposed sections: Weapon Tree and Attributes from the new brief, plus these two retained skill sections:
 
-1. **Upgrade Owned:** list owned eligible skills/augments, current rank, exact next-rank effect and price. Selecting a row opens a purchase preview. Capped augments are labeled Max and disabled.
-2. **Rare Offers:** three distinct offers from the four eligible unowned rare abilities below. If fewer than three remain, show fewer. If none remain, say “All rare skills owned.”
+1. **Owned Skills:** list eligible owned combat abilities and their whole next rank. Deflector is excluded in favor of its capacity-only attribute node. Numeric augments use quarter-strength purchases, discrete pattern augments stay field-only. Owned Blink uses its separate proposed Legendary price.
+2. **Special Offers:** three distinct offers from the four eligible unowned special abilities below. If fewer than three remain, show fewer. If none remain, say “All special offers owned.”
 
-Selected rare pool: **Singularity, Space Collapse, Nuclear Missile, Armageddon**. These are existing abilities, not four new classes. They retain the same effects and rank growth when acquired in the field. All other existing augments/abilities are standard for pricing. Owned entries from either category appear in Upgrade Owned.
+Selected special-offer pool: **Singularity, Space Collapse, Nuclear Missile, Armageddon**. These are existing abilities, not four new classes. They retain the same effects and rank growth when acquired in the field. These four retain their prior premium pricing group even though their new proposed field grades differ. Other ordinary combat abilities retain standard rank prices; numeric augment/Deflector/Blink exceptions are in the new ledger. Eligible owned entries appear in Owned Skills.
 
-- Rare skills remain obtainable through field cards at lower weight. Do not make free progression unable to complete a build.
+- These four remain obtainable through field cards at their proposed Epic/Legendary weights. Do not make free progression unable to complete a build.
 - Stock is generated at expedition start from its own RNG, retained through every dock/panel visit, and not rerolled by leaving/reentering.
 - Buying an offer marks that slot sold. It becomes an owned skill available for future targeted upgrades.
-- If a field card teaches a skill occupying an unbought rare slot, mark that slot Owned and disable its acquisition; do not replace/reroll it. Its next rank remains purchasable through Upgrade Owned.
+- If a field card teaches a skill occupying an unbought rare slot, mark that slot Owned and disable its acquisition; do not replace/reroll it. Its next rank remains purchasable through Owned Skills.
 - Proposed initial version has **no stock refresh, paid reroll, refunds, selling, consumables, discounts or permanent unlocks**. Later stock expansion can follow playtests.
 - Shop access requires docking at the station and opening its panel, not merely having enough currency in combat.
 - Return Home itself and the starting shield grant are never rare purchases.
@@ -457,20 +465,20 @@ See game-design.md for the canonical starting prices:
 
 | Shop item | Price in trade scrap | What the purchase grants |
 |---|---:|---|
-| Any owned standard augment/ability next rank | `100 + 50*r` | One rank; r is current rank; rank 1 -> 2 costs 150 |
-| Any owned rare ability next rank | `200 + 75*r` | One rank; rank 1 -> 2 costs 275 |
+| Eligible owned ordinary combat ability next rank, excluding Deflector/Blink | `100 + 50*r` | One rank; r is current rank; rank 1 -> 2 costs 150 |
+| Owned ability from the four existing premium special entries, next rank | `200 + 75*r` | One rank; rank 1 -> 2 costs 275 |
 | Singularity, unowned rare offer | 240 | Acquire rank 1; crowd control and ordinary rewards |
 | Space Collapse, unowned rare offer | 280 | Acquire rank 1; explicitly warns that erased enemies yield neither currency nor progress |
 | Nuclear Missile, unowned rare offer | 320 | Acquire rank 1; existing burst effect |
 | Armageddon, unowned rare offer | 400 | Acquire rank 1; existing sustained barrage |
 
-No standard skill acquisition is sold: obtain it from field cards, then target its ranks at the shop. Deflector, Scrap Magnet, Combat Drone and every other owned standard ability use the same standard price formula. Capped augments stay capped. Prices are identical across modes/difficulties; no price RNG or price reroll.
+Ordinary first skill acquisitions still come from field cards. Scrap Magnet/Combat Drone and eligible ordinary combat abilities retain standard rank pricing. Deflector uses capacity-only purchases; Blink is field-only for first acquisition and has a proposed premium owned-rank price. Numeric augment purchases follow the quarter-strength ledger; existing card caps remain. Prices are identical across modes/difficulties; no price RNG or price reroll.
 
 The owner delegated inventory/pricing, so these are the selected handoff values rather than unanswered questions. They are not playtest-certified. At the nominal 500 salvage threshold, 250 basic kills produce expected trade income 500, range 250-750, before level-driven increases; this usually funds repair and a meaningful purchase. Actual first return occurs later when leveling raises its requirement. Keep healing inexpensive compared with elective skill upgrades.
 
 Purchase transaction: revalidate run state, item, current rank, eligibility, price and wallet; apply the rank/acquisition exactly once and debit exactly once. Reject stale or repeated click events without charging. If application fails, no currency is lost.
 
-After purchase: wallet falls; totalCollected, player level, level progress and return charge are unchanged. Effects follow normal rank snapshot/cooldown rules. Opening the shop cannot refill drones, revive shields or reset attack cooldowns. To preserve paid hull repair, a **paid Reinforced Hull rank increases maximum HP only**, retaining absolute current HP. Its free field card retains the documented +maximum/+current HP exception. Both use the same rank API with an explicit acquisition-source parameter; the shared card/price preview must explain this intentional difference. Paid shield ranks similarly add capacity without refill.
+After purchase: wallet falls; totalCollected, player level, level progress and return charge are unchanged. Effects follow normal rank snapshot/cooldown rules. Opening the shop cannot refill drones, revive shields or reset attack cooldowns. To preserve paid hull repair, a **paid Reinforced Hull increment adds +5 maximum HP only**, retaining absolute current HP. Its free field card retains the documented +maximum/+current HP exception. Both use the authoritative stat derivation with explicit source records; the shop increment does not advance a full field rank, and the shared preview shows its smaller grant. Paid shield capacity increments likewise do not refill points or grant full-rank regeneration/reboot improvements.
 
 ### 9.4 Shared card and shop descriptions
 

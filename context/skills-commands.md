@@ -4,6 +4,8 @@
 
 Implemented on `dev` for the 17 October request, extended with repeat-pick upgrades on 18 October. Source brief: [skills-context.md](skills-context.md). There are 14 augments and 18 abilities, using existing textures and simple Raylib shapes. The existing timed picker now offers both types. No generated assets, new dependencies, ability drops, inventory, or shop connections.
 
+**21 October review notice:** the [new upgrade/automatic-skill proposal](../todo/07-upgrade-proposals/README.md) records later target changes, including Legendary reactive Blink. The prototype commands and values below are not modified by this context session and must not be mistaken for the proposed future behavior.
+
 ## Terminal
 
 From the repository, compile and launch with commands:

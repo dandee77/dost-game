@@ -1,5 +1,13 @@
 # Architecture
 
+## 21 October upgrade integration proposal — not implemented
+
+See [upgrade review](../todo/07-upgrade-proposals/README.md). Keep one authoritative derived-stat path using source records for field card ranks and paid numeric counts. A quarter-strength purchase cannot invoke a full-rank grant and retain its side effects. Cannon branch/tier is run-local equipment state; upgrades are atomic hub transactions and live attacks retain their launch snapshots. Deflector has one live shield state: paid capacity changes its maximum without full-rank/reboot/heal effects. Do not add a second shield manager.
+
+Legendary Blink belongs in the existing damage/skill ownership flow. Intercept a validated direct hit once before shield/hull damage, query bounded legal on-screen destinations, and commit teleport/protection/cooldown together only if safe. Its protected window and cooldown cannot refresh through upgrades, hub entry or repeat collision callbacks. New position is the start of subsequent movement; no sweep/pickup credit along the teleport path.
+
+The proposed Luck source snapshots reward quality at enemy spawn using a separate Luck RNG alongside the existing base loot stream; final values survive suspension and cannot reroll on death/collection. Skill rarity uses the independent card stream and is unaffected by Luck. Owner choices, not proposed tables, determine eventual adopted scope; no new class/singleton or save system is mandated by this context update.
+
 ## 21 October preparation alignment
 
 The foldered handoff starts at [todo/README.md](../todo/README.md). Story/source contracts are in [world and campaign](../todo/01-story/world-and-campaign.md); material labels are in [scrap types](../todo/03-economy/scrap-types.md). These are future integration requirements, not new classes implemented in this session.

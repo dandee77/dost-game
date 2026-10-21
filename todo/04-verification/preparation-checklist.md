@@ -44,6 +44,16 @@
 - [ ] Source shutdown never requires a random boss drop or purification item.
 - [ ] Spending trade currency never subtracts salvage level progress or Return Home charge.
 
+## Upgrade proposal checks before adoption
+
+- [ ] Five-tier weapon graph is 1/3/6/6/6 nodes; only legal descendants can be bought. Full T3-T5 profiles follow family approval.
+- [ ] Quarter-strength numeric grants do not buy full field ranks, heal, reset cooldowns or produce fractional bullets.
+- [ ] Deflector stays in field cards; paid capacity preserves current shield and broken/reboot state.
+- [ ] Legendary Blink intercepts a validated incoming direct hit once; legal on-screen rescue/cooldown/protection commit together.
+- [ ] Blink no-safe-spot behavior, protection duration and cooldown floor are reviewed before code.
+- [ ] All 19 abilities and 13 augments have unique proposed grades; Luck stays a separate proposed support node.
+- [ ] Legendary gating is not promoted by ordinary-pool exhaustion; Luck does not change card rarity or reroll existing rewards.
+- [ ] Boss/schedule/name/layout/general-economy deferrals remain open, without repeated questions now.
 ## 4. Handoff completeness gates
 
 Review [decisions and gaps](../00-planning/decisions-and-gaps.md) before each affected checkpoint. An unresolved item is visible work; do not silently fill it with an unrelated feature.

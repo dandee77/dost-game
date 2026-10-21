@@ -2,6 +2,8 @@
 
 Start here for unfinished game work. This folder sits beside `assets/`, `build/`, `context/` and `src/`.
 
+The maintained [task list and idea register](06-task-list/README.md) is the working entry point for outstanding tasks, new issues, ideas and completion history. Update it whenever work is completed, requirements change or new attention items are discovered; follow its maintenance rules each session.
+
 The owner requested this top-level handoff on **20 October 2026**. These files describe work to implement later; moving or publishing them does not complete their features. This change is documentation only.
 
 ## Foldered preparation — 21 October revision
@@ -25,6 +27,18 @@ todo/
     scrap-types.md
   04-verification/
     preparation-checklist.md
+  05-suggested-names/
+    README.md
+  06-task-list/
+    README.md
+    tasks.md
+    ideas.md
+    completed.md
+  07-upgrade-proposals/
+    README.md
+    weapon-tree.md
+    attributes-and-luck.md
+    automatic-skills-and-rarities.md
 ```
 
 Read the required context references first, then the planning register, world/science/story, gameplay, scrap taxonomy and preparation checklist. Numbers remain authoritative in context/game-design.md; this folder supplies detailed briefs, not competing tuning sources. Confirmed choices, delegated selections, proposed defaults and content still needed are labeled separately.
@@ -33,6 +47,11 @@ Read the required context references first, then the planning register, world/sc
 
 | File | What remains to be done |
 |---|---|
+| [Weapon/attribute/rarity review](07-upgrade-proposals/README.md) | Five-tier weapon proposal, 25% shop attributes, Luck, complete automatic roster and Legendary Blink; details awaiting confirmation |
+| [Maintained task list](06-task-list/tasks.md) | Prioritized open work, decisions and verified preparation checkboxes; update when work changes |
+| [Ideas and attention](06-task-list/ideas.md) | Suggestions and alternatives with explicit review status; not automatically active scope |
+| [Completion history](06-task-list/completed.md) | Dated results and evidence, with clear separation from pending implementation |
+| [Suggested game names](05-suggested-names/README.md) | Title options, meanings and recommended tagline pairing; final title undecided |
 | [Decisions and gaps](00-planning/decisions-and-gaps.md) | Confirmed/proposed choices, missing non-art systems, priorities, boss/schedule templates and tutorial/result proposals |
 | [World and campaign](01-story/world-and-campaign.md) | HOPE acronym, 2718-2733 timeline, biological waste-eater origin, colony functions and source-boss campaign |
 | [Science notes](01-story/science-notes.md) | Primary-source environmental framing, fictional boundaries and explanation of retired narrative terms |
@@ -56,7 +75,7 @@ All remain pending. Completed P6 pause/timing work and existing skills/equipment
 - [ ] **T05:** Start -> difficulty -> safe colony hub, service stations and portal previews.
 - [ ] **T06:** Real Swarm, Survival, Boss, Chaos and Campaign objectives; owner-supplied boss content.
 - [ ] **T07:** Shield-gated Return Home, encounter suspension/resume and paid hull/shield service.
-- [ ] **T08:** Targeted skill-rank shop and priced rare offers; atomic spending and persistent stock.
+- [ ] **T08:** Mothership weapon tree, quarter-strength attributes and eligible skill/special offers after proposal approval; atomic spending and persistent stock.
 - [ ] **T09:** HUD, pause/settings, input capture and tutorial integration.
 - [ ] **T10:** End-to-end gameplay, reset, balance/performance and documentation verification.
 
@@ -84,6 +103,10 @@ This is a consolidated view of unfinished numbered work from [progress-tracker.m
 | **A1–A9** | Remaining style, ship/enemy/boss/dock/background/UI/cutscene/audio deliverables and provenance; completed sub-deliveries remain accepted |
 
 Item **04** and completed P1–P5/P5.1/P6-checkpoint-1 work are intentionally not listed as new work. Their implementation evidence and any partial-item caveats remain in the tracker.
+
+## Current review scope
+
+The owner is currently reviewing weapons, attributes, Luck and automatic-skill rarities through the new proposal folder. Boss designs, mode schedules, final names, hub/arena layouts and broad economy review are deferred for now. Keep those tasks open; do not ask for those decisions during this preparation.
 
 ## Decisions and content still needed
 

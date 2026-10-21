@@ -2,6 +2,8 @@
 
 **21 October 2026. Proposed material taxonomy; documentation only.** The owner requested scrap types without specifying categories. This brief chooses six families and defines their first-version purpose. Existing random trade rewards, fixed salvage progress, paid repairs and skill prices remain authoritative in [game design](../../context/game-design.md) and [gameplay](../02-gameplay/gameplay.md).
 
+**Upgrade-review note:** [Luck and attributes](../07-upgrade-proposals/attributes-and-luck.md) propose a spawn-time trade-quality comparison without changing material families or inclusive reward bounds. Uniform amounts below remain base rolls; salvage/no-drop exclusions remain. New cannon/attribute purchases use the review contracts. Broad material/economy review is owner-deferred.
+
 ## 1. One economy, recognizable materials
 
 A pickup has a **material family**, a **trade value**, and a **salvage value**. The family describes what was recovered. Trade value enters the shared wallet used by repairs and the shop. Salvage value independently advances field leveling and Return Home.

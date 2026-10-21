@@ -2,6 +2,16 @@
 
 Read this file first in every session. It defines what the game is, why it exists, how it plays, which screens exist, and what is in and out of scope for the submission. For technical questions, `architecture.md` wins. For numbers, `game-design.md` wins.
 
+The owner requires the [task-list folder](../todo/06-task-list/README.md) to be maintained every session: read its open tasks before work, add newly discovered attention items/ideas, and update checkboxes plus completion evidence whenever something is verified complete. This supplements the main tracker and does not change the current context-only authorization.
+
+## 21 October weapon and upgrade follow-up — context proposal
+
+Confirmed owner direction: simple-cannon start, cannon tiers bought only at the mothership, one weapon branch per run, and purchased numeric attributes at **25% of the matching card gain**. Shield remains in field cards and can also receive paid capacity increments. All combat abilities are automatic; Return Home remains the manually activated utility. Blink is Legendary and reacts to an impending direct hit by preventing its damage and relocating the ship to a safer visible-screen position.
+
+The [upgrade proposal folder](../todo/07-upgrade-proposals/README.md) presents a five-tier tree, six weapon specializations, attribute/skill purchase separation, Luck recommendation and full automatic roster/rarity tables for later confirmation. Exact family placement, new prices/stat profiles, rarity weights and Blink cooldown/protection details are drafts; older full-rank numeric-augment/no-weapon-shop descriptions are superseded. The 25% rule concerns numeric attributes, not fractional skill acquisitions. Field attack-stat cards remain under the explicitly labeled interpretation awaiting review; they do not grant cannon tiers.
+
+Boss designs, mode schedules, final names, hub/arena layouts and general economy review are deferred by the owner. Keep their tasks open and marked deferred. No new mode/boss/layout decisions or source changes are authorized by this follow-up.
+
 ## 20-21 October product revision: design only
 
 The owner's current design handoff is [todo/02-gameplay/gameplay.md](../todo/02-gameplay/gameplay.md). No code was changed for this revision; the tracker distinguishes implemented behavior from targets. This revision and the current story/screen sections below supersede the original cargo/deposit/two-mode/tree design.

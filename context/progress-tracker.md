@@ -6,6 +6,15 @@ Update this file after every completed build-plan item. Anyone reading it (teamm
 
 ## Current Status
 
+**21 October upgrade/automatic-skill review (documentation only):** Prepared [todo/07-upgrade-proposals/](../todo/07-upgrade-proposals/README.md) with five-tier weapon graph, six candidate families, quarter-strength numeric purchases, shield capacity, Luck, all 19 combat abilities/13 augments with proposed grades, and Legendary reactive Blink. Owner confirmed one branch/run, 25% shop gains, retained shield cards, automatic combat and incoming-hit Blink. Owner deferred bosses, schedules, final names, layouts and broad economy review, then requested no further questions during preparation. Exact new family/profile/price/rarity/Luck/Blink details remain review proposals; existing source and runtime commands are unchanged. The required task list records six new open review/data tasks and DOC-06's draft delivery separately.
+
+
+**Upgrade-proposal documentation verification:** All 221 local links resolve across 32 context/TODO documents; 22 changed/new paths are Markdown only, including previously prepared name/task folders. Weapon graph counts are 1/3/6/6/6; roster has 19 unique abilities plus 13 augments. Attribute/Luck price sums, quarter-strength mirror values, distance/shield examples, Blink cooldowns, rarity probability and Luck expectation agree. All 55 open tasks and six documentation completions reconcile with history; owner deferrals and eight pending review choices remain open. Tables/whitespace pass; source/assets/tests/build files are unchanged. This verifies document consistency, not gameplay balance or runtime behavior.
+
+**21 October maintained task-list folder (documentation only):** Created [todo/06-task-list/](../todo/06-task-list/README.md) with open tasks, idea review states and dated completion evidence. Consolidated existing preparation gaps, T01-T10, remaining project/release work and verification attention. Required session context now instructs future workers to read/update the folder whenever work changes or is completed. Documentation deliveries are checked separately from pending gameplay; no code or assets were changed.
+
+**21 October suggested-names folder (documentation only):** Added [todo/05-suggested-names/README.md](../todo/05-suggested-names/README.md) with the suggested titles, their meanings and the recommended SCRAPBOUND/tagline pairing. Linked it from the preparation index. The team has not selected a final game title; existing project, colony and runtime names remain unchanged.
+
 **21 October text-only trailer publication (documentation only):** Saved the complete storytelling trailer supplied in chat as [story-trailer-text.md](../todo/01-story/story-trailer-text.md), linked it from the story brief and TODO index, and prepared it for the owner-requested GitHub push. This untimed text draft does not replace the timed production outline or create media. No source, assets, tests, gameplay numbers or build files changed.
 
 **21 October scrap-armor follow-up (documentation only):** Owner requested a stronger biological explanation for existing scrap-monster designs. Added uncontrolled intake, limited digestion and retained fragments bound into external armor; distinguished initial chemical-induced mutation from inherited adaptation across subsequent generations. World section 4.1 specifies the chain, bodily/resource limits, protected orbital core and lore wording. Overview, science references, storyboard, UI, scrap flavor and decision/review registers agree. Existing silhouettes, assets, gameplay values and combat behavior are unchanged.
@@ -118,6 +127,7 @@ After finishing an item:
 4. Add a row to the **AI Usage Log** for any AI tool used in the item.
 5. Add surprises, workarounds and playtest results to **Notes** or **Playtest Log**.
 6. If the item changed a class, confirm `class-registry.md` matches the headers.
+7. Update [task checkboxes](../todo/06-task-list/tasks.md), append dated evidence to [completed.md](../todo/06-task-list/completed.md), and add newly discovered work or [ideas](../todo/06-task-list/ideas.md). Keep partial work open and synchronize the root TODO checkpoints. Follow the [maintenance rules](../todo/06-task-list/README.md) every session.
 
 ---
 
@@ -230,6 +240,7 @@ P5 (17 October): user explicitly requested all 32 skill features ahead of acquis
 
 | Date | # | Decision | Reason | Files changed |
 |---|---|---|---|---|
+| 2026-10-21 | PREP-04 | Mothership-only branch-locked cannon progression; quarter-strength paid numeric attributes; shield cards retained; automatic combat and Legendary incoming-hit Blink | Owner confirmed these directions and requested remaining detail/rarity proposals for later review; bosses/schedules/names/layout/general economy deferred | context/ and todo/ Markdown only |
 | 2026-10-21 | PREP-03 | Existing scrap monsters are living waste-eaters with retained debris bound into external armor; mutation precedes adaptation across generations | Owner requested indiscriminate absorption and a more scientifically coherent explanation of existing designs | context/ and todo/ Markdown only |
 | 2026-10-21 | PREP-02 | Biological waste-eaters precede the separate climate treatment; mutation creates hostile organisms inside scrap shells; neglect becomes the central theme | Owner revised the enemy origin and requested consequence-focused slogans while preserving context-only scope | context/ and todo/ Markdown only |
 | 2026-10-21 | PREP-01 | Folder pending briefs; adopt HOPE name and source-containment story; propose chronology, material taxonomy and explicit gap register | Owner requests context-only preparation, scientific-fiction revision and a detailed handoff before teammate implementation | context/*.md and todo/**/*.md only |
@@ -246,6 +257,8 @@ P5 (17 October): user explicitly requested all 32 skill features ahead of acquis
 ---
 
 ## Open Questions
+
+21 October upgrade reconciliation: the older full-rank numeric-augment shop and no-weapon-shop target conflict with the owner's new mothership cannon tree and 25% paid attribute direction. The new review ledger/briefs supersede those targets while preserving the prototype history. Shield stays in field cards. The four existing special-acquisition prices remain; new field grades are not price multipliers. Blink's Legendary reactive intent is confirmed; exact cooldown/safety values and other grades remain draft. Boss/schedule/name/layout/general-economy questions are owner-deferred, with no further questions to be sent during preparation.
 
 21 October reconciliation: the source-containment story supersedes the old tree/radiation premise; HOPE replaces the former dock name. Narrative dates, protected orbital physiology, final creature design and six material families remain proposed. The biological origin and neglect theme are owner-selected; the autonomous-recycler origin is retired. The complete non-art specification register is [decisions and gaps](../todo/00-planning/decisions-and-gaps.md); no unimplemented feature is marked complete by this revision.
 
@@ -308,6 +321,9 @@ Required for Form 03 (Asset and AI Usage Disclosure). Organizers may request pro
 
 | Date | Item | Tool and model | Used for | Extent (Minimal / Moderate / Heavy) | Human review |
 |---|---|---|---|---|---|
+| 2026-10-21 | Weapon/attribute/Luck/automatic-skill proposals | Codex (OpenAI) | Read current equipment and 32-entry skill context; draft five-tier branch graph, quarter-strength grants, Luck, rarity roster/weights and Legendary Blink rescue; align numerical ledger, ownership/UI/gameplay references and maintained tasks. | Heavy | Owner confirmed branch lock, 25% gains and Legendary reactive Blink; other details await later review. No further questions during preparation. Context Markdown only; no code/assets/tests/build changes |
+| 2026-10-21 | Maintained task-list and idea folder | Codex (OpenAI) | Consolidate design gaps, future implementation/project tasks, attention items, optional ideas and verified document history; add recurring maintenance instructions to session context. | Moderate | Owner requested ongoing updates; Markdown maintenance workflow only, no background automation or runtime changes. Links/checklists/scope verified |
+| 2026-10-21 | Suggested game names folder | Codex (OpenAI) | Save brainstorming options and meanings in a dedicated context folder; link the preparation index and record pending title selection. | Minimal | Owner requested folder; title remains undecided and name availability unresearched. Markdown only |
 | 2026-10-21 | Text-only story trailer publication | Codex (OpenAI) | Save the chat trailer script in the story preparation folder, index it, verify documentation scope/links and publish at owner request. | Minimal | Owner requested text-only storytelling and GitHub push; no audio/video/assets/code created |
 | 2026-10-21 | Scrap armor and generational adaptation | Codex (OpenAI) | Clarify indiscriminate intake, limited digestion, biological binding of nonliving armor and mutation versus evolution; consult case-building/evolution references; align narrative, storyboard, UI and resource continuity. | Moderate | Owner selected scrap-armor direction; exact fictional anatomy remains proposed. Documentation-only checks; no code, assets, tuning or build changes |
 | 2026-10-21 | Biological-origin and responsibility-theme follow-up | Codex (OpenAI) | Revise fictional waste-eater origin, chemical-exposure/DNA story, orbital continuity, source nests, intro/trailer/ending, scrap-shell flavor and slogans; check primary biological inspiration and align preparation references. | Moderate | Owner selected biological premise and neglect theme; creature name/physiology and slogan wording drafted for review. Documentation only; no code/assets/tests/build changes |

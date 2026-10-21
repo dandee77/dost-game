@@ -1,5 +1,78 @@
 # Game Design
 
+## 21 October upgrade review ledger — pending owner review, no code changes
+
+Read [upgrade review](../todo/07-upgrade-proposals/README.md). Confirmed: mothership-only cannon tiers, one branch per run, 25% purchased numeric attribute gains, shield cards retained, automatic combat skills, and Legendary incoming-hit Blink. Other values in this section are proposed for later confirmation, not tested balance. This section supersedes older full-rank numeric-augment shop and no-weapon-shop targets where they conflict. Current executable values remain in the prototype sections below.
+
+The owner explicitly deferred boss designs, mode schedules, final names, hub/arena layout and general economy review. Do not reopen them during this proposal. New upgrade costs below are local draft quotes to review later; existing reward ranges, fixed salvage, repair rates and previously selected special-offer costs remain.
+
+### Weapon proposal numbers
+
+| Quantity | Proposed value |
+|---|---|
+| Tier count / nodes T1-T5 | 5 / 1, 3, 6, 6, 6; total 22 nodes |
+| Branch ownership | One path/run; immediate child purchases only; no respec/refund |
+| Tier incremental costs T2/T3/T4/T5 | 150 / 300 / 600 / 1000 Trade Scrap; cumulative 2050 |
+| T1 root | Existing 7-12 damage, 0.5 s cooldown, speed 200; proposed finite range 100 |
+| T2 Machine Gun | 4 damage, 8 shots/s, range 90, speed 240 |
+| T2 Sniper | 24 base damage, 1 shot/s, range 180, speed 480, three total distinct-target hits |
+| T2 Shotgun | Six pellets, 6 damage/pellet, 1 volley/s, range 60, speed 180, 40-degree fan |
+| Sniper/Rail distance multiplier | `1 + 0.75 * clamp((travelDistance - 80) / 80, 0, 1)`; maximum 1.75x |
+| T3-T5 full profiles | Pending family review; do not infer new damage/range/effect values from names |
+
+Distance uses actual projectile travel from spawn to each contact. Guided Missile does not inherit the Sniper/Rail distance/penetration profile. Existing compatible augments still modify attacks; exact family/augment mapping remains a review task. The full tree is in [weapon-tree.md](../todo/07-upgrade-proposals/weapon-tree.md).
+
+### Numeric attribute proposal numbers
+
+| Attribute | Field-card increment | Purchased increment |
+|---|---|---|
+| Weapons Payload | +15 percentage points base-primary damage | +3.75 percentage points |
+| Critical Matrix | +5 percentage points critical chance | +1.25 percentage points, probability capped at 100% |
+| Overclocked Chambers | Cooldown multiplier 0.90 | Cooldown multiplier 0.975 |
+| Reinforced Hull | +20 max/current HP | +5 max HP only, no healing |
+| Thruster Overdrive | Move-speed multiplier 1.10 | Move-speed multiplier 1.025 |
+| Gyro Control | Turn-response multiplier 1.10 | Turn-response multiplier 1.025 |
+| Phase Shift | Ordinary hit-protection multiplier 1.10 | Ordinary hit-protection multiplier 1.025; no Blink extension |
+| Inertia Impact | +50 knockback magnitude | +12.5 knockback magnitude |
+| Shield Capacity | Deflector full rank adds +5 max plus its rank effects | +1.25 max only, no full rank/recharge/reboot benefit |
+
+Each purchase's gain is 25% of the listed card increment; compounded modifiers need not make four purchases exactly equal one card. Keep actual derived previews. Preserve fractional shield values. Capacity formula: `20 + 5*(deflectorCardRank - 1) + 1.25*paidCapacityPurchases`. Current HP/shield and cooldown debt are preserved on paid capacity increases.
+
+Proposed eight paid purchases per numeric attribute per run, price `40 + 20*n` where n is its prior paid count: 40/60/80/100/120/140/160/180, total 880. Persistent augment card ranks retain their existing cap 10; paid counts are independently capped and add their specified benefit. Deflector card rank remains an ability rank. Discrete Rapid Fire/Armor Piercing/Scatter/Broadside/Tail Gunner cards are field-only in the draft; no fractional projectiles or duplicate full-rank shop route.
+
+Owned ordinary combat abilities retain `100 + 50*r`; the existing four special abilities retain `200 + 75*r`; Deflector is excluded from those whole-rank shop rows. Proposed owned Blink next rank costs `600 + 150*r`, first upgrade 750. Acquisition of Blink is field-only. Existing four special acquisitions remain Singularity 240, Space Collapse 280, Nuclear Missile 320 and Armageddon 400; stock remains fixed for the run.
+
+### Luck proposal numbers
+
+| Quantity | Proposed value |
+|---|---|
+| Source | Workshop-only Support node, not a field card in the initial recommendation |
+| Rank | 0-5 |
+| Quality-check chance | `0.10 * rank`, capped at 0.50 |
+| Success | Keep higher of independent base/comparison uniform trade rolls inside the existing tier range |
+| Eligible reward tiers | Low/basic, mid/ranged, high/heavy only; not bosses/debris/excluded causes |
+| Prices | `80 + 40*n`, prior Luck count n; 80/120/160/200/240, total 800 |
+| Basic mean at Luck 0 / 5 | 2 / 20/9, approximately 2.222 at rank 5 |
+
+Assign final reward and Luck snapshot at spawn using isolated base-loot and Luck RNG state. Currency spending, later Luck purchase, kill cause, pickup merging or collection cannot reroll existing assigned values. Salvage, Return Home, score, card rarity and material family are unchanged by Luck. Existing uniform enemy range tables below describe the base roll; Luck intentionally biases the final eligible distribution while preserving the same inclusive bounds.
+
+### Blink and rarity proposal numbers
+
+| Quantity | Proposed value |
+|---|---|
+| Blink grade | Legendary, confirmed |
+| Cooldown at rank r | `max(12, 30 * 0.95^(r-1))` combat seconds; snapshot on successful activation |
+| Blink protected window | 2 seconds, fixed; no Phase Shift multiplication |
+| Travel maximum | Existing 35 at rank 1, +15% base/rank through rank 5, capped 56 |
+| Destination search | At most 24 candidates: eight stable headings at one-third/two-thirds/full travel; legal visible-screen and arena checks |
+| If no safe destination | No teleport/protection/cooldown consumption; resolve ordinary hit |
+| Field rarity nominal weights | Common 45, Uncommon 30, Rare 18, Epic 6.5, Legendary 0.5 percent |
+| Legendary gate | Independent 0.005 per offered slot; no ordinary-tier exhaustion promotion |
+| Three-slot Legendary gate probability | `1 - 0.995^3` = 0.014925125, approximately 1.49% |
+| Proposed drone persistence | Persistent until destroyed; per-missing-slot respawn uses existing 20 combat seconds |
+
+The [skill/rarity roster](../todo/07-upgrade-proposals/automatic-skills-and-rarities.md) assigns all 19 combat abilities and 13 augments. Blink's direct-hit interception precedes shield/hull damage; already-negated hits and non-spatial status ticks do not trigger it. Ordinary card selection renormalizes only the non-Legendary tier weights over eligible entries. Luck does not alter these weights.
+
 ## 21 October material and campaign alignment (proposed; not implemented)
 
 [Scrap types](../todo/03-economy/scrap-types.md) classifies recoveries into **six** families: Recovered Alloys, Electronic Components, Polymer Stock, Power Modules, Structural Composites and Purification Media. A family is fixed by content profile, not a random price multiplier. Existing trade ranges, fixed salvage, debris yields and prices below are unchanged. Single-family merged pickups retain the label; different families display Mixed Salvage with conserved trade/salvage totals. There are no per-family wallets, recipes, conversion rates or statistics in the selected minimum scope.
@@ -55,7 +128,7 @@ Assign once at spawn, store across suspension, materialize only on reward-eligib
 
 Paid hull service clears harmful player statuses only on completion of actual healing; shield-only service does not. Debit and service effects commit atomically after the 3-second duration, never on panel opening. Cancel means no cost and no healing. Pause freezes service. Zero wallet permits launch/resume but no free repair. Example: missing 37 HP costs 8; wallet 3 buys 15 HP for 3. Fractional positive shield deficits round up to at least 1 scrap.
 
-The shop sells all eligible owned standard ranks, owned rare ranks and the four rare acquisitions above. No standard first acquisition, weapon shop, consumable, reroll or permanent unlock is added. Paid Reinforced Hull grants max HP only; the field card retains its max/current-HP increase. Paid shield capacity never refills current points. Pass acquisition source through the same rank API and display the real resulting effect.
+**Older shop target, superseded for numeric augment grants and cannon access by the 21 October upgrade review:** the shop sells all eligible owned standard ranks, owned rare ranks and the four rare acquisitions above. No standard first acquisition, weapon shop, consumable, reroll or permanent unlock is added. Paid Reinforced Hull grants max HP only; the field card retains its max/current-HP increase. Paid shield capacity never refills current points. Pass acquisition source through the same rank API and display the real resulting effect.
 
 ### Level and return examples
 

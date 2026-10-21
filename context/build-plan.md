@@ -2,6 +2,14 @@
 
 The order in which the game is built between **14 October** and the **25 October 2026** submission. Each numbered item is one unit of work: one branch, one pull request, one entry in `progress-tracker.md`. Do not start an item until its dependencies meet the Definition of Done in `code-standards.md`.
 
+## Task-list maintenance for every work item
+
+Read [todo/06-task-list/tasks.md](../todo/06-task-list/tasks.md) before each item. During work, add missing requirements or discovered issues there and optional alternatives to [ideas.md](../todo/06-task-list/ideas.md). After verification, mark the matching task, append dated evidence to [completed.md](../todo/06-task-list/completed.md), and reconcile this plan, the root TODO index and progress tracker in the same change. Follow the [folder maintenance rules](../todo/06-task-list/README.md); partial work stays open. Current authorization remains context-only.
+
+## 21 October weapon/attribute review checkpoint
+
+Prepare and review the [upgrade proposals](../todo/07-upgrade-proposals/README.md) before changing T03/T04/T08. Confirmed direction includes mothership cannon progression, locked run branches, 25% purchased numeric gains, retained shield cards and Legendary reactive Blink. Details remain candidate designs. Bosses, schedules, names, geometry and broad economy review are owner-deferred; keep tasks open and collect upgrade questions for later. Expand T08 to the weapon/attribute sections alongside eligible skill offers; do not implement the obsolete full-rank numeric-augment shop.
+
 ## 21 October context preparation checkpoint
 
 Current work is documentation only. Pending briefs are organized into planning, story, gameplay, economy and verification folders under [todo/](../todo/README.md). Read the [gap register](../todo/00-planning/decisions-and-gaps.md) and [preparation checklist](../todo/04-verification/preparation-checklist.md) before a later implementation instruction. Required shared context files stay here; completed work is not reopened.
