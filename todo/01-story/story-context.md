@@ -2,6 +2,8 @@
 
 **21 October 2026. Preparation only.** Canon: [world and campaign](world-and-campaign.md), governed by [project overview](../../context/project-overview.md). Scientific boundaries: [science notes](science-notes.md). Mechanics: [gameplay](../02-gameplay/gameplay.md). This revision replaces the former seed/tree narrative; it creates no art, audio, video or code.
 
+The owner-requested [text-only story trailer](story-trailer-text.md) preserves the standalone storytelling script. It is an untimed literary draft; the existing 90-second production outline below retains its separate text/footage timing. This publication creates no audio or video.
+
 ## 1. Presentation contract
 
 The owner's confirmed format is **short story text -> animation/gameplay -> next story text -> next moving scene**, with rising trailer pacing. Text introduces an idea; the next shot demonstrates it. Narration is optional. Story cards and meaningful moving action are required.

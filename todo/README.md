@@ -18,6 +18,7 @@ todo/
     science-notes.md
     narrative-theme.md
     story-context.md
+    story-trailer-text.md
   02-gameplay/
     gameplay.md
   03-economy/
@@ -39,6 +40,7 @@ Read the required context references first, then the planning register, world/sc
 | [Scrap types](03-economy/scrap-types.md) | Six proposed material families, existing debris mapping, one-wallet economy and reward conservation |
 | [Preparation checklist](04-verification/preparation-checklist.md) | Documentation review, checkpoint content gates and later runtime acceptance scenarios |
 | [gameplay.md](02-gameplay/gameplay.md) | Full detailed handoff: colony hub, five modes, field progression, random trade scrap, paid repairs, skill shop, shield/Return Home, UI, lifecycle and verification |
+| [Text-only story trailer](01-story/story-trailer-text.md) | Standalone storytelling script from the chat; untimed literary draft for later production |
 | [story-context.md](01-story/story-context.md) | Alternating story text and animated/gameplay footage: 40-second intro, ending and 90-second trailer; final boss content/art/optional voice still pending |
 
 The handoffs now live in topic folders. `gameplay.md` was formerly `context/todo.md`; `story-context.md` was formerly `context/story-context.md`. They have been moved, not copied. The original pause/scrap/difficulty specification is replaced by the gameplay handoff.
