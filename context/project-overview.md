@@ -1,5 +1,7 @@
 # Project Overview
 
+**24 October owner decision:** every new game starts fresh; no permanent gameplay unlocks, banked scrap or stat progression. Settings/history may persist without combat benefits. Same-expedition hub visits preserve the run. Owner delegated [boss concept/attack drafting](../todo/02-gameplay/boss-roster-draft.md) for review; the proposed roster is not yet approved or implemented.
+
 Read this file first in every session. It defines what the game is, why it exists, how it plays, which screens exist, and what is in and out of scope for the submission. For technical questions, `architecture.md` wins. For numbers, `game-design.md` wins.
 
 The owner requires the [task-list folder](../todo/06-task-list/README.md) to be maintained every session: read its open tasks before work, add newly discovered attention items/ideas, and update checkboxes plus completion evidence whenever something is verified complete. This supplements the main tracker and does not change the current context-only authorization.

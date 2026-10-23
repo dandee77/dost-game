@@ -2,6 +2,8 @@
 
 Start here for unfinished game work. This folder sits beside `assets/`, `build/`, `context/` and `src/`.
 
+For the latest owner-requested concepts, see [boss roster and attacks for review](02-gameplay/boss-roster-draft.md). New games always start fresh; no permanent gameplay progression is selected.
+
 Latest: [balance implementation, unfinished context and confirmation list](08-review/balance-and-context-review.md). Owner authorized source changes and delegated routine ambiguity resolution. Earlier context-only statements below are historical.
 
 The maintained [task list and idea register](06-task-list/README.md) is the working entry point for outstanding tasks, new issues, ideas and completion history. Update it whenever work is completed, requirements change or new attention items are discovered; follow its maintenance rules each session.

@@ -82,6 +82,8 @@ The delegated re-entry default above is a future integration contract, not imple
 
 ## Confirmation list for the owner
 
+**24 October answers:** Items 1–2 below are resolved. Every new game resets gameplay; no permanent progression/unlocks. Boss drafting is delegated to us, and the [roster/attacks draft](../02-gameplay/boss-roster-draft.md) is ready for review. Final boss concept approval, optional roster scope and its proposed Boss-mode half-energy start remain open; title/release facts below remain open. Earlier recommendations for permanent cosmetic/content unlocks were not selected.
+
 1. **Between-run grind:** keep every run fresh, or add permanent unlocks? Recommended first version: cosmetic/content unlocks only, avoiding permanent stat advantages that invalidate balance.
 2. **Boss concepts:** will you provide the final boss concepts, or should I draft the roster and attacks for your review? The Chaos reuse/escalation direction is already settled.
 3. **Final game title:** keep the working title for now, or select one from the existing name proposals? This does not block math work.

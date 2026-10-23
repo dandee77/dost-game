@@ -4,6 +4,10 @@
 
 ## Start here
 
+- [x] **DOC-12 — Fresh-run rule and boss proposal delivered.** Owner confirmed always-reset gameplay. Four boss concepts, canonical attack/stat proposals and overlap/fairness rules are documented for review. 283 local links resolve; whitespace and existing build pass. PREP-01/T06 stay open for approval and implementation.
+
+**24 October follow-up:** Between-run progression is settled: always start fresh, no permanent gameplay unlocks/stat bonuses. Boss drafting is delegated to us; PREP-01 now reviews [the concrete roster/attack proposal](../02-gameplay/boss-roster-draft.md) instead of waiting for owner-authored concepts. Review approval and T06 implementation remain open.
+
 **24 October verified subcheckpoint:** Natural spawning/ordinary HP/barricade pacing, paired eligible loot and salvage-driven choices are implemented. Build and three CTests pass; pure math passes ASan/UBSan. BAL-01 remains open for high-rank skills, weapon/shield integration and human pacing trials. T01–T03 remain partial: typed modes/return integration, final pickup budgets and rarity rules are pending.
 
 - [x] **DOC-11 — Balance/context review delivered.** [Report](../08-review/balance-and-context-review.md) separates implemented and pending work, resolves historical authority/input/formula contradictions and lists necessary owner confirmations.

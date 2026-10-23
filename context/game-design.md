@@ -1,5 +1,42 @@
 # Game Design
 
+## 24 October fresh-run rule and boss review draft
+
+**Owner confirmed:** every New Game starts fresh. No retained scrap, XP, levels, weapon tiers, skills, attributes, batteries, permanent stat bonuses or gameplay unlock grind. All enabled modes remain accessible. Settings and historical scores may persist without granting combat advantages. Returning from the hub to the same expedition preserves that expedition; it is not New Game.
+
+**Boss numbers below are proposed for review, not implemented or owner-approved.** See [boss roster and attacks](../todo/02-gameplay/boss-roster-draft.md). Four reusable archetypes: two campaign guardians plus two optional Boss/Chaos encounters. Ship only finished encounters; keep incomplete ones unavailable rather than substituting ordinary enemies.
+
+| Boss | Base HP | Contact damage | Movement speed | Collision radius | Role |
+|---|---:|---:|---:|---:|---|
+| Shellback | 1200 | 12 | 12 | 10 | Campaign wave 5 guardian; space control |
+| Coilmaw | 1600 | 10 | 18 | 8 | Optional Boss/Chaos; aimed ranged pressure |
+| Brood Hauler | 2000 | 10 | 10 | 12 | Optional Boss/Chaos; bounded reinforcements |
+| Nestheart | 2800 | 15 | 8 | 14 | Campaign wave 10 guardian; combined mechanics |
+
+Boss HP snapshot proposal: `roundHalfUp(baseHP * (1 + min(0.5, max(0, combatMinutes-5)*0.02)))`. No player-level/difficulty factor, no regeneration, no stacking encounter factor. HP caps at 1.5x after minute 30. Damage/speed stay fixed. Boss-mode fresh encounters use base HP. Ordinary finite damage applies to bosses; Nuclear Missile/Space Collapse must not erase them instantly. Damage is counted once per hit and actual HP removed excludes overkill.
+
+| Boss attack | Telegraph | Active action | Damage | Recovery | Earliest repeat |
+|---|---:|---|---:|---:|---:|
+| Shellback: Ram | 1.2 s lane, aim locks for final 0.4 s | 0.7 s charge at 65 units/s | 12 contact | 1.5 s | 6 s |
+| Shellback: Scrap Fan | 1.0 s cone | 5 bullets at 70 units/s, angles -40/-20/0/20/40 degrees | 8 each | 1.2 s | 8 s |
+| Coilmaw: Arc Volley | 1.1 s aimed cone | 3 bullets at 90 units/s, angles -18/0/18 degrees | 8 each | 1.0 s | 4 s |
+| Coilmaw: Sweep | 1.5 s line and direction arrow | Beam sweeps 60 degrees over 2 s, range 100, width 4 | 8 per eligible hit; 0.75 s per-target cooldown | 2 s | 10 s |
+| Brood Hauler: Release | 1.5 s visible hatch | 4 basic adds; maximum 12 living owned adds | Ordinary enemy damage | 1.5 s | 10 s |
+| Brood Hauler: Residue Pools | 1.2 s ground circles | 3 pools, radius 8, lifetime 4 s; centers at least 20 units apart | 6 per eligible hit; 1 s per-target cooldown | 1.5 s | 9 s |
+| Nestheart: Split Volley | 1.2 s cone | 7 bullets at 75 units/s, angles -60/-40/-20/0/20/40/60 degrees | 8 each | 1.5 s | 7 s |
+| Nestheart: Source Pulse | 1.8 s annulus with marked opening | Ring expands 15 to 90 radius at 40 units/s; width 4; fixed 80-degree gap | 10 once per pulse per target | 2 s | 12 s |
+| Nestheart: Release | 1.5 s hatch | 3 basic adds; maximum 9 living owned adds | Ordinary enemy damage | 1.5 s | 12 s |
+
+Attack timing proposal: repeat interval runs from attack start; one attack at a time per boss, no attack during recovery. After an interval expires, wait until that boss and the encounter telegraph budget are free; do not bank missed attacks. Every projectile has 180-unit maximum travel, hits the player at most once and then disappears. Pools from one boss share their per-target cooldown; overlap cannot multiply same-frame damage. Existing player damage protection applies to all boss damage as well.
+
+At 50% HP, enter phase two once: Shellback's fan becomes 7 bullets at the same spread endpoints; Coilmaw alternates sweep direction; Hauler release becomes 5 adds with the same 12-alive cap; Nestheart alternates pulse-gap direction between casts. Existing tells never change mid-attack. No phase damage/HP multiplier, instant refill or invulnerable transition.
+
+Proposed arena/fairness defaults: boss placement 100–140 world units from the player, never inside an active portal interaction area; 2 s arrival warning before attacks/contact damage. Hazards may not initially cover the player; an intended dodging route must remain at least 16 units wide. Infinite roaming combat retains a nearby-boss direction marker rather than invisible arena damage. Two bosses may hold major attack reservations at once; Ram/Sweep/Source Pulse share those reservations from telegraph through recovery. Minor volleys/adds still use per-boss cadence and total enemy population budget.
+
+Chaos overlap proposal: first boss at minute 5, one spawn opportunity per 180 combat seconds, allowance `1+floor(combatSeconds/900)` (1/2/3/4 at minutes 5/15/30/45). No missed-spawn debt. Shuffle the enabled roster without replacement; prefer types not already alive. Once every enabled type is alive, reinforcement instances may repeat a type, with unique entity/Animator IDs and staggered attack reservations. This explicitly revises the earlier wait-for-distinct-ID default, which would otherwise cap a two-boss roster at two forever. Do not add HP inflation as a substitute for extra bosses. Actual sustainable concurrency requires profiling before release.
+
+Rewards retain selected tiers: standard boss uniform 120–180 trade plus 100 salvage; campaign final 200–300 trade plus 200 salvage. Ordinary adds pay ordinary rewards and share the global population budget. Source-guardian death stops its emitter; remaining required adds still block campaign completion. Chaos continues, Boss mode ends after its boss/required adds, and same-frame player death takes priority. Suggested Boss-mode-only starting energy is 500/1000 so a solo encounter can offer a shield-gated exit before a kill; this exception is part of the draft review, not an implemented rule.
+
 ## 23 October implemented population and progression revision
 
 Owner authorized implementation plus statistics updates. This section supersedes conflicting older exponential XP/HP, growing return thresholds, timed card grants and two-minute barricade figures below. Full current/pending breakdown: [balance implementation and context review](../todo/08-review/balance-and-context-review.md). Values are initial tuning, not human-playtested balance.

@@ -112,6 +112,8 @@ The safe hub suspends the expedition as specified in gameplay. Background servic
 
 ## 6. Campaign structure and source bosses
 
+**24 October update:** Owner delegated boss concepts and attacks for review. [Boss draft](../02-gameplay/boss-roster-draft.md) proposes Shellback/Nestheart as the two source guardians, with Coilmaw/Brood Hauler as optional Boss/Chaos encounters. Earlier statements that the owner must supply every concept are superseded; final concept approval and implementation remain pending.
+
 Keep the existing **provisional ten-wave campaign with boss encounters at waves five and ten**. Two source sectors fit that scope. The owner still supplies actual boss identities and attacks. “Source Guardian A/B” are planning placeholders, never final shipped labels. Do not restore the older boss names as approved content.
 
 | Stage | Player objective | Source relationship | Resolution |
