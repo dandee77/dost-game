@@ -1,6 +1,6 @@
 # Completed Work and Evidence
 
-**Last updated: 21 October 2026.** Append verified deliveries here whenever a task is completed. Keep the corresponding checkbox in [tasks.md](tasks.md) synchronized. The detailed historical implementation record remains in [progress tracker](../../context/progress-tracker.md).
+**Last updated: 23 October 2026.** Append verified deliveries here whenever a task is completed. Keep the corresponding checkbox in [tasks.md](tasks.md) synchronized. The detailed historical implementation record remains in [progress tracker](../../context/progress-tracker.md).
 
 ## Completion record format
 
@@ -17,6 +17,7 @@ Record date, stable task ID, actual result, evidence/commit when known and anyth
 | 2026-10-21 | DOC-05 | Task list, idea register, completion history and recurring maintenance instructions created | This folder; links/scope/checklist reconciliation verified for the documentation change. Runtime work remains pending |
 | 2026-10-21 | DOC-06 | Upgrade review package written; confirmations, deferrals and later review questions recorded | [Upgrade folder](../07-upgrade-proposals/README.md); detailed family/stats, attributes, Luck, rarity and Blink data remain drafts. Six new review/data tasks stay open; no runtime feature implemented |
 | 2026-10-21 | DOC-07 | Initial dual-repository publication configured and verified | [Sync procedure](repository-sync.md); both remote branches returned 10c92bc1ed802bdd27dccb305b4215ad9aaf2631, the initial 30-path Markdown-only publication. Owner repository default branch verified as docs/context-preparation; future edits require refreshing the publication branch |
+| 2026-10-23 | DOC-08 | All current feature-branch updates published to dev in both repositories | Owner requested complete dev publication. Both remote dev branches returned dc39d781af5891f85f4097bc03c4ec7ed4d5929c after the fast-forward and pushes. Bundled CMake Debug build succeeded; PlayerEquipment CTest passed (1/1). Dependency warnings were emitted. No new gameplay/source code authored; design proposals remain pending. [Updated pull instructions](repository-sync.md) |
 
 ## Delivered implementation baseline to preserve
 

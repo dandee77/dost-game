@@ -1,6 +1,6 @@
 # Open Work and Attention List
 
-**Last reviewed: 21 October 2026.** Initial inventory comes from the current preparation documents and recorded implementation status. It is not a fresh source-code or runtime audit. Update this file as work is discovered or verified; see [maintenance rules](README.md). Implementation is deferred until the teammate authorizes it.
+**Last reviewed: 23 October 2026.** Initial inventory comes from the current preparation documents and recorded implementation status. It is not a fresh source-code or runtime audit. Update this file as work is discovered or verified; see [maintenance rules](README.md). Implementation is deferred until the teammate authorizes it.
 
 ## Start here
 
@@ -98,3 +98,5 @@ These checked tasks concern documentation only. Evidence and historical implemen
 - [x] **DOC-06 — P1 — Owner: context author.** Write the upgrade review package and record confirmations, deferrals and later review questions. This completes draft documentation, not PREP-22 through PREP-27 approval or implementation.
 
 - [x] **DOC-07 — P1 — Owner: context author.** Configure and verify initial context publication to both authorized repositories on docs/context-preparation; record the initial matching remote hashes and future refresh/push procedure in repository-sync.md. Subsequent publications still require verification.
+
+- [x] **DOC-08 — P1 — Owner: repository maintainer.** Publish the complete current feature baseline to dev in both authorized repositories at the owner's request. Both remote dev hashes verified at dc39d78; Debug build and configured CTest passed. See repository-sync.md and completed.md. Pending gameplay proposals remain unimplemented.

@@ -1,5 +1,21 @@
 # Publishing Context to Both Repositories
 
+## 23 October: complete baseline now on dev
+
+The owner explicitly requested all current changes in dev. Both repositories' dev branches were verified at dc39d781af5891f85f4097bc03c4ec7ed4d5929c after publishing all nine commits from feat/pause-scrap-progression. This includes the pause fix and the full context/TODO handoff. The local checkout is now dev. The instructions below preserve the earlier separate documentation-publication workflow; docs/context-preparation is no longer the branch to select for the complete current baseline.
+
+To update an existing clone using either repository as origin:
+
+```text
+git fetch origin
+git switch dev
+git pull --ff-only origin dev
+```
+
+For future authorized publication of the complete dev branch, fetch and integrate remote work first, verify the build and applicable tests, then push dev to origin and owner individually and compare each remote dev hash with local dev. Never force-push over teammate work. Repository default branches were not changed by this publication; explicitly select dev.
+
+## Earlier context publication
+
 **21 October 2026.** The owner authorized publication to these two GitHub repositories and delegated the branch choice:
 
 - [dandee77/dost-game](https://github.com/dandee77/dost-game)
