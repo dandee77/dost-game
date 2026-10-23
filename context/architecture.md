@@ -2,7 +2,7 @@
 
 ## 24 October Boss-mode encounter lifecycle — target, not implemented
 
-Game keeps one run through successive boss encounters. The encounter owner finalizes a living player's boss clear once, stops owned spawns/hazards and reveals one base portal. The portal enters the existing base state without calling resetRun. Only a later confirmed launch advances the encounter index and creates a fresh boss arena; progression and wallet persist. Cancel/duplicate portal or launch requests cannot award rewards or advance twice. Existing earned loot is credited once before arena retirement; cleanup gives no additional rewards. Campaign required-add completion remains distinct. See game-design.md for the pending portal-gate decision and owner-requested phases/HP bars.
+Game keeps one run through successive boss encounters. The encounter owner finalizes a living player's boss clear once, stops owned spawns/hazards and reveals one base portal. The portal enters the existing base state without calling resetRun. Only a later confirmed launch advances the encounter index and creates a fresh boss arena; progression and wallet persist. Cancel/duplicate portal or launch requests cannot award rewards or advance twice. Existing earned loot is credited once before arena retirement; cleanup gives no additional rewards. Campaign required-add completion remains distinct. See game-design.md for the confirmed boss-clear shield/energy bypass and owner-requested phases/HP bars.
 
 ## 24 October implemented balance flow
 

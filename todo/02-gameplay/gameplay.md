@@ -1,6 +1,6 @@
 # TODO: Colony Hub, Game Modes, Scrap Progression and Return Home
 
-**Latest Boss-mode revision:** repeated boss encounters with a base portal after each kill; the next boss starts only when launching from base. Same-run build/wallet persist. This supersedes one-boss mode victory and the proposed half-energy start. Boss-clear portal gate behavior remains pending; see the latest game-design.md section. Boss phases and named HP bars are requested, not implemented yet.
+**Latest Boss-mode revision:** repeated boss encounters with a base portal after each kill; the next boss starts only when launching from base. Same-run build/wallet persist. This supersedes one-boss mode victory and the proposed half-energy start. Boss-clear portals bypass shield/energy requirements; see the latest game-design.md section. Boss phases and named HP bars are requested, not implemented yet.
 
 **24 October update:** Source implementation is now authorized. The latest [game-design balance revision](../../context/game-design.md#23-october-implemented-population-and-progression-revision) supersedes older XP/HP/return and Chaos schedule formulas below. [Current implementation/context review](../08-review/balance-and-context-review.md) identifies delivered and remaining work; this older handoff is not evidence that its full feature set exists.
 

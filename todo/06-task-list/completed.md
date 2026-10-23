@@ -8,6 +8,8 @@ Record date, stable task ID, actual result, evidence/commit when known and anyth
 
 ## Verified preparation deliveries
 
+**24 October boss-clear portal decision:** Owner confirmed shield/energy bypass for the Boss-mode post-kill portal. Updated active design/architecture/task references; ordinary portal gates and paid services remain intact. Documentation only; this completes the gate decision, not the portal implementation.
+
 **24 October Boss-loop contract update:** Recorded repeated boss/base/launch flow and requested phase/HP-bar presentation across numerical authority, architecture and gameplay briefs. Whitespace check and existing build pass (no compilation needed). Documentation only; the portal gate answer and actual mode/HUD implementation remain pending.
 
 **24 October DOC-12:** Recorded owner-selected fresh starts and delivered [boss roster/attacks](../02-gameplay/boss-roster-draft.md) with numbers in game-design.md. 283 local document links resolve; whitespace check passes; existing build exits 0 with no work required. Documentation only, no boss gameplay or playtest claim. Boss concepts, optional release scope and Boss-mode starting energy remain under review.

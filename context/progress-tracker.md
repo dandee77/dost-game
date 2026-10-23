@@ -6,6 +6,8 @@ Update this file after every completed build-plan item. Anyone reading it (teamm
 
 ## Current Status
 
+**24 October boss-clear gate confirmed:** Owner selected post-kill Boss-mode portals that bypass shield and energy requirements. A living player presses F inside; no energy payment, free healing or upgrade reset. Ordinary portal gates remain unchanged. Retired proposed starting-energy grant; optional mid-fight Boss-mode retreat is a separate open policy. Documentation updated, actual boss/base/portal implementation remains pending.
+
 **24 October Boss-mode progression revision:** Owner selected boss kill -> base portal -> base services -> launch next boss, with run progression preserved. This replaces one-encounter victory and the proposed starting-energy workaround. Boss-clear shield/energy bypass is under popup review; not assumed. Recorded prior owner request for phases and named HP bars, with proposed three-phase thresholds/attack pacing in game-design.md. Documentation only; boss/hub implementation remains pending.
 
 **24 October fresh-run decision and boss draft:** Owner confirmed every new game resets gameplay progression, with no permanent unlock/stat grind; same-expedition hub returns still preserve state. Owner asked us to draft boss concepts/attacks for review. [Roster](../todo/02-gameplay/boss-roster-draft.md) proposes two campaign guardians and two optional Boss/Chaos encounters, with canonical proposed attack/HP/reward/fairness data in game-design.md. Increasing Chaos pursuit can repeat finished archetypes after the enabled roster is represented, avoiding the earlier distinct-only concurrency ceiling. Draft only; no source/assets changed and T06 remains pending.
@@ -355,6 +357,7 @@ Required for Form 03 (Asset and AI Usage Disclosure). Organizers may request pro
 
 | Date | Item | Tool and model | Used for | Extent (Minimal / Moderate / Heavy) | Human review |
 |---|---|---|---|---|---|
+| 2026-10-24 | Boss-clear portal gate decision | Codex (OpenAI) | Propagate approved shield/energy bypass through mode, architecture and task references; retain ordinary gates and no-free-heal rule. | Minimal | Owner explicitly selected bypass. Documentation only; runtime implementation remains pending |
 | 2026-10-24 | Repeating Boss-mode contract | Codex (OpenAI) | Record post-kill portal/base/next-encounter flow, preserve run state, separate Campaign cleanup and capture requested boss phases/HP bars. | Moderate | Loop and phases/bars requested; portal gates awaiting answer; phase numbers remain proposed; no source/UI implementation |
 | 2026-10-24 | Fresh-run decision and boss review draft | Codex (OpenAI) | Record no persistent gameplay progression; draft four reusable bosses, attacks, fairness rules, overlap schedule and implementation gates. | Moderate | Reset rule confirmed. Boss roster, optional scope and Boss-mode starting energy remain proposals for owner review; no runtime implementation claimed |
 | 2026-10-23 | Population-led balance implementation | Codex (OpenAI) | Trace spawn/HP/reward/XP formulas, implement bounded pacing and economy contracts, add regression checks and update statistics. | Heavy | Owner authorized implementation; requested increasing late Chaos boss pursuit. Runtime/playtest limits are recorded with final verification, not inferred from arithmetic |
