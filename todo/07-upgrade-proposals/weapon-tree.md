@@ -1,96 +1,81 @@
 # Mothership Weapon Tree
 
-**21 October 2026. Confirmed acquisition direction plus proposed branch content.** Read the [review index](README.md). All new stats/prices below are mirrored from the pending-review ledger in [game design](../../context/game-design.md). No weapon, asset or class is implemented by this document.
+**23 October 2026. Accepted names and branching structure; numerical tuning is a draft.** The owner accepted this list/path after requesting choices at both T4 and T5, then asked for balanced stats. This supersedes the earlier six-family proposal. All stats, geometry, signatures and damage accounting are in [game design](../../context/game-design.md#23-october-weapon-stat-draft--accepted-tree-proposed-tuning). No source/assets changed.
 
-## 1. Five tiers without an expanding content explosion
+## 1. Branches across different tiers
 
-The owner's spoken tier counts were ambiguous. Proposed interpretation: **1 / 3 / 6 / 6 / 6 nodes** across T1-T5. That is 22 nodes including the free starter, but six end-family behaviors. T4 and T5 improve an existing specialization instead of introducing another doubling of choices. Exact family names remain descriptive placeholders; final-name work is deferred.
+There are **1 / 3 / 5 / 7 / 10 nodes**, 26 total and ten final weapons. Some paths split at T4, some split at T5, and others stay straight.
 
 ```text
-T1 Simple Cannon
+T1 Starter Cannon
   T2 Machine Gun
-    T3 Rotary Cannon -> T4 Rotary Cannon II -> T5 Rotary Cannon III
-    T3 Focus Laser   -> T4 Focus Laser II   -> T5 Focus Laser III
-  T2 Sniper
-    T3 Rail Lance    -> T4 Rail Lance II    -> T5 Rail Lance III
-    T3 Guided Missile -> T4 Guided Missile II -> T5 Guided Missile III
+    T3 Rotary Cannon
+      T4 Assault Cannon
+        T5 Tempest
+        T5 Ironclap
+    T3 Focus Laser
+      T4 Fusion Lance
+        T5 Starbreaker
+      T4 Arc Projector
+        T5 Thunderweb
+  T2 Sniper Cannon
+    T3 Railgun
+      T4 Siege Railgun
+        T5 Horizon Piercer
+        T5 Sundering Lance
+      T4 Guided Launcher
+        T5 Starfall
   T2 Shotgun
-    T3 Flak Burst    -> T4 Flak Burst II    -> T5 Flak Burst III
-    T3 Flamethrower  -> T4 Flamethrower II  -> T5 Flamethrower III
+    T3 Flak Cannon
+      T4 Shrapnel Cannon
+        T5 Shatterstorm
+        T5 Breachmaker
+    T3 Flamethrower
+      T4 Inferno Projector
+        T5 Cinderheart
 ```
 
-**Confirmed branch lock:** buy one T2 child of the starter and, later, one T3 child of that branch. Other siblings become unavailable for the rest of the run. T4/T5 follow the chosen specialization. No swapping owned weapons, refund, respec, branch merge or persistent unlock is proposed. A fresh run returns to the starter.
+Buy only an immediate child of the current node. Choosing a child locks its siblings for that run, including T4/T5 splits. Upgrades remain mothership-only; a fresh run starts with Starter Cannon. No branch swapping, refund, persistent unlock or manual signature key is added.
 
-All cannon tier purchases happen at the mothership. A new run starts with the normal cannon before any purchase. The owner did not ask to change the selected ship's appearance or create a playable character-selection roster.
+## 2. Roles and refinements
 
-## 2. Branch identities and initial comparison
+| T3 specialty | Core function | T4 development |
+|---|---|---|
+| Rotary Cannon | Sustained rapid bullets | Assault Cannon improves output; T5 chooses speed or heavy impact |
+| Focus Laser | Narrow tracking beam | Fusion Lance concentrates damage; Arc Projector changes to limited electrical chains |
+| Railgun | Powerful penetrating shots | Siege Railgun improves straight-line penetration; Guided Launcher trades penetration/distance bonus for homing explosives |
+| Flak Cannon | Short-range explosive pellets | Shrapnel Cannon improves coverage; T5 chooses fragments or a concentrated slug |
+| Flamethrower | Short cone with temporary nonstacking burn | Inferno Projector improves direct flame and reach |
 
-| Tier-two path | Intended role | Benefit | Cost/tradeoff |
-|---|---|---|---|
-| Machine Gun | Sustained mid-range pressure | Small individual bullets, rapid attack cadence, reliable crowd damage | Lower per-bullet damage; limited reach relative to Sniper |
-| Sniper | Long-range aligned targets | Fast projectile, high per-hit damage, built-in penetration and distance-based damage bonus | Slow firing; weak recovery when surrounded; requires firing lanes |
-| Shotgun | Close-range interception | Several pellets in a forward fan; strong when multiple pellets connect | Short travel range; dispersed pellets lose effective damage at distance |
+T2 identities remain Machine Gun (rapid medium-range bullets), Sniper Cannon (slower penetrating precision) and Shotgun (close pellet fan).
 
-Proposed baseline before augment modifiers:
+## 3. Final weapons
 
-| Profile | Damage | Trigger rate | Range / projectile speed | Built-in pattern |
-|---|---|---|---|---|
-| T1 Simple Cannon | Preserve existing 7-12 damage | 2 shots/s | Proposed finite range 100 / preserve speed 200 | One ordinary shot |
-| T2 Machine Gun | 4 per bullet | 8 shots/s | 90 / 240 | One small shot per trigger |
-| T2 Sniper | 24 base per target | 1 shot/s | 180 / 480 | Up to three distinct target hits; distance bonus below |
-| T2 Shotgun | 6 per pellet | 1 volley/s | 60 / 180 | Six pellets over a proposed 40-degree fan |
+| T5 | Core identity | Automatic signature |
+|---|---|---|
+| Tempest | Fast sustained fire | Overdrive: enemy contact builds toward brief faster piercing fire |
+| Ironclap | Slower heavy rounds | Hammerfall: periodic empowered round with collateral blast and knockback |
+| Starbreaker | Concentrated beam | Core Rupture: sustained contact on one enemy causes a local explosion |
+| Thunderweb | Connected crowd damage | Storm Network: enhanced discharge through existing chain links |
+| Horizon Piercer | Long firing lanes | Terminal Shock: terminal shockwave damages enemies the projectile did not already hit |
+| Sundering Lance | Priority-target precision | Fracture: consecutive hits add damage; gives up inherited penetration |
+| Starfall | Guided bombardment | Pursuit Salvo: successful primary hits earn additional guided missiles |
+| Shatterstorm | Wide close coverage | Fragment Bloom: secondary fragments cannot repeat damage on their parent's impact victim |
+| Breachmaker | Tight heavy slug | Breach Wave: empowered impact adds damage and a blast cone behind the victim |
+| Cinderheart | Sustained short flame | Flashover: direct exposure causes a local eruption without chain reactions |
 
-All ranges/speeds are world units and world units/s. “Small bullets” refers to presentation/collision profile; final radius/art sizing must be authored before code. Finite range is projectile travel length, not a claim that everything currently despawns this way. Current prototype root values remain the implementation baseline.
+These are primary-weapon effects, separate from automatic ability ownership. Focus Laser does not grant Plasma Beam, Arc Projector does not grant Chain Lightning, and Starfall does not grant Nuclear Missile.
 
-Nominal single-target damage/s before other effects is 19 average for T1, 32 for Machine Gun, 24-42 for Sniper depending on range, and at most 36 for Shotgun when every pellet hits. These are comparison examples, not encounter balance certification. Penetration and splash change total crowd damage.
+## 4. Purchase and lifecycle
 
-## 3. Six proposed specializations
+Shared incremental prices and the cumulative path cost are in [game design](../../context/game-design.md#23-october-weapon-stat-draft--accepted-tree-proposed-tuning). Every path crosses the same number of paid edges; no premium is added for choosing a split or a guided/beam weapon.
 
-| Parent | T3 family | Behavior and identity | T4 refinement | T5 refinement |
-|---|---|---|---|---|
-| Machine Gun | Rotary Cannon | Sustained rapid physical fire; strongest when a firing lane stays open | Improve stable sustained output | Final sustained-output package; no new input or branch |
-| Machine Gun | Focus Laser | Sustained narrow mid-range beam; rewards keeping aim on a target | Improve authored beam output/uptime | Final beam refinement; not unlimited screen-wide reach |
-| Sniper | Rail Lance | Very fast straight shot with deeper penetration; retains distance bonus | Improve penetration/long-range profile | Final precision profile with bounded hits and no repeat hit on one enemy |
-| Sniper | Guided Missile | Slower cadence guided explosive projectile; emphasizes distant priority targets | Improve authored guidance/splash profile | Final missile refinement with bounded blast/effect load |
-| Shotgun | Flak Burst | Close-range pellet volley with a bounded airburst at its designed endpoint | Improve close-area coverage | Final close-interception profile; no distant sniper damage |
-| Shotgun | Flamethrower | Short cone/stream of damaging exhaust; little long-range capability | Improve short-range stream profile | Final short-range area profile; no permanent arena-covering trail |
+Show current node, legal children, role/range, exact cost, wallet afterward and sibling-lock warning. Revalidate parent/tier, branch, hub location, funds and transaction state at commit. Debit and equip once together; stale/double clicks cannot skip a tier or spend twice.
 
-Guided Missile replaces the sniper bullet model: it **does not inherit the Rail Lance distance multiplier or built-in penetration**. Flak/rocket splash and Flamethrower/laser damage need their own per-target timing rules. These families are alternatives, not an instruction to combine every strength in one weapon.
+Changing cannon never heals hull/shield, charges Return Home, refreshes Blink, changes level or grants a combat ability. Live effects keep firing-time profiles/modifiers. Preserve remaining primary cooldown debt and retire the old loop at the hub; no extra shot/signature on Resume or upgrade. Branch/tier survives same-expedition hub visits. Death, quit or New Run clears all run-local weapon/effect state through existing owners.
 
-Flamethrower is placed under Shotgun to preserve the short-range identity even though the owner also mentioned it near Machine Gun. That placement is a proposal for later review. The primary Focus Laser and automatic Plasma Beam are different systems; a purchased cannon must not silently grant the Plasma Beam ability.
+## 5. Cards and balance review
 
-T3-T5 exact damage, attack rate, range, projectile/effect counts and area caps remain **UPG-REVIEW-08**, to author after family approval. Do not mark the weapon specification implementation-ready before those tables exist. Reuse prototype Cannon/Rockets/Laser/Heavy behavior where suitable after consulting the class registry; ownership/reuse does not prove all six families are already implemented.
+Field attributes strengthening attacks while cannon tiers remain mothership-only is still the proposed interpretation awaiting explicit review. PREP-27 stays open for exact burst/scatter/piercing/beam/flame compatibility; no eligible card may silently waste its effect.
 
-## 4. Distance damage and penetration
-
-Proposed Sniper/Rail Lance formula before ordinary primary-attack augments:
-
-`damage(distance) = baseDamage * [1 + 0.75 * clamp((distance - 80) / 80, 0, 1)]`
-
-Distance is the projectile's accumulated travel from its firing point at that target contact, not the player's current distance after moving. Hits through 80 units get 1x, at 120 units 1.375x and from 160 onward 1.75x, up to the projectile's finite range. A T2 24-damage shot therefore deals 24, 33 and 42 in those examples before other modifiers/rounding.
-
-Each target is hit once by a given projectile. T2 has three total target hits, not three extra hits after the first. Existing Armor Piercing cards can add supported target hits; their interaction must remain explicit. No indefinite hit loop, extra damage just for being off-screen or unlimited multiplier beyond the range is permitted. Partial/blocked trajectories use actual travel; target movement does not rewind it.
-
-## 5. Purchase, application and lifecycle
-
-| Tier reached | Proposed incremental cost | Cumulative path cost |
-|---|---:|---:|
-| T1 | Free starter | 0 |
-| T2 | 150 Trade Scrap | 150 |
-| T3 | 300 Trade Scrap | 450 |
-| T4 | 600 Trade Scrap | 1050 |
-| T5 | 1000 Trade Scrap | 2050 |
-
-No level gate, special-material recipe or boss unlock is added in this proposal. The tree edge and wallet are the prerequisites. Each transaction grants only its immediate child; purchasing multiple consecutive tiers requires separate deliberate confirmations and exact quoted costs.
-
-Show the current node, next choices, role/range, exact price, wallet afterward and branch-lock warning. Revalidate parent/tier, branch, location, funds and transaction state at commit. Debit and equip once together. A stale/double click cannot skip a tier or spend twice.
-
-Changing cannon never heals hull/shield, charges Return Home, refreshes Blink or changes level/ability ownership. Live projectiles/effects keep their firing profile and modifiers. Retire the old primary firing loop at the safe hub without duplicating a beam/burst on Resume. Preserve the remaining primary cooldown; the new profile applies on the next legal attack, with no free bonus shot.
-
-Weapon branch/tier survives hub visits, pause and same-expedition Resume. Death, quit or New Run resets it. Return Home does not reroll or reset branch choices.
-
-## 6. Field cards versus cannon tiers
-
-Proposed interpretation to confirm: field cards still improve ship attributes and primary-attack modifiers, including damage, speed, pellets and penetration. They never change the selected cannon model or buy a tier. This preserves field progression while cannon evolution requires a mothership visit.
-
-Keep the existing compatible augment effects. Pattern cards on a beam/stream require an authored auxiliary-shot mapping rather than copying full beam damage into every direction. Extra pellets, directions, burst counts and penetration stay discrete card effects; quarter-strength purchases do not create fractional bullets. Guided explosives must detonate once and count each affected target under their damage contract. Final family/augment compatibility is part of UPG-REVIEW-02/08.
+Ideal solo output, crowd coverage and equal prices are starting comparisons. Fixed-seed moving-target/crowd/boss/card-scaling/performance playtests are required before a balance claim. Stat values remain drafts. Boss/schedule/layout/general-economy deferrals remain intact; game-title/boss naming is separate from the now-accepted weapon list.

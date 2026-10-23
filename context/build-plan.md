@@ -6,6 +6,14 @@ The order in which the game is built between **14 October** and the **25 October
 
 Read [todo/06-task-list/tasks.md](../todo/06-task-list/tasks.md) before each item. During work, add missing requirements or discovered issues there and optional alternatives to [ideas.md](../todo/06-task-list/ideas.md). After verification, mark the matching task, append dated evidence to [completed.md](../todo/06-task-list/completed.md), and reconcile this plan, the root TODO index and progress tracker in the same change. Follow the [folder maintenance rules](../todo/06-task-list/README.md); partial work stays open. Current authorization remains context-only.
 
+## 23 October economy checkpoint
+
+Selected weapon prices are 500/1500/4000/10000 (16000 total), Swarm T5 target is 20–25 combat minutes, and Survival retains shared prices/lower-tier outcomes. Attribute/owned-rank prices scale 5x, special acquisitions 10x. Hull repair is 10 scrap per missing HP with proportional affordable repair; Shield Battery replaces paid shield recharge. Four material labels use one wallet and existing enemy-tier values. Exact battery details/source mappings are under popup review. Adopt these contracts for future T02/T07/T08/T10; this documentation does not implement them.
+
+## 23 October weapon-stat checkpoint
+
+Owner accepted names/path with T4/T5 choices (1/3/5/7/10 nodes). Full proposed profiles/signatures and analytical comparisons now exist in game-design.md. PREP-27 remains open for numerical adoption, exact card compatibility and combined effect limits; REVIEW-07 tracks live viability. Paper DPS is not completed T08/T10 gameplay. No source changes authorized.
+
 ## 21 October weapon/attribute review checkpoint
 
 Prepare and review the [upgrade proposals](../todo/07-upgrade-proposals/README.md) before changing T03/T04/T08. Confirmed direction includes mothership cannon progression, locked run branches, 25% purchased numeric gains, retained shield cards and Legendary reactive Blink. Details remain candidate designs. Bosses, schedules, names, geometry and broad economy review are owner-deferred; keep tasks open and collect upgrade questions for later. Expand T08 to the weapon/attribute sections alongside eligible skill offers; do not implement the obsolete full-rank numeric-augment shop.

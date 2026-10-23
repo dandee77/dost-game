@@ -1,6 +1,6 @@
 # Ideas and Questions to Review
 
-**Last reviewed: 21 October 2026.** All entries below are **proposed** until their status changes. They are context ideas, not instructions to implement new features. [Open tasks](tasks.md) tracks required decisions and execution. Avoid turning every idea into extra sprint scope.
+**Last reviewed: 23 October 2026.** All entries below are **proposed** until their status changes. They are context ideas, not instructions to implement new features. [Open tasks](tasks.md) tracks required decisions and execution. Avoid turning every idea into extra sprint scope.
 
 For each update, retain the ID and record one status: Proposed, Needs decision, Accepted, Deferred or Rejected. Accepted means the team adopted the idea into an authority document; it does not mean implemented. Add the decision date/reason and linked task when that happens.
 
@@ -33,10 +33,15 @@ For each update, retain the ID and record one status: Proposed, Needs decision, 
 
 ## Upgrade follow-up ideas and confirmed directions
 
-- **IDEA-19 — Needs decision — Owner: owner/gameplay.** Review the five-tier, six-family weapon graph and engine-chassis deferral. Linked task PREP-22; exact high-tier data is PREP-27.
+- **IDEA-19 — Accepted direction, 2026-10-23 — Owner: owner/gameplay.** Owner accepted the latest five-tier names/path with T4/T5 branching, ten finals and some straight paths. Stats/signatures drafted; numbers/card compatibility/live viability remain PREP-27/REVIEW-07. Engine chassis stays deferred.
 - **IDEA-20 — Needs decision — Owner: owner/gameplay.** Consider workshop-only Luck improving trade-roll quality inside existing bounds. Legendary Luck card remains an alternative. Linked task PREP-24; no new card is approved.
 - **IDEA-21 — Accepted direction, 2026-10-21 — Owner: owner/gameplay.** Blink is Legendary and automatically prevents an incoming direct hit when a legal safer visible-screen destination exists. Exact numerical/safety proposal stays PREP-26. Acceptance is not implementation.
 - **IDEA-22 — Accepted direction, 2026-10-21 — Owner: owner/gameplay.** One weapon branch/run and numeric shop gains at 25% of field-card increments. Details remain PREP-22/PREP-23 and the [review package](../07-upgrade-proposals/README.md).
+- **IDEA-23 — Accepted direction, 2026-10-23 — Owner: owner/gameplay.** Weapon prices 500/1500/4000/10000, Swarm T5 target 20–25 minutes, shared Survival prices, 5x attribute/owned-rank prices and 10x special acquisitions. Hull repair 10 scrap/missing HP, with proportional affordable repair and exact previews. Price choices are not playtest certification.
+- **IDEA-24 — Accepted direction, 2026-10-23 — Owner: owner/gameplay.** Metal Fragments/Circuit Parts/Polymer Pieces/Power Cells share one wallet, use enemy-tier values and match source appearance. PREP-20 retains authored mapping coverage review.
+- **IDEA-25 — Accepted, 2026-10-23 — Owner: owner/gameplay.** Tiny/Small/Medium/Large/XL provide 20%/50%/100%/150%/200% of normal capacity after removing old overcharge. Damaged normal shield is not freely refilled. Starting prices 100/250/500/700/900 scale proportionally with normal-capacity upgrades. Repeat paid purchases allowed; natural regeneration stops at normal capacity. PREP-28 design adopted; implementation/playtesting remain T07/T10.
+- **IDEA-26 — Accepted direction; placement data open, 2026-10-23 — Owner: owner/gameplay.** Random return portals appear at half energy, Easy/Hard/Impossible counts 3/2/1 across all modes; F inside with shield online/positive and sufficient current energy replaces manual teleport. Distant exits allowed, pointer only within roughly one visible screen; portals persist until used/run end and remain visible/locked after shield break or increased energy threshold. Successful return retires the set; the next half-charge readiness generates new random locations. Resume uses the saved portal position with 2 seconds of damage protection ending on firing, no hull/shield refill. Placement/detection and protection/input ordering remain PREP-29.
+
 ## Ideas kept outside current scope
 
 Material-specific crafting, six separate wallets, a refinery grind, corpse harvesting, persistent colony construction, a walking avatar, online play, a live evolution simulation and per-piece armor destruction are outside the current preparation's gameplay scope. They remain discussion topics only if the owner later requests them; the scrap-armor story does not require these systems.

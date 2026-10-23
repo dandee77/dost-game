@@ -2,7 +2,19 @@
 
 **21 October 2026. Preparation register, not a feature-completion report.** Read [TODO index](../README.md), [gameplay handoff](../02-gameplay/gameplay.md) and [progress tracker](../../context/progress-tracker.md) first. Existing code evidence comes from the documented prior read-only audit and tracker; this revision does not claim a new runtime audit or that every old finding persists after future pulls.
 
-## Current review scope — owner follow-up
+## 23 October selected field return
+
+Owner replaced manual teleport with random portals appearing at half energy; F inside, online positive shield and half-current-capacity energy are required. Easy/Hard/Impossible spawn 3/2/1 portals across every mode. Exits can be far; pointer detection starts around one visible screen. Portals persist until used/run end and remain visible/locked after shield break or a raised energy threshold. Successful return retires the set and the next half-charge readiness generates fresh random locations. Numeric placement/detection and Resume details remain open in [return portals](../02-gameplay/return-portals.md). All skills are automatic; no manual fallback is selected.
+
+## 23 October active economy/material review
+
+Owner selected weapon prices 500/1500/4000/10000 (16000 total), T5 at 20–25 Swarm minutes, and shared prices/lower tiers in 5-minute Survival. Attribute/owned-rank prices increase 5x, special acquisitions 10x. Hull repair costs 10 scrap/missing HP with exact proportional partial repair and two previewed buttons. Shield Battery is used on shop purchase, replacing paid recharge service; details are under popup review. Four selected material labels use one wallet and unchanged enemy-tier values. Material/pricing deferrals are reopened for these choices only; actual runtime viability remains unverified.
+
+## 23 October active weapon review
+
+Owner resumed questions and accepted the latest names/tree with T4/T5 branching (1/3/5/7/10). The [weapon tree](../07-upgrade-proposals/weapon-tree.md) and [numeric ledger](../../context/game-design.md#23-october-weapon-stat-draft--accepted-tree-proposed-tuning) replace the earlier six-family graph. Stats/signatures are proposed; numerical adoption, card compatibility, live balance and effect/performance limits remain open. Older no-questions text is superseded only for active weapon review. Unrelated deferrals remain.
+
+## Previous review scope — owner follow-up
 
 [Upgrade proposals](../07-upgrade-proposals/README.md) supply candidate weapon, attribute, Luck and automatic-skill rarity details. Confirmed: mothership cannon tiers, one branch/run, 25% purchased numeric gains, shield cards retained and Legendary reactive Blink. Other details remain open. Boss designs, schedules, final names, layouts and broad economy review are owner-deferred. Send no further questions during preparation; collect upgrade choices in the review checklist.
 ## 1. How to interpret this file
@@ -27,7 +39,7 @@ The teammate's later instruction may authorize a complete implementation sequenc
 | D10 | No special tree/seed solution or radiation origin; source isolation enables gradual restoration | Confirmed direction | World and campaign |
 | D11 | 2718 breakthrough, 2723 release, 2732 collapse estimate, 2733 cadet deployment | Proposed exact dates | World and campaign |
 | D12 | Earlier engineered waste-eaters mutate after exposure to the separate atmospheric treatment; living organisms occupy scrap shells | Confirmed fictional origin; space support and exact creature design proposed | [Science notes](../01-story/science-notes.md) |
-| D13 | Six material families, single currency, no crafting gate | Proposed taxonomy and minimum scope | [Scrap types](../03-economy/scrap-types.md) |
+| D13 | Metal Fragments, Circuit Parts, Polymer Pieces, Power Cells; one wallet, enemy-tier values, no crafting gate | Confirmed 23 October; authored source mappings under review | [Scrap types](../03-economy/scrap-types.md) |
 | D14 | Alternating story cards and moving footage | Confirmed presentation | [Story/trailer](../01-story/story-context.md) |
 | D15 | Intro before menu once per launch; 40-second intro, 24-second ending, 90-second trailer | Proposed pacing/placement | Story/trailer |
 | D16 | Neglect and postponed responsibility lead to catastrophe; survivors earn hope through sustained recovery | Confirmed theme; slogan wording drafted | [Theme and slogans](../01-story/narrative-theme.md) |
@@ -92,7 +104,7 @@ Default envelopes already selected: Swarm endless without bosses; Survival 300 c
 | H2 Services | First service panel opened | “Repairs and skill upgrades cost Trade Scrap.” | Close with the panel; real prices remain visible |
 | F1 Recovery | First credited pickup | “Trade Scrap buys services. Salvage earns field upgrades and charges Return Home.” | One short nonblocking prompt; do not pause enemy simulation just for flavor |
 | F2 Level | First queued field choice | “Choose an upgrade. Your next level needs more Salvage.” | Existing mandatory card panel owns input; do not stack a tutorial modal |
-| F3 Return ready | Threshold met while shield online | “Return Home is ready. Press Q to visit HOPE.” | Once per application session; HUD carries later readiness |
+| F3 Return ready | Threshold met while shield online | “Return Home is ready. Find a return portal and press F inside to visit HOPE.” | Once per application session; HUD carries later readiness |
 | F4 Return blocked | First attempted return with broken shield | “Shield offline. Return Home unavailable.” | Immediate feedback on every blocked attempt; extended explanation only first time |
 | H3 Resume | First successful field-to-hub return | “Repair, upgrade, then resume this expedition.” | Highlight Resume; choosing another mode explains fresh-run reset |
 
@@ -108,6 +120,6 @@ Only one finalized result may be submitted once. Ending skip, repeated result-me
 
 ## 8. Remaining decisions to discuss with the owner — later
 
-The current upgrade checklist takes priority. The broad review below is deferred for bosses, schedules, final names, layouts and general economy; do not send those questions now. Later review: review the proposed chronology, final Scavenger name/body plan and protected orbital core; approve/revise the six scrap families; supply the boss concepts; choose the final game title. The biological origin and neglect theme are now owner-selected; do not reopen the retired autonomous-machine premise. The team can author spawn schedules, targeting matrices, geometry, score values and technical limits from the templates before coding. Existing paid repair and shop prices need a later playtest, not speculative reapproval now.
+The current upgrade checklist takes priority. The broad review below is deferred for bosses, schedules, final names, layouts and general economy; do not send those questions now. Later review: review the proposed chronology, final Scavenger name/body plan and protected orbital core; review authored mappings for the four selected scrap labels; supply the boss concepts; choose the final game title. The biological origin and neglect theme are now owner-selected; do not reopen the retired autonomous-machine premise. The team can author spawn schedules, targeting matrices, geometry, score values and technical limits from the templates before coding. Existing paid repair and shop prices need a later playtest, not speculative reapproval now.
 
 Preparation is ready for an implementation brief only when blocking content and data have an explicit owner, an adopted default or a documented deferral that is visible in the product scope. “Everything is done” cannot mean merely that all missing details have a heading.

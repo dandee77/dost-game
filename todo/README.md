@@ -4,6 +4,8 @@ Start here for unfinished game work. This folder sits beside `assets/`, `build/`
 
 The maintained [task list and idea register](06-task-list/README.md) is the working entry point for outstanding tasks, new issues, ideas and completion history. Update it whenever work is completed, requirements change or new attention items are discovered; follow its maintenance rules each session.
 
+For the owner's complete numerical review, read [Full game logic and statistics review](08-review/full-game-review.md): starting stats, all weapon/ability upgrades, enemies, economy, progression calculations and prioritized unresolved rules. This is a review snapshot; game-design.md remains the numerical authority.
+
 The owner requested this top-level handoff on **20 October 2026**. These files describe work to implement later; moving or publishing them does not complete their features. This change is documentation only.
 
 ## Foldered preparation — 21 October revision
@@ -39,6 +41,8 @@ todo/
     weapon-tree.md
     attributes-and-luck.md
     automatic-skills-and-rarities.md
+  08-review/
+    full-game-review.md
 ```
 
 Read the required context references first, then the planning register, world/science/story, gameplay, scrap taxonomy and preparation checklist. Numbers remain authoritative in context/game-design.md; this folder supplies detailed briefs, not competing tuning sources. Confirmed choices, delegated selections, proposed defaults and content still needed are labeled separately.
@@ -47,6 +51,7 @@ Read the required context references first, then the planning register, world/sc
 
 | File | What remains to be done |
 |---|---|
+| [Field return portals](02-gameplay/return-portals.md) | Selected random portal/F interaction replacing manual teleport; shield/half-energy gates, limited-range pointer; count/placement/replenishment still open |
 | [Weapon/attribute/rarity review](07-upgrade-proposals/README.md) | Five-tier weapon proposal, 25% shop attributes, Luck, complete automatic roster and Legendary Blink; details awaiting confirmation |
 | [Maintained task list](06-task-list/tasks.md) | Prioritized open work, decisions and verified preparation checkboxes; update when work changes |
 | [Ideas and attention](06-task-list/ideas.md) | Suggestions and alternatives with explicit review status; not automatically active scope |
@@ -56,7 +61,7 @@ Read the required context references first, then the planning register, world/sc
 | [World and campaign](01-story/world-and-campaign.md) | HOPE acronym, 2718-2733 timeline, biological waste-eater origin, colony functions and source-boss campaign |
 | [Science notes](01-story/science-notes.md) | Primary-source environmental framing, fictional boundaries and explanation of retired narrative terms |
 | [Narrative theme](01-story/narrative-theme.md) | Neglect, postponed responsibility, consequences, hopeful recovery and original slogan options |
-| [Scrap types](03-economy/scrap-types.md) | Six proposed material families, existing debris mapping, one-wallet economy and reward conservation |
+| [Scrap types](03-economy/scrap-types.md) | Four selected material labels, one wallet and enemy-tier values; authored source mappings and later integration remain |
 | [Preparation checklist](04-verification/preparation-checklist.md) | Documentation review, checkpoint content gates and later runtime acceptance scenarios |
 | [gameplay.md](02-gameplay/gameplay.md) | Full detailed handoff: colony hub, five modes, field progression, random trade scrap, paid repairs, skill shop, shield/Return Home, UI, lifecycle and verification |
 | [Text-only story trailer](01-story/story-trailer-text.md) | Standalone storytelling script from the chat; untimed literary draft for later production |
@@ -74,7 +79,7 @@ All remain pending. Completed P6 pause/timing work and existing skills/equipment
 - [ ] **T04:** Persistent shield, automatic combat skills, Shield Detonation and starter-shield contract.
 - [ ] **T05:** Start -> difficulty -> safe colony hub, service stations and portal previews.
 - [ ] **T06:** Real Swarm, Survival, Boss, Chaos and Campaign objectives; owner-supplied boss content.
-- [ ] **T07:** Shield-gated Return Home, encounter suspension/resume and paid hull/shield service.
+- [ ] **T07:** Shield/energy-gated field return portals, encounter suspension/resume, hull repair and separate Shield Battery shop purchases.
 - [ ] **T08:** Mothership weapon tree, quarter-strength attributes and eligible skill/special offers after proposal approval; atomic spending and persistent stock.
 - [ ] **T09:** HUD, pause/settings, input capture and tutorial integration.
 - [ ] **T10:** End-to-end gameplay, reset, balance/performance and documentation verification.
@@ -106,7 +111,9 @@ Item **04** and completed P1–P5/P5.1/P6-checkpoint-1 work are intentionally no
 
 ## Current review scope
 
-The owner is currently reviewing weapons, attributes, Luck and automatic-skill rarities through the new proposal folder. Boss designs, mode schedules, final names, hub/arena layouts and broad economy review are deferred for now. Keep those tasks open; do not ask for those decisions during this preparation.
+23 October owner choices: weapon prices 500/1500/4000/10000, 20–25-minute Swarm T5 target, shared prices/lower tiers in Survival, 5x attribute/owned-rank prices, 10x special acquisitions, hull repair at 10 scrap/missing HP with affordable proportional healing, and a Shield Battery shop item replacing paid shield service. Metal Fragments/Circuit Parts/Polymer Pieces/Power Cells share one wallet and unchanged enemy-tier values. Exact battery details/source mappings are under popup review. Pricing/material decisions are now active; unrelated deferrals remain.
+
+On 23 October owner accepted the latest weapon names/tree with T4/T5 branching (1/3/5/7/10), then requested balanced stats. Full proposed profiles/signatures are in game-design.md; numerical adoption, card compatibility and live viability remain open. Weapon questions resumed; attribute/Luck/rarity proposals remain review items. Boss designs, mode schedules, final names, hub/arena layouts and broad economy review are deferred for now. Keep those tasks open; do not ask for those decisions during this preparation.
 
 ## Decisions and content still needed
 

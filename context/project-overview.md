@@ -4,11 +4,27 @@ Read this file first in every session. It defines what the game is, why it exist
 
 The owner requires the [task-list folder](../todo/06-task-list/README.md) to be maintained every session: read its open tasks before work, add newly discovered attention items/ideas, and update checkboxes plus completion evidence whenever something is verified complete. This supplements the main tracker and does not change the current context-only authorization.
 
-## 21 October weapon and upgrade follow-up — context proposal
+## 23 October field-return portal revision
+
+Owner replaced the planned manual teleport skill with random combat-map return portals. Portals appear once energy reaches 50%; travel requires positive online shield and at least half of current energy capacity, with F pressed inside the portal. Difficulty sets concurrent count across every mode: Easy 3, Hard 2, Impossible 1. They can be far away; a pointer appears within roughly one visible screen. Portals remain until used/run end and stay visible but locked while shield is broken or energy is short after a level-up. A successful return retires the set; the next half-charge readiness generates fresh random locations. All skills are automatic. Exact placement ranges and fallback remain open in [return portals](../todo/02-gameplay/return-portals.md); no source changes are authorized here.
+
+Resume returns the ship to the used portal position with two seconds of damage protection, ending on firing and restoring no hull/shield. Exact attack-input handling remains a later contract detail.
+
+Owner also selected appearance-matched scrap types. Five Shield Batteries—Tiny/Small/Medium/Large/XL—supply 20%/50%/100%/150%/200% of upgraded normal shield capacity. Each purchase removes old overcharge before adding its charge; damage below normal capacity is preserved first. Repeat paid purchases are allowed. Natural regeneration only fills to normal capacity. Starting prices 100/250/500/700/900 scale proportionally with normal-capacity upgrades. Full formula, examples and shop previews are in game-design.md. Power Cell salvage is not a battery.
+
+## 23 October selected economy and materials
+
+Owner selected weapon costs **500/1500/4000/10000** (16000 total), targeting T5 at 20–25 Swarm combat minutes; 5-minute Survival keeps the shared prices and ends with lower tiers. Attribute/owned-rank prices increase 5x and special acquisitions 10x. Hull repair costs 10 scrap per missing HP and offers proportional affordable repair with exact previews. A Shield Battery shop item, used on purchase, replaces paid shield-recharge/full-service jobs; its details remain under popup review. Four selected salvage labels—Metal Fragments, Circuit Parts, Polymer Pieces and Power Cells—feed one wallet at existing enemy-tier values, with no material gates or free shield restoration. This reopens price/material review only; source and assets remain unchanged. See [game design](game-design.md).
+
+## 23 October accepted weapon tree and draft stats
+
+Owner accepted the latest weapon names/path, with choices at T4 and T5: **1/3/5/7/10 nodes**, 26 total and ten finals. The [weapon tree](../todo/07-upgrade-proposals/weapon-tree.md) supersedes the earlier six-family graph. [Game design](game-design.md#23-october-weapon-stat-draft--accepted-tree-proposed-tuning) contains the requested full profile/signature draft. Numbers, exact card compatibility, actual viability and performance remain unverified. No source/assets changed. Weapon questions have resumed; boss/schedule/layout/general-economy and final game-title decisions remain deferred.
+
+## 21 October weapon and upgrade follow-up — historical proposal
 
 Confirmed owner direction: simple-cannon start, cannon tiers bought only at the mothership, one weapon branch per run, and purchased numeric attributes at **25% of the matching card gain**. Shield remains in field cards and can also receive paid capacity increments. All combat abilities are automatic; Return Home remains the manually activated utility. Blink is Legendary and reacts to an impending direct hit by preventing its damage and relocating the ship to a safer visible-screen position.
 
-The [upgrade proposal folder](../todo/07-upgrade-proposals/README.md) presents a five-tier tree, six weapon specializations, attribute/skill purchase separation, Luck recommendation and full automatic roster/rarity tables for later confirmation. Exact family placement, new prices/stat profiles, rarity weights and Blink cooldown/protection details are drafts; older full-rank numeric-augment/no-weapon-shop descriptions are superseded. The 25% rule concerns numeric attributes, not fractional skill acquisitions. Field attack-stat cards remain under the explicitly labeled interpretation awaiting review; they do not grant cannon tiers.
+The [upgrade proposal folder](../todo/07-upgrade-proposals/README.md) originally presented a five-tier, six-specialization tree (superseded above), attribute/skill purchase separation, Luck recommendation and full automatic roster/rarity tables for later confirmation. Exact family placement, new prices/stat profiles, rarity weights and Blink cooldown/protection details are drafts; older full-rank numeric-augment/no-weapon-shop descriptions are superseded. The 25% rule concerns numeric attributes, not fractional skill acquisitions. Field attack-stat cards remain under the explicitly labeled interpretation awaiting review; they do not grant cannon tiers.
 
 Boss designs, mode schedules, final names, hub/arena layouts and general economy review are deferred by the owner. Keep their tasks open and marked deferred. No new mode/boss/layout decisions or source changes are authorized by this follow-up.
 
@@ -20,15 +36,15 @@ The owner's current design handoff is [todo/02-gameplay/gameplay.md](../todo/02-
 
 Requested modes are **Swarm** (endless normal crowds), **Survival** (fixed-duration survival), **Boss** (focused boss encounter), **Chaos** (bosses and swarms together), and **Campaign** (staged progression ending with a boss). The no-boss Swarm distinction, durations and schedules are proposed defaults in the handoff. Older Story/Endless references in historical planning map to Campaign/Swarm; they are not the complete new mode list. The owner will supply final boss identities and attacks; previous boss names are not approved content.
 
-**Confirmed field progression:** collected scrap fills level progress and presents normal upgrade cards in the field. Docking is not required. Scrap also powers a manual Return Home utility, usable at 50% of a maximum that grows with player level; a broken shield blocks it.
+**Confirmed field progression:** collected scrap fills level progress and presents normal upgrade cards in the field. Docking is not required. Scrap also powers field-return portal eligibility at 50% of a maximum that grows with player level; a broken shield blocks use. Portals replace the planned manual Return Home skill.
 
-**Economy follow-up:** the owner requires paid base health repair and random tradeable scrap by enemy (basic enemies 1-3), and delegated inventory/pricing. Selected design: each pickup carries random trade currency and fixed salvage progress for leveling/Return Home. No cargo cap, credit conversion or deposit. The shop sells targeted owned-skill ranks and rare Singularity/Space Collapse/Nuclear Missile/Armageddon acquisitions; a paid repair/recharge berth shares that currency. Exact ranges, costs and transaction rules are in game-design.md and TODO. These are selected initial tuning, not claims of tested balance.
+**Economy follow-up:** the owner requires paid base health repair and random tradeable scrap by enemy (basic enemies 1-3), and delegated inventory/pricing. Selected design: each pickup carries random trade currency and fixed salvage progress for leveling/Return Home. No cargo cap, credit conversion or deposit. The shop sells targeted owned-skill ranks and rare Singularity/Space Collapse/Nuclear Missile/Armageddon acquisitions; a paid hull-repair berth and a separately purchased Shield Battery share that currency. Exact ranges, costs and transaction rules are in game-design.md and TODO. These are selected initial tuning, not claims of tested balance.
 
 **Target hub loop:** return -> repair berth/skill shop -> resume the same expedition. Hub visits preserve the build and suspend the encounter in the existing Game scene. Switching modes begins a fresh run. No walking character, networking, cross-run progression or save system is added.
 
 Minimal shared volume settings, difficulty UI, hub/portal UI and visible pause UI are in the target scope. The original blanket Settings exclusion, seven gear lines, credits and cargo loop are superseded. Existing completed skills, art, equipment and pause timing remain the implementation baseline.
 
-Proposed controls: Q = Return Home, F = nearby hub interaction, E retains auto-fire; combat abilities become automatic/persistent. Proposed starter Deflector prevents a missing shield from making return unreachable. These are defaults to adopt or revise in the teammate's implementation brief.
+Current target controls: F = nearby hub/field-return-portal interaction, E retains auto-fire; all skills are automatic/persistent and there is no manual teleport skill. Proposed starter Deflector prevents a missing shield from making return unreachable. These are defaults to adopt or revise in the teammate's implementation brief.
 
 New target screen additions: S-12 Difficulty (menu panel), S-13 Colony Hub (Game state), S-14 Portal Preview (hub panel). S-05 becomes field level-up, S-06 becomes the skill shop, S-07 gains settings/quit confirmation. Mode selection moves from S-03 into S-13/S-14. The screen table below lists target responsibilities; the tracker reports actual completion.
 
@@ -115,7 +131,7 @@ Open game -> optional intro -> Start Game -> difficulty -> HOPE hub in the ship 
 
 During the expedition, defeat threats and collect scrap. The random trade amount enters one wallet; fixed salvage independently advances field levels and Return Home. Choose normal upgrade cards in the field. At sufficient charge with an online positive shield, Return Home suspends the encounter. Pay for repairs or skill upgrades, then Resume that same expedition. Selecting another mode starts a fresh run after the existing-run confirmation. No cargo deposit or credits conversion remains.
 
-Six proposed material families add recognizable resource flavor: Recovered Alloys, Electronic Components, Polymer Stock, Power Modules, Structural Composites and Purification Media. They do not create six currencies or crafting gates. See [scrap types](../todo/03-economy/scrap-types.md).
+Four owner-selected material labels add recognizable salvage flavor: Metal Fragments, Circuit Parts, Polymer Pieces and Power Cells. They share one wallet and enemy-tier reward ranges; there are no material-specific crafting gates. See [scrap types](../todo/03-economy/scrap-types.md).
 
 Current delivered behavior remains in the progress tracker; writing this loop does not implement it. P6 checkpoint 1's pause-safe timing and existing combat/skills/equipment/debris remain the baseline.
 

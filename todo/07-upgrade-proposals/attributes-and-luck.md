@@ -2,6 +2,8 @@
 
 **21 October 2026. Context only.** Owner confirmed purchased attribute gains at **25% of a corresponding field card**, shield retained in cards, and mothership cannon progression. Remaining limits, prices and Luck details are proposals for later review. Numerical authority: pending-review ledger in [game design](../../context/game-design.md).
 
+**23 October pricing update:** Owner selected 5x numeric-attribute and owned-skill-rank prices, and 10x special-skill acquisition prices. Gains are unchanged. Exact current prices are in game-design.md; the earlier low-price draft is superseded. Luck adoption remains open.
+
 ## 1. Three different purchases
 
 | Purchase | Effect | Progression source |
@@ -57,7 +59,7 @@ Shop tabs become **Weapon Tree**, **Attributes**, **Owned Skills** and **Special
 
 ## 5. Local price proposal
 
-Numeric attribute purchase number `n + 1` costs `40 + 20*n`, with `n` the prior paid count for that attribute. First four prices are 40, 60, 80, 100; eight purchases total 880. Each attribute tracks its own count. No luck-based discount, random price or service coupon is introduced.
+Owner-selected 23 October numeric attribute price (5x prior draft): purchase `n + 1` costs `200 + 100*n`, with n the prior paid count. First four prices are 200, 300, 400, 500; eight purchases total 4400. Each attribute tracks its own count. No luck-based discount, random price or service coupon is introduced.
 
 Spending is atomic with the granted increment and requires the hub shop. No standard numeric augment is also sold through the old full-rank purchase row: that would bypass the 25% rule. Failed/stale/duplicate transactions do not charge. If a hard stat limit would make the purchase grant no effect, disable it and do not charge; previews show any clamped final gain. Paid max-HP/capacity gains preserve absolute current health/shield and all break/reboot state.
 
@@ -73,6 +75,6 @@ For later reward assignment, the ordinary loot RNG still assigns one base amount
 
 Example: a basic enemy's base roll is 1; a successful Luck comparison rolls 3, so its stored trade amount is 3 and fixed salvage remains 2. If the comparison fails, keep 1. If both rolls are 1, keep 1. Without Luck, the existing uniform base distribution remains intact; with Luck, the final distribution intentionally favors higher values.
 
-Proposed Luck price: `80 + 40*n` for the next rank with `n` prior Luck purchases; prices 80/120/160/200/240, total 800 for rank 5. This is a support-node proposal, not a normal quarter-strength combat attribute, and cannot recursively improve its own price or offer rarity. At rank 5, expected basic-enemy trade rises from 2 to 20/9 (about 2.222), not beyond its 1-3 range.
+Proposed Luck price, aligned to the selected 5x non-weapon scale if this support node is adopted: `400 + 200*n`; prices 400/600/800/1000/1200, total 4000. Luck and this support-node interpretation remain pending review. This is a support-node proposal, not a normal quarter-strength combat attribute, and cannot recursively improve its own price or offer rarity. At rank 5, expected basic-enemy trade rises from 2 to 20/9 (about 2.222), not beyond its 1-3 range.
 
 The workshop tree has independent Weapon, Attributes and Support/Luck branches. No mandatory Luck purchase blocks a cannon, shield or repair. No cross-run unlock currency, permanent research grind or extra material inventory is added.

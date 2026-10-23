@@ -1,26 +1,157 @@
 # Game Design
 
-## 21 October upgrade review ledger — pending owner review, no code changes
+## 23 October field-return portal contract — design only
+
+Owner selected random return portals in the combat map, generated once energy reaches at least 50% of the current maximum: **Easy 3 / Hard 2 / Impossible 1**, across all modes. F inside a portal requests travel; shield must remain online/positive and energy at least the current threshold at commit. Portals may be far away. A pointer detects them at roughly one visible screen, with exact detection/placement constants pending. Portals persist until used or run end; a broken shield leaves them visible/locked. A higher level can raise the energy threshold: existing portals remain visible, display missing energy and unlock once charge recovers without moving. Successful return retires the full set; the next half-charge readiness after Resume generates fresh random positions. See [return portals](../todo/02-gameplay/return-portals.md). This replaces planned manual Q Return Home, without changing existing energy-growth or full-charge-consumption defaults. No source/assets changed.
+
+Selected re-entry: Resume returns the ship to the used portal's saved position with **2 combat seconds of damage protection**, ending immediately when the player fires. It restores no hull or shield and does not increase shield capacity. Protection/attack ordering, including auto-fire, must be explicit before implementation.
+
+## 23 October economy decisions — design only
+
+Owner selected higher weapon costs and a typical Swarm T5 target of **20–25 combat minutes**. Shared prices remain in 5-minute Survival, which normally finishes with a lower-tier build. These are pacing targets, not measured runtime results. Enemy-tier trade ranges and fixed salvage/XP/Return Home rewards do not increase implicitly.
+
+| Selected economy rule | Value |
+|---|---|
+| T2 / T3 / T4 / T5 weapon purchase | 500 / 1500 / 4000 / 10000; cumulative 500 / 2000 / 6000 / 16000 |
+| Numeric attributes and owned skill ranks | 5x their prior quoted prices; gains/ranks do not increase |
+| Special skill first acquisition | 10x prior prices: Singularity 2400, Space Collapse 2800, Nuclear Missile 3200, Armageddon 4000 |
+| Hull repair full quote Q | `ceil(missingHP * 10)` scrap; zero deficit means no charge |
+| Affordable repair | B = min(wallet, Q); restore `missingHP * B / Q` for positive Q and B, exactly proportional to payment; fractional HP retained |
+| Repair UI | Full Repair and Repair What I Can Afford, exact restored HP, debit and remaining wallet shown before purchase |
+| Shield Battery | Five sizes: Tiny/Small/Medium/Large/XL supply 20%/50%/100%/150%/200% of upgraded normal capacity. Remove old overcharge, then add purchased charge: `newShield = min(currentShield, normalCapacity) + batteryCharge`. Starting prices 100/250/500/700/900 scale proportionally with normal capacity. Repeat paid purchases allowed; regeneration stops at normal capacity |
+| Materials | Metal Fragments, Circuit Parts, Polymer Pieces, Power Cells; one wallet; enemy-tier values, visual/lore differences only |
+
+Repair scales with actual missing HP rather than a flat visit fee or percentage-of-max surcharge. A full quote of 1000 and payment of 500 restores half the quoted missing hull. The same policy applies to any quoted deficit. Hull repair remains a 3-second atomic service; a battery purchase is a separate shop transaction. Power Cells are salvage, not Shield Batteries and not free shield restoration.
+
+Selected battery contract: let C be current normal shield capacity including upgrades, S current shield, and f the purchased size fraction. On a successful shop purchase set `newShield = min(S, C) + f*C`. This removes the previous battery's excess above C, preserves any damage below C, and adds exactly the purchased charge. Do not refill to C first and do not set the total to f*C. There is no stacking: the largest purchase yields at most 3*C. Normal regeneration only restores up to C; damage above C consumes the excess permanently until another paid purchase. Purchases may repeat without depletion or per-visit limits, and replacing with a smaller size can lower shield. Capacity upgrades preserve current shield points; they do not retroactively refill a battery. Battery charge uses C at purchase, never the overcharged shield total.
+
+| Battery | Charge supplied | Starting price (scrap) |
+|---|---|---|
+| Tiny | 20% of C | 100 |
+| Small | 50% of C | 250 |
+| Medium | 100% of C | 500 |
+| Large | 150% of C | 700 |
+| XL | 200% of C | 900 |
+
+Let C0 be the ship's normal starting shield capacity before run upgrades, fixed for that run. Price is `ceil(startingPrice * C / C0)` scrap; quote from the same current capacity used for charge. A 50% capacity increase raises prices to 150/375/750/1050/1350. Preview normal capacity, current shield -> resulting shield, replacement loss if any, exact price and wallet afterward. An unaffordable purchase changes neither shield nor wallet; a successful purchase commits both together. Preserve fractional shield points. Battery use does not heal hull, increase normal capacity, grant a shield rank or create a carried activation item.
+
+At C=100: S=80 + Tiny -> 100; S=80 + XL -> 280; S=280 + Tiny -> 120; S=100 + XL -> 300; buying XL again at S=300 stays 300. The owner's earlier 20-point Small example now maps to Tiny in the adopted five-size list. The resolved 80 + 200 -> 280 example supersedes the earlier 80 -> 200 interpretation. These are selected initial tuning and arithmetic contracts, not playtested balance.
+
+The weapon-only target requires average net saving of 16000/1500 to 16000/1200 = **10.67–13.33 scrap/s**; actual gross income must also pay repairs, skills and attributes. These are required budget rates, not a spawn schedule or proven earnings. At the base basic-enemy mean of 2, the weapon path represents 8000 basic-kill equivalents before other spending. Measure real mixed-enemy income and pickup collection before tuning. Older low repair/shop prices and the six-material proposal below are superseded; unrelated boss/layout/encounter decisions remain deferred.
+
+## 21 October upgrade review ledger — revised by decisions above, no code changes
 
 Read [upgrade review](../todo/07-upgrade-proposals/README.md). Confirmed: mothership-only cannon tiers, one branch per run, 25% purchased numeric attribute gains, shield cards retained, automatic combat skills, and Legendary incoming-hit Blink. Other values in this section are proposed for later confirmation, not tested balance. This section supersedes older full-rank numeric-augment shop and no-weapon-shop targets where they conflict. Current executable values remain in the prototype sections below.
 
-The owner explicitly deferred boss designs, mode schedules, final names, hub/arena layout and general economy review. Do not reopen them during this proposal. New upgrade costs below are local draft quotes to review later; existing reward ranges, fixed salvage, repair rates and previously selected special-offer costs remain.
+Owner originally deferred boss designs, mode schedules, final names, hub/arena layout and general economy review. The 23 October request reopens material identity and shop/repair pricing only; unrelated deferrals remain. New upgrade costs below are local draft quotes to review later; existing reward ranges and fixed salvage remain; selected repair/shop prices are revised above.
 
-### Weapon proposal numbers
+### 23 October weapon stat draft — accepted tree, proposed tuning
 
-| Quantity | Proposed value |
+The owner accepted the latest weapon names/tree and requested stats that support choosing any path. This replaces the earlier six-family graph and its T2/sniper draft. The tree is **1 / 3 / 5 / 7 / 10 nodes**, 26 total: branches occur at T3, T4 and T5, with straight paths where appropriate. Names refer to weapons; the game's final title and boss names remain deferred. Source code/assets are unchanged.
+
+All values below are **TUNE, analytical starting values**. They are not implemented or certified balanced. The authoritative graph and qualitative identities are in [weapon-tree.md](../todo/07-upgrade-proposals/weapon-tree.md).
+
+#### Reading the profiles
+
+Damage is HP, range/radius/distance are world units, speed is world units/s, cadence is triggers or ticks/s, and time is active combat seconds. Solo DPS is a long-run, zero-armor, stationary single-target calculation before cards, crits, abilities or difficulty; every applicable pellet hits, burn is established, sniper distance is at its maximum bonus, and signatures are earned at their fastest legal cadence. Opening delay, dodging, travel time, target switching, overkill and misses reduce actual output.
+
+T1 preserves the existing random inclusive 7–12 damage, with mean 9.5. Primary fire has no ammunition/reload resource or movement slowdown in this draft. Range is travel length; beam/arc/cone attacks require valid visible targets. Homing cannot acquire off-screen targets. Existing obstacle/barricade blocking applies; enemy penetration is not wall penetration.
+
+| Quantity | Draft value / rule |
 |---|---|
-| Tier count / nodes T1-T5 | 5 / 1, 3, 6, 6, 6; total 22 nodes |
-| Branch ownership | One path/run; immediate child purchases only; no respec/refund |
-| Tier incremental costs T2/T3/T4/T5 | 150 / 300 / 600 / 1000 Trade Scrap; cumulative 2050 |
-| T1 root | Existing 7-12 damage, 0.5 s cooldown, speed 200; proposed finite range 100 |
-| T2 Machine Gun | 4 damage, 8 shots/s, range 90, speed 240 |
-| T2 Sniper | 24 base damage, 1 shot/s, range 180, speed 480, three total distinct-target hits |
-| T2 Shotgun | Six pellets, 6 damage/pellet, 1 volley/s, range 60, speed 180, 40-degree fan |
-| Sniper/Rail distance multiplier | `1 + 0.75 * clamp((travelDistance - 80) / 80, 0, 1)`; maximum 1.75x |
-| T3-T5 full profiles | Pending family review; do not infer new damage/range/effect values from names |
+| Purchase cost to reach T2 / T3 / T4 / T5 | Owner-selected 500 / 1500 / 4000 / 10000 Trade Scrap; cumulative 500 / 2000 / 6000 / 16000 |
+| Ownership | One path/run; only immediate children, no respec/refund; new run resets |
+| Primary damage modifiers | Apply Payload once to every primary-owned damage component; automatic abilities retain their own tuning |
+| Critical handling | Existing 2x multiplier; one roll per emitted shot/volley/pulse/tick, shared by its damage descendants, never rolled recursively |
+| Sniper family distance bonus | `1 + 0.25 * clamp((travelDistance - 12) / 18, 0, 1)`: 1x through 12, 1.125x at 21, 1.25x from 30 |
+| Distance eligibility | Sniper Cannon, Railgun, Siege Railgun, Horizon Piercer and Sundering Lance direct shots only; not their secondary damage or Guided Launcher/Starfall |
+| Enemy penetration falloff | First enemy 100%, each later enemy 60% of that contact's distance-adjusted shot damage; one hit per projectile/enemy |
+| Same-tier price fairness | Identical purchase price across choices; no rarity or material gate added |
+| Signature scaling | Payload/critical snapshot once; signature minimum intervals remain fixed combat seconds under attack-speed/burst/pellet modifiers |
+| Fractional damage | Preserve fractional HP/damage internally in the future implementation; rounded UI must not discard repeated fractional ticks |
 
-Distance uses actual projectile travel from spawn to each contact. Guided Missile does not inherit the Sniper/Rail distance/penetration profile. Existing compatible augments still modify attacks; exact family/augment mapping remains a review task. The full tree is in [weapon-tree.md](../todo/07-upgrade-proposals/weapon-tree.md).
+| Tier | Weapon | Base damage | Attacks/s | Range | Speed | Target limit | Ideal solo DPS |
+|---|---|---|---|---|---|---|---|
+| T1 | Starter Cannon | 7–12 | 2 | 100 | 200 | 1 | 19 |
+| T2 | Machine Gun | 4 | 8 | 90 | 280 | 1 | 32 |
+| T2 | Sniper Cannon | 28 | 1 | 120 | 480 | 3 | 35 |
+| T2 | Shotgun | 6 × 6 pellets | 1 | 40 | 240 | See pellet rule | 36 |
+| T3 | Rotary Cannon | 5 | 10 | 95 | 300 | 1 | 50 |
+| T3 | Focus Laser | 5 / tick | 10 | 70 | Instant | 1 | 50 |
+| T3 | Railgun | 40 | 1 | 135 | 600 | 4 | 50 |
+| T3 | Flak Cannon | 8 × 6 pellets | 1 | 42 | 260 | See pellet rule | 48 |
+| T3 | Flamethrower | 3 / tick + 20 burn/s | 10 | 30 | Cone | See flame rule | 50 |
+| T4 | Assault Cannon | 6 | 12 | 100 | 320 | 1 | 72 |
+| T4 | Fusion Lance | 7 / tick | 10 | 80 | Instant | 1 | 70 |
+| T4 | Arc Projector | 14 / pulse | 5 | 60 | Instant | 3 | 70 |
+| T4 | Siege Railgun | 56 | 1 | 145 | 700 | 5 | 70 |
+| T4 | Guided Launcher | 56 | 1.25 | 120 | 160 | See explosive rule | 70 |
+| T4 | Shrapnel Cannon | 9 × 8 pellets | 1 | 45 | 280 | See pellet rule | 72 |
+| T4 | Inferno Projector | 5 / tick + 20 burn/s | 10 | 35 | Cone | See flame rule | 70 |
+| T5 | Tempest | 7 | 12 | 105 | 340 | 1; 2 in Overdrive | 98 |
+| T5 | Ironclap | 22 | 4 | 95 | 280 | 1 + splash | 96 |
+| T5 | Starbreaker | 8 / tick | 10 | 90 | Instant | 1 + signature splash | 95 |
+| T5 | Thunderweb | 14 / pulse | 5 | 65 | Instant | 3 | 95 |
+| T5 | Horizon Piercer | 76 | 1 | 155 | 800 | 6 | 95 |
+| T5 | Sundering Lance | 72 | 1 | 145 | 800 | 1 | 100 |
+| T5 | Starfall | 64 | 1.25 | 130 | 180 | See explosive rule | 95 |
+| T5 | Shatterstorm | 13 × 8 pellets | 1 | 48 | 300 | See pellet rule | 104 |
+| T5 | Breachmaker | 60 | 1.5 | 60 | 320 | 1 + signature cone | 96 |
+| T5 | Cinderheart | 6 / tick + 20 burn/s | 10 | 40 | Cone | See flame rule | 95 |
+
+#### Pattern, geometry and damage accounting
+
+- Bullet radii: Starter/Machine Gun/Rotary/Assault/Tempest 0.6; Ironclap 0.9; sniper/rail shots 0.7; pellet 0.45; guided missile 0.8; Breachmaker slug 1.0. Beam half-width: Focus 1.0, Fusion 1.25, Starbreaker 1.5. Beam stops after its allowed enemy count; both beam and projectile traversal stop at blocking world geometry.
+- Shotgun T2: six evenly spaced pellets over a 30-degree full fan. Flak T3: six over 32 degrees. Shrapnel T4/Shatterstorm T5: eight over 32 degrees. Shotgun pellets hit one enemy; explosive Flak/Shrapnel/Shatterstorm pellets detonate on contact or range end, radius 3. An impacted enemy takes exactly the listed damage once; up to two other nearby enemies take 50% each. A range-end burst deals listed damage to its nearest enemy and 50% to up to two others. Damage is not both direct plus full blast on the same victim.
+- Flame T3/T4/T5: full cone angle 40/45/50 degrees, range as in profiles, 10 direct ticks/s. The nearest enemy inside the aim cone receives full direct/burn damage; up to three additional enemies receive 35%. Burn is 20 damage/s on the primary, ticks every 0.25 s and expires 1.5 s after last flame contact. Additional enemies receive 7 burn damage/s. Burn refreshes, never stacks with itself; a new primary can upgrade an existing weaker burn, while weaker refreshes cannot downgrade a stronger unexpired burn. Secondary-only exposure refreshes a stronger burn only to its existing expiry; after expiry the current 35% burn applies. No ground fire. Flame exposure counters advance only on actual direct contact, not lingering burn.
+- Arc T4/T5: acquire the nearest visible enemy in a 50-degree full forward cone. Chain to at most two further distinct visible enemies, each within 12 of its preceding link and at 50% damage, not compounded. Targets cannot repeat; no damage multiplication when only one enemy exists. Walls block acquisition and links. Stable ID breaks distance ties.
+- Guided Launcher/Starfall: acquire the nearest visible enemy within 80 in a 90-degree full forward cone; turn at most 240 degrees/s. Keep a valid visible lock or reacquire under the same policy; without a legal target continue straight, never hold the primary firing loop waiting for a lock. Impact or travel limit detonates radius 10/12, up to four distinct enemies: primary 100%, others 50%. Direct plus splash is a single damage event per victim. These weapons do not inherit rail distance/penetration.
+- Rotary has no damage ramp penalty before T5; all weapons retain their listed baseline immediately. Ordinary fire stops during hub/pause. Existing cooldown debt is preserved when upgrading; no extra shot or signature refresh is granted.
+- Nearest-first with stable-ID ties selects damage-limited area targets. Hard visual budgets must not silently delete already-earned damage or rewards. Card-added target counts remain separate, bounded compatibility work under PREP-27/PREP-14.
+
+#### T5 signatures
+
+Counters below count only primary trigger groups that actually contact an enemy: one group for a pellet volley, burst or emitted primary pulse, never one per pellet, victim, chain or secondary effect. World-object hits do not earn signature charge. Counters cannot bank additional activations while a minimum interval is closed. All signature-generated damage is unable to generate another signature. A no-target trigger never spends a ready signature. Pauses/hub suspend counters and timers; upgrades cannot precharge or reset them.
+
+| T5 | Automatic signature | Trigger / bound | Extra damage and coverage |
+|---|---|---|---|
+| Tempest | Overdrive | 4 s of primary enemy contact earns 2 s at 18 shots/s, then repeat. Contact time has a 0.2 s grace; after 0.5 s without contact, unfinished charge resets. No charge during Overdrive | Normal 12 shots/s, 7 damage; Overdrive rounds hit up to 2 enemies with the penetration falloff. Overdrive duration advances in combat even if shots miss; ideal cycle is 6 s |
+| Ironclap | Hammerfall | Every eighth successful shot, minimum 2 s between activations | That shot adds 16 to its primary victim; radius-8 splash deals 16 to at most 3 other enemies, excludes the primary; push up to 3 units subject to enemy resistance, never stun-lock a boss |
+| Starbreaker | Core Rupture | 2 s actual beam contact on the same enemy, minimum 2 s between activations. A miss gap over 0.2 s or target switch resets exposure | 30 damage to primary, 15 each to at most 3 others within radius 8 |
+| Thunderweb | Storm Network | 2 s of actual primary arc contact, minimum 2 s between activations; miss gap over 0.2 s resets charge | One enhanced pulse adds 50 to its primary and 25 each to its existing two links; no extra links or recursive arcs |
+| Horizon Piercer | Terminal Shock | Every third successful shot, minimum 3 s between activations | Empowered projectile stores last enemy contact; on termination, radius-8 shock deals 24 to at most 4 enemies not already hit by that projectile. No solo DPS bonus; ordinary 76 x 1.25 = 95 |
+| Sundering Lance | Fracture | Every third consecutive successful shot on the same target, minimum 3 s between activations. A miss, target change or 2 s without contact resets the sequence | Add 30 damage to that target, no permanent vulnerability/debuff. Direct shots hit one enemy, trading away Siege Railgun's penetration |
+| Starfall | Pursuit Salvo | Every fifth successful primary missile, minimum 4 s between activations | Launch 3 additional missiles, 20 damage each, using normal guidance and radius-6 blast with the normal four-target/50% secondary rule. Distribute among legal targets before reusing one; all may hit a lone target |
+| Shatterstorm | Fragment Bloom | Every fourth successful volley, minimum 4 s between activations | Each impacted parent pellet emits 2 child fragments, 3 damage each, ±15 degrees from its incoming direction, speed 300, travel 10, radius 0.3; no blast/splitting, and each pair excludes its parent's impact victim. At most 16 children per empowered volley; no solo bonus against the impacted lone target |
+| Breachmaker | Breach Wave | Every third successful slug, minimum 2 s between activations | Add 12 damage to its impact victim; behind it, a 45-degree full cone of length 15 deals 24 to at most 4 others, excludes primary |
+| Cinderheart | Flashover | 2 s of direct flame contact on one enemy, minimum 2 s globally between activations. Miss gap over 0.2 s resets that enemy's exposure | 30 to triggering enemy and 15 each to at most 3 others within radius 8. Choose greatest exposure then stable ID if simultaneous; eruptions/burn cannot trigger eruptions |
+
+Earned signature effects commit only if their triggering primary hit occurs; a victim killed by that hit still produces its committed area effect at the stored impact position. Target-death cannot charge another target or duplicate the effect. Missing initial targets means no free signature charge from firing into empty space. Signature counters/timers are run-local; full reset clears them.
+
+#### Analytical balance evidence and playtest gates
+
+| T5 | Ideal long-run solo calculation | DPS |
+|---|---|---|
+| Tempest | `7 * (12*4 + 18*2) / 6` | 98 |
+| Ironclap | `22*4 + 16/2` | 96 |
+| Starbreaker | `8*10 + 30/2` | 95 |
+| Thunderweb | `14*5 + 50/2` | 95 |
+| Horizon Piercer | `76*1.25` | 95 |
+| Sundering Lance | `72*1.25 + 30/3` | 100 |
+| Starfall | `64*1.25 + 3*20/4` | 95 |
+| Shatterstorm | `13*8` | 104 |
+| Breachmaker | `60*1.5 + 12/2` | 96 |
+| Cinderheart | `6*10 + 20 + 30/2` | 95 |
+
+The ideal solo spread is 104/95 = 1.0947, under 10%. This is a paper comparison, not measured combat throughput. Burn can continue briefly after disengaging; shotgun pellet loss and sniper near-range damage must be reported rather than replaced by these ceilings.
+
+Future checks before any balance claim:
+1. Compare each tier against equal HP targets and equal upgrade investment. Include 30-HP basic and 50-HP ranged prototype targets, plus synthetic durable 1000-HP targets (test fixtures, not approved boss stats), dispersed enemies, packed crowds and moving targets. Check all firing directions and obstacle lanes at the real camera zoom.
+2. Run each T5 in a fixed-seed lone durable-target encounter and a mixed crowd encounter with at least three pilots. Record time-to-kill, actual landed DPS, incoming damage, clear rate and target uptime. Aim for median lone-target completion times within 15% of the roster median at intended fighting distances; a failed target leads to tuning, not declaring a path balanced from nominal DPS.
+3. Repeat with equal offensive card/shop budgets and with each supported pattern card. Do not publish a card/weapon pairing that silently wastes the card; exact burst/scatter/beam/cone mappings remain PREP-27, not implicitly approved here. Check high-rank attack-speed/crit and signature recursion.
+4. Every enabled encounter must remain completable by every path at the expected tier without requiring a rare compensating ability. Close-range routes require practical attack windows; no hard weapon-family immunity is proposed. This is an encounter acceptance requirement, not new boss authorship.
+5. Record time/wallet to each tier and affordable repair burden in real modes. Equal prices do not establish that T5 is reachable in 300-second Survival; economy/schedules remain deferred.
+6. Verify no damage/reward loss under the combined multi-target/effect load, at both 30 and 144 FPS, plus hub suspension and new-run reset. Do not claim implementation readiness until compatibility, performance limits and runtime checks are resolved.
 
 ### Numeric attribute proposal numbers
 
@@ -38,9 +169,9 @@ Distance uses actual projectile travel from spawn to each contact. Guided Missil
 
 Each purchase's gain is 25% of the listed card increment; compounded modifiers need not make four purchases exactly equal one card. Keep actual derived previews. Preserve fractional shield values. Capacity formula: `20 + 5*(deflectorCardRank - 1) + 1.25*paidCapacityPurchases`. Current HP/shield and cooldown debt are preserved on paid capacity increases.
 
-Proposed eight paid purchases per numeric attribute per run, price `40 + 20*n` where n is its prior paid count: 40/60/80/100/120/140/160/180, total 880. Persistent augment card ranks retain their existing cap 10; paid counts are independently capped and add their specified benefit. Deflector card rank remains an ability rank. Discrete Rapid Fire/Armor Piercing/Scatter/Broadside/Tail Gunner cards are field-only in the draft; no fractional projectiles or duplicate full-rank shop route.
+Proposed eight paid purchases per numeric attribute per run, owner-selected price `200 + 100*n` (5x prior draft) where n is its prior paid count: 200/300/400/500/600/700/800/900, total 4400. Persistent augment card ranks retain their existing cap 10; paid counts are independently capped and add their specified benefit. Deflector card rank remains an ability rank. Discrete Rapid Fire/Armor Piercing/Scatter/Broadside/Tail Gunner cards are field-only in the draft; no fractional projectiles or duplicate full-rank shop route.
 
-Owned ordinary combat abilities retain `100 + 50*r`; the existing four special abilities retain `200 + 75*r`; Deflector is excluded from those whole-rank shop rows. Proposed owned Blink next rank costs `600 + 150*r`, first upgrade 750. Acquisition of Blink is field-only. Existing four special acquisitions remain Singularity 240, Space Collapse 280, Nuclear Missile 320 and Armageddon 400; stock remains fixed for the run.
+Owner-selected 5x owned-rank pricing: ordinary combat abilities use `500 + 250*r`; the existing four special abilities use `1000 + 375*r`; Deflector is excluded from whole-rank rows. Proposed owned Blink pricing is scaled to `3000 + 750*r`, first upgrade 3750; its inclusion/acquisition contract stays under review and first acquisition remains field-only. Owner-selected 10x special acquisition prices: Singularity 2400, Space Collapse 2800, Nuclear Missile 3200 and Armageddon 4000; stock rules are unchanged.
 
 ### Luck proposal numbers
 
@@ -51,7 +182,7 @@ Owned ordinary combat abilities retain `100 + 50*r`; the existing four special a
 | Quality-check chance | `0.10 * rank`, capped at 0.50 |
 | Success | Keep higher of independent base/comparison uniform trade rolls inside the existing tier range |
 | Eligible reward tiers | Low/basic, mid/ranged, high/heavy only; not bosses/debris/excluded causes |
-| Prices | `80 + 40*n`, prior Luck count n; 80/120/160/200/240, total 800 |
+| Prices, if Luck adopted | Proposed 5x support-price alignment: `400 + 200*n`; 400/600/800/1000/1200, total 4000; Luck itself and this support-node interpretation remain under review |
 | Basic mean at Luck 0 / 5 | 2 / 20/9, approximately 2.222 at rank 5 |
 
 Assign final reward and Luck snapshot at spawn using isolated base-loot and Luck RNG state. Currency spending, later Luck purchase, kill cause, pickup merging or collection cannot reroll existing assigned values. Salvage, Return Home, score, card rarity and material family are unchanged by Luck. Existing uniform enemy range tables below describe the base roll; Luck intentionally biases the final eligible distribution while preserving the same inclusive bounds.
@@ -75,7 +206,7 @@ The [skill/rarity roster](../todo/07-upgrade-proposals/automatic-skills-and-rari
 
 ## 21 October material and campaign alignment (proposed; not implemented)
 
-[Scrap types](../todo/03-economy/scrap-types.md) classifies recoveries into **six** families: Recovered Alloys, Electronic Components, Polymer Stock, Power Modules, Structural Composites and Purification Media. A family is fixed by content profile, not a random price multiplier. Existing trade ranges, fixed salvage, debris yields and prices below are unchanged. Single-family merged pickups retain the label; different families display Mixed Salvage with conserved trade/salvage totals. There are no per-family wallets, recipes, conversion rates or statistics in the selected minimum scope.
+[Scrap types](../todo/03-economy/scrap-types.md) now uses the owner's **four** selected labels: Metal Fragments, Circuit Parts, Polymer Pieces and Power Cells, superseding the six-family draft. All feed one shared wallet, with enemy-tier reward values and visual/lore differences only. Existing trade ranges, fixed salvage and debris yields are unchanged. Weapon/upgrade/repair prices are revised by the 23 October decisions; older 20/21 October prices are superseded. Single-family merged pickups retain the label; different families display Mixed Salvage with conserved trade/salvage totals. There are no per-family wallets, recipes, conversion rates or statistics in the selected minimum scope.
 
 The ten-wave Campaign proposal now represents two source sectors, with guardians at five and ten. Guardian death stops that source's future emissions/adds; remaining required hostiles still block completion. No global HP reduction, reward reroll or purification-item requirement is introduced. Source shutdown flags persist through hub visits and reset with a fresh run. Same-step player death takes priority over victory. See [world and campaign](../todo/01-story/world-and-campaign.md).
 
@@ -97,17 +228,17 @@ The new product contract is [todo/02-gameplay/gameplay.md](../todo/02-gameplay/g
 | Return availability | `ceil(maximum / 2)` and online shield with positive points |
 | Return growth per player level | Swarm 50; Survival 75; Boss 100; Chaos 125; Campaign 100 |
 | Charge per collected salvage point | 1, capped at current maximum; independent of random trade value |
-| Successful manual return | Drain current charge to zero; no wallet/XP cost |
+| Successful field-return portal use | Drain current charge to zero; no wallet/XP cost |
 | Level-up capacity adjustment | Preserve absolute charge; recalculate maximum/threshold |
 | Low/mid salvage progress | Fixed 2 / 5; currency rolls listed separately below |
-| Owned standard rank r -> r+1 price | `100 + 50*r`; rank 1 -> 2 costs 150 |
-| Owned rare rank r -> r+1 price | `200 + 75*r`; rank 1 -> 2 costs 275 |
-| Rare acquisition prices | Singularity 240; Space Collapse 280; Nuclear Missile 320; Armageddon 400 |
+| Owned standard rank r -> r+1 price | `500 + 250*r`; rank 1 -> 2 costs 750 |
+| Owned rare rank r -> r+1 price | `1000 + 375*r`; rank 1 -> 2 costs 1375 |
+| Rare acquisition prices | Singularity 2400; Space Collapse 2800; Nuclear Missile 3200; Armageddon 4000 |
 | Rare stock | Three distinct unowned entries from those four, fixed for the run; fewer if insufficient eligible entries |
-| Hull repair | `ceil(missingHP / 5)` trade scrap; restores quoted hull after 3 uninterrupted service seconds |
-| Affordable hull patch | Spend up to wallet/needed repair cost; 5 HP per paid scrap, clamped; minimum price 1 |
-| Shield recharge | `ceil(missingShield / 5)` trade scrap; restores shield/reboot after 3 service seconds |
-| Full service | Sum of hull + shield quotes, same 3 seconds; no charge for already-full components |
+| Hull repair | `ceil(missingHP * 10)` Trade Scrap; restores quoted hull after 3 uninterrupted service seconds |
+| Repair What I Can Afford | For positive deficit/full quote Q, spend B = min(wallet, Q), restore `missingHP * B / Q`; preserve fractional HP; zero wallet buys no healing |
+| Shield Battery | Separate shop purchase; remove old overcharge and add supplied charge using the five-size contract above; no paid recharge berth service |
+| Service separation | Hull repair at the berth; Shield Battery purchased separately at the shop; no automatic combined debit |
 
 Each pickup stores `tradeValue` and `salvageValue`. Wallet and totalCollected increase by trade value; levelProgress and returnCharge increase by salvage value. Currency luck affects buying power without changing progression pace. Spending never subtracts XP/charge or lifetime trade collected. No cargo cap, credits conversion or deposit multiplier.
 
@@ -126,7 +257,7 @@ All ranges are uniform inclusive integers; one stored roll per enemy from a sepa
 
 Assign once at spawn, store across suspension, materialize only on reward-eligible death, credit only on collection. No currency reroll at kill/collection/merge. Summing/splitting preserves both fields. Existing ordinary debris keeps fixed per-kind yields for both fields. Barricades, cleanup/despawn and Space Collapse yield zero for both; Singularity follows normal rules. These reward tiers do not authorize new enemy/boss content.
 
-Paid hull service clears harmful player statuses only on completion of actual healing; shield-only service does not. Debit and service effects commit atomically after the 3-second duration, never on panel opening. Cancel means no cost and no healing. Pause freezes service. Zero wallet permits launch/resume but no free repair. Example: missing 37 HP costs 8; wallet 3 buys 15 HP for 3. Fractional positive shield deficits round up to at least 1 scrap.
+Paid hull service clears harmful player statuses only on completion of actual healing. Debit and hull healing commit atomically after 3 seconds; cancel means no cost/healing and pause freezes the job. Zero wallet permits launch/resume but no free repair. At 10 scrap per missing HP, missing 37 quotes 370; wallet 185 buys 18.5 HP, exactly half the deficit for half the quote. Preserve fractional HP so a small paid repair is not rounded away. Buying a Shield Battery is a distinct shop transaction; it does not heal hull or grant a Deflector rank.
 
 **Older shop target, superseded for numeric augment grants and cannon access by the 21 October upgrade review:** the shop sells all eligible owned standard ranks, owned rare ranks and the four rare acquisitions above. No standard first acquisition, weapon shop, consumable, reroll or permanent unlock is added. Paid Reinforced Hull grants max HP only; the field card retains its max/current-HP increase. Paid shield capacity never refills current points. Pass acquisition source through the same rank API and display the real resulting effect.
 
@@ -154,7 +285,7 @@ The return target moves as levels rise. At 2 salvage per basic enemy, the initia
 
 Deflector: rank-1 maximum 20, +5 per rank; online regeneration 2 points/s, +10% of base per rank. A hit against positive points is entirely absorbed even if it breaks the shield. Offline delay 10 s, minus 1 s/rank to a 5 s floor; restart at 50%, then restore the remaining half over 3 simulation seconds. No concurrent normal regeneration during that special restoration phase. Zero/offline shield blocks return; positive online shield permits it.
 
-Proposed starter Deflector rank 1 guarantees the utility has a normal-play shield. Rank increases preserve current points and elapsed cooldown debt; no free revival. Paid shield recharge/full service restores shield and clears reboot; hull-only repair does not. Hull has no passive field regeneration; Reinforced Hull's max/current-HP exception applies to free field cards only.
+Proposed starter Deflector rank 1 guarantees the utility has a normal-play shield. Rank increases preserve current points and elapsed cooldown debt; no free revival. Shield Batteries use the selected five-size shop contract above; normal field return requires an online positive shield. Hull-only repair does not restore shield or change its reboot. Hull has no passive field regeneration; Reinforced Hull's max/current-HP exception applies to free field cards only.
 
 Replace Nano Repair with Shield Detonation: 50 damage, radius 35, 18 s internal cooldown; +25% damage/rank, +10% radius/rank through rank 5, -10% cooldown with positive high-rank continuation. Trigger once on actual break, not repair/reset/upgrade. Combat catalog remains 32; Return Home is separate.
 

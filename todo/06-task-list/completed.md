@@ -25,6 +25,12 @@ The main tracker records completed debug tools, equipment prototypes, skill effe
 
 Consult the tracker for the exact dates, commits, native checks, measured capacity, human-review caveats and later corrections. In particular, prototype equipment is not the completed normal-play acquisition flow; existing timed cards are not the requested field salvage-level system; accepted art is not a complete hub/boss/cutscene production set.
 
+| 2026-10-23 | DOC-09 | Accepted weapon tree recorded; full numerical/signature draft prepared | [Tree](../07-upgrade-proposals/weapon-tree.md), [ledger](../../context/game-design.md#23-october-weapon-stat-draft--accepted-tree-proposed-tuning): 26 unique graph/profile matches, ten T5 calculations, 152 local links and 65 table checks pass; diff whitespace passes and existing Debug build exits 0 (no work). Arithmetic/document verification only; numerical adoption, card compatibility and live balance remain PREP-27/REVIEW-07. No source/assets changed |
+
 ## Future entries
+
+**23 October 2026 — DOC-10: Complete game logic/statistics review delivered.** [Review](../08-review/full-game-review.md) covers current source versus selected/draft design, all weapons/abilities, starting and upgrade milestones, enemy stats, economy and calculated progression risks. PREP-30 keeps owner decisions open; no runtime changes or playtested balance claim.
+
+**23 October 2026 — PREP-28: Shield Battery design adopted.** Owner selected five sizes, charge fractions, starting prices, proportional price scaling and replacement arithmetic. Game design records examples, the regeneration boundary and transaction previews. This completes design preparation only; T07/T10 implementation and live balance checks remain pending.
 
 Append new verified results below this section. If a completed item later fails or requirements change, preserve the record, reopen its original ID and add the date/reason. Do not delete completed history to make the open list look smaller.

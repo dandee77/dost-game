@@ -1,5 +1,9 @@
 # UI Rules
 
+## 23 October repair/shop feedback
+
+Show Full Repair and Repair What I Can Afford at the berth with the quoted deficit, exact restored HP, cost and wallet afterward. Partial payment restores the same fraction of missing HP; retain fractional values instead of displaying a paid zero gain. Shield Battery is a separate shop purchase used immediately, distinct from Power Cell salvage. Disable purchase when nothing can be restored, and commit debit/effect together after validation. This is a design contract; no screen is implemented by this documentation.
+
 ## 21 October upgrade review UI — proposed, not implemented
 
 The [upgrade review](../todo/07-upgrade-proposals/README.md) adds a mothership weapon tree and quarter-strength numeric attributes. Show current parent/branch/tier, exact next effect/price, remaining wallet and the run-long branch lock before purchase. Five tiers refer to equipment progression, not the rarity color of a skill card. Disable sibling branches with a readable reason; do not advertise an unavailable weapon profile as finished.
@@ -12,7 +16,7 @@ Blink's card is Legendary and automatic. Its status shows readiness/cooldown and
 
 Use **H.O.P.E. Colony** on arrival/story cards and **HOPE** where space is limited. Full expansion: **Habitat for Orbital Preservation and Endurance**. The player stays in the ship; show reused inhabited station modules, safe service approaches and Earth beyond. No special-tree/seed quest art or radiation-origin imagery is required. Source shutdown and survey/containment craft replace the old ending motif. The latest creature origin is biological: an altered waste-eater moves inside a shell formed by binding indiscriminately collected fragments around its body. Retain the accepted canister/appliance/metal-cluster silhouettes; the bulk of each visible enemy can be nonliving external armor concealing the organism. A later story close-up can show fibrous joins and gathering behavior without requiring a sprite redesign or new armor mechanic. Future narrative shots establish benign organisms before exposure, then altered movement and protected orbital cores. Preserve accepted enemy/debris art in this context-only session; organic seams or core reveals are later art-direction proposals, not replacement assets required now. Detailed motion beats and playback rules: [story context](../todo/01-story/story-context.md).
 
-The six proposed [scrap families](../todo/03-economy/scrap-types.md) are optional flavor labels on the same trade/salvage pickups. Do not add six HUD meters, material-specific prices or compulsory new pickup art. Mixed bundles use Mixed Salvage. Preserve accepted destruction frames and red glow pickups; future icons distinguish shape as well as color. The main combat readout remains Trade Scrap, Salvage progress, shield and Return Home readiness. Source-isolation notices must not hide required surviving-hostile counts.
+The four owner-selected [scrap labels](../todo/03-economy/scrap-types.md)—Metal Fragments, Circuit Parts, Polymer Pieces and Power Cells—share the same trade/salvage accounting. Do not add four HUD meters, material-specific prices or compulsory new pickup art. Mixed bundles use Mixed Salvage. Preserve accepted destruction frames and red glow pickups; future icons distinguish shape as well as color. The main combat readout remains Trade Scrap, Salvage progress, shield and Return Home readiness. Source-isolation notices must not hide required surviving-hostile counts.
 
 ## 20 October target screens (design only)
 
@@ -24,7 +28,7 @@ See [todo/02-gameplay/gameplay.md](../todo/02-gameplay/gameplay.md) sections 3-5
 | S-12 Difficulty | Easy/Hard/Impossible, effects summary, explicit Confirm and Back |
 | S-13 Colony hub | Same pilot ship, safe navigation, visible inhabited colony, mothership, repair berth, shop and five labeled portals |
 | S-14 Portal preview | Objective, mode/difficulty, ending condition, Launch/Resume; crossing radius alone never launches |
-| S-04 Field HUD | Wallet and level progress at top center; distinct Return Home meter/50% tick/Q/block reason; hull/shield, objective/timer, MENU |
+| S-04 Field HUD | Wallet and level progress at top center; distinct portal-energy meter/50% tick/nearby F/block reason; hull/shield, objective/timer, MENU |
 | S-05 Field cards | NEW/UPGRADE, real changing stats, automatic/persistent tags; triggered by scrap, not wave clear or elapsed time |
 | S-06 Skill shop | Upgrade Owned and Rare Offers, shared card-stat preview, rank, price, Buy/disabled reason, sold and empty-stock states |
 | S-07 Pause | Resume/Settings/Quit to Main Menu with confirmation; resumes to original hub/field state |
@@ -38,7 +42,7 @@ Repair UI disables unaffordable/full components, offers an affordable hull patch
 
 Intro/trailer treatment is in [todo/01-story/story-context.md](../todo/01-story/story-context.md): a short story-text card clears, then its animated scene/gameplay clip plays; repeat with trailer pacing. Use the same safe area/type constraints. Required story sentences belong on their own beats, not continuously over combat. Footage needs moving action; narration is optional. No new art is generated in this documentation session.
 
-Preserve existing 3840x2160 canvas, 1280x720 initial window, CRT-safe regions, mapped mouse input, Button style and Theme tokens. No UI text at the cropped screen edge. Keep accepted red debris glow and complete destruction art. Proposed Q Return Home replaces the old manual-skill indicator only when implementation changes activation; F hub interaction avoids conflicting with E auto-fire.
+Preserve existing 3840x2160 canvas, 1280x720 initial window, CRT-safe regions, mapped mouse input, Button style and Theme tokens. No UI text at the cropped screen edge. Keep accepted red debris glow and complete destruction art. Selected field return portals replace the planned Q Return Home ability. F interacts inside a return portal or at hub services, with frame input consumed at transitions; E retains auto-fire. Portal pointer appears only within the selected detection radius (roughly one visible screen); broken-shield portals remain visible with Shield Offline. Do not present a manual skill slot.
 
 How everything on screen is drawn: the canvas and safe area, the two coordinate spaces, fonts, colors, sizes, layout, sprites and screens. This file replaces three web files: **ui-rules** (how to compose screens), **ui-tokens** (now the `Theme.hpp` header, defined at the end of this file) and the visual half of **ui-registry** (sprite and asset tables).
 

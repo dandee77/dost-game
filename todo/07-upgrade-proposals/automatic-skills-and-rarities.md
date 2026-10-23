@@ -1,10 +1,10 @@
 # Automatic Skills, Blink and Proposed Rarity
 
-**21 October 2026. Context only.** The owner confirmed automatic combat skills, manual Return Home, and Legendary reactive Blink. Other tier assignments/weights remain proposals for later confirmation. Existing implementation behavior is recorded in [skills commands](../../context/skills-commands.md), not changed by these documents.
+**21 October 2026. Context only.** The owner confirmed automatic combat skills and Legendary reactive Blink; the 23 October field return portals supersede manual Return Home. Other tier assignments/weights remain proposals for later confirmation. Existing implementation behavior is recorded in [skills commands](../../context/skills-commands.md), not changed by these documents.
 
 ## 1. Complete target combat-ability list
 
-The earlier Nano Repair -> Shield Detonation target remains. There are **19 combat abilities** below plus **13 attribute/pattern augments**, total 32 existing target entries. Luck is a separate proposed shop node. Return Home is a separate manual utility, not an extra combat card. New primary weapon families are equipment tree nodes, not added automatic-ability entries.
+The earlier Nano Repair -> Shield Detonation target remains. There are **19 combat abilities** below plus **13 attribute/pattern augments**, total 32 existing target entries. Luck is a separate proposed shop node. Field return portals are world interactions outside the card catalog, not an extra manual skill. New primary weapon families are equipment tree nodes, not added automatic-ability entries.
 
 | Ability | Proposed rarity | Automatic behavior and duration category |
 |---|---|---|
@@ -75,6 +75,6 @@ With eligible Legendary entries and three populated slots, the probability of at
 
 The previous four acquisition offers remain a separate **Special Offers** selection: Singularity, Space Collapse, Nuclear Missile and Armageddon, at their existing draft prices. Their new field rarity labels do not automatically change those prices. These four can therefore be deliberately acquired at home if stocked; their card rarity describes field frequency, not universal scarcity.
 
-**Blink first acquisition is field-only** in the proposal, to preserve the owner's request that it be very rare. It does not join the guaranteed or fixed acquisition shop stock. Once learned, its proposed whole-rank shop cost is `600 + 150*r` for current rank r, so rank 1 -> 2 costs 750. Cards can also grant later ranks. Existing four special abilities retain their prior premium rank formula; other ordinary abilities retain the standard whole-rank formula. Deflector capacity and numeric augments use the separate quarter-strength attribute contract instead.
+**Blink first acquisition is field-only** in the proposal, to preserve the owner's request that it be very rare. It does not join the guaranteed or fixed acquisition shop stock. Once learned, its proposed whole-rank shop cost is `3000 + 750*r` for current rank r after the selected 5x owned-rank scale, so rank 1 -> 2 costs 3750. Blink's exact adoption remains pending. Cards can also grant later ranks. The selected 23 October scale makes special owned ranks `1000 + 375*r` and ordinary owned ranks `500 + 250*r`; special first acquisitions use 10x their prior prices. See the numerical ledger; no rank benefits or rarity weights change. Deflector capacity and numeric augments use the separate quarter-strength attribute contract instead.
 
 No claim is made that the rarity or acquisition prices are balanced. The complete roster, grade assignments, persistent-drone proposal and weighting are presented for later confirmation; don't mark PREP-04/05 complete solely because these candidate tables exist.

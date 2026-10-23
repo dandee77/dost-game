@@ -35,7 +35,7 @@
 ## 3. Economy review
 
 - [ ] Biological remains do not create a new currency, pickup or corpse-harvesting requirement.
-- [ ] Six proposed material families map to recognizable sources; Mixed Salvage is a display label, not a seventh resource.
+- [ ] Four owner-selected materials (Metal Fragments, Circuit Parts, Polymer Pieces, Power Cells) map to recognizable sources; Mixed Salvage is a label, not another currency. Enemy-tier reward values remain unchanged.
 - [ ] Material families introduce no exchange multiplier, random reroll, crafting prerequisite or second wallet.
 - [ ] Enemy trade ranges and fixed salvage values agree with game-design.md.
 - [ ] Existing ordinary debris yields/animations and no-reward exclusions are preserved.
@@ -44,9 +44,14 @@
 - [ ] Source shutdown never requires a random boss drop or purification item.
 - [ ] Spending trade currency never subtracts salvage level progress or Return Home charge.
 
+- [ ] Weapon quotes are 500/1500/4000/10000 with 16000 total on every path; 20–25-minute Swarm timing is measured, not inferred from prices. Survival shares prices and normally ends with a lower-tier build.
+- [ ] Attribute/owned-rank prices are 5x, special acquisitions 10x; gains do not multiply with prices.
+- [ ] Hull repair quotes 10 scrap per missing HP and restores exactly payment/full-quote of the deficit, preserving fractional HP. Full Repair/Repair What I Can Afford show exact previews; zero wallet yields no free heal.
+- [ ] Verify the adopted five-size battery contract at runtime: remove old overcharge before adding charge, preserve damaged normal shield, quote proportional prices, commit payment/shield atomically, preview weaker replacements and cap regeneration at normal capacity. PREP-28 design is adopted; runtime checks remain pending.
+
 ## Upgrade proposal checks before adoption
 
-- [ ] Five-tier weapon graph is 1/3/6/6/6 nodes; only legal descendants can be bought. Full T3-T5 profiles follow family approval.
+- [ ] Accepted graph is 1/3/5/7/10 nodes; only immediate descendants can be bought. Full proposed profiles/signatures exist; numerical adoption, exact card compatibility and live balance/performance remain open.
 - [ ] Quarter-strength numeric grants do not buy full field ranks, heal, reset cooldowns or produce fractional bullets.
 - [ ] Deflector stays in field cards; paid capacity preserves current shield and broken/reboot state.
 - [ ] Legendary Blink intercepts a validated incoming direct hit once; legal on-screen rescue/cooldown/protection commit together.

@@ -4,11 +4,19 @@ Design handoff updated **20 October 2026**. This replaces the former pause/scrap
 
 No feature below is implemented merely because it is described here. Read [progress-tracker.md](../../context/progress-tracker.md) for implementation status. This session changes documentation only, under `context/` and the owner-requested top-level `todo/`.
 
+## 23 October field-return portal follow-up
+
+Owner replaced manual Q teleport with [random field return portals](return-portals.md). Spawn once energy reaches half of current capacity; F inside the portal requests travel with positive online shield and energy still at least half. Portals can be far away; pointer detection begins roughly one visible screen away. Portals remain until used/run end and stay visible/locked when the shield breaks. All skills are automatic; F is interaction. Counts are Easy/Hard/Impossible 3/2/1; fresh random sets follow successful return/recharge, with placement/detection details pending. Five battery sizes and prices are adopted: remove old overcharge, then add purchased charge as specified in game-design.md. Regeneration stops at normal capacity and prices scale proportionally with that capacity. This supersedes the manual-return target below, not implemented runtime behavior.
+
+## 23 October pricing/material follow-up
+
+Owner selected weapon costs 500/1500/4000/10000 (16000 per full path), targeting T5 around 20–25 combat minutes in Swarm. Survival keeps shared prices and normally ends with a lower-tier build. Numeric attribute and owned-skill-rank prices increase 5x, special acquisitions 10x. Hull repair costs 10 scrap per missing HP, with Full Repair and Repair What I Can Afford plus exact proportional previews. Shield Battery is a separate shop purchase replacing paid shield recharge; its five-size charge, replacement and price contract is adopted in game-design.md. Four selected material labels feed one wallet and retain enemy-tier reward values. This supersedes older prices/material-count and no-questions instructions; encounter/layout/boss decisions remain deferred. No runtime implementation is implied.
+
 ## 21 October weapon/attribute/rarity follow-up
 
 Read the [upgrade proposal folder](../07-upgrade-proposals/README.md) before the older shop/skill contracts below. Confirmed: mothership cannon tiers, one branch per run, numeric purchases at 25% of field-card gains, shield cards retained, automatic combat abilities and Legendary reactive Blink. All detailed new family stats/prices/rarities and exact Blink/Luck rules are review proposals, not implemented or silently approved. The [game-design review ledger](../../context/game-design.md) is the numeric authority.
 
-Proposed five-tier path count is 1/3/6/6/6. Weapon Tree, Attributes, Owned Skills and Special Offers become the shop's sections. Numeric-augment full-rank purchases are superseded; Deflector gets a capacity-only purchase node, while ordinary eligible combat skills retain whole-rank upgrades. New primary family choices never appear in field cards. The retained field attack-attribute effects versus hub-only cannon evolution is an explicit interpretation awaiting owner review.
+Owner-accepted five-tier path count is now 1/3/5/7/10, with choices at both T4 and T5. Weapon Tree, Attributes, Owned Skills and Special Offers become the shop's sections. Numeric-augment full-rank purchases are superseded; Deflector gets a capacity-only purchase node, while ordinary eligible combat skills retain whole-rank upgrades. New primary family choices never appear in field cards. The retained field attack-attribute effects versus hub-only cannon evolution is an explicit interpretation awaiting owner review.
 
 The owner deferred bosses, mode schedules, final names, hub/arena layouts and broad economy review. Their existing proposals remain references but are not decisions to obtain during this session. No further questions are to be sent during preparation; collect remaining choices in the upgrade review checklist.
 
@@ -18,7 +26,7 @@ This handoff now lives in a topic folder. [World and campaign](../01-story/world
 
 The proposed campaign retains ten waves and boss slots five/ten. Each guardian disables its source emitter on death; existing required adds must still be cleared before the sector completes. Source shutdown does not reroll loot, lower existing HP or require a special drop. The final sector opens a cleanup corridor, not an instantly restored Earth. No-loot effects still resolve objectives; same-step player death takes priority over victory as below. Final boss identities/attacks remain owner content.
 
-[Scrap types](../03-economy/scrap-types.md) proposes six material families over the existing paired trade/salvage economy. Types carry no reward multipliers or crafting gates. A profile assigns the dominant material; a mixed merged pickup displays Mixed Salvage while preserving both totals. Ordinary debris yields, accepted art, random enemy currency ranges, fixed salvage, repair costs and skill prices stay unchanged.
+[Scrap types](../03-economy/scrap-types.md) records four owner-selected labels: Metal Fragments, Circuit Parts, Polymer Pieces and Power Cells, over the existing paired trade/salvage economy. Types carry no reward multipliers or crafting gates. A profile assigns the dominant material; a mixed merged pickup displays Mixed Salvage while preserving both totals. Ordinary debris yields, accepted art, random enemy currency ranges, fixed salvage stay unchanged; repair and shop prices use the new 23 October scale.
 
 [Decisions and gaps](../00-planning/decisions-and-gaps.md) records remaining specifications beyond art: boss content, spawn tables, equipment access, card distribution, auto-targeting/mobility, geometry, scoring/results, tutorial/audio and performance limits. Their proposed defaults are preparation choices, not delivered features.
 
@@ -85,8 +93,8 @@ This is a focused source/doc audit, not a fresh runtime certification. No game b
 | C04 | Modes | **Confirmed direction:** Swarm/endless, timed Survival, Boss, Chaos with bosses plus swarms, Campaign ending in a boss |
 | C05 | Boss content | **Pending content:** owner will develop bosses. Existing Hoarder/Core designs are reference proposals, not newly approved final content |
 | C06 | Level-up location | **Confirmed by follow-up:** normal upgrades happen in the field immediately through scrap progression; returning is not required |
-| C07 | Return Home | **Confirmed:** scrap-powered manual ability, usable from 50% charge, capacity grows with player level, blocked while shield is broken |
-| C08 | Manual combat skills | **Proposed interpretation:** Return Home is the one manual ability; previous automatic/persistent combat-skill target remains |
+| C07 | Return Home | **Confirmed 23 October:** random field portals replace manual teleport; F inside with 50% energy and online positive shield; capacity grows with player level |
+| C08 | Manual combat skills | **Confirmed 23 October:** all skills automatic; F is a world/portal interaction, not a manual skill |
 | C09 | Scrap numbers | Owner's 100 level requirement and 1,000 return maximum are **example values**; use as proposed initial tuning, not tested final balance |
 | C10 | Accounting | **Confirmed:** tradeable scrap is random by enemy, starting at 1-3. **Delegated design:** separate random trade value from fixed salvage progress; one collected pickup carries both |
 | C11 | Hub shop | **Delegated design:** targeted next-rank purchases plus rare offers from existing combat skills; inventory and prices selected in section 9 |
@@ -120,7 +128,7 @@ The hub is a local single-player staging area. “Lobby” does not imply matchm
 
 Fight -> collect released scrap -> receive XP, currency and return charge -> complete a level threshold -> choose a card in the field -> resume the same encounter.
 
-At any eligible moment, request Return Home. At the end of that simulation frame, resolve damage/death and pending level choices before a return can commit. A successful return suspends the encounter, moves the player to the hub and opens access to repair/shop services.
+Find a spawned field return portal and press F inside its interaction zone when eligible. At the end of that simulation frame, resolve damage/death and pending level choices before a return can commit. A successful return suspends the encounter, moves the player to the hub and opens access to repair/shop services.
 
 ### 3.3 At home after return
 
@@ -160,7 +168,7 @@ The colony must look inhabited without requiring NPC conversations, a walking av
 ### 4.2 Safe hub behavior
 
 - No enemy, debris hazard, hostile projectile, boss, barricade or scrap farming spawns in the hub.
-- Primary fire, automatic damage skills and manual Return Home are disabled there. Ship movement is allowed outside modal panels.
+- Primary fire, automatic damage skills and field return-portal use are disabled there. Ship movement is allowed outside modal panels.
 - Combat cooldown debt, statuses, persistent effects and encounter time freeze; hub time is not a way to recharge offensive skills.
 - Do not carry visible hostile projectiles or damaging skill effects into the hub.
 - Opening shop or a portal panel captures movement/fire input. Closing it consumes that input.
@@ -175,12 +183,12 @@ The colony must look inhabited without requiring NPC conversations, a walking av
 
 | Service | Selected price | Result after 3 uninterrupted docking seconds |
 |---|---|---|
-| Repair Hull | `ceil(missingHull / 5)` scrap | Restore hull to current maximum; clear harmful player statuses |
-| Affordable Hull Patch | `min(wallet, ceil(missingHull / 5))` scrap, at least 1 | Restore up to 5 HP per paid scrap, clamped to missing hull; clear harmful player statuses |
-| Recharge Shield | `ceil(missingShieldPoints / 5)` scrap | Restore shield to current maximum; clear broken/reboot/restoration state |
-| Full Service | Hull repair quote + shield recharge quote | Both effects; each component priced once |
+| Full Repair | Q = `ceil(missingHull * 10)` scrap | Restore hull to current maximum; clear harmful player statuses |
+| Repair What I Can Afford | B = `min(wallet, Q)` scrap; Q is the positive full-repair quote | Restore `missingHull * B / Q` HP; preserve fractional gains; clear harmful player statuses |
+| Shield Battery | Five sizes starting at 100/250/500/700/900 scrap; prices scale proportionally with normal capacity | Remove old overcharge, then add 20%/50%/100%/150%/200% of normal capacity. Repeat purchases allowed; no free normal-shield refill or hull healing. Full contract in game-design.md |
+| Combined service | Removed in favor of separate explicit repair/battery purchases | No automatic bundled debit |
 
-Do not floor fractional shield deficits: any positive deficit costs at least 1 scrap. Disable a service with nothing to restore. A full hull needs no repair charge; a full shield needs no recharge charge. The affordable patch appears when full hull repair is unaffordable but the wallet can pay for some healing. Example: 37 missing HP costs 8 for full repair; with 3 scrap, buy a 15-HP patch for 3.
+Disable paid restoration with nothing to restore. The affordable hull button appears when a positive wallet cannot cover Q. Example: 37 missing HP quotes 370; paying 185 restores 18.5 HP. A budget of zero heals nothing. Full quote payment restores the whole quoted deficit; partial payment restores the exact same fraction. Preserve fractional HP and preview the actual gain.
 
 Display exact HP/shield restored, cost and post-service balance before confirmation. Lock that quote and capture input while servicing; no simultaneous shopping. Charge and healing commit together at completion after revalidating funds and deficits. Cancel, leave, pause or quit cannot produce partial free healing: pause freezes service time; cancellation clears the job without a debit or heal; quit cancels it before run teardown. A failed/stale commit returns to the quote without charging.
 
@@ -215,7 +223,7 @@ These schedules are proposed in the tuning ledger. New boss stats, attacks, anim
 
 - Campaign wave clear does not automatically grant an upgrade card. Only the scrap threshold does.
 - Proposed Campaign service checkpoints occur after completed waves. They can automatically offer safe hub transit without a Return Home charge or shield check because the encounter has ended.
-- Other modes use the manual return condition while an encounter remains active.
+- Return during an active encounter uses the selected field portals and unchanged shield/energy gates.
 - Objective success/death are resolved once. Proposed tie rule: player death in the same simulation step takes priority over victory.
 - After a terminal result, stop scoring and collection. Uncollected loot is not magically converted into currency or XP.
 - Uncollected loot at an ordinary wave clear stays collectible until collected or the expedition ends; checkpoint travel freezes it.
@@ -241,7 +249,7 @@ Combat-time clocks exclude pause, card selection, console, hub and shop. A separ
 | `totalCollected` | Lifetime trade scrap collected in this run; statistics only | +t | Unchanged | Unchanged |
 | `wallet` | Spendable trade scrap currency | +t | Subtract confirmed price | Unchanged |
 | `levelProgress` | Salvage progress toward field upgrades | +p | Unchanged | Unchanged |
-| `returnCharge` | Salvage energy for Return Home | +p, capped | Unchanged | Drain to zero on successful manual return |
+| `returnCharge` | Salvage energy for Return Home | +p, capped | Unchanged | Drain to zero on successful field-return portal use |
 
 There is no allocation menu or conversion fee. Spending money on repair/skills does not undo field progress or discharge Return Home. Random currency luck does not also randomize the level-up/return pace. This separation is the author's chosen implementation interpretation, not an additional owner-specified formula.
 
@@ -347,7 +355,8 @@ All conditions must hold:
 3. No queued level-up choice.
 4. Charge at least the current required amount.
 5. Authoritative persistent shield present, online and with positive shield points.
-6. No return already pending or committed.
+6. Player inside a valid active field-return portal and F pressed for this request.
+7. No return already pending or committed.
 
 “Shield broken” means zero points or an active broken/reboot state. Hull invulnerability, an equipment shield visual, a temporary protective effect or a queued repair cannot bypass it. A damaged shield with positive points is sufficient; a fully charged shield is not required.
 
@@ -355,9 +364,9 @@ Proposed default for an absent shield is **blocked**, with clear feedback. The r
 
 ### 7.4 Successful and failed requests
 
-- Q/button creates one return request, not an immediate teleport before damage resolution.
+- F inside a spawned field return portal creates one request, not an immediate teleport before damage resolution; there is no manual Q teleport skill.
 - Resolve that frame's normal collision/damage. Death wins. A shield broken by that frame cancels the request.
-- Process scrap and thresholds. If cards become pending, open them and cancel the return request; require a fresh Q after choosing.
+- Process scrap and thresholds. If cards become pending, open them and cancel the return request; require a fresh F inside the portal after choosing.
 - Recheck eligibility against the final frame state and updated capacity.
 - If valid, commit once: drain charge to zero, suspend expedition, place ship at hub arrival, capture input for the transition.
 - If invalid, keep charge and wallet unchanged. Briefly show the reason; do not queue an automatic future return when the shield heals.
@@ -465,16 +474,16 @@ See game-design.md for the canonical starting prices:
 
 | Shop item | Price in trade scrap | What the purchase grants |
 |---|---:|---|
-| Eligible owned ordinary combat ability next rank, excluding Deflector/Blink | `100 + 50*r` | One rank; r is current rank; rank 1 -> 2 costs 150 |
-| Owned ability from the four existing premium special entries, next rank | `200 + 75*r` | One rank; rank 1 -> 2 costs 275 |
-| Singularity, unowned rare offer | 240 | Acquire rank 1; crowd control and ordinary rewards |
-| Space Collapse, unowned rare offer | 280 | Acquire rank 1; explicitly warns that erased enemies yield neither currency nor progress |
-| Nuclear Missile, unowned rare offer | 320 | Acquire rank 1; existing burst effect |
-| Armageddon, unowned rare offer | 400 | Acquire rank 1; existing sustained barrage |
+| Eligible owned ordinary combat ability next rank, excluding Deflector/Blink | `500 + 250*r` | One rank; r is current rank; rank 1 -> 2 costs 750 |
+| Owned ability from the four existing premium special entries, next rank | `1000 + 375*r` | One rank; rank 1 -> 2 costs 1375 |
+| Singularity, unowned rare offer | 2400 | Acquire rank 1; crowd control and ordinary rewards |
+| Space Collapse, unowned rare offer | 2800 | Acquire rank 1; explicitly warns that erased enemies yield neither currency nor progress |
+| Nuclear Missile, unowned rare offer | 3200 | Acquire rank 1; existing burst effect |
+| Armageddon, unowned rare offer | 4000 | Acquire rank 1; existing sustained barrage |
 
 Ordinary first skill acquisitions still come from field cards. Scrap Magnet/Combat Drone and eligible ordinary combat abilities retain standard rank pricing. Deflector uses capacity-only purchases; Blink is field-only for first acquisition and has a proposed premium owned-rank price. Numeric augment purchases follow the quarter-strength ledger; existing card caps remain. Prices are identical across modes/difficulties; no price RNG or price reroll.
 
-The owner delegated inventory/pricing, so these are the selected handoff values rather than unanswered questions. They are not playtest-certified. At the nominal 500 salvage threshold, 250 basic kills produce expected trade income 500, range 250-750, before level-driven increases; this usually funds repair and a meaningful purchase. Actual first return occurs later when leveling raises its requirement. Keep healing inexpensive compared with elective skill upgrades.
+Owner selected these higher price scales on 23 October; they are not playtest-certified. Nominal 250 basic kills still yield expected trade 500 before level-driven return changes, but increased prices mean this no longer promises repair plus a skill purchase. Compare actual spending and tier timing to the 20–25-minute Swarm target, including repair/upgrade spending, without altering salvage growth or reward ranges implicitly.
 
 Purchase transaction: revalidate run state, item, current rank, eligibility, price and wallet; apply the rank/acquisition exactly once and debit exactly once. Reject stale or repeated click events without charging. If application fails, no currency is lost.
 
@@ -522,7 +531,7 @@ Required information, ordered for readability:
 - Hull and persistent shield, including offline/reboot status.
 - **Scrap** wallet at top center; lifetime collected in result/details, not mislabeled as available money.
 - Thin player-level progress bar immediately below: `Level L — progress / required`.
-- Separate Return Home meter: `charge / maximum`, 50% marker, Q hint and readiness/block reason.
+- Separate portal-energy meter: `charge / maximum`, 50% marker, readiness/block reason and F hint only at a portal. Direction marker is limited to the selected detection range.
 - Mode objective and combat timer: Survival countdown, Campaign wave, Boss name/HP, Swarm/Chaos elapsed time.
 - MENU button inside the top-right safe region.
 
@@ -617,13 +626,13 @@ No unrelated refactors, dependencies, asset generation, online systems, save-gam
 - Verify return maximum/50% threshold for all modes at levels 1, 2, 5, 10; odd maximum rounds up.
 - Collect a reward pair through each path: wallet/total gain trade, XP/charge gain salvage once; capped charge does not discard trade/XP.
 - Collect salvage 250/trade 231 on Easy at level 1: two picks, level 3, progress 45, wallet 231; test large batches and checked limits.
-- Buy rank 2 from rank 1 with exactly 150 wallet: success leaves zero; 149 fails without mutation.
+- Buy ordinary rank 2 from rank 1 with exactly 750 wallet: success leaves zero; 749 fails without mutation.
 - Purchase changes no player-level requirement, charge or collected statistic.
 - Verify inclusive reward endpoints and deterministic seeded samples for every tier. Swapping menu/cosmetic/card activity must not change an enemy's stored roll. Do not require a small random sample to match theoretical frequencies exactly.
 - Merging/splitting conserves both trade and salvage independently; no-reward deaths emit neither.
-- Hull deficit 37 quotes 8; wallet 3 buys 15 HP for 3. Zero wallet cannot heal. Fully repaired components are not charged.
+- Hull deficit 37 quotes 370; wallet 185 buys 18.5 HP. Half the full quote restores half the deficit; fractional gains are retained. Zero wallet cannot heal and full hull cannot be charged.
 - Cancellation, pause, repeat clicks and stale service quotes never produce a debit without healing or healing without a debit. Full Service is the sum of its two component quotes.
-- Rare acquisition prices and rank-1 upgrade prices (standard 150, rare 275) match the shared preview. Paid Reinforced Hull increases max HP without current-HP healing.
+- Rare acquisition prices and rank-1 upgrade prices (standard 750, rare 1375) match the shared preview. Paid Reinforced Hull increases max HP without current-HP healing.
 - Shop reentry, resume, reset cleanup, expired cosmetic effects and destroyed barricades award no scrap.
 
 ### 14.2 Shield and Return Home
@@ -676,7 +685,7 @@ Suggested future debug additions: `scrap add`, `scrap status`, `progress fill`, 
 1. Playtest the selected paired reward model: random trade currency, fixed salvage progress, no spending of XP/return charge.
 2. Playtest the delegated shop inventory/prices and paid repair. These details have now been chosen; no repeated design permission is needed.
 3. Confirm starter Deflector and strict missing-shield block. This makes the broken-shield return rule coherent without relying on random acquisition.
-4. Confirm Return Home drains all charge and uses Q; confirm no extra manual combat slot.
+4. Confirm field portal use drains all charge, uses F inside its zone, rechecks shield/energy and has no Q/manual skill fallback.
 5. Playtest 100/1,000 starting values, mode growth, drop income, level growth and shop costs together. The threshold moves while collecting; nominal 500-scrap return is not necessarily attainable at level 1.
 6. Supply actual bosses: identity, arena, telegraphs, phases, damage/HP, adds, durations and scrap rewards. Adopt or replace old Hoarder/Core proposals.
 7. Confirm Survival duration, Chaos cadence, Campaign structure and checkpoint travel.

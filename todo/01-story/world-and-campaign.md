@@ -142,15 +142,15 @@ Boss-source flags are run-local. Swarm, Survival, Boss and Chaos do not inherit 
 
 ## 7. Scrap as a story resource
 
-Scrap has recognizable material families, described in [scrap types](../03-economy/scrap-types.md). Useful metal, electronics, polymers, power modules, composites and filtration stock connect enemies to colony survival. Destroying enemies produces recoverable fractions, not proof that shooting is an efficient real-world recycling process.
+Scrap has recognizable material families, described in [scrap types](../03-economy/scrap-types.md). Metal Fragments, Circuit Parts, Polymer Pieces and Power Cells connect recovered nonliving shell/equipment material to colony survival. Destroying enemies produces recoverable fractions, not proof that shooting is an efficient real-world recycling process.
 
-The economy still has one trade wallet. Family labels explain recovered material; they do not create six currencies. Fixed salvage progress represents field adaptation and Return Home readiness. It remains separate from the random trade reward. Neither progress meter is a measured mass, electrical charge or scientifically calculated fuel quantity.
+The economy still has one trade wallet. Family labels explain recovered material; the four selected labels do not create separate currencies. Fixed salvage progress represents field adaptation and Return Home readiness. It remains separate from the random trade reward. Neither progress meter is a measured mass, electrical charge or scientifically calculated fuel quantity.
 
 ## 8. Content that remains to be authored
 
 - Original and mutated Scavenger appearance, protected orbital core, final creature name, and how each existing enemy silhouette contains the organism.
 - Boss names, silhouettes, attacks, phases, telegraphs, movement constraints and nest/source-site designs.
-- Approved enemy-to-material mapping if the six proposed families change.
+- Authored appearance-based enemy/debris mapping for the four owner-selected material labels; no material-specific spending gate.
 - Final game title and optional narrator; the HOPE settlement name is already selected.
 - Final source-neutralization visual/audio treatment using the existing 2D production pipeline.
 - Adoption of the documented death-before-victory tie rule across every finite mode; tracked in [decisions and gaps](../00-planning/decisions-and-gaps.md).
