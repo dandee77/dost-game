@@ -1,5 +1,7 @@
 # Project Overview
 
+**Boss-mode retreat decision:** no mid-fight retreat. Ordinary return portals are disabled in Boss mode regardless of energy/shield. The base portal appears only after boss death and bypasses both requirements. Other modes keep their ordinary return rules.
+
 **Latest Boss-mode direction:** defeating each boss reveals a base portal; launching from the base starts the next boss encounter in the same run, preserving the build and wallet. Boss mode no longer ends after one kill. Owner requested boss phases and visible named HP bars. Boss-clear portals bypass shield/energy requirements; no starting-energy exception is adopted.
 
 **24 October owner decision:** every new game starts fresh; no permanent gameplay unlocks, banked scrap or stat progression. Settings/history may persist without combat benefits. Same-expedition hub visits preserve the run. Owner delegated [boss concept/attack drafting](../todo/02-gameplay/boss-roster-draft.md) for review; the proposed roster is not yet approved or implemented.

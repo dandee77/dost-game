@@ -8,6 +8,8 @@ Record date, stable task ID, actual result, evidence/commit when known and anyth
 
 ## Verified preparation deliveries
 
+**24 October Boss-mode retreat decision:** Owner selected no mid-fight retreat. Updated authority, architecture, gameplay, boss proposal and acceptance notes; ordinary portals are disabled only for Boss mode, whose post-kill portal remains unrestricted. This closes the policy question, not the mode implementation.
+
 **24 October boss-clear portal decision:** Owner confirmed shield/energy bypass for the Boss-mode post-kill portal. Updated active design/architecture/task references; ordinary portal gates and paid services remain intact. Documentation only; this completes the gate decision, not the portal implementation.
 
 **24 October Boss-loop contract update:** Recorded repeated boss/base/launch flow and requested phase/HP-bar presentation across numerical authority, architecture and gameplay briefs. Whitespace check and existing build pass (no compilation needed). Documentation only; the portal gate answer and actual mode/HUD implementation remain pending.

@@ -4,6 +4,8 @@
 
 ## Start here
 
+**Boss-mode return acceptance settled:** forbid ordinary portal generation/interaction during a living boss encounter; after valid boss death, one base portal bypasses shield/energy. Test full-energy attempts, zero-shield victory, duplicate requests and same-frame player death. No retreat-policy confirmation remains; runtime T06/T07 is still pending.
+
 **Latest Boss-mode acceptance:** each kill reveals one base portal; entering base preserves the run; next launch creates the next boss once. Add phase thresholds and named HP bars to PREP-01/T06/T09 acceptance. Boss-clear portal shield/energy bypass is owner-confirmed; ordinary portal gates remain unchanged. Retire the one-boss-victory and proposed half-energy-start assumptions; do not mark mode implementation complete from this contract update.
 
 - [x] **DOC-12 — Fresh-run rule and boss proposal delivered.** Owner confirmed always-reset gameplay. Four boss concepts, canonical attack/stat proposals and overlap/fairness rules are documented for review. 283 local links resolve; whitespace and existing build pass. PREP-01/T06 stay open for approval and implementation.
