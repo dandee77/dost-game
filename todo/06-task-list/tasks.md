@@ -4,6 +4,8 @@
 
 ## Start here
 
+**Latest Boss-mode acceptance:** each kill reveals one base portal; entering base preserves the run; next launch creates the next boss once. Add phase thresholds and named HP bars to PREP-01/T06/T09 acceptance. Portal shield/energy bypass remains pending. Retire the one-boss-victory and proposed half-energy-start assumptions; do not mark mode implementation complete from this contract update.
+
 - [x] **DOC-12 — Fresh-run rule and boss proposal delivered.** Owner confirmed always-reset gameplay. Four boss concepts, canonical attack/stat proposals and overlap/fairness rules are documented for review. 283 local links resolve; whitespace and existing build pass. PREP-01/T06 stay open for approval and implementation.
 
 **24 October follow-up:** Between-run progression is settled: always start fresh, no permanent gameplay unlocks/stat bonuses. Boss drafting is delegated to us; PREP-01 now reviews [the concrete roster/attack proposal](../02-gameplay/boss-roster-draft.md) instead of waiting for owner-authored concepts. Review approval and T06 implementation remain open.

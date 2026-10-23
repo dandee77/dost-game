@@ -8,6 +8,8 @@ Record date, stable task ID, actual result, evidence/commit when known and anyth
 
 ## Verified preparation deliveries
 
+**24 October Boss-loop contract update:** Recorded repeated boss/base/launch flow and requested phase/HP-bar presentation across numerical authority, architecture and gameplay briefs. Whitespace check and existing build pass (no compilation needed). Documentation only; the portal gate answer and actual mode/HUD implementation remain pending.
+
 **24 October DOC-12:** Recorded owner-selected fresh starts and delivered [boss roster/attacks](../02-gameplay/boss-roster-draft.md) with numbers in game-design.md. 283 local document links resolve; whitespace check passes; existing build exits 0 with no work required. Documentation only, no boss gameplay or playtest claim. Boss concepts, optional release scope and Boss-mode starting energy remain under review.
 
 **24 October DOC-11:** [Balance/context review](../08-review/balance-and-context-review.md) delivered. Gameplay subcheckpoint: population pacing, bounded HP, delayed barricade, paired loot and queued salvage choices; build and all three CTests pass. ASan/UBSan pass for both pure-math suites. Earlier Application Control block cleared for the latest build without security changes. BAL-01 and T01–T03 remain partial; no full hub/shop/boss/high-rank balance claim.

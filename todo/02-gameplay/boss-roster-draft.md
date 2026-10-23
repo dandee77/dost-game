@@ -1,5 +1,7 @@
 # Boss roster for review — 24 October 2026
 
+**Owner follow-up:** Boss mode now repeats boss kill -> base portal -> services -> launch next boss, preserving the current run. It does not end after one boss. Boss phases and a named HP bar per living boss are requested. The [latest numerical authority](../../context/game-design.md#24-october-boss-mode-loop--owner-revision) records proposed phase thresholds, safe transitions, encounter cleanup and the pending boss-clear portal gate decision. The old Boss-mode half-energy start below is superseded, not adopted.
+
 The owner asked us to draft the bosses and attacks. These concepts are **proposals**, not approved names, finished art or implemented encounters. Numerical authority, attack tables and timing rules are in [game-design.md](../../context/game-design.md#24-october-fresh-run-rule-and-boss-review-draft).
 
 All bosses are mutated organisms inside salvaged shells. They fit the existing biological/source-containment story; they are not autonomous machines. Each boss derives from the planned Boss/Enemy boundary. Reuse encounters across modes rather than creating a separate boss class for every mode.

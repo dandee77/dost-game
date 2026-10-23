@@ -1,5 +1,19 @@
 # Game Design
 
+## 24 October Boss mode loop — owner revision
+
+Boss mode is a continuing sequence within one run, not victory after one encounter: defeat the current boss, reveal a base portal, enter it voluntarily, use base services, then launch the next boss encounter. Keep scrap, XP, weapon/skill/attribute upgrades and actual hull/shield state across these visits. No free repair or new-run reset. A true New Game still clears gameplay progression.
+
+One boss-clear portal appears once on a valid boss death; pressing F inside enters the base. No next boss spawns until the player launches from the base. Advance the encounter index once, upon launch, rather than on repeated portal callbacks. Pause/base time do not advance combat clocks. A simultaneous player death takes priority; no portal rescues a dead player. Finishing a boss records a completed encounter, not final mode victory. This supersedes earlier Boss-mode win-after-one-boss text and the proposed half-energy starting grant.
+
+**Still awaiting the popup answer:** whether this boss-clear portal bypasses normal shield/energy requirements. Do not implement an assumed bypass or retain the earlier proposed 500 starting energy as an approved decision. Ordinary mid-fight return remains a separate unresolved Boss-mode policy; the owner has selected the post-kill progression loop only.
+
+Delegated encounter-clear default: stop that boss's add emitter and cancel remaining hostile projectiles/hazards; remove surviving encounter-owned adds without kill credit or drops so the completed fight cannot obstruct its portal. Already earned pickups remain collectible; collect any remaining earned encounter loot once when entering the base before retiring the old arena. Do not synthesize extra rewards. This Boss-mode cleanup differs from Campaign, where required surviving adds still block sector completion. Next launch creates fresh encounter entities without resetting player progression, wallet or offer RNG.
+
+Owner also requested boss phases and an HP bar whenever a boss appears. Draft phases are 100–60%, 60–30%, and below 30% of spawn max HP. Cross each boundary once; a hit crossing both boundaries selects the final applicable phase without duplicate transitions. No healing, max-HP change or damage multiplier on transition. Preserve an active telegraph/attack and apply phase changes to the next action. Phase two uses the per-boss pattern variations below (superseding the earlier 50% trigger); phase three shortens listed repeat intervals by 10%, retaining telegraph, active and recovery times and the shared major-attack budget. These numerical phase defaults remain proposed boss tuning.
+
+Each living boss receives a named bar with current/max HP and phase markers at 60% and 30%. It appears at arrival, updates from authoritative damage and disappears after death/encounter cleanup. Chaos uses individually identified compact bars for concurrent bosses; overflow must remain accessible through a scrollable boss list, never silently hide a living boss. All HUD geometry belongs in Theme during implementation. No rendered boss HUD is implemented by this documentation revision.
+
 ## 24 October fresh-run rule and boss review draft
 
 **Owner confirmed:** every New Game starts fresh. No retained scrap, XP, levels, weapon tiers, skills, attributes, batteries, permanent stat bonuses or gameplay unlock grind. All enabled modes remain accessible. Settings and historical scores may persist without granting combat advantages. Returning from the hub to the same expedition preserves that expedition; it is not New Game.
