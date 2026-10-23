@@ -139,6 +139,8 @@ namespace Theme {
     inline constexpr Color COLOR_HARVEST = {255, 65, 75, 255};
     inline constexpr Vector2 SCRAP_HUD_POSITION = {220.0f, 390.0f};
     inline constexpr float SCRAP_HUD_SIZE = 64.0f;
+    inline constexpr Vector2 PROGRESS_HUD_POSITION = {220.0f, 470.0f};
+    inline constexpr float PROGRESS_HUD_SIZE = 48.0f;
     // Original asteroid frame is 96px with a roughly 36px body and transparent padding.
     inline constexpr std::array<float, 3> BARRICADE_DRAW_SIZES = {15.0f, 25.0f, 30.0f};
     inline constexpr int BARRICADE_SPIN_MIN = 5, BARRICADE_SPIN_MAX = 240;

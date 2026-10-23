@@ -2,6 +2,8 @@
 
 Start here for unfinished game work. This folder sits beside `assets/`, `build/`, `context/` and `src/`.
 
+Latest: [balance implementation, unfinished context and confirmation list](08-review/balance-and-context-review.md). Owner authorized source changes and delegated routine ambiguity resolution. Earlier context-only statements below are historical.
+
 The maintained [task list and idea register](06-task-list/README.md) is the working entry point for outstanding tasks, new issues, ideas and completion history. Update it whenever work is completed, requirements change or new attention items are discovered; follow its maintenance rules each session.
 
 For the owner's complete numerical review, read [Full game logic and statistics review](08-review/full-game-review.md): starting stats, all weapon/ability upgrades, enemies, economy, progression calculations and prioritized unresolved rules. This is a review snapshot; game-design.md remains the numerical authority.

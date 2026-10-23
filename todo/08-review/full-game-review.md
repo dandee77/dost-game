@@ -1,5 +1,7 @@
 # Full game logic and statistics review
 
+**Later revision:** Read [balance implementation and context review](balance-and-context-review.md) first. Its implemented population/HP/loot/XP changes supersede the corresponding snapshot figures below; unchanged weapon/ability tables retain their original draft/code labels. The new review also lists unfinished context and the small set of decisions needing owner confirmation.
+
 **23 October 2026. Review snapshot prepared for the owner.** This document consolidates the game design and inspected prototype source. It does not implement new features or certify balance. Later accepted decisions belong in the authority documents, not only here.
 
 **Status key:** **Selected** = owner-approved design; **Draft** = proposed tuning or integration; **Code** = inspected current implementation; **Open** = no final rule/data. Historical retired systems are identified explicitly. “Final weapon” means T5; there is no finite final player build while ability ranks remain uncapped.

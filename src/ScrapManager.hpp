@@ -9,13 +9,14 @@ public:
     static ScrapManager& GetInstance() { static ScrapManager instance; return instance; }
     void spawnDebris(Vector2 center, float angle, DebrisKind kind, float drawSize, bool harvestable);
     void spawnDestruction(Vector2 center, float angle, float drawSize, const std::string& textureKey);
-    int update(float dt, Vector2 playerPosition);
+    ScrapReward update(float dt, Vector2 playerPosition);
     void draw();
     void reset() { pickups.clear(); destructions.clear(); }
     std::size_t count() const { return pickups.size(); }
-    int pendingValue() const;
+    std::int64_t pendingValue() const;
     void spawnScrap(Vector2 position, int value);
-    int collectAll();
+    void spawnScrap(Vector2 position, ScrapReward reward);
+    ScrapReward collectAll();
     const std::vector<std::unique_ptr<ScrapPickup>>& getPickups() const { return pickups; }
     std::size_t destructionCount() const { return destructions.size(); }
 private:

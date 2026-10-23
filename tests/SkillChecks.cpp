@@ -22,7 +22,7 @@ namespace {
         game.playerEntity.position = {};
         game.playerEntity.rect = {-2.0f, -2.0f, 4.0f, 4.0f};
         game.gameState = GAME_RUNNING;
-        game.harvestedScrap = 0;
+        game.progress.reset();
         game.killCounter.reset();
         utils::gameCamera = {{1920.0f, 1080.0f}, {}, 0.0f, 20.0f};
     }
@@ -61,6 +61,34 @@ int runSkillChecks(const std::string& artifactDirectory)
     game.onSwitch();
     auto& player = game.playerEntity;
     auto& bullets = BulletManager::GetInstance().getBullets();
+    clear(game);
+    enemy("weapon-reward", {0, -10}, 1);
+    game.damageEquipmentEnemy("weapon-reward", 100, {}, 0);
+    require(ScrapManager::GetInstance().pendingValue() == 2,
+        "Ordinary weapon kills earn the same salvage as automatic skills");
+    game.damageEquipmentEnemy("weapon-reward", 100, {}, 0);
+    const auto earned = ScrapManager::GetInstance().collectAll();
+    require(earned.trade == 2 && earned.salvage == 2,
+        "Repeated damage on a removed enemy cannot duplicate its reward");
+    clear(game);
+    auto& salvage = ScrapManager::GetInstance();
+    for (int i = 0; i < Balance::SCRAP_MAX_PICKUPS + 10; ++i)
+        salvage.spawnScrap({10000, 0}, ScrapReward{3, 2});
+    salvage.update(21, {});
+    const auto merged = salvage.collectAll();
+    require(merged.trade == 480 && merged.salvage == 320,
+        "Enemy loot merging and lifetime preserve separate trade and salvage values");
+    clear(game);
+    game.progress.reset();
+    game.progress.collect(1, 370);
+    game.gameTimer.setStartTime(1);
+    game.update();
+    require(game.gameState == GAME_AUGMENT_SELECTION && game.progress.queuedChoices == 3,
+        "Earned salvage opens a card choice without waiting for a timer");
+    game.augmentCards.front().isAnimationComplete = true;
+    game.augmentCards.front().isIntroPlaying = false;
+    require(game.chooseUpgrade(0) && game.progress.queuedChoices == 2 && !game.chooseUpgrade(0),
+        "One selected card consumes exactly one queued level");
     // Repeating an ability pick must change real combat, not only its label.
     clear(game);
     game.skills.equip(ABILITY_RADIANT_HALO);
@@ -206,7 +234,7 @@ int runSkillChecks(const std::string& artifactDirectory)
     clear(game); game.skills.upgrade(ABILITY_SCRAP_MAGNET); game.skills.upgrade(ABILITY_SCRAP_MAGNET);
     cast(game, ABILITY_SCRAP_MAGNET); step(game, 5.2f);
     ScrapManager::GetInstance().spawnScrap({1000, 1000}, 11); step(game, 0.3f);
-    require(game.harvestedScrap == 11, "Upgraded magnet still collects after level-one duration ends");
+    require(game.progress.wallet == 11, "Upgraded magnet still collects after level-one duration ends");
     clear(game); game.skills.upgrade(ABILITY_HOLOGRAM_CLONE); game.skills.upgrade(ABILITY_HOLOGRAM_CLONE);
     cast(game, ABILITY_HOLOGRAM_CLONE); step(game, 0.45f);
     require(bullets.size() == 2, "Upgraded clone fires its second shot before the base half-second interval");
@@ -220,6 +248,7 @@ int runSkillChecks(const std::string& artifactDirectory)
     clear(game);
     for (int pick = 1; pick <= 2; ++pick) {
         game.gameState = GAME_AUGMENT_SELECTION;
+        game.progress.queuedChoices = 1;
         game.augmentCards.clear();
         game.augmentCards.emplace_back(Vector2{}, Vector2{1200, 300}, ABILITY_SPACE_COLLAPSE, pick);
         game.augmentCards.emplace_back(Vector2{}, Vector2{1200, 300}, ABILITY_COMBAT_DRONE, 1);
@@ -246,6 +275,7 @@ int runSkillChecks(const std::string& artifactDirectory)
         std::any_of(game.augmentCards.begin(), game.augmentCards.end(), [](const Card& card) { return card.getAbilityId() != ABILITY_COUNT; }),
         "Level-five abilities remain available after passive augments are maxed");
     game.gameState = GAME_AUGMENT_SELECTION;
+    game.progress.queuedChoices = 1;
     game.augmentCards.front().isAnimationComplete = true; game.augmentCards.front().isIntroPlaying = false;
     require(game.chooseUpgrade(0), "Full-health run can still finish the picker");
     clear(game);
@@ -382,8 +412,8 @@ int runSkillChecks(const std::string& artifactDirectory)
     require(bullets.empty() && health("rift") == 80, "Rift swallows crossing bullets and damages enemies");
     clear(game); ScrapManager::GetInstance().spawnScrap({1000, 1000}, 17);
     cast(game, ABILITY_SCRAP_MAGNET);
-    require(game.harvestedScrap == 17 && ScrapManager::GetInstance().count() == 0, "Magnet collects battlefield-wide once");
-    step(game, 0.5f); require(game.harvestedScrap == 17, "Magnet cannot duplicate scrap");
+    require(game.progress.wallet == 17 && ScrapManager::GetInstance().count() == 0, "Magnet collects battlefield-wide once");
+    step(game, 0.5f); require(game.progress.wallet == 17, "Magnet cannot duplicate scrap");
     clear(game); cast(game, ABILITY_HOLOGRAM_CLONE);
     require(game.skills.decoy() && !bullets.empty(), "Clone exists and mimics primary fire");
     enemy("lured", {0, -20});

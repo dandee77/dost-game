@@ -15,7 +15,7 @@ private:
     float fireRange = 1.85f;
 
 public:
-    MidLevelEnemy(std::string enemyID, EnemyType type, Vector2 spawnPos, Vector2 playerPos);
+    MidLevelEnemy(std::string enemyID, EnemyType type, Vector2 spawnPos, Vector2 playerPos, double combatSeconds = 0);
     void update() override;
     void draw() override;
     void destruct() override;

@@ -3,6 +3,8 @@
 #include "raylib.h"
 #include "Entity.hpp"
 #include "Timer.hpp"
+#include "ScrapReward.hpp"
+#include "Balance.hpp"
 #include <string>
 #include <vector>
 
@@ -26,6 +28,9 @@ public:
     {
         this->enemyID = enemyID;
         enemyType = type;
+        const int salvage = type == LOW_LEVEL_ENEMY ? Balance::SKILL_LOW_SCRAP :
+            type == MID_LEVEL_ENEMY ? Balance::SKILL_MID_SCRAP : 0;
+        reward = {salvage, salvage};
         position = spawnPos;
         playerPosition = playerPos;
         viewDirection = {0, 0};
@@ -52,12 +57,15 @@ public:
     int getContactDamage() const;
     bool isStunned() const { return stunRemaining > 0.0f; }
     bool isCorroded() const { return corrosionRemaining > 0.0f; }
+    ScrapReward getReward() const { return reward; }
+    void setTradeReward(int trade) { reward.trade = trade; }
 
 protected:
     virtual void advanceCooldowns(float dt);
 
     std::string enemyID;
     EnemyType enemyType;
+    ScrapReward reward;
     Vector2 viewDirection;
     Vector2 playerPosition;
     Rectangle hitbox;

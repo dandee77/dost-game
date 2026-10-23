@@ -68,7 +68,7 @@ int runPauseChecks()
     mid->fireCooldown.startCooldown();
     mid->applyKnockback({1.0f, 0.0f}, 1.0f);
     enemies.getEnemies()["pause_shooter"] = std::move(shooter);
-    enemies.enemySpawnCooldown.startCooldown();
+    enemies.spawnCredit = 0.5;
     debris.debrisSpawnCooldown.startCooldown();
     scrap.spawnScrap({90.0f, 90.0f}, 5);
     bullets.addBullet(Bullet({30.0f, 30.0f}, {1.0f, 0.0f}, true));
@@ -79,7 +79,7 @@ int runPauseChecks()
     game.gameState = GAME_PAUSED;
     game.playerEntity.boostCooldown = 2.0f;
     const float fireBefore = mid->fireCooldown.remainingCooldown();
-    const float spawnBefore = enemies.enemySpawnCooldown.remainingCooldown();
+    const double spawnBefore = enemies.spawnCredit;
     const float debrisBefore = debris.debrisSpawnCooldown.remainingCooldown();
     const float knockbackBefore = mid->knockbackCooldown.remainingCooldown();
     const float killBefore = game.killCounter.cooldown.remainingCooldown();
@@ -96,7 +96,7 @@ int runPauseChecks()
         game.update();
         BeginDrawing(); game.draw(); EndDrawing();
         require(mid->fireCooldown.remainingCooldown() == fireBefore &&
-            enemies.enemySpawnCooldown.remainingCooldown() == spawnBefore &&
+            enemies.spawnCredit == spawnBefore &&
             debris.debrisSpawnCooldown.remainingCooldown() == debrisBefore &&
             mid->knockbackCooldown.remainingCooldown() == knockbackBefore,
             "Pause and card selection preserve shooting, spawn and knockback clocks");
@@ -146,7 +146,7 @@ int runPauseChecks()
     require(mid->fireCooldown.remainingCooldown() == fireAfterResume && animation->currentTime == animationAfterResume,
         "Game-over presentation leaves world clocks and animations frozen");
     EquipmentTestAccess::restart(game);
-    require(!enemies.enemySpawnCooldown.isOnCooldown() && !debris.debrisSpawnCooldown.isOnCooldown() &&
+    require(enemies.spawnCredit == 0 && !debris.debrisSpawnCooldown.isOnCooldown() &&
         !game.killCounter.cooldown.isOnCooldown() && game.gameTimer.getElapsedTime() == 0.0f,
         "Restart clears old cooldown debt and resets the simulation clock");
 

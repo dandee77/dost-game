@@ -4,6 +4,8 @@ The order in which the game is built between **14 October** and the **25 October
 
 ## Task-list maintenance for every work item
 
+**23 October owner implementation authorization:** The owner explicitly selected “Implement and update the stats document.” Earlier context-only restrictions below are historical. Current sequence: population-led enemy pacing; T01 progression/economy calculations; T02 consistent paired loot; T03 salvage-driven queued choices. Build and verify each checkpoint. Five-mode hub/shop/weapon/boss content is not silently declared implemented. The owner also reopened general balance and Chaos scheduling; Chaos uses all finished bosses with increasing concurrent pursuit over time.
+
 Read [todo/06-task-list/tasks.md](../todo/06-task-list/tasks.md) before each item. During work, add missing requirements or discovered issues there and optional alternatives to [ideas.md](../todo/06-task-list/ideas.md). After verification, mark the matching task, append dated evidence to [completed.md](../todo/06-task-list/completed.md), and reconcile this plan, the root TODO index and progress tracker in the same change. Follow the [folder maintenance rules](../todo/06-task-list/README.md); partial work stays open. Current authorization remains context-only.
 
 ## 23 October economy checkpoint

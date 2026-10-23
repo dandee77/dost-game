@@ -1,5 +1,7 @@
 # Decisions, Missing Details and Implementation Gaps
 
+**24 October reconciliation:** Owner authorized source changes and delegated routine ambiguity resolution. Use the [current context review and confirmation list](../08-review/balance-and-context-review.md), plus the latest game-design section, before older deferrals/formulas below. Battery arithmetic and five sizes are settled; fixed return capacity supersedes level-driven growth; Chaos now increases concurrent boss pursuit. Missing implementation/content stays open even where a design default is resolved.
+
 **21 October 2026. Preparation register, not a feature-completion report.** Read [TODO index](../README.md), [gameplay handoff](../02-gameplay/gameplay.md) and [progress tracker](../../context/progress-tracker.md) first. Existing code evidence comes from the documented prior read-only audit and tracker; this revision does not claim a new runtime audit or that every old finding persists after future pulls.
 
 ## 23 October selected field return

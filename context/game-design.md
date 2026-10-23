@@ -1,5 +1,40 @@
 # Game Design
 
+## 23 October implemented population and progression revision
+
+Owner authorized implementation plus statistics updates. This section supersedes conflicting older exponential XP/HP, growing return thresholds, timed card grants and two-minute barricade figures below. Full current/pending breakdown: [balance implementation and context review](../todo/08-review/balance-and-context-review.md). Values are initial tuning, not human-playtested balance.
+
+| Combat minute | Potential spawns/second | Natural population limit | Basic HP | Ranged HP |
+|---|---:|---:|---:|---:|
+| 0 | 0.7 | 120 | 30 | 50 |
+| 5 | 1.5 | 200 | 30 | 50 |
+| 10 | 4 | 400 | 34 | 56 |
+| 15 | 8 | 650 | 38 | 63 |
+| 20 | 12 | 900 | 41 | 69 |
+| 25 | 16 | 1200 | 45 | 75 |
+| 35 | 20 | 1500 | 53 | 88 |
+| 45 onward | 20 | 1500 | 60 | 100 |
+
+Spawn rates/population limits interpolate linearly between knots; integrate rate over combat delta and carry fractional spawn credit. Blocked whole spawns are discarded, not banked. At most 32 natural enemies spawn in one update to bound stall recovery. Debug spawning retains its separate 10000 absolute limit. First five minutes allow 330 potential natural spawns before population blocking. Ranged share grows linearly from zero at 180 seconds to 15% at 1500 seconds, then stays there. The enclosing barricade event begins at 600 seconds, retains 64 segments of 120 HP and its existing escape geometry. Its segments count toward the natural population limit.
+
+Normal spawn HP is `roundHalfUp(baseHP * clamp(1 + (combatSeconds - 300) * 0.025 / 60, 1, 2))`, snapshotted in the constructor. No player-level multiplier and no difficulty HP/damage multiplier. Ordinary contact and ranged bullet damage remain 10; corrosion still halves contact damage. No new boss/heavy implementation is implied by this ordinary-enemy curve.
+
+Field XP requirement is `min(600, 100 + 20 * (level - 1))`, starting at level 1. Currency rolls do not change XP. Each earned level queues one choice; overflow is retained and all queued choices resolve before combat resumes. Timer-only card grants are removed. Return energy has a fixed 1000 capacity/500 requirement, independent of level/mode/difficulty. The calculation exists; actual portals and shield-gated travel are not implemented yet. Full successful return drains energy; spending currency cannot drain XP/energy. Earlier level-up lock scenarios become unnecessary with fixed capacity; shield locks still apply.
+
+| Collected salvage | Level | XP toward next level | Next requirement |
+|---|---:|---:|---:|
+| 500 | 4 | 140 | 160 |
+| 2000 | 11 | 100 | 300 |
+| 6000 | 21 | 200 | 500 |
+| 16000 | 38 | 300 | 600 |
+| 20500 | 46 | 0 | 600 |
+
+Natural basic enemies store one trade roll of 1–3 and fixed salvage 2; ranged enemies store trade 3–7 and salvage 5. Loot RNG is separate from spawn/cosmetic RNG and resets with EnemyManager. Ordinary weapon and eligible skill kills use the stored pair once. Enemy loot does not expire; overflow merging preserves both totals. Existing debris keeps per-kind fixed rewards, animation/handoff and lifetime. Shared physical pickup budget remains 150 in this checkpoint; the separate 500-enemy-pickup target is not implemented. Space Collapse, barricade deaths and environmental cleanup retain their explicit no-reward behavior pending the high-rank skill pass.
+
+Selected weapon prices remain 500/1500/4000/10000 (16000 total); battery sizes/prices and repair rate are unchanged. `RunProgress.hpp` supplies tested quote math for replacement batteries and proportional repairs, but the shop/service UI does not exist. Do not describe helper functions as purchasable gameplay.
+
+**Chaos direction selected by owner:** rotate all finished bosses; allow two simultaneous pursuers from minute 15 and progressively more later. Delegated initial schedule for future T06: first boss at minute 5, one attempt every 180 combat seconds, alive allowance `1 + floor(combatSeconds / 900)`. A full allowance skips that attempt without banking debt. Draw without replacement from enabled boss IDs, avoid a repeat until the roster is exhausted, and skip an already-living ID. When all distinct bosses are alive, wait; never invent missing bosses to fill slots. Later overlap may require performance and telegraph tuning. This replaces the earlier one-boss/after-death schedule. No boss classes or five-mode director are implemented by this change.
+
 ## 23 October field-return portal contract — design only
 
 Owner selected random return portals in the combat map, generated once energy reaches at least 50% of the current maximum: **Easy 3 / Hard 2 / Impossible 1**, across all modes. F inside a portal requests travel; shield must remain online/positive and energy at least the current threshold at commit. Portals may be far away. A pointer detects them at roughly one visible screen, with exact detection/placement constants pending. Portals persist until used or run end; a broken shield leaves them visible/locked. A higher level can raise the energy threshold: existing portals remain visible, display missing energy and unlock once charge recovers without moving. Successful return retires the full set; the next half-charge readiness after Resume generates fresh random positions. See [return portals](../todo/02-gameplay/return-portals.md). This replaces planned manual Q Return Home, without changing existing energy-growth or full-charge-consumption defaults. No source/assets changed.

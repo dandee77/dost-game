@@ -4,6 +4,7 @@ project(SpaceAblaze)
 option(GAME_DEBUG "Enable debug keys and overlay" OFF)
 option(GAME_COLLISION_TESTS "Build collision regression tests and rendered benchmark" OFF)
 option(GAME_EQUIPMENT_TESTS "Build player equipment integration tests" OFF)
+option(GAME_BALANCE_TESTS "Build deterministic gameplay math tests" ON)
 set(GAME_COLLISION_REFERENCE "" CACHE FILEPATH "Optional original Game.cpp for benchmark comparison")
 
 
@@ -51,6 +52,18 @@ if(WIN32)
 endif()
 
 target_link_libraries(${PROJECT_NAME} raylib)
+
+if (GAME_BALANCE_TESTS)
+    enable_testing()
+    add_executable(BalanceMathTests tests/BalanceMathTests.cpp)
+    target_include_directories(BalanceMathTests PRIVATE src)
+    target_link_libraries(BalanceMathTests raylib)
+    add_test(NAME BalanceMath COMMAND BalanceMathTests)
+    add_executable(ProgressionTests tests/ProgressionTests.cpp)
+    target_include_directories(ProgressionTests PRIVATE src)
+    target_link_libraries(ProgressionTests raylib)
+    add_test(NAME Progression COMMAND ProgressionTests)
+endif()
 
 #? copy assets to build directory after building
 add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD

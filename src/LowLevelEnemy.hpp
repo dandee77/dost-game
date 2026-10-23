@@ -13,7 +13,7 @@ private:
     int randomEnemyTextureIdx;
 
 public:
-    LowLevelEnemy(std::string enemyID, EnemyType type, Vector2 spawnPos, Vector2 playerPos);
+    LowLevelEnemy(std::string enemyID, EnemyType type, Vector2 spawnPos, Vector2 playerPos, double combatSeconds = 0);
     void update() override;
     void draw() override;
     void destruct() override;

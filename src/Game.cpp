@@ -32,7 +32,6 @@ static bool CheckCollisions(Vector2 bulletPos, Vector2 shipPos, float shipSize) 
 // TODO: GLITTERS WHEN AUGMENT SELECTION
 // TODO: SPINNING COLORS ON THE RECTANGLE ON AUGMENTS BORDER]
 // todo: cursor
-static int prevGameTimer = 0;
 static bool gameOverTextStarted = false;
 
 Game::Game() 
@@ -78,7 +77,7 @@ void Game::createUpgradeOffer()
 
 bool Game::chooseUpgrade(std::size_t index)
 {
-    if (gameState != GAME_AUGMENT_SELECTION || index >= augmentCards.size() || playerEntity.getHealth() <= 0 ||
+    if (gameState != GAME_AUGMENT_SELECTION || progress.queuedChoices <= 0 || index >= augmentCards.size() || playerEntity.getHealth() <= 0 ||
         std::any_of(augmentCards.begin(), augmentCards.end(), [](const Card& card) { return card.hasStartedExit(); })) return false;
     auto& card = augmentCards[index];
     if (!card.isIntroComplete()) return false;
@@ -86,6 +85,7 @@ bool Game::chooseUpgrade(std::size_t index)
         if (!skills.upgrade(card.getAbilityId())) return false;
     } else if (!applyAugment(playerEntity, card.getAugmentId()) && card.getAugmentId() != AUG_NANO_REPAIR) return false;
     card.startExitAnimation();
+    --progress.queuedChoices;
     return true;
 }
 
@@ -93,10 +93,9 @@ void Game::resetRun()
 {
     skills.reset();
     augmentRng.seed(Balance::SKILL_SEED);
-    prevGameTimer = 0;
     barricadeEvent.reset();
     ScrapManager::GetInstance().reset();
-    harvestedScrap = 0;
+    progress.reset();
     enemyCollisionGrid.clear();
     debrisCollisionGrid.clear();
     collisionEnemies.clear();
@@ -236,7 +235,7 @@ bool Game::updateSkills(float dt, Vector2 aim, bool activateSelected)
     const auto result = skills.update(dt, playerEntity, aim, activateSelected);
     for (const auto& hit : result.hits)
         damageEquipmentEnemy(hit.enemyId, hit.damage, {}, 0.0f, hit.dropsScrap);
-    harvestedScrap += result.scrap;
+    progress.collect(result.scrap.trade, result.scrap.salvage);
     return result.teleported;
 }
 
@@ -244,7 +243,7 @@ void Game::damageEquipmentEnemy(const std::string& id, int amount, Vector2 direc
 {
     auto& enemies = EnemyManager::GetInstance().getEnemies();
     const auto found = enemies.find(id);
-    if (found == enemies.end()) return;
+    if (found == enemies.end() || found->second->isDead() || amount <= 0) return;
     auto& enemy = *found->second;
     const int dealt = std::min(amount, enemy.getHealth());
     enemy.takeDamage(amount);
@@ -253,8 +252,7 @@ void Game::damageEquipmentEnemy(const std::string& id, int amount, Vector2 direc
     if (knockback > 0.0f && enemy.canReceiveKnockback()) enemy.applyKnockback(direction, knockback);
     if (!enemy.isDead()) return;
     if (dropSkillScrap && enemy.getEnemyType() != BARRICADE_ENEMY)
-        ScrapManager::GetInstance().spawnScrap(enemy.getPosition(), enemy.getEnemyType() == MID_LEVEL_ENEMY ?
-            Balance::SKILL_MID_SCRAP : Balance::SKILL_LOW_SCRAP);
+        ScrapManager::GetInstance().spawnScrap(enemy.getPosition(), enemy.getReward());
     killCounter.increment();
     playerEntity.addScore(enemy.getEnemyType() == LOW_LEVEL_ENEMY ? Balance::LOW_SCORE :
         enemy.getEnemyType() == MID_LEVEL_ENEMY ? Balance::MID_SCORE : Balance::DEBRIS_SCORE);
@@ -417,16 +415,14 @@ std::string Game::update()
     case GAME_RUNNING:
     {
         const float deltaTime = GetFrameTime();
-        gameTimer.update(deltaTime);
 #pragma region AugmentSelection
 
-        if ((int)gameTimer.getElapsedTime() % 20 == 0 && (int)gameTimer.getElapsedTime() > 0 && (int)gameTimer.getElapsedTime() != prevGameTimer) {
+        if (progress.queuedChoices > 0 && playerEntity.getHealth() > 0) {
             
             createUpgradeOffer();
 
             ConfettiManager::GetInstance().startConfetti();
 
-            prevGameTimer = (int)gameTimer.getElapsedTime();
             gameTimer.pause();
             gameState = GAME_AUGMENT_SELECTION;
         }
@@ -434,6 +430,7 @@ std::string Game::update()
 #pragma endregion AugmentSelection
 
         if (gameState != GAME_RUNNING) break;
+        gameTimer.update(deltaTime);
 
 #pragma region StartAnimation
 
@@ -523,8 +520,9 @@ std::string Game::update()
                                     enemy->getHitbox().width)) {
                         
                         int damage = playerEntity.getRandomDamage();
+                        const int actualDamage = std::min(damage, enemy->getHealth());
                         enemy->takeDamage(damage);
-                        playerEntity.addDamageDealt(damage);
+                        playerEntity.addDamageDealt(actualDamage);
                         
                         if (bm.getBullets()[i].getKnockbackPower() > 0.0f && enemy->canReceiveKnockback()) {
                             enemy->applyKnockback(bm.getBullets()[i].getDirection(), 
@@ -536,6 +534,7 @@ std::string Game::update()
             
                         
                         if (enemy->isDead()) {
+                            ScrapManager::GetInstance().spawnScrap(enemy->getPosition(), enemy->getReward());
                             killCounter.increment();
                             for (int j = 0; j < MAX_SOUND_INSTANCES; j++) {
                                 if (!IsSoundPlaying(scoreSounds[j])) {
@@ -831,8 +830,10 @@ std::string Game::update()
 #pragma endregion
 
         killCounter.update();
-        if (gameState == GAME_RUNNING && playerEntity.getHealth() > 0)
-            harvestedScrap += ScrapManager::GetInstance().update(GetFrameTime(), playerEntity.getPosition());
+        if (gameState == GAME_RUNNING && playerEntity.getHealth() > 0) {
+            const auto reward = ScrapManager::GetInstance().update(GetFrameTime(), playerEntity.getPosition());
+            progress.collect(reward.trade, reward.salvage);
+        }
         if (gameState == GAME_RUNNING) Animator::GetInstance().Update();
         break;
     }
@@ -851,9 +852,13 @@ std::string Game::update()
             }
             if (card.isExitComplete()) {
                 augmentCards.clear();
-                ConfettiManager::GetInstance().stopConfetti();
-                gameTimer.unpause();
-                gameState = GAME_RUNNING; 
+                if (progress.queuedChoices > 0) {
+                    createUpgradeOffer();
+                } else {
+                    ConfettiManager::GetInstance().stopConfetti();
+                    gameTimer.unpause();
+                    gameState = GAME_RUNNING;
+                }
                 break;
             }
         }
@@ -873,7 +878,7 @@ std::string Game::update()
         playerEntity.setDeflectorHits(0);
         barricadeEvent.reset();
         ScrapManager::GetInstance().reset();
-        harvestedScrap = 0;
+        progress.reset();
         updateCameraZoom(GetFrameTime());
         //TODO: STOP THE GAME OVER SOUND AFTER CLICKING THE BUTTON
         gameTimer.pause();
@@ -1110,8 +1115,12 @@ void Game::draw()
 
         killCounter.draw();
         DrawTextEx(ResourceManager::GetInstance().GetFont("primary_font"),
-            TextFormat("SCRAP %d", harvestedScrap), Theme::SCRAP_HUD_POSITION,
+            TextFormat("SCRAP %lld", static_cast<long long>(progress.wallet)), Theme::SCRAP_HUD_POSITION,
             Theme::SCRAP_HUD_SIZE, 0.0f, Theme::COLOR_HARVEST);
+        DrawTextEx(ResourceManager::GetInstance().GetFont("primary_font"),
+            TextFormat("LV %lld  SALVAGE %lld / %lld", static_cast<long long>(progress.level),
+                static_cast<long long>(progress.xp), static_cast<long long>(ProgressionMath::xpRequired(progress.level))),
+            Theme::PROGRESS_HUD_POSITION, Theme::PROGRESS_HUD_SIZE, 0.0f, Theme::COLOR_HARVEST);
         gameTimer.draw(GAME_SCREEN_WIDTH);
         barricadeEvent.drawStatus();
         
@@ -1128,7 +1137,7 @@ void Game::onExit()
     playerEntity.setDeflectorHits(0);
     barricadeEvent.reset();
     ScrapManager::GetInstance().reset();
-    harvestedScrap = 0;
+    progress.reset();
     utils::gameCamera.zoom = Config::CAMERA_ZOOM_PLAY;
     Animator::GetInstance().StopAll();
     Animator::GetInstance().Remove("killer_display"); // Clean up killer animation

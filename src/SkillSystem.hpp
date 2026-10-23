@@ -1,6 +1,7 @@
 #pragma once
 #include "raylib.h"
 #include "Balance.hpp"
+#include "ScrapReward.hpp"
 #include <array>
 #include <random>
 #include <string>
@@ -21,7 +22,7 @@ AbilityId findAbility(std::string_view key);
 Balance::AbilityTuning abilityTuning(AbilityId id, int level);
 std::string abilityUpgradeDescription(AbilityId id, int level);
 struct SkillHit { std::string enemyId; int damage; bool dropsScrap = true; };
-struct SkillResult { std::vector<SkillHit> hits; int scrap = 0; bool teleported = false; };
+struct SkillResult { std::vector<SkillHit> hits; ScrapReward scrap; bool teleported = false; };
 
 // Game-owned simulation system. It reports damage; Game owns deaths and rewards.
 class SkillSystem {

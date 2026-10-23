@@ -6,6 +6,8 @@ The owner requires the [task-list folder](../todo/06-task-list/README.md) to be 
 
 ## 23 October field-return portal revision
 
+**Latest implementation direction:** Owner authorized C++ balance fixes plus updated statistics. Early combat should be calm, later pressure should come primarily from enemy numbers, and HP growth should remain modest. Chaos rotates through all finished bosses and allows progressively more concurrent pursuers as combat time grows. Earlier context-only/general-balance deferrals are superseded for this work; missing boss content remains open.
+
 Owner replaced the planned manual teleport skill with random combat-map return portals. Portals appear once energy reaches 50%; travel requires positive online shield and at least half of current energy capacity, with F pressed inside the portal. Difficulty sets concurrent count across every mode: Easy 3, Hard 2, Impossible 1. They can be far away; a pointer appears within roughly one visible screen. Portals remain until used/run end and stay visible but locked while shield is broken or energy is short after a level-up. A successful return retires the set; the next half-charge readiness generates fresh random locations. All skills are automatic. Exact placement ranges and fallback remain open in [return portals](../todo/02-gameplay/return-portals.md); no source changes are authorized here.
 
 Resume returns the ship to the used portal position with two seconds of damage protection, ending on firing and restoring no hull/shield. Exact attack-input handling remains a later contract detail.

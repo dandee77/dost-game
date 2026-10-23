@@ -45,7 +45,7 @@ int main(int argc, char** argv)
         game.playerEntity.minDamage = 10;
         game.playerEntity.maxDamage = 10;
         game.gameTimer.reset(); game.gameTimer.start();
-        em.enemySpawnCooldown.startCooldown();
+        em.spawnCredit = 0;
         am.debrisSpawnCooldown.startCooldown();
         SetRandomSeed(static_cast<unsigned>(scenario));
         std::vector<Vector2> positions;
@@ -88,7 +88,7 @@ int main(int argc, char** argv)
         }
         // Three frames test persistent piercing and same-frame destruction.
         for (int frame = 0; frame < 3; ++frame) {
-            em.enemySpawnCooldown.startCooldown(); am.debrisSpawnCooldown.startCooldown();
+            em.spawnCredit = 0; am.debrisSpawnCooldown.startCooldown();
             game.playerEntity.position = {250.0f, 250.0f};
             game.playerEntity.velocity = {0.0f, 0.0f};
             if (game.gameState == GAME_RUNNING) game.update();

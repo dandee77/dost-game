@@ -8,28 +8,17 @@
 #include "Balance.hpp"
 #include <cmath>
 #include <algorithm>
+#include "CombatMath.hpp"
 
 
 #define ENEMY_MAX_DISTANCE 1000.0f
 #define ENEMY_MAX_RANGE 100.0f
-#define MID_LEVEL_ENEMY_SPAWN_START_TIME 150.0f 
 
 void EnemyManager::update(Vector2 playerPos, const GameTimer& gameTimer, const Vector2* decoy, float decoyRange)
 {
     const float dt = GetFrameTime();
-    enemySpawnCooldown.update(dt);
     float elapsed = gameTimer.getElapsedTime(); 
-
-    float newCooldown = std::max(0.025f, 1.25f - (elapsed / 250.0f) * 1.25f);
-    enemySpawnCooldown.updateCooldownDuration(newCooldown);
-
-    if (enemies.size() < Balance::ENEMY_LIMIT && !enemySpawnCooldown.isOnCooldown()) {
-        int spawns = 1 + GetRandomValue(0, 2);
-        for (int i = 0; i < spawns; i++) {
-            spawnEnemy(playerPos, elapsed);
-        }
-        enemySpawnCooldown.startCooldown();
-    }
+    advanceSpawning(playerPos, elapsed, dt);
 
     std::vector<std::string> toRemove;
     for (auto& [id, enemy] : enemies) {
@@ -94,31 +83,21 @@ void EnemyManager::spawnEnemy(Vector2 playerPos, float elapsed)
 
     std::string enemyID = "enemy_" + std::to_string(enemyCounter++);
 
-    // Mid-level spawn chance: Only after 5 minutes, then scales up
-    // Time	       Approx. midChance
-    // 0-300s (0-5min)    0%
-    // 360s        (6min)	11.8%
-    // 420s        (7min)	20.3%
-    // 480s        (8min)	26.3%
-    // 540s        (9min)	29.6%
-    // 600s        (10min)	31.5%
-    // 900s        (15min)	38.7%
-    // ∞	        40% (asymptotic)
-    float midChance = 0.0f;
-    if (elapsed >= MID_LEVEL_ENEMY_SPAWN_START_TIME) { //?  only spawn mid-level enemies after 5 minutes
-        float adjustedTime = elapsed - MID_LEVEL_ENEMY_SPAWN_START_TIME; //? start scaling from 0 after 5 minutes
-        midChance = 40.0f * (1.0f - expf(-adjustedTime / 180.0f));
-    }
+    // Introduce ranged enemies after three minutes, capped at 15% by minute 25.
+    const float midChance = static_cast<float>(100.0 * CombatMath::rangedChance(elapsed));
     float randomValue = (float)GetRandomValue(0, 9999) / 100.0f;
     bool isMidLevel = randomValue < midChance;
 
     std::unique_ptr<Enemy> enemy;
     if (isMidLevel) {
-        enemy = std::make_unique<MidLevelEnemy>(enemyID, MID_LEVEL_ENEMY, spawnPos, playerPos);
+        enemy = std::make_unique<MidLevelEnemy>(enemyID, MID_LEVEL_ENEMY, spawnPos, playerPos, elapsed);
     } else {
-        enemy = std::make_unique<LowLevelEnemy>(enemyID, LOW_LEVEL_ENEMY, spawnPos, playerPos);
+        enemy = std::make_unique<LowLevelEnemy>(enemyID, LOW_LEVEL_ENEMY, spawnPos, playerPos, elapsed);
     }
 
+    std::uniform_int_distribution<int> trade(isMidLevel ? Balance::MID_TRADE_MIN : Balance::LOW_TRADE_MIN,
+        isMidLevel ? Balance::MID_TRADE_MAX : Balance::LOW_TRADE_MAX);
+    enemy->setTradeReward(trade(lootRng));
     enemies[enemyID] = std::move(enemy);
 
     // std::cout << "Elapsed: " << elapsed << "s, midChance: " << midChance << "%, randomValue: " << randomValue << ", isMidLevel: " << (isMidLevel ? "true" : "false") << std::endl;
@@ -151,7 +130,20 @@ void EnemyManager::reset()
     crowdEnemies.clear();
     enemies.clear();
     enemyCounter = 0;
-    enemySpawnCooldown = Cooldown(enemySpawnCooldown.getCooldownDuration());
+    spawnCredit = 0;
+    lootRng.seed(Balance::LOOT_SEED);
+}
+
+void EnemyManager::advanceSpawning(Vector2 playerPos, double elapsed, double dt)
+{
+    if (!std::isfinite(dt) || dt <= 0 || !std::isfinite(elapsed)) return;
+    spawnCredit += CombatMath::spawnBudget(elapsed - dt, elapsed);
+    const int available = std::max(0, CombatMath::populationLimit(elapsed) - static_cast<int>(enemies.size()));
+    const int count = static_cast<int>(std::min({std::floor(spawnCredit),
+        static_cast<double>(available), static_cast<double>(Balance::ENEMY_MAX_SPAWNS_PER_UPDATE)}));
+    // Discard blocked whole spawns: clearing a crowd or returning from a stall must not unleash stored debt.
+    spawnCredit -= std::floor(spawnCredit);
+    for (int i = 0; i < count; ++i) spawnEnemy(playerPos, static_cast<float>(elapsed));
 }
 
 std::vector<std::string> EnemyManager::spawnBarricade(Vector2 center)

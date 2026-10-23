@@ -66,10 +66,10 @@ int runBarricadeChecks(const std::string& artifactDirectory)
         scraps.destructions.front().frameCount == 7, "Asteroid death uses all seven original breakup frames");
     game.gameState = GAME_PAUSED; game.update();
     require(scraps.destructions.front().elapsed == 0, "Asteroid death animation freezes while paused");
-    require(scraps.update(6.5f * Theme::DEBRIS_DESTRUCT_FRAME_TIME, {}) == 0 &&
+    require(scraps.update(6.5f * Theme::DEBRIS_DESTRUCT_FRAME_TIME, {}).trade == 0 &&
         scraps.destructionCount() == 1 && scraps.count() == 0,
         "Asteroid collapse never enters the collectible-particle phase");
-    require(scraps.update(1.0f, {}) == 0 && scraps.destructionCount() == 0 && scraps.count() == 0,
+    require(scraps.update(1.0f, {}).trade == 0 && scraps.destructionCount() == 0 && scraps.count() == 0,
         "Asteroid death finishes without leaving particles or rewards");
 
     SetRandomSeed(42);
@@ -102,19 +102,21 @@ int runBarricadeChecks(const std::string& artifactDirectory)
         "Seeded ring contains all three sizes and different rotation speeds");
 
     reset();
-    event.update(0, 119.99f, {});
-    require(!event.isActive(), "No automatic event before two minutes");
-    event.update(0, 120, {});
-    require(event.isContaining() && enemies.size() == Balance::BARRICADE_SEGMENTS, "Automatic complete ring at two minutes");
+    event.update(0, 300, {});
+    require(!event.isActive(), "Opening five minutes remain free of the enclosing barricade event");
+    event.update(0, 599.99f, {});
+    require(!event.isActive(), "Barricade waits for the ten-minute escalation");
+    event.update(0, 600, {});
+    require(event.isContaining() && enemies.size() == Balance::BARRICADE_SEGMENTS, "Automatic complete ring at ten minutes");
     for (const auto& [id, enemy] : enemies) {
         require(enemy->getEnemyType() == BARRICADE_ENEMY && enemy->getHealth() == Balance::BARRICADE_HEALTH,
             "Barricade has its own enemy type and durable health");
         require(!enemy->canReceiveKnockback(), "Weapon knockback cannot dislodge barricade");
     }
-    advance(34, 154);
-    event.update(0, 160, {});
+    advance(34, 634);
+    event.update(0, 640, {});
     require(!event.isActive() && enemies.empty(), "Automatic event fires once per run");
-    reset(); event.update(0, 120, {});
+    reset(); event.update(0, 600, {});
     require(event.isActive(), "Reset rearms automatic event");
 
     // Cover both ends of the shrinking geometry, every seam and long boosted steps.
@@ -223,11 +225,13 @@ int runBarricadeChecks(const std::string& artifactDirectory)
 
     // Exercise real Game::update scheduling and the original player's bullet path.
     reset(); BeginDrawing(); EndDrawing(); BeginDrawing(); EndDrawing();
-    game.gameTimer.setStartTime(120);
+    game.gameTimer.setStartTime(600);
+    game.progress.collect(0, 100);
     game.update();
-    require(game.gameState == GAME_AUGMENT_SELECTION && !event.isActive(), "Two-minute augment transition freezes event until resume");
-    game.gameState = GAME_RUNNING; game.augmentCards.clear(); game.gameTimer.setStartTime(121);
-    manager.enemySpawnCooldown = Cooldown(manager.enemySpawnCooldown.getCooldownDuration());
+    require(game.gameState == GAME_AUGMENT_SELECTION && !event.isActive(), "Earned augment transition freezes event until resume");
+    game.gameState = GAME_RUNNING; game.augmentCards.clear(); game.gameTimer.setStartTime(601);
+    game.progress.queuedChoices = 0;
+    manager.spawnCredit = 1;
     testDebrisManager().debrisSpawnCooldown.startCooldown();
     game.update();
     require(event.isContaining() && enemies.size() > Balance::BARRICADE_SEGMENTS, "Game starts event while normal enemy spawning continues");

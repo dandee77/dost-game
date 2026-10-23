@@ -23,7 +23,7 @@ int runDebrisChecks(const std::string& artifactDirectory)
         player.position = {};
         player.rotation = 0;
         game.gameTimer.setStartTime(1.0f);
-        EnemyManager::GetInstance().enemySpawnCooldown.startCooldown();
+        EnemyManager::GetInstance().spawnCredit = 0;
         debris.debrisSpawnCooldown.startCooldown();
     };
     const auto spawn = [&](DebrisKind kind, Vector2 position) {
@@ -114,7 +114,7 @@ int runDebrisChecks(const std::string& artifactDirectory)
     for (const float angle : {0.0f, 33.0f, 90.0f, 245.0f}) {
         clear();
         scraps.spawnDebris({12, -9}, angle, DEBRIS_WING, 48, true);
-        require(scraps.update(Theme::SCRAP_HANDOFF_TIME - 0.001f, {500, 0}) == 0 && scraps.count() == 0,
+        require(scraps.update(Theme::SCRAP_HANDOFF_TIME - 0.001f, {500, 0}).trade == 0 && scraps.count() == 0,
             "Last visible frame finishes before any orb appears");
         scraps.update(0.001f, {500, 0});
         require(scraps.count() == centers.size(), "One orb replaces every final fleck");
@@ -153,7 +153,7 @@ int runDebrisChecks(const std::string& artifactDirectory)
         require(scraps.count() == 0 && scraps.destructionCount() == 1, "Destruction sheet plays before pickups spawn");
         require(scraps.pendingValue() == Balance::DEBRIS_SCRAP_VALUES[type], "Breakup preserves exact variant value");
         require(!debris.removeDebris(id, true), "Repeated destruction is harmless");
-        require(scraps.update(Theme::SCRAP_HANDOFF_TIME, {}) == 0, "No credit before absorption");
+        require(scraps.update(Theme::SCRAP_HANDOFF_TIME, {}).trade == 0, "No credit before absorption");
         const float expectedSizes[] = {1.25f, 1.25f, 2.5f, 1.25f, 1.8f, 1.25f, 2.5f, 1.8f, 2.5f, 2.5f};
         require(scraps.count() == Theme::DEBRIS_SCRAP_VISUALS[type].exitPixels.size(), "Every variant uses its own saved particle count");
         std::vector<Vector2> seenPositions;
@@ -171,14 +171,14 @@ int runDebrisChecks(const std::string& artifactDirectory)
         }
         require(scraps.pendingValue() == Balance::DEBRIS_SCRAP_VALUES[type], "Fewer visual orbs preserve full scrap yield");
         int total = 0;
-        for (int frame = 0; frame < 180; ++frame) total += scraps.update(1.0f / 60.0f, {});
+        for (int frame = 0; frame < 180; ++frame) total += scraps.update(1.0f / 60.0f, {}).trade;
         require(total == Balance::DEBRIS_SCRAP_VALUES[type] && scraps.count() == 0, "All shards home and credit exactly once");
-        require(scraps.update(1.0f, {}) == 0, "No duplicate collection");
+        require(scraps.update(1.0f, {}).trade == 0, "No duplicate collection");
     }
     require(Theme::DEBRIS_DRAW_SIZES[DEBRIS_WING] > Theme::DEBRIS_DRAW_SIZES[DEBRIS_PIPE], "Satellite wing is larger than small junk");
     clear();
     debris.removeDebris(spawn(DEBRIS_WING, {30, 0}), false);
-    require(scraps.pendingValue() == 0 && scraps.update(1, {}) == 0 && scraps.count() == 0, "Environmental breakup fades without rewards");
+    require(scraps.pendingValue() == 0 && scraps.update(1, {}).trade == 0 && scraps.count() == 0, "Environmental breakup fades without rewards");
     clear();
     spawn(DEBRIS_WING, {1000, 0});
     debris.update({}, game.gameTimer);
@@ -204,7 +204,7 @@ int runDebrisChecks(const std::string& artifactDirectory)
     require(scraps.count() <= Balance::SCRAP_MAX_PICKUPS, "Pickup cap bounds render workload");
     require(scraps.pendingValue() == 200 * Balance::DEBRIS_SCRAP_VALUES[DEBRIS_WING], "Overflow merges all earned value");
     int massCollected = 0;
-    for (int i = 0; i < 180; ++i) massCollected += scraps.update(1.0f / 60.0f, {});
+    for (int i = 0; i < 180; ++i) massCollected += scraps.update(1.0f / 60.0f, {}).trade;
     require(massCollected == 1600, "Merged pickup value is collected without cargo cap");
     clear();
     const int wingCount = static_cast<int>(Theme::DEBRIS_SCRAP_VISUALS[DEBRIS_WING].exitPixels.size());
@@ -216,16 +216,16 @@ int runDebrisChecks(const std::string& artifactDirectory)
         scraps.pendingValue() == wingBursts * 8 + 24,
         "Small bursts fit remaining cap slots; overflow preserves their value");
     int mixedCollected = 0;
-    for (int i = 0; i < 180; ++i) mixedCollected += scraps.update(1.0f / 60.0f, {});
+    for (int i = 0; i < 180; ++i) mixedCollected += scraps.update(1.0f / 60.0f, {}).trade;
     require(mixedCollected == wingBursts * 8 + 24, "Mixed-size overflow credits the complete reward");
     clear();
-    game.harvestedScrap = 100;
+    game.progress.wallet = 100;
     scraps.spawnDebris({}, 0, DEBRIS_WING, 48, true);
-    require(scraps.update(Theme::SCRAP_HANDOFF_TIME, {}) == 0, "Breakup reaches pickup phase without early credit");
+    require(scraps.update(Theme::SCRAP_HANDOFF_TIME, {}).trade == 0, "Breakup reaches pickup phase without early credit");
     SetTargetFPS(60);
     for (int frame = 0; frame < 30; ++frame) { BeginDrawing(); EndDrawing(); game.update(); }
     SetTargetFPS(0);
-    require(game.harvestedScrap == 108 && scraps.count() == 0, "Live Game updates counter beyond planned cargo cap");
+    require(game.progress.wallet == 108 && scraps.count() == 0, "Live Game updates counter beyond planned cargo cap");
 
     // Actual weapon integration, including legacy bullets through Game::update.
     for (auto weapon : {WEAPON_DEFAULT, WEAPON_CANNON, WEAPON_HEAVY, WEAPON_ROCKETS, WEAPON_LASER}) {
@@ -266,16 +266,16 @@ int runDebrisChecks(const std::string& artifactDirectory)
     scraps.update(Theme::SCRAP_HANDOFF_TIME, {});
     game.gameState = GAME_PAUSED; game.update();
     require(scraps.getPickups().front()->getElapsed() == 0, "Pause also freezes spawned glow orbs");
-    game.harvestedScrap = 123;
+    game.progress.wallet = 123;
     EquipmentTestAccess::restart(game);
-    require(scraps.count() == 0 && scraps.destructionCount() == 0 && game.harvestedScrap == 0, "Restart clears explosions, particles and balance");
+    require(scraps.count() == 0 && scraps.destructionCount() == 0 && game.progress.wallet == 0, "Restart clears explosions, particles and balance");
     scraps.spawnDebris({30, 0}, 0, DEBRIS_CLUMP, 20, true);
-    game.harvestedScrap = 321; game.onExit();
-    require(scraps.count() == 0 && scraps.destructionCount() == 0 && game.harvestedScrap == 0, "Scene exit clears harvesting state");
+    game.progress.wallet = 321; game.onExit();
+    require(scraps.count() == 0 && scraps.destructionCount() == 0 && game.progress.wallet == 0, "Scene exit clears harvesting state");
     clear();
     scraps.spawnDebris({30, 0}, 0, DEBRIS_CLUMP, 20, true);
-    game.harvestedScrap = 321; game.gameState = GAME_OVER; game.update();
-    require(scraps.count() == 0 && scraps.destructionCount() == 0 && game.harvestedScrap == 0, "Death loses harvested scrap and cancels effects");
+    game.progress.wallet = 321; game.gameState = GAME_OVER; game.update();
+    require(scraps.count() == 0 && scraps.destructionCount() == 0 && game.progress.wallet == 0, "Death loses harvested scrap and cancels effects");
 
     // Native renderer: actual fixed-size variants and continuous pickup phases.
     const auto render = LoadRenderTexture(1600, 1200);

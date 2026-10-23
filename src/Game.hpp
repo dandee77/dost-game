@@ -21,6 +21,7 @@
 #include "SpatialGrid.hpp"
 #include "BarricadeEvent.hpp"
 #include "SkillSystem.hpp"
+#include "RunProgress.hpp"
 #ifdef GAME_DEBUG
 #include "DebugTools.hpp"
 #endif
@@ -79,14 +80,14 @@ private:
     bool chooseUpgrade(std::size_t index);
     void resolveEquipmentAttacks();
     bool updateSkills(float dt, Vector2 aim, bool activateSelected);
-    void damageEquipmentEnemy(const std::string& id, int damage, Vector2 direction, float knockback, bool dropSkillScrap = false);
+    void damageEquipmentEnemy(const std::string& id, int damage, Vector2 direction, float knockback, bool dropSkillScrap = true);
     void destroyEquipmentDebris(const std::string& id);
     void detonateRocket(Vector2 center, int damage, float knockback);
     void updateCameraZoom(float dt);
     void resolveBarricadeContact(Vector2 previousPlayerPosition);
 
     GameState gameState;
-    int harvestedScrap = 0;
+    RunProgress progress;
     BarricadeEvent barricadeEvent;
     SkillSystem skills;
     std::mt19937 augmentRng;

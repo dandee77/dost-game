@@ -8,15 +8,20 @@
 
 void ScrapManager::spawnScrap(Vector2 position, int value)
 {
-    if (value <= 0) return;
-    if (pickups.size() >= Balance::SCRAP_MAX_PICKUPS) { pickups.front()->addValue(value); return; }
-    pickups.push_back(std::make_unique<ScrapPickup>(position, value, Theme::SCRAP_ORB_SIZE));
+    spawnScrap(position, ScrapReward{value, value});
 }
 
-int ScrapManager::collectAll()
+void ScrapManager::spawnScrap(Vector2 position, ScrapReward reward)
 {
-    int value = 0;
-    for (const auto& pickup : pickups) value += pickup->getValue();
+    if (reward.trade < 0 || reward.salvage < 0 || (reward.trade == 0 && reward.salvage == 0)) return;
+    if (pickups.size() >= Balance::SCRAP_MAX_PICKUPS) { pickups.front()->addReward(reward); return; }
+    pickups.push_back(std::make_unique<ScrapPickup>(position, reward, Theme::SCRAP_ORB_SIZE, true));
+}
+
+ScrapReward ScrapManager::collectAll()
+{
+    ScrapReward value;
+    for (const auto& pickup : pickups) value += pickup->getReward();
     pickups.clear();
     return value; // Pending destruction stays intact until its visible handoff.
 }
@@ -69,21 +74,23 @@ int ScrapManager::releasePickups(const Destruction& destruction, float remaining
     return collected;
 }
 
-int ScrapManager::update(float dt, Vector2 playerPosition)
+ScrapReward ScrapManager::update(float dt, Vector2 playerPosition)
 {
-    if (dt <= 0.0f) return 0;
-    int collected = 0;
+    if (dt <= 0.0f) return {};
+    ScrapReward collected;
     for (auto& pickup : pickups) {
         pickup->advance(dt, playerPosition);
-        if (pickup->isCollected()) collected += pickup->getValue();
+        if (pickup->isCollected()) collected += pickup->getReward();
     }
     std::erase_if(pickups, [](const auto& pickup) { return pickup->isCollected() || pickup->isExpired(); });
     for (auto& destruction : destructions) {
         destruction.elapsed += dt;
         if (!destruction.released && destruction.elapsed >= Theme::SCRAP_HANDOFF_TIME) {
             destruction.released = true;
-            if (destruction.harvestable)
-                collected += releasePickups(destruction, destruction.elapsed - Theme::SCRAP_HANDOFF_TIME, playerPosition);
+            if (destruction.harvestable) {
+                const int value = releasePickups(destruction, destruction.elapsed - Theme::SCRAP_HANDOFF_TIME, playerPosition);
+                collected += {value, value};
+            }
         }
     }
     std::erase_if(destructions, [](const auto& destruction) {
@@ -107,9 +114,9 @@ void ScrapManager::draw()
     for (auto& pickup : pickups) pickup->draw();
 }
 
-int ScrapManager::pendingValue() const
+std::int64_t ScrapManager::pendingValue() const
 {
-    int value = 0;
+    std::int64_t value = 0;
     for (const auto& destruction : destructions) if (!destruction.released) value += destruction.value;
     for (const auto& pickup : pickups) value += pickup->getValue();
     return value;

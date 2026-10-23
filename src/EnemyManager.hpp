@@ -2,6 +2,7 @@
 #include <vector>
 #include <unordered_map>
 #include <memory>
+#include <random>
 #include "BulletManager.hpp"
 #include "Timer.hpp"
 #include "raylib.h"
@@ -35,10 +36,12 @@ private:
 
     EnemyManager() = default;
     void spawnEnemy(Vector2 playerPos, float elapsedTime);
+    void advanceSpawning(Vector2 playerPos, double elapsed, double dt);
 
     int enemyCounter = 0; 
     std::unordered_map<std::string, std::unique_ptr<Enemy>> enemies; 
-    Cooldown enemySpawnCooldown{0.5f}; 
+    double spawnCredit = 0;
+    std::mt19937 lootRng{Balance::LOOT_SEED};
     SpatialGrid crowdGrid;
     std::vector<Enemy*> crowdEnemies;
 };

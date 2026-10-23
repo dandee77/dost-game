@@ -5,6 +5,29 @@
 
 // Player equipment prototypes. TUNE in playtests before adding progression.
 namespace Balance {
+    // Population-led endurance pacing. Seconds exclude pause/cards/hub. TUNE.
+    struct SpawnPoint { double seconds, perSecond; int population; };
+    inline constexpr std::array<SpawnPoint, 7> ENEMY_SPAWN_CURVE = {{
+        {0, 0.7, 120}, {300, 1.5, 200}, {600, 4, 400}, {900, 8, 650},
+        {1200, 12, 900}, {1500, 16, 1200}, {2100, 20, 1500}
+    }};
+    inline constexpr double ENEMY_HP_GRACE_SECONDS = 300;
+    inline constexpr double ENEMY_HP_GROWTH_PER_SECOND = 0.025 / 60.0;
+    inline constexpr double ENEMY_HP_MAX_MULTIPLIER = 2;
+    inline constexpr double ENEMY_RANGED_START_SECONDS = 180;
+    inline constexpr double ENEMY_RANGED_FULL_SECONDS = 1500;
+    inline constexpr double ENEMY_RANGED_MAX_CHANCE = 0.15;
+    inline constexpr int LOW_HEALTH = 30, MID_HEALTH = 50;
+    inline constexpr int ENEMY_MAX_SPAWNS_PER_UPDATE = 32;
+    inline constexpr int FIELD_XP_START = 100, FIELD_XP_STEP = 20, FIELD_XP_MAX = 600;
+    inline constexpr int RETURN_CAPACITY = 1000, RETURN_REQUIRED = 500;
+    inline constexpr std::array<int, 4> WEAPON_TIER_PRICES = {500, 1500, 4000, 10000};
+    inline constexpr std::array<double, 5> BATTERY_FRACTIONS = {0.2, 0.5, 1, 1.5, 2};
+    inline constexpr std::array<int, 5> BATTERY_PRICES = {100, 250, 500, 700, 900};
+    inline constexpr int REPAIR_SCRAP_PER_HP = 10;
+    inline constexpr unsigned int LOOT_SEED = 20261023;
+    inline constexpr int LOW_TRADE_MIN = 1, LOW_TRADE_MAX = 3;
+    inline constexpr int MID_TRADE_MIN = 3, MID_TRADE_MAX = 7;
     // P5 skills prototype. TUNE: acquisition and final balance intentionally deferred.
     inline constexpr int AUG_MAX_LEVEL = 10, AUG_HULL_BONUS = 20;
     inline constexpr float AUG_PAYLOAD_BONUS = 0.15f, AUG_CRIT_CHANCE = 0.05f;
@@ -88,7 +111,7 @@ namespace Balance {
     inline constexpr int SCRAP_MAX_PICKUPS = 150;
     inline constexpr float DEBRIS_PREVIEW_RADIUS = 60.0f;
     // Barricade event prototype. TUNE after playtests.
-    inline constexpr float BARRICADE_TRIGGER_TIME = 120.0f;
+    inline constexpr float BARRICADE_TRIGGER_TIME = 600.0f;
     inline constexpr float BARRICADE_DURATION = 30.0f, BARRICADE_SCATTER_TIME = 4.0f;
     inline constexpr int BARRICADE_SEGMENTS = 64, BARRICADE_HEALTH = 120;
     inline constexpr float BARRICADE_START_RADIUS = 130.0f, BARRICADE_END_RADIUS = 45.0f;

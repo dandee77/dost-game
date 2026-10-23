@@ -3,6 +3,7 @@
 #include "Animator.hpp"
 #include "raymath.h"
 #include <cstdlib>
+#include "CombatMath.hpp"
 
 
 static const std::string EnemyTextureNames[] = 
@@ -14,10 +15,10 @@ static const std::string EnemyTextureNames[] =
 //todo: make the rand to be a class var so that it will be used when the enemy dies
 //TODO: ADD OPTION FOR THE ANIMATION TO BE ON OR OFF IN THE SETTINGS
 
-LowLevelEnemy::LowLevelEnemy(std::string enemyID, EnemyType type, Vector2 spawnPos, Vector2 playerPos) 
+LowLevelEnemy::LowLevelEnemy(std::string enemyID, EnemyType type, Vector2 spawnPos, Vector2 playerPos, double combatSeconds)
     : Enemy(enemyID, type, spawnPos, playerPos), textureName(EnemyTextureNames[GetRandomValue(0, 2)])
 {
-    health = 30;  
+    health = CombatMath::enemyHealth(Balance::LOW_HEALTH, combatSeconds);
     spriteSize = 15.0f;
     origin = {spriteSize / 2.0f, spriteSize / 2.0f};
     speed = GetRandomValue(15, 30);
@@ -72,7 +73,7 @@ LowLevelEnemy::LowLevelEnemy(std::string enemyID, EnemyType type, Vector2 spawnP
         ));
         break;
     default:
-        TraceLog(LOG_ERROR, "invalid enemy texture id: %d", rand);
+        TraceLog(LOG_ERROR, "invalid enemy texture id: %d", randomEnemyTextureIdx);
         break;
     }
 

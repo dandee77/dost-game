@@ -3,15 +3,16 @@
 #include "Animator.hpp"
 #include "raymath.h"
 #include "BulletManager.hpp"
+#include "CombatMath.hpp"
 
 #define ENEMY_MAX_ACCELERATION 800.0f
 #define ENEMY_MAX_RANGE 100.0f
 
 
-MidLevelEnemy::MidLevelEnemy(std::string enemyID, EnemyType type, Vector2 spawnPos, Vector2 playerPos) 
+MidLevelEnemy::MidLevelEnemy(std::string enemyID, EnemyType type, Vector2 spawnPos, Vector2 playerPos, double combatSeconds)
     : Enemy(enemyID, type, spawnPos, playerPos), textureName("mid_level_enemy"), fireCooldown(1.5f)
 {
-    health = 50;  
+    health = CombatMath::enemyHealth(Balance::MID_HEALTH, combatSeconds);
     spriteSize = 15.0f;
     origin = {spriteSize / 2.0f, spriteSize / 2.0f};
     speed = GetRandomValue(25, 50);

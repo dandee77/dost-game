@@ -430,7 +430,7 @@ int main(int argc, char** argv)
         player.rotationSpeedMultiplier = 0.0f;
         player.autoShoot = true;
         enemy("live_beam", {0, -30});
-        EnemyManager::GetInstance().enemySpawnCooldown.startCooldown();
+        EnemyManager::GetInstance().spawnCredit = 0;
         testDebrisManager().debrisSpawnCooldown.startCooldown();
         game.update();
         require(hp("live_beam") < 100 && player.isLaserActive(), "Game update fires and resolves the equipped laser");
@@ -441,7 +441,7 @@ int main(int argc, char** argv)
         Bullet incoming({0, -6}, {0, 1}, true);
         incoming.setBulletSpeed(0);
         bm.addBullet(incoming);
-        EnemyManager::GetInstance().enemySpawnCooldown.startCooldown();
+        EnemyManager::GetInstance().spawnCredit = 0;
         testDebrisManager().debrisSpawnCooldown.startCooldown();
         game.update();
         require(bm.getBullets().empty() && player.getHealth() == 100, "Game intercepts enemy bullet before the hull");

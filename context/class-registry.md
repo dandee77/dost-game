@@ -1,5 +1,17 @@
 # Class Registry
 
+## 24 October current balance checkpoint
+
+These entries supersede older proposed-only descriptions for the listed systems.
+
+- **RunProgress**, `src/RunProgress.hpp`: Game-owned value `progress`; 64-bit wallet, lifetime trade, level, XP and queued choices, plus bounded return energy. `collect` preserves overflow and separates currency/salvage; `spend` does not remove XP/energy. Game resets it on new-run, death and exit. Return methods are calculations awaiting portal integration.
+- **ProgressionMath**, same header: pure XP, battery-replacement/price and affordable repair quotes. Future purchases must validate eligibility and commit payment/effect atomically; the shop is not implemented.
+- **CombatMath**, `src/CombatMath.hpp`: integrated spawn budget, natural population limit, ranged chance and bounded spawn HP. Balance owns every tuning value. LowLevelEnemy/MidLevelEnemy constructors accept optional combatSeconds (default zero for existing debug callers).
+- **ScrapReward**, `src/ScrapReward.hpp`: paired 64-bit trade/salvage values. Enemy stores the pair; natural spawns assign trade once through `setTradeReward`, using EnemyManager's separate loot RNG. Direct/debug construction uses mean trade. Barricades default to zero rewards.
+- **EnemyManager**: fractional `spawnCredit` replaces spawn Cooldown; `advanceSpawning` integrates combat time, respects population/per-update limits and discards blocked whole credit. Reset clears credit and reseeds loot RNG. Debug absolute capacity remains separate.
+- **ScrapPickup/ScrapManager**: paired persistent enemy pickups, existing fixed-value debris constructor/handoff retained. `update`/`collectAll` return ScrapReward; `pendingValue` returns 64-bit trade. Merging preserves both fields and enemy persistence. Existing reset owns all pickup state.
+- **Game/SkillResult**: Game collects both regular and magnet reward pairs through RunProgress. Cards consume one queued salvage level, then resolve remaining choices before resuming. Eligible weapon kills now emit stored rewards; the skill no-drop flag remains explicit. HUD adds a Theme-owned level/salvage line. Skill activation/rank formulas remain prototype behavior.
+
 ## 20 October design handoff: proposed integration only
 
 [todo/02-gameplay/gameplay.md](../todo/02-gameplay/gameplay.md) records remaining work. **No class was added or modified by this documentation session.** Existing implementation statuses below remain unchanged.

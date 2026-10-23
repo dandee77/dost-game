@@ -86,7 +86,7 @@ public:
         game.playerEntity.playerState = PLAYER_DEFAULT;
         game.playerEntity.health = 100;
         game.playerEntity.autoShoot = false;
-        EnemyManager::GetInstance().enemySpawnCooldown.startCooldown();
+        EnemyManager::GetInstance().spawnCredit = 0;
         testDebrisManager().debrisSpawnCooldown.startCooldown();
         for (std::size_t i = 0; i < observers.size(); ++i) {
             observers[i]->position = positions[i];

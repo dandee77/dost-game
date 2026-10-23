@@ -4,6 +4,14 @@
 
 ## Start here
 
+**24 October verified subcheckpoint:** Natural spawning/ordinary HP/barricade pacing, paired eligible loot and salvage-driven choices are implemented. Build and three CTests pass; pure math passes ASan/UBSan. BAL-01 remains open for high-rank skills, weapon/shield integration and human pacing trials. T01–T03 remain partial: typed modes/return integration, final pickup budgets and rarity rules are pending.
+
+- [x] **DOC-11 — Balance/context review delivered.** [Report](../08-review/balance-and-context-review.md) separates implemented and pending work, resolves historical authority/input/formula contradictions and lists necessary owner confirmations.
+
+**Latest owner instruction:** Implementation and full balance review are now authorized. Earlier context-only/general-balance/schedule deferrals below are historical. Current checkpoint sequence is pacing, T01 accounting, T02 paired rewards, T03 queued field choices. Boss content still needs definition; Chaos now requires all finished bosses and increasing concurrency with elapsed combat time.
+
+- [ ] **BAL-01 — Population-led balance pass.** Replace abrupt spawning/exponential HP targets, unify weapon/skill rewards, connect salvage leveling, verify rounding/overflow/reset and publish current versus pending stats. Pure calculations and regression checks do not certify human balance or complete the missing hub/boss/weapon features.
+
 The current work is context preparation. Resolve the design prerequisites below before their affected implementation checkpoint. Keep the requested five-mode scope visible; any submission reduction needs team direction. Release dates and original competition requirements remain in the [overview](../../context/project-overview.md) and [main tracker](../../context/progress-tracker.md).
 
 ## Current owner review focus — 23 October economy, batteries and return portals

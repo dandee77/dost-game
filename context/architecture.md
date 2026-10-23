@@ -1,5 +1,13 @@
 # Architecture
 
+## 24 October implemented balance flow
+
+Game owns RunProgress. EnemyManager assigns stored trade currency from a dedicated loot RNG; Enemy retains separate fixed salvage. Eligible death emits one ScrapReward pickup. ScrapManager and the skill magnet return paired values; Game credits them once. Merging preserves both totals and persistence. Spending currency cannot remove XP/energy.
+
+Queued salvage levels open the existing card state before the next combat update. Accepted input consumes one choice; exit animation creates the next offer or resumes combat. Timer-only cards are removed. Reset/death/exit clear progress with existing manager resets. Repair/battery/return helpers do not create the pending hub or alter live shield behavior.
+
+Natural spawning integrates a piecewise-linear rate over combat delta, retains fractional credit and discards blocked whole spawns. EnemyManager resets credit and loot RNG. Ordinary enemy constructors snapshot bounded combat-time HP without player-level or difficulty multiplication. The current schedule is a prototype endurance schedule, not a five-mode WaveDirector.
+
 ## 21 October upgrade integration proposal — not implemented
 
 See [upgrade review](../todo/07-upgrade-proposals/README.md). Keep one authoritative derived-stat path using source records for field card ranks and paid numeric counts. A quarter-strength purchase cannot invoke a full-rank grant and retain its side effects. Cannon branch/tier is run-local equipment state; upgrades are atomic hub transactions and live attacks retain their launch snapshots. Deflector has one live shield state: paid capacity changes its maximum without full-rank/reboot/heal effects. Do not add a second shield manager.

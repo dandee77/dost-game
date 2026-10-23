@@ -5,7 +5,11 @@
 #include "Theme.hpp"
 #include "raymath.h"
 
-ScrapPickup::ScrapPickup(Vector2 spawnPosition, int scrapValue, float drawSize) : value(scrapValue)
+ScrapPickup::ScrapPickup(Vector2 spawnPosition, int scrapValue, float drawSize)
+    : ScrapPickup(spawnPosition, ScrapReward{scrapValue, scrapValue}, drawSize, false) {}
+
+ScrapPickup::ScrapPickup(Vector2 spawnPosition, ScrapReward value, float drawSize, bool keep)
+    : reward(value), persistent(keep)
 {
     position = spawnPosition;
     rect = {position.x, position.y, drawSize, drawSize};
@@ -36,7 +40,7 @@ void ScrapPickup::advance(float dt, Vector2 target)
     }
 }
 
-bool ScrapPickup::isExpired() const { return elapsed >= Balance::SCRAP_LIFETIME; }
+bool ScrapPickup::isExpired() const { return !persistent && elapsed >= Balance::SCRAP_LIFETIME; }
 
 void ScrapPickup::draw()
 {
