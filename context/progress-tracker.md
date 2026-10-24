@@ -6,6 +6,8 @@ Update this file after every completed build-plan item. Anyone reading it (teamm
 
 ## Current Status
 
+**24 October DOC-14:** Owner selected complete absorption of the shield-breaking hit, no fixed combat-skill/army-count cap, and persistent battle droids rebuilding individually after 20 combat seconds. Updated design, roster and task/review references. Attribute-cap scope remains a follow-up. Documentation only; source implementation and performance verification remain pending.
+
 **24 October DOC-13 context reconciliation:** Replaced stale active XP/return/HP formulas, single-boss Chaos scheduling, manual teleport and Boss retreat text. Aligned review/task authority, accepted roster direction and remaining confirmations. Current contracts are distinct from historical dated entries below; those entries describe what was known then. Documentation only; hub, portals, unified shield, weapon tree, boss phases/HUD and high-rank math remain unfinished. Verification: 289 local Markdown links resolve, git diff --check passes and the existing build exits 0 (no work required). No source/runtime changes or new playtest claims.
 
 **24 October no-retreat decision confirmed:** Boss mode permits base travel only through its post-kill portal, which bypasses shield/energy. Suppress ordinary portals and their interactions during the fight; other modes retain normal gates. Pause/settings remain available and quit abandons the run. This closes the prior mid-fight-retreat question. Documentation only; boss/base/portal implementation remains pending.
@@ -361,6 +363,7 @@ Required for Form 03 (Asset and AI Usage Disclosure). Organizers may request pro
 
 | Date | Item | Tool and model | Used for | Extent (Minimal / Moderate / Heavy) | Human review |
 |---|---|---|---|---|---|
+| 2026-10-24 | DOC-14 shield and army decisions | Codex (OpenAI) | Record owner answers and reconcile progression/performance requirements. | Minimal | Owner selected shield, army and persistence rules; attribute scope pending; no source changes |
 | 2026-10-24 | DOC-13 context reconciliation | Codex (OpenAI) | Reconcile active formulas, portal/mode contracts, UI targets, task status and confirmation list without changing source. | Moderate | Owner requested continuing context; gameplay implementation and playtesting remain separate |
 | 2026-10-24 | Boss-mode no-retreat decision | Codex (OpenAI) | Record owner-selected post-kill-only base access and align mode policy/acceptance cases. | Minimal | Owner explicitly rejected mid-fight retreat; no runtime implementation claimed |
 | 2026-10-24 | Boss-clear portal gate decision | Codex (OpenAI) | Propagate approved shield/energy bypass through mode, architecture and task references; retain ordinary gates and no-free-heal rule. | Minimal | Owner explicitly selected bypass. Documentation only; runtime implementation remains pending |

@@ -4,6 +4,8 @@
 
 ## Start here
 
+- [x] **DOC-14 — Record shield/army decisions.** Full-hit shield absorption, uncapped combat-skill/army progression, persistent droids and individual 20-second rebuilds. Numeric-attribute cap scope remains a follow-up; runtime work remains T04/T10.
+
 - [x] **DOC-13 — Reconcile active context contracts.** Correct stale formulas, ordinary/Boss portal exceptions, Chaos scheduling, delegated work and confirmation lists; Verified 289 local links, whitespace and existing build. Documentation does not complete T04–T10.
 
 **Boss-mode return acceptance settled:** forbid ordinary portal generation/interaction during a living boss encounter; after valid boss death, one base portal bypasses shield/energy. Test full-energy attempts, zero-shield victory, duplicate requests and same-frame player death. No retreat-policy confirmation remains; runtime T06/T07 is still pending.
@@ -51,7 +53,7 @@ Reference for PREP-01 through PREP-16: [detailed gap register](../00-planning/de
 - [ ] **PREP-11 — P1 — Owner: UI/gameplay designer.** Adopt or revise the tutorial proposal. Done when final copy, triggers, dismissal, repetition and session-state rules are specified without stacking conflicting modals. G11.
 - [ ] **PREP-12 — P1 — Owner: presentation programmer.** Review story playback contracts against the supported cutscene pipeline. Done when intro/ending placement, advance/skip, destination and result ownership are ready for implementation. G12.
 - [ ] **PREP-13 — P1 — Owner: audio/UI owner.** Define music/SFX/volume routing. Done when field, hub, boss, pause and exit transitions cannot stack music or leave effects running. G13.
-- [ ] **PREP-14 — P0 — Owner: programming owner.** Define high-rank numerical and effect budgets. Done when overflow, spawn/effect limits, reward conservation and performance targets are measurable without silently discarding earned progression. G14.
+- [ ] **PREP-14 — P0 — Owner: programming owner.** Define high-rank numerical safety and performance without fixed combat-skill or army-count caps. Done when overflow handling, cosmetic effect budgets, reward conservation and performance targets are measurable without silently discarding earned progression or replacing count gains with strength-only upgrades. G14.
 - [ ] **PREP-15 — P0 — Owner: gameplay designer.** Adopt consistent outcome precedence. Done when Survival/Boss/Campaign specify same-step death versus success and source/reward finalization agrees. Existing proposal: player death takes priority. G15.
 - [ ] **PREP-16 — P0 — Owner: producer/team.** Confirm submission scope and resolve the existing eligibility question. Done when the team's recorded decision addresses the inherited-code requirement and deliverable owners are assigned. G16 and tracker Open Question 1; no external message is authorized by this checklist.
 - [ ] **PREP-17 — P1 — Owner-deferred — Owner: team.** Choose a final game title. Done when selection is recorded in the overview/tracker and title-card references agree. Suggestions are in [suggested names](../05-suggested-names/README.md); SCRAPBOUND is a recommendation, not a selected title.

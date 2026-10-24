@@ -14,7 +14,7 @@ The earlier Nano Repair -> Shield Detonation target remains. There are **19 comb
 | Radiant Halo | Uncommon | Instant burst centered on the ship when enemies are within its authored radius |
 | Corrosive Trail | Uncommon | Timed emission window while useful combat movement occurs; individual pools expire under existing duration rules |
 | Point-Defense Interceptor | Uncommon | Timed defensive window triggered by relevant hostile projectiles; does not delete friendly fire |
-| Laser Rings | Rare | Persistent orbiting blades once acquired; no duration gap. Existing rank/count/radius rules apply, subject to authored load budgets |
+| Laser Rings | Rare | Persistent orbiting blades once acquired; no duration gap. Existing rank/count/radius rules apply, without a fixed gameplay count cap; optimize cosmetic presentation separately |
 | Lightning Ring | Rare | Temporary ring around the ship, then recharge; damages/stuns nearby enemies during the window |
 | Chain Lightning | Rare | Selects a valid nearby target automatically and chains through distinct targets; instantaneous event |
 | Combat Drone | Rare | Proposed persistent companions until destroyed; each missing slot returns after its combat respawn delay. No free revival on hub/shop opening |
@@ -30,9 +30,9 @@ The earlier Nano Repair -> Shield Detonation target remains. There are **19 comb
 
 Rarity describes proposed field-offer frequency, not a random multiplier to skill damage. Already owned abilities can coexist. No limited active-slot inventory or skill swap button is introduced.
 
-Companion persistence is a proposal requiring owner review: use the existing 20-second base drone cooldown as a per-destroyed-slot respawn delay, frozen outside combat. Existing drone count/HP/damage growth remain. A rank increase adds a slot under the normal spawn contract; it cannot heal an existing drone. Per-slot timing prevents repeated whole-swarm creation while living drones remain. This differs from the current timed prototype and is not implemented.
+Companion persistence is owner-confirmed on 24 October: use a 20-combat-second per-destroyed-slot rebuild delay, frozen outside combat. Existing drone count/HP/damage growth remain; the owner rejected fixed army/count or combat-skill rank caps. Continued ranks depend on eligible random offers or established paid rank purchases, not guaranteed cards. A rank increase adds a slot under the normal spawn contract; it cannot heal an existing drone. Per-slot timing prevents repeated whole-swarm creation while living drones remain. This differs from the current timed prototype and is not implemented.
 
-For other timed abilities, retain the current duration/cooldown as the baseline until their numerical targeting review. Owning an automatic skill does not mean firing it while the hub or a modal has frozen combat. Primary movement/aim/fire controls remain separate; only **Return Home** is a manually activated skill. Existing equipment Space boosts/guards must not introduce a second normal-play skill button; engine chassis integration remains deferred.
+For other timed abilities, retain the current duration/cooldown as the baseline until their numerical targeting review. Owning an automatic skill does not mean firing it while the hub or a modal has frozen combat. Primary movement/aim/fire controls remain separate; field return uses F inside portals and is not a manually activated skill. Existing equipment Space boosts/guards must not introduce a second normal-play skill button; engine chassis integration remains deferred.
 
 ## 2. Blink — incoming-hit rescue
 

@@ -69,7 +69,7 @@ The delegated re-entry default above is a future integration contract, not imple
 | Area | Missing work | Needs a user decision? |
 |---|---|---|
 | Unified shield / automatic abilities | One persistent shield source, starter grant, break/reboot, reactive Blink, Shield Detonation, remove manual skill flow | No; direction is already selected. Implement and test |
-| Skill math at very high ranks | Unbounded drones/zones/counts, cooldown/tick floors, multiplicative pattern growth, erasure rewards and damage accounting | No; prepare bounded simulation with continued useful upgrades, then measure. Do not call this pass a complete fix of all skill math |
+| Skill math at very high ranks | Unbounded drones/zones/counts, cooldown/tick floors, multiplicative pattern growth, erasure rewards and damage accounting | No; preserve owner-selected uncapped combat-skill/army progression, optimize simulation and cosmetic effects, then measure. Do not call this pass a complete fix of all skill math |
 | Weapon tree | 26 nodes, 10 signatures, per-family card compatibility and equal-investment trials | No for routine mapping/tuning; accepted tree remains the basis |
 | Hub / portals / shop | Five gates, services, random exits, pointer range/placement, saved world resume and atomic purchases | No; use selected rules and delegated geometry/input defaults |
 | Five modes | Actual WaveDirector, objective/outcome logic, difficulty population data, campaign sources and boss integration | Roster direction accepted; any scope reduction still needs confirmation |
@@ -88,6 +88,6 @@ Already settled: fresh starts; five battery sizes and replacement arithmetic; fi
 2. **Release facts:** actual target PC/minimum hardware, responsibility for eligibility/license evidence, and final submission owner. These require human facts and commitments.
 3. **Any proposed scope reduction:** confirm before dropping requested modes or boss content. The current plan retains the requested scope; a cut is not silently authorized.
 
-Boss phase thresholds, attack values, wave budgets, portal geometry, rarity/card compatibility and high-rank effect limits remain visible drafts or delegated tuning tasks. Prepare and verify them without treating every implementation detail as a permission question. The complete numerical reference is [game design](../../context/game-design.md); the older [full review](full-game-review.md) remains a historical prototype audit, not the current formula authority.
+Boss phase thresholds, attack values, wave budgets, portal geometry, rarity/card compatibility and high-rank numerical/performance handling remains visible draft work or delegated tuning tasks. Prepare and verify them without treating every implementation detail as a permission question. The complete numerical reference is [game design](../../context/game-design.md); the older [full review](full-game-review.md) remains a historical prototype audit, not the current formula authority.
 
 No public push or final balance certification is implied by this review.

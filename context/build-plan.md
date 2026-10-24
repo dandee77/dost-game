@@ -2,9 +2,9 @@
 
 The order in which the game is built between **14 October** and the **25 October 2026** submission. Each numbered item is one unit of work: one branch, one pull request, one entry in `progress-tracker.md`. Do not start an item until its dependencies meet the Definition of Done in `code-standards.md`.
 
-## Current checkpoint — DOC-13 context reconciliation
+## Current checkpoint — DOC-14 shield and army decisions
 
-Reconcile current progression, ordinary/Boss portal policies, Chaos schedule, review questions and task authority. Done when active tables agree with current decisions and implemented math, historical records remain labeled, local links resolve and the existing build passes. No source changes in this checkpoint.
+Record owner-selected full-hit shield absorption, uncapped skill/army progression and persistent droids with individual 20-second rebuilds. Reconcile affected review/task references and ask whether numeric-attribute caps are included. Verify documentation and existing build; no source changes in this checkpoint.
 
 ## Task-list maintenance for every work item
 

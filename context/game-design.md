@@ -1,5 +1,13 @@
 # Game Design
 
+## 24 October shield and battle-droid decisions — selected, integration pending
+
+- A hit against positive online shield is absorbed in full, even when damage exceeds remaining shield. Example: 5 shield against 20 damage becomes 0 shield and no hull damage from that hit; enter broken state once. No damage overflow to hull. Subsequent distinct hits follow the broken-shield/damage-immunity rules; this does not grant extra invulnerability.
+- Combat Drones are the allied battle droids. They persist until destroyed. Each destroyed slot rebuilds after **20 combat seconds**; hub, pause and mandatory cards freeze that timer. Base visits do not revive them. Upgrades must not heal surviving droids or reset existing rebuild timers.
+- The owner rejected fixed gameplay ceilings on skill ranks or the resulting army/count progression. Players may keep building a droid army and upgrading combat skills whenever an eligible random offer appears; no offer is guaranteed. Do not replace future count gains with damage-only upgrades or silently discard earned units to enforce a performance cap.
+- Performance work must preserve purchased/earned gameplay: efficient spatial queries, allocation reuse and cosmetic-only effect reduction are acceptable. Finite hardware and numeric representation still require stress testing and explicit failure handling; this decision is not a claim of unlimited runtime capacity. Any proposed gameplay cap requires a new owner decision.
+- Existing physical-size limits, positive cooldown floors, weapon tiers and numeric-attribute caps are separate contracts. Whether the owner also wants numeric-attribute caps removed is pending clarification; do not infer that weapon tiers or all cooldown floors disappear.
+
 ## 24 October Boss mode loop — owner revision
 
 Boss mode is a continuing sequence within one run, not victory after one encounter: defeat the current boss, reveal a base portal, enter it voluntarily, use base services, then launch the next boss encounter. Keep scrap, XP, weapon/skill/attribute upgrades and actual hull/shield state across these visits. No free repair or new-run reset. A true New Game still clears gameplay progression.
