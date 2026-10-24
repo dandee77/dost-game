@@ -1,5 +1,63 @@
 # Game Design
 
+## 25 October scoring defaults - beta r1
+
+Author-selected implementation defaults under the owner's delegation; not implemented or playtested. Current rules identity: `beta-2026-10-25-r1`. [Result/leaderboard contract](../todo/02-gameplay/results-and-leaderboards.md) defines event ownership, worked examples, outcome precedence, ties, storage and acceptance cases.
+
+| Credited event | Points | Eligibility |
+|---|---:|---|
+| Low/basic enemy kill | 10 | Director-origin enemy; not a boss-owned add |
+| Ranged enemy kill | 50 | Same origin restriction |
+| Heavy enemy kill, when implemented/enabled | 100 | Same origin restriction; does not imply heavy content exists |
+| Shootable natural debris destroyed | 5 | Once per object; no barricade/scenery/cleanup points |
+| Boss killed | 2000 | Once per legitimate encounter instance, including Q19/Q20 fatal tie |
+| Campaign normal wave clear | 250 | Once per authored normal-wave objective; boss encounter is not another normal wave |
+| Campaign level complete | 1000 | Boss and every required hostile resolved; once per level |
+| Final Campaign completion | 5000 | Once after every required final objective, additional to C04 level award |
+| Boss-owned add kill | 0 | Material/Salvage rewards keep their separate ordinary loot rules |
+| Damage, overkill, criticals, time, pickups, purchases, repairs, travel, retirement, Boss cycle wrap | 0 | No indirect score farming or deposit conversion |
+
+`score = 10*basic + 50*ranged + 100*heavy + 5*debris + 2000*bosses + 250*campaignNormalWaves + 1000*campaignLevels + 5000*campaignComplete` using only eligible once-credited events. No difficulty/time/weapon/Luck multiplier, flawless-wave bonus or paid-score bonus. Separate boards by mode/difficulty/rules. Boss adds cannot farm score while their boss remains alive; valid no-loot ability kills still receive eligible kill/objective points. Cleanup awards nothing. This replaces all older deposit, wave-number and timed Story-victory formulas.
+
+Store checked uint64 score/time/counters; numeric failure makes that result visibly unranked rather than wrapping/silently capping competitive points. Gameplay point constants belong in Balance during implementation, storage/UI limits in Config/Theme. Score, active combat time and Boss clear count survive station visits and freeze before terminal cleanup. Boss retirement is Retired, not a cycle victory. A final mutual-destruction clear may receive the ordinary final objectives' awards if all those objectives resolved; it grants no extra mutual-destruction bonus.
+
+Endless-mode order (Swarm/Chaos/Boss): score descending, active time descending, stable earlier acceptance. Campaign: score descending, completed flag first, levels then boss clears descending, active time ascending, stable earlier acceptance. Show score/time in all modes, Boss clears and Campaign progress where relevant. Top 10 per `(rules, mode, difficulty)`; no comparing old two-mode scores against this ruleset. Exact schema/limits/error behavior live in the linked non-numerical storage contract.
+
+## 24 October Boss-mode retirement - Q25 confirmed
+
+Owner confirms **Retire Run** at the Boss-mode station, saving earned score and bosses cleared. Use the same preview -> Confirm/Cancel -> frozen eligible result flow as Swarm/Chaos. Display **Retired**, score, uniquely credited boss clears and active combat time; retain mode/difficulty/rules/debug eligibility. Author ranking default remains score first, with boss clears and time shown as additional result fields; exact weights/storage remain PREP-08/09.
+
+Only a living player already at the station can retire; this adds no mid-fight retreat, death rescue or remote retirement. The initial station may also retire an unstarted run: record actual zero score/clears/time subject to normal eligibility, with no bonus. Between encounters, preview completed boss count and the pending next ordinal separately. Confirmation never counts the pending boss, starts its encounter, creates a new clear reward or advances the cycle. Cancel preserves the same pending boss, wallet/build, service/launch context and cooldown debt.
+
+Confirm freezes one result before teardown, prevents further launch/shop actions and submits at most once through normal name-entry flow. Cleanup yields no extra loot, kill or score; no retirement/completion bonus. Retiring after Nestheart is still Retired, not a four-boss victory. Q19/Q20 mutual destruction has its own terminal reason and cannot be relabeled Retired. Quit/abandon remains distinct. Test zero-clear retirement, one-clear retirement, four-clear cycle boundary, Cancel, repeated confirmation/result saves and restart; station time never increases survival. This extends retirement from Swarm/Chaos to Boss only; no new Campaign retirement policy is implied.
+
+## 24 October automatic Boss sequence - Q24 confirmed
+
+Owner chose an automatic sequence, with no player boss picker. Delegated beta order is **Shellback -> Coilmaw -> Brood Hauler -> Nestheart -> repeat**. This order is specific to Boss mode; it does not change Campaign availability or Chaos's separate roster scheduling. The sequence runs until run termination, not automatic victory after four kills.
+
+| Encounter ordinal, starting at 1 | Boss | Cycle, starting at 1 |
+|---|---|---|
+| 1, 5, 9, ... | Shellback | `1 + floor((ordinal - 1) / 4)` |
+| 2, 6, 10, ... | Coilmaw | Same formula |
+| 3, 7, 11, ... | Brood Hauler | Same formula |
+| 4, 8, 12, ... | Nestheart | Same formula |
+
+Fresh run begins with Shellback pending, completed bosses zero, cycle one and no active boss. A confirmed first launch creates ordinal 1. Surviving a valid kill records that encounter once and exposes the existing clear portal; the next boss is only pending. Entering the station, buying, pausing, canceling launch previews or repeatedly pressing F never advances the ordinal or spawns a boss. The next confirmed station launch commits the next ordinal exactly once and creates a uniquely identified instance. Show upcoming name/ordinal before launch, including Nestheart -> Shellback at the cycle boundary. Preserve actual ship/build/wallet and existing cooldown debt; do not auto-launch, refresh abilities or grant resources on cycle completion.
+
+Snapshot roster/order with the run's rules identity. The complete beta requires all four authored bosses; an unavailable boss cannot silently be replaced or skipped. A development-only partial roster must be explicitly labeled unranked and given a different rules identity; that is not complete T06 delivery. Keep factory/arena/resource readiness checks before committing launch so a failure leaves the player at the station with the same pending ordinal and no debit/advance. Reset ordinal/clear IDs with New Game, death or exit; Q19/Q20 mutual destruction records the boss then ends the run with no pending launch usable.
+
+Retain existing Boss-mode base-HP snapshots and per-boss phases/attack tuning; sequence position/cycle alone adds no hidden HP, damage, speed or reward multiplier. Repeated boss types are distinct encounters with distinct IDs; each legitimate kill follows normal reward rules once. A repeated callback for the same encounter grants nothing. Pause/station time adds no active survival time. Numerical tuning remains authored rather than playtested. Test first launch, four-to-five wrap, duplicate input/callbacks, canceled/failed launch, station preservation, restart and mutual destruction. PREP-02 still needs the complete mode/difficulty spawn/add tables; this sequence contract is only its Boss-order subpart.
+
+## 24 October simultaneous boss clear - Q19/Q20 confirmed
+
+If the player and one or more bosses receive fatal damage in the same simulation step, count each valid boss death once and end the run. Owner selected boss-clear credit and explicitly rejected revival/continuation for this case. Author UI reason: **Mutual Destruction - Boss Cleared**. This overrides older death-first boss-credit rules; a portal, station, ending or new encounter cannot revive the player.
+
+Resolve all already-valid damage events for that simulation step before deciding outcomes; do not short-circuit away a boss death because player damage was processed first. Do not simulate another step, fire new attacks after death, wait for a later damage tick or clean up hostiles as extra kills. Kill/objective score and source shutdown follow the ordinary credited-boss path exactly once. Uncollected loot remains uncollected; no recovery/healing, victory bonus or automatic card choice is invented by this exception. Freeze earned score, active time and boss-clear records before teardown. Exact scoring weights remain PREP-08.
+
+In Boss mode, record that encounter clear and end the sequence; no post-kill travel/next launch. In Chaos, record killed bosses and end the endless run; ordinary leaderboard eligibility applies. In Campaign, record the boss/source clear, but never automatically clear surviving required adds. If every final-level objective is resolved in that same step, record Campaign completion and permit the normal ending over the frozen result despite ship loss. Otherwise end with boss-clear credit and the actually completed progress only; no later stage unlock/launch is playable. Ordinary player deaths without a same-step boss kill still end in defeat, including a normal-wave last-enemy tie.
+
+Test both damage-processing orders, several concurrent boss deaths, remaining required adds, final objectives all resolved, death without boss kill, later-step residual damage and repeated outcome callbacks. All paths preserve one finalized result; runtime work remains T06/T10.
+
 ## 24 October primary-fire and endless retirement decisions
 
 Owner confirmed primary auto-fire starts **OFF** on each new run/restart; hold LMB/Shoot or press E to enable it. Aiming remains mouse-controlled. Same-run pauses/station visits preserve the toggle, suppressing fire while inactive; audio/graphics persistence never saves it between runs. Existing re-entry protection and cooldown-debt rules still apply.
@@ -123,7 +181,7 @@ Use checked/log-domain rate arithmetic and an explicitly validated aggregate rep
 
 Boss mode is a continuing sequence within one run, not victory after one encounter: defeat the current boss, reveal a base portal, enter it voluntarily, use base services, then launch the next boss encounter. Keep scrap, XP, weapon/skill/attribute upgrades and actual hull/shield state across these visits. No free repair or new-run reset. A true New Game still clears gameplay progression.
 
-One boss-clear portal appears once on a valid boss death; pressing F inside enters the base. No next boss spawns until the player launches from the base. Advance the encounter index once, upon launch, rather than on repeated portal callbacks. Pause/base time do not advance combat clocks. A simultaneous player death takes priority; no portal rescues a dead player. Finishing a boss records a completed encounter, not final mode victory. This supersedes earlier Boss-mode win-after-one-boss text and the proposed half-energy starting grant.
+For a surviving player, one boss-clear portal appears once on a valid boss death; pressing F inside enters the base. No next boss spawns until the player launches from the base. Advance the encounter index once, upon launch, rather than on repeated portal callbacks. Pause/base time do not advance combat clocks. Same-step player/boss death counts the boss clear but ends the run under Q19/Q20; no portal rescues a dead player. Finishing a boss records a completed encounter, not final mode victory. This supersedes earlier Boss-mode win-after-one-boss text and the proposed half-energy starting grant.
 
 **Owner confirmed:** the boss-clear portal bypasses shield and energy requirements. A living player may enter with zero/offline shield and zero energy; no energy payment is required. F inside and the one-time valid encounter-clear checks still apply. It does not refill hull/shield, grant energy or waive shop prices. The earlier proposed 500 starting-energy grant is retired. This exception applies only to the Boss-mode post-kill portal; ordinary return portals retain their shield/half-energy gates. Owner confirmed no mid-fight retreat in Boss mode: suppress ordinary return-portal generation and interaction throughout the encounter, even at full energy with an online shield. Only the post-kill portal can enter the base. Pause/settings remain available; quitting abandons the run rather than saving or advancing the encounter. Other modes retain their ordinary return rules.
 
@@ -137,14 +195,14 @@ Each living boss receives a named bar with current/max HP and phase markers at 6
 
 **Owner confirmed:** every New Game starts fresh. No retained scrap, XP, levels, weapon tiers, skills, attributes, batteries, permanent stat bonuses or gameplay unlock grind. All enabled modes remain accessible. Settings and historical scores may persist without granting combat advantages. Returning from the hub to the same expedition preserves that expedition; it is not New Game.
 
-**Boss numbers below are proposed for review, not implemented or owner-approved.** See [boss roster and attacks](../todo/02-gameplay/boss-roster-draft.md). Four reusable archetypes: two campaign guardians plus two optional Boss/Chaos encounters. Ship only finished encounters; keep incomplete ones unavailable rather than substituting ordinary enemies.
+**Boss numbers below are authored tuning, not implemented or playtested.** See [boss roster and attacks](../todo/02-gameplay/boss-roster-draft.md). All four archetypes are required by the current beta Campaign and automatic Boss sequence; the earlier optional-pair recommendation is superseded. Incomplete encounters remain unavailable in explicitly partial development builds, without claiming complete beta delivery or substituting ordinary enemies.
 
 | Boss | Base HP | Contact damage | Movement speed | Collision radius | Role |
 |---|---:|---:|---:|---:|---|
-| Shellback | 1200 | 12 | 12 | 10 | Campaign stage guardian; assignment pending; space control |
-| Coilmaw | 1600 | 10 | 18 | 8 | Optional Boss/Chaos; aimed ranged pressure |
-| Brood Hauler | 2000 | 10 | 10 | 12 | Optional Boss/Chaos; bounded reinforcements |
-| Nestheart | 2800 | 15 | 8 | 14 | Campaign stage guardian; assignment pending; combined mechanics |
+| Shellback | 1200 | 12 | 12 | 10 | Campaign C01; Boss slot 1; Chaos; space control |
+| Coilmaw | 1600 | 10 | 18 | 8 | Campaign C02; Boss slot 2; Chaos; aimed ranged pressure |
+| Brood Hauler | 2000 | 10 | 10 | 12 | Campaign C03; Boss slot 3; Chaos; bounded reinforcements |
+| Nestheart | 2800 | 15 | 8 | 14 | Campaign C04; Boss slot 4; Chaos; combined mechanics |
 
 Boss HP snapshot proposal: `roundHalfUp(baseHP * (1 + min(0.5, max(0, combatMinutes-5)*0.02)))`. No player-level/difficulty factor, no regeneration, no stacking encounter factor. HP caps at 1.5x after minute 30. Damage/speed stay fixed. Boss-mode fresh encounters use base HP. Ordinary finite damage applies to bosses; Nuclear Missile/Space Collapse must not erase them instantly. Damage is counted once per hit and actual HP removed excludes overkill.
 
@@ -168,7 +226,7 @@ Proposed arena/fairness defaults: boss placement 100–140 world units from the 
 
 Chaos overlap proposal: first boss at minute 5, one spawn opportunity per 180 combat seconds, allowance `1+floor(combatSeconds/900)` (1/2/3/4 at minutes 5/15/30/45). No missed-spawn debt. Shuffle the enabled roster without replacement; prefer types not already alive. Once every enabled type is alive, reinforcement instances may repeat a type, with unique entity/Animator IDs and staggered attack reservations. This explicitly revises the earlier wait-for-distinct-ID default, which would otherwise cap a two-boss roster at two forever. Do not add HP inflation as a substitute for extra bosses. Actual sustainable concurrency requires profiling before release.
 
-Rewards retain selected tiers: standard boss uniform 120–180 trade plus 100 salvage; campaign final 200–300 trade plus 200 salvage. Ordinary adds pay ordinary rewards and share the global population budget. Source-guardian death stops its emitter; remaining required adds still block campaign completion. Chaos continues, Boss mode ends after its boss/required adds, and same-frame player death takes priority. Suggested Boss-mode-only starting energy is 500/1000 so a solo encounter can offer a shield-gated exit before a kill; this exception is part of the draft review, not an implemented rule.
+Rewards retain selected tiers: standard boss uniform 120–180 trade plus 100 salvage; campaign final 200–300 trade plus 200 salvage. Ordinary adds pay ordinary rewards and share the global population budget. Source-guardian death stops its emitter; remaining required adds still block campaign completion. A surviving player continues Chaos or uses the Boss-mode clear/base/next-boss loop. Same-step player/boss death counts the boss clear and ends the run under Q19/Q20. The earlier 500/1000 Boss-mode starting-energy workaround is retired; no mid-fight retreat is permitted and surviving players use the unrestricted post-kill portal.
 
 ## 23 October implemented population and progression revision
 
@@ -413,7 +471,7 @@ The [skill/rarity roster](../todo/07-upgrade-proposals/automatic-skills-and-rari
 
 [Scrap types](../todo/03-economy/scrap-types.md) now uses the owner's **four** selected labels: Metal Fragments, Circuit Parts, Polymer Pieces and Power Cells, superseding the six-family draft. All feed one shared wallet, with enemy-tier reward values and visual/lore differences only. Existing trade ranges, fixed salvage and debris yields are unchanged. Weapon/upgrade/repair prices are revised by the 23 October decisions; older 20/21 October prices are superseded. Single-family merged pickups retain the label; different families display Mixed Salvage with conserved trade/salvage totals. There are no per-family wallets, recipes, conversion rates or statistics in the selected minimum scope.
 
-The staged Campaign replaces the old ten-wave/two-sector schedule; assign source guardians to authored stage bosses. Guardian death stops that source's future emissions/adds; remaining required hostiles still block completion. No global HP reduction, reward reroll or purification-item requirement is introduced. Source shutdown flags persist through hub visits and reset with a fresh run. Same-step player death takes priority over victory. See [world and campaign](../todo/01-story/world-and-campaign.md).
+The staged Campaign replaces the old ten-wave/two-sector schedule; assign source guardians to authored stage bosses. Guardian death stops that source's future emissions/adds; remaining required hostiles still block completion. No global HP reduction, reward reroll or purification-item requirement is introduced. Source shutdown flags persist through hub visits and reset with a fresh run. Q19/Q20 count a same-step boss clear despite player loss, then end the run; full Campaign completion still requires all final objectives resolved in that step. See [world and campaign](../todo/01-story/world-and-campaign.md).
 
 Remaining numerical design gaps are explicit in [decisions and gaps](../todo/00-planning/decisions-and-gaps.md): complete spawn budgets, boss stats/attacks, auto-target ranges, arena dimensions, scoring weights and high-rank/performance limits. Existing prototype values are not automatically approved answers for those new systems. Adopt the proposed card distribution/targeting policy there before adding corresponding numeric tables here.
 
@@ -490,7 +548,9 @@ The ordinary return target stays at 500 at every level. At 2 salvage per basic e
 
 Deflector: rank-1 maximum 20, +5 per rank; online regeneration 2 points/s, +10% of base per rank. A hit against positive points is entirely absorbed even if it breaks the shield. Offline delay 10 s, minus 1 s/rank to a 5 s floor; restart at 50%, then restore the remaining half over 3 simulation seconds. No concurrent normal regeneration during that special restoration phase. Zero/offline shield blocks ordinary return; positive online shield satisfies that gate. Boss-clear portals bypass this requirement.
 
-Proposed starter Deflector rank 1 guarantees the utility has a normal-play shield. Rank increases preserve current points and elapsed cooldown debt; no free revival. Shield Batteries use the selected five-size shop contract above; normal field return requires an online positive shield. Hull-only repair does not restore shield or change its reboot. Hull has no passive field regeneration; Reinforced Hull's max/current-HP exception applies to free field cards only.
+**24 October Q17 confirmed:** Every new run starts with a working basic shield. Delegated beta initialization uses Deflector rank 1, 20/20 points and online state, with no overcharge, break/reboot debt or pending break event. This applies to all four modes and difficulties; no card, payment or prior-run unlock is required. Deflector cards remain eligible as upgrades to this one shield. Existing debug equipment shields must not contribute a second capacity, absorption layer or regeneration source in normal play.
+
+Initialize this full starter shield only when creating/resetting a fresh run. Same-run hub visits, Resume, wave/level transitions and purchases preserve actual points and reboot state except for the explicitly purchased charge or earned upgrade effect. Rank increases preserve current points and elapsed cooldown debt; no free revival. Shield Batteries use the selected five-size shop contract above; normal field return requires an online positive shield. Hull-only repair does not restore shield or change its reboot. Hull has no passive field regeneration; Reinforced Hull's max/current-HP exception applies to free field cards only. The owner selected shield availability; the existing 20-point tuning remains an authored beta default, not a measured balance result.
 
 Replace Nano Repair with Shield Detonation: 50 damage, radius 35, 18 s internal cooldown; +25% damage/rank, +10% radius/rank through rank 5, -10% cooldown with positive high-rank continuation. Trigger once on actual break, not repair/reset/upgrade. Existing combat/augment catalog is 32; Legendary Luck and Epic Blast Radius expand the target roster to 34 cards. Return portals are separate.
 
@@ -809,19 +869,9 @@ Free. Pick 1 of 3 distinct cards, offered with `RunRng`. These are the 9 Space A
 
 ---
 
-## Scoring
+## Earlier scoring plan - superseded
 
-| Event | Points |
-|---|---|
-| Enemy kill | Enemy's score value |
-| Debris destroyed | 5 |
-| Scrap deposited at the dock | 2 per scrap |
-| Wave cleared | 100 × wave number |
-| Wave cleared without taking damage | +250 |
-| Boss killed | Boss score value |
-| Story victory | + `max(0, 6000 − 5 × seconds)` (rewards speed) |
-
-Leaderboard order: Story by score, then lower time. Endless by score, then more waves.
+The former deposit, wave-number, flawless-wave and timed Story-victory formulas are retired. Use the 25 October scoring defaults at the top of this file and the [result/leaderboard contract](../todo/02-gameplay/results-and-leaderboards.md). Current source scoring remains the prototype until the new ledger is actually implemented.
 
 ---
 

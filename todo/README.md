@@ -1,5 +1,11 @@
 # TODO — Remaining Work
 
+**25 October current workflow:** Owner clarified: questions only about needed game content, one at a time. Routine technical/numerical and remaining Campaign details stay delegated; no administrative questions. [Score/results](02-gameplay/results-and-leaderboards.md), [creature direction](09-art/creature-direction.md) and [audio direction](09-art/audio-direction.md) complete PREP-08/09/18/13 writing; [Cadet identity](01-story/player-identity.md) is specified. Current open umbrella count: 52. Runtime/art/audio remain unfinished and unconfirmed human facts stay explicit; earlier counts/workflows below are historical snapshots.
+
+**24 October Q19/Q20:** Simultaneous player/boss death records boss clear and ends the run without revival. [Outcome contract](../context/game-design.md#24-october-simultaneous-boss-clear---q19q20-confirmed) completes PREP-15 design. Current open umbrella count is 56; earlier counts below are dated snapshots. Runtime/scoring/results remain unfinished.
+
+**24 October Q17/Q18:** Basic starter shield and skippable in-play tutorial tips are confirmed. [Tutorial contract](00-planning/decisions-and-gaps.md#6-in-play-tutorial---q18-confirmed-24-october) completes PREP-11 design; actual shield/tutorial integration remains T04/T09 work. There are 57 open umbrella tasks, with overlapping preparation/runtime/release scope.
+
 Current mode contract: [four modes and star-field Campaign](02-gameplay/campaign-stages.md). Survival is removed; beta has four authored levels, three or four visited before final completion. Other unlocked, unfinished levels remain available. Start here for unfinished work beside `assets/`, `build/`, `context/` and `src/`.
 
 **Latest background/wave-clear direction:** Teammate produces backgrounds using the [written art brief](09-art/background-brief.md); no images are created in this context checkpoint. Campaign normal clears offer optional Enter Station or Next Wave/Stage Boss, superseding compulsory base travel. [Checkpoint details](02-gameplay/campaign-stages.md).
@@ -60,19 +66,23 @@ Read the required context references first, then the planning register, world/sc
 | File | What remains to be done |
 |---|---|
 | [Field return portals](02-gameplay/return-portals.md) | Selected random portal/F interaction replacing manual teleport; shield/half-energy gates, limited-range pointer; count/placement/replenishment still open |
+| [Scoring, results and leaderboards](02-gameplay/results-and-leaderboards.md) | Adopted four-mode score/event/outcome/tie rules, names, versioned local data, anti-farming and safe save/recovery; runtime still open |
 | [Background art handoff](09-art/background-brief.md) | Instructions for teammate production: scene identities, shared layers, verified replacement formats, prompt starting points and delivery checks; no assets generated |
+| [Scavenger art direction](09-art/creature-direction.md) | Confirmed hidden-body/seam direction with low/boss silhouette guidance and enclosed orbital cores; teammate produces actual assets |
+| [Audio direction and routing](09-art/audio-direction.md) | Dark synth track/SFX/voice handoff, scene matrix, one-owner gains/fades/focus/skip/exit/failure rules; production/runtime pending |
 | [Weapon/attribute/rarity review](07-upgrade-proposals/README.md) | Five-tier weapon proposal, 25% shop attributes, Luck, complete automatic roster and Legendary Blink; details awaiting confirmation |
 | [Maintained task list](06-task-list/tasks.md) | Prioritized open work, decisions and verified preparation checkboxes; update when work changes |
 | [Ideas and attention](06-task-list/ideas.md) | Suggestions and alternatives with explicit review status; not automatically active scope |
 | [Completion history](06-task-list/completed.md) | Dated results and evidence, with clear separation from pending implementation |
-| [Suggested game names](05-suggested-names/README.md) | Title options, meanings and recommended tagline pairing; final title undecided |
+| [Suggested game names](05-suggested-names/README.md) | Selected SCRAPBOUND: Last Hope and preserved earlier naming proposals |
 | [Decisions and gaps](00-planning/decisions-and-gaps.md) | Confirmed/proposed choices, missing non-art systems, priorities, boss/schedule templates and tutorial/result proposals |
 | [World and campaign](01-story/world-and-campaign.md) | HOPE acronym, 2718-2733 timeline, biological waste-eater origin, colony functions and source-boss campaign |
+| [Player identity](01-story/player-identity.md) | Player-entered Cadet [Name], prelaunch validation, session/restart preservation and captured-name result submission; UI still pending |
 | [Science notes](01-story/science-notes.md) | Primary-source environmental framing, fictional boundaries and explanation of retired narrative terms |
 | [Narrative theme](01-story/narrative-theme.md) | Neglect, postponed responsibility, consequences, hopeful recovery and original slogan options |
 | [Scrap types](03-economy/scrap-types.md) | Four selected material labels, one wallet and enemy-tier values; authored source mappings and later integration remain |
 | [Preparation checklist](04-verification/preparation-checklist.md) | Documentation review, checkpoint content gates and later runtime acceptance scenarios |
-| [gameplay.md](02-gameplay/gameplay.md) | Full detailed handoff: colony hub, five modes, field progression, random trade scrap, paid repairs, skill shop, shield/Return Home, UI, lifecycle and verification |
+| [gameplay.md](02-gameplay/gameplay.md) | Detailed handoff: colony hub, four modes, field progression, trade scrap, paid services, shop, shield/portals, UI, lifecycle and verification; dated older sections are superseded by current contracts |
 | [Text-only story trailer](01-story/story-trailer-text.md) | Standalone storytelling script from the chat; untimed literary draft for later production |
 | [story-context.md](01-story/story-context.md) | Alternating story text and animated/gameplay footage: 40-second intro, ending and 90-second trailer; final boss content/art/optional voice still pending |
 

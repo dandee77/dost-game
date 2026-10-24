@@ -45,7 +45,7 @@ After C01 clears, C02 and C03 both unlock for this run. Previewing or launching 
 
 C04 requires completion of **either middle stage**, not both: the delegated OR merge. The remaining middle stage stays available until final Campaign completion. An unfinished active stage continues its next encounter; no map visit skips/rewinds it or farms a cleared stage. Ordinary retreat resumes that fight. Death/New Game resets unlocks, current encounter and source flags. Final-level preview states that completion ends the beta Campaign, so optional levels can be finished first.
 
-C04 is the final source. Its boss death stops the source; required surviving hostiles still block completion. Finalize earned rewards/queued choices exactly once before the final result is frozen. A simultaneous player death is defeat. On a valid final clear, commit victory once, play the ending, then show that frozen result; no extra map launch or fifth stage is implied.
+C04 is the final source. Its boss death stops the source; required surviving hostiles still block completion. For a living player, finalize earned rewards/queued choices exactly once before the final result is frozen. Q19/Q20 count a simultaneous boss kill despite player death, then end the run without revival, automatic loot collection or card choices. If every final objective resolved in that same step, record Campaign completion and play the ending over the frozen result; otherwise record only earned boss/progress credit. On a valid final clear, commit victory once, play the ending, then show that frozen result; no extra map launch or fifth stage is implied.
 
 Remaining content work: exact per-wave enemy budgets, mixes/cadence/caps, pressure/difficulty data, boss tuning, stage geometry and asset production. Counts, routing and beta boss assignments above are selected delegated defaults; tuning/playability are not certified.
 
@@ -79,7 +79,7 @@ Between waves, either checkpoint launch or optional station departure continues 
 
 ## Delegated transition and ownership contract
 
-A normal wave clears when its authored spawn budget is exhausted and all required hostiles are resolved. Boss encounters additionally require the stage boss dead; required adds cannot be silently ignored. Same-step player death wins over clear. Miniboss death alone does not clear an unfinished wave or grant a separate base visit.
+A normal wave clears when its authored spawn budget is exhausted and all required hostiles are resolved. Boss encounters additionally require the stage boss dead; required adds cannot be silently ignored. Same-step player/boss death retains boss-clear credit but ends the run under Q19/Q20; ordinary-wave fatal ties remain defeat. Miniboss death alone does not clear an unfinished wave or grant a separate base visit.
 
 Wave completion opens the safe optional-station checkpoint above. Only selecting Enter Station transits to base, bypassing shield/energy with no payment/free repair. Earned loot and cards finalize once before another launch. Base services stay paid; checkpoint/base/pause/cards do not advance combat or rebuild timers.
 

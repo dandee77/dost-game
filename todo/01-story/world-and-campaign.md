@@ -1,5 +1,9 @@
 # World, Colony and Campaign
 
+**25 October Q28 visual decision:** Mutated Scavengers keep their living bodies mostly hidden beneath scrap armor, with small organic seams. [Creature production brief](../09-art/creature-direction.md) maps this to accepted silhouettes and four bosses, including protected orbital cores. Written direction only, not delivered art.
+
+**25 October Q27 naming decision:** **Scavengers** is the final collective/species label for the engineered waste-eaters, confirmed by the owner. Singular: **Scavenger**. Use **mutated Scavengers** for hostile descendants and **scrap creatures** only as survivor slang. Mutation does not require a replacement species name. Body visibility/production design remains separate; this confirmation creates no new artwork.
+
 **21 October 2026. Preparation only; no implementation is authorized by this document.** Product authority: [project overview](../../context/project-overview.md). Presentation: [story and trailer](story-context.md). Evidence and fictional boundaries: [science notes](science-notes.md). Gameplay rules and numbers remain in [gameplay](../02-gameplay/gameplay.md) and [game design](../../context/game-design.md).
 
 ## 1. Decisions and terminology
@@ -23,7 +27,7 @@ The colony acronym belongs to a place, not automatically the final game title. N
 
 Long before the final experiment, humanity learned to make its waste disappear from sight. It never learned to stop producing so much of it. Discarded goods accumulated on Earth, obsolete machinery filled orbital routes, and climate damage deepened while each new cleanup project bought another delay.
 
-Scientists engineered biological waste-eaters, provisionally called **Scavengers**. They were living creatures designed to break down selected waste and separate recoverable material. Ground facilities used them to process refuse. Orbital crews deployed them inside protected recovery pods and adapted station equipment to work through collected space debris. Their success became an excuse to keep discarding: cleanup capacity grew, but so did the waste it was expected to absorb.
+Scientists engineered biological waste-eaters called **Scavengers** (final name confirmed 25 October). They were living creatures designed to break down selected waste and separate recoverable material. Ground facilities used them to process refuse. Orbital crews deployed them inside protected recovery pods and adapted station equipment to work through collected space debris. Their success became an excuse to keep discarding: cleanup capacity grew, but so did the waste it was expected to absorb.
 
 In 2718, a separate scientific program developed an atmospheric treatment intended to help climate recovery. For five years, researchers refined it. The Scavengers were already widespread by then. Trials failed to reveal the full interaction between the treatment, residues in waste, and the organisms exposed to them. Society trusted another intervention to buy time while neglecting the harder work of reducing pollution and waste at their sources.
 
@@ -90,7 +94,7 @@ The causal sequence for writers and artists is:
 
 This gives the accepted scrap-monster designs a biological explanation. It does not require new sprites, per-piece armor simulation, material absorption during combat, regeneration, a second health bar, armor damage reduction or additional loot. Existing reward amounts and hit behavior remain unchanged until a separate gameplay instruction authorizes changes.
 
-The shell is not sufficient by itself to sustain life in vacuum: protected cores and retained recovery-pod support remain necessary in the orbital fiction. Its industrial appearance can largely hide the body; exposed tissue or seams are optional later storytelling details, not a demand to redraw every monster.
+The shell is not sufficient by itself to sustain life in vacuum: protected cores and retained recovery-pod support remain necessary in the orbital fiction. Q28 selects mostly hidden bodies with small organic seams; scrap dominates the silhouette. The authored body default is a compact irregular organism with fibrous/adhesive binding tissue enclosed in retained equipment. Do not expose a whole fleshy core, add transparent armor or require accepted sprites to be redrawn. Seams are presentation details, not weak-point hitboxes or armor rules; follow the creature production brief.
 
 ## 5. How HOPE operates
 
@@ -136,7 +140,7 @@ The source's visual shutdown and a brief **“Source isolated”** objective mes
 1. Register guardian death once through the shared encounter system; stop its future source emissions immediately.
 2. Process rewards only if the weapon/death cause permits them. Story completion never depends on receiving loot.
 3. Resolve all required surviving adds. Optional ordinary pickups are not hostiles and do not block completion.
-4. When the final required hostile is gone, complete the sector once. A dead player cannot be rescued by a cutscene; the gameplay handoff proposes player death taking priority over victory in the same simulation step. Adopt that rule consistently; a simultaneous final kill cannot rescue a dead player.
+4. When the final required hostile is gone, complete the sector once. Q19/Q20 retain a boss clear when player and boss die in the same simulation step, then end the run without revival. If every final objective resolved in that step, record final completion and allow the ending over the frozen result; otherwise retain only earned boss/progress credit. A cutscene never rescues the ship or clears surviving required hostiles.
 5. At the midpoint, persist the contained-source flag through pause, hub return and same-expedition resume. At the final sector, stop further combat spawns and freeze the result before the ending.
 6. Ending playback cannot award pickups, heal the player, advance scores or mutate the run. New Run clears sector flags; replaying presentation does not rerun rewards.
 
@@ -150,11 +154,11 @@ The economy still has one trade wallet. Family labels explain recovered material
 
 ## 8. Content that remains to be authored
 
-- Original and mutated Scavenger appearance, protected orbital core, final creature name, and how each existing enemy silhouette contains the organism.
+- Original and mutated Scavenger appearance, protected orbital core and how each existing enemy silhouette contains the organism. Name is confirmed; do not reopen it as missing content.
 - Boss names, silhouettes, attacks, phases, telegraphs, movement constraints and nest/source-site designs.
 - Authored appearance-based enemy/debris mapping for the four owner-selected material labels; no material-specific spending gate.
-- Final game title and optional narrator; the HOPE settlement name is already selected.
+- Produce the selected SCRAPBOUND: Last Hope identity and required shared original English narrator; HOPE settlement and Scavengers names are already selected.
 - Final source-neutralization visual/audio treatment using the existing 2D production pipeline.
-- Adoption of the documented death-before-victory tie rule across every finite mode; tracked in [decisions and gaps](../00-planning/decisions-and-gaps.md).
+- Runtime validation of Q19/Q20: same-step player/boss death counts the boss clear and ends the run without revival; final completion still needs all final objectives. The older death-first boss-credit proposal is superseded.
 
 No extra quests, playable ground combat, research tree, human characters, persistent colony simulation or new chemistry simulation are prerequisites for telling this story.

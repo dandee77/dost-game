@@ -1,5 +1,33 @@
 # Project Overview
 
+**25 October Q32 music direction:** Owner selects dark electronic/synth. [Written audio handoff](../todo/09-art/audio-direction.md) defines shared HOPE/menu, field and boss tracks plus scene routing/volume/voice/failure rules. PREP-13 written contract delivered; actual audio production and playback integration remain open.
+
+**25 October Q31 narration tone:** The shared original English narrator is **calm and serious** across intro/ending/trailer, with restrained regret/hope as scenes require. Keep the same voice profile and measured delivery; dynamic player names remain runtime text. Written production direction only, not generated audio.
+
+**25 October Q29/Q30 player identity:** The player enters a name and is addressed as **Cadet [Name]**. Flow: Start -> difficulty -> name -> hub. [Identity contract](../todo/01-story/player-identity.md) defines name validation/session/restart/results behavior. Voice remains generic Cadet/Pilot, and gameplay still starts fresh. No name UI/runtime is delivered by this documentation decision.
+
+**25 October Q28 creature visibility:** Mutated Scavengers have mostly hidden living bodies beneath scrap armor, with small organic seams. [Written art direction](../todo/09-art/creature-direction.md) completes the body/identity contract; teammate produces actual art. No new weak-point gameplay or artwork is implied.
+
+**25 October Q27 creature name confirmed:** **Scavengers** is the final name of the engineered waste-eaters. Use **Scavenger** singular and **mutated Scavengers** for hostile descendants. Story/narration/trailer/asset instructions share that terminology. No new art or runtime implementation is delivered by this decision.
+
+**25 October current workflow:** Owner clarified: **ask only about needed game content**, one short story/gameplay/presentation question at a time. Stop administrative/deadline/assignment questions; remaining Campaign details and routine numerical/technical choices stay delegated. Official cutoff hour, target PC and registration/provenance evidence remain unconfirmed; final submission owner is unassigned. Do not mistake an authored default or written specification for a delivered feature.
+
+**25 October score/results specification:** [Current contract](../todo/02-gameplay/results-and-leaderboards.md) defines four-mode score events, retirement/mutual outcomes, score-first local rankings, names, versioned storage and safe failure/retry. PREP-08/09 documentation is delivered; actual scoring/result/leaderboard implementation remains open.
+
+**24 October Q25 Boss retirement:** Boss-mode players may voluntarily Retire Run at the station, recording score and bosses cleared with Retired outcome. Reuse Swarm/Chaos confirmation/result handling, include active time and preserve ordinary eligibility. No new mid-fight retreat, reward, boss clear or revival. [Contract](game-design.md#24-october-boss-mode-retirement---q25-confirmed); runtime remains pending.
+
+**24 October Q24 Boss-mode ordering:** Owner chose an automatic boss sequence. Delegated beta order repeats Shellback, Coilmaw, Brood Hauler and Nestheart. No boss picker; the player still chooses when to launch from the station. Four kills do not end the run. [Sequence contract](game-design.md#24-october-automatic-boss-sequence---q24-confirmed) defines the current target; no runtime delivery claimed.
+
+**24 October Q23 submission responsibility:** Final competition upload/submission has no assigned owner yet. Keep it unassigned in the release checklist; the video-production/context roles do not imply upload responsibility. Submission remains an open human task.
+
+**24 October Q22 production ownership:** The implementing teammate will produce the trailer and gameplay demonstration video with AI assistance. The owner handles the context/scripts/instructions with this documentation assistance. These assignments do not mark media complete or assign final submission/upload. Preserve separate gameplay-demo and trailer deliverables; the demo must show the actual playable build.
+
+**24 October Q19/Q20 outcome confirmed:** If player and boss die in the same simulation step, record the boss clear and end the run. No revival or station continuation. Final Campaign completion still requires all final objectives resolved; ordinary deaths remain defeat. [Outcome contract](game-design.md#24-october-simultaneous-boss-clear---q19q20-confirmed) replaces older death-first boss-credit rules. Runtime integration remains pending.
+
+**24 October tutorial confirmed:** Short, skippable tips appear during normal play; no separate practice screen. Optional tips never pause combat or replace mandatory errors/controls. [Adopted tutorial contract](../todo/00-planning/decisions-and-gaps.md#6-in-play-tutorial---q18-confirmed-24-october) covers triggers, copy and session repetition. Runtime integration remains pending.
+
+**24 October starter shield confirmed:** Every fresh run starts with a working basic shield. Adopt the existing Deflector rank-1 tuning (20/20 points, online) as the delegated beta default. Deflector cards upgrade the owned shield; they are not required to acquire it. Same-run station visits, level changes and Resume do not reinitialize or refill it. Context decision only; runtime integration remains open.
+
 **24 October controls/retirement:** Fresh runs start primary auto-fire OFF; hold Shoot/LMB or toggle E. Swarm/Chaos allow confirmed station retirement with score and active survival time recorded under **Retired**, subject to ordinary leaderboard eligibility. Same-run pauses/station visits preserve the firing toggle without firing in inactive states. [Questionnaire](../todo/08-review/owner-questionnaire.md) records confirmed Q15/Q16 and remaining implementation work.
 
 **24 October trailer voice confirmed:** Intro, ending and trailer share the same original AI-generated English narrator for consistency. Preserve readable story cards, current duration targets and recorded AI/asset provenance. This selects production direction; no narration or video is produced here.
@@ -93,7 +121,7 @@ The game is built on top of **Space Ablaze**, a C++/Raylib shooter previously ma
 | Release title | **SCRAPBOUND: Last Hope**; short form **SCRAPBOUND**, selected 24 October |
 | Engine | C++20, Raylib 5.5, CMake |
 | Platform | Windows PC (primary, used at the finals), Linux and macOS builds also work |
-| Category | Student or Professional (record in `progress-tracker.md`) |
+| Category | **Professional**, owner confirmed 24 October; registration evidence remains pending |
 | Themes claimed | Climate Change (primary), Circular Economy (secondary) |
 | Gameplay type | Player-versus-Environment with leaderboards |
 | Submission deadline | 25 October 2026 |

@@ -1,5 +1,7 @@
 # Ideas and Questions to Review
 
+**25 October latest workflow:** Ask only short needed game-content questions, without further administrative questioning. Preserve this as a suggestion/history register; resolve routine technical/numerical and remaining Campaign details through authored defaults. Human facts remain unconfirmed until supplied.
+
 **Last reviewed: 24 October 2026.** Entries are **proposed** until their status changes. They are context ideas, not instructions to implement new features. [Open tasks](tasks.md) tracks required decisions and execution. Avoid turning every idea into extra sprint scope.
 
 For each update, retain the ID and record one status: Proposed, Needs decision, Accepted, Deferred or Rejected. Accepted means the team adopted the idea into an authority document; it does not mean implemented. Add the decision date/reason and linked task when that happens.
@@ -16,7 +18,7 @@ For each update, retain the ID and record one status: Proposed, Needs decision, 
 ## Clarity of play and economy
 
 - **IDEA-07 — Proposed — Owner: UI/gameplay.** Make portal previews answer objective, ending condition and whether an existing expedition will reset. Why: prevents a player from unknowingly losing a suspended run. Next: incorporate into T05's required preview/confirmation design.
-- **IDEA-08 — Proposed — Owner: UI/gameplay.** Pair the first collected reward with one clear explanation of Trade Scrap versus Salvage. Why: one pickup feeds money and progression differently. Next: adopt final tutorial copy under PREP-11; do not add more permanent resource bars.
+- **IDEA-08 — Accepted 24 October — Owner: UI/gameplay.** Pair the first credited pickup with a short skippable Trade Scrap versus Salvage explanation. Q18/PREP-11 adopt the tutorial contract; T09 implements it without adding more permanent resource bars.
 - **IDEA-09 — Proposed — Owner: UI/gameplay.** State the current Return Home blocker directly: charge insufficient, shield offline or mandatory upgrade pending. Why: a full-looking meter otherwise feels broken. Next: review T07/T09 feedback precedence and keep messages truthful to actual state.
 - **IDEA-10 — Proposed — Owner: UI/gameplay.** Present full repair and an affordable partial hull patch with exact cost/restoration previews. Why: a low wallet should still produce an understandable choice. Next: apply the already specified repair contract; this is a presentation idea, not a new price or free service.
 - **IDEA-11 — Proposed — Owner: UI/gameplay.** Explain why a rare offer became Owned after a field card. Why: fixed stock should not look like a shop failure. Next: use the existing ownership/stock contract in T08; no reroll is introduced.

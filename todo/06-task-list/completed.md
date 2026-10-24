@@ -1,12 +1,42 @@
 # Completed Work and Evidence
 
-**Last updated: 24 October 2026.** Append verified deliveries here whenever a task is completed. Keep the corresponding checkbox in [tasks.md](tasks.md) synchronized. The detailed historical implementation record remains in [progress tracker](../../context/progress-tracker.md).
+**Last updated: 25 October 2026.** Append verified deliveries here whenever a task is completed. Keep the corresponding checkbox in [tasks.md](tasks.md) synchronized. The detailed historical implementation record remains in [progress tracker](../../context/progress-tracker.md).
 
 ## Completion record format
 
 Record date, stable task ID, actual result, evidence/commit when known and anything still incomplete. A context draft, an implemented feature, an automated check and human playtest approval are distinct achievements. Use precise language about which one finished.
 
 ## Verified preparation deliveries
+
+**25 October DOC-41 / PREP-13:** Q32 selects dark electronic/synth. Delivered audio track/event/voice direction, scene routing matrix, owner/update rules, gains/fades/duck/mute, focus/skip/exit/failure behavior and corrected current game_music-path baseline. Markdown/matrix/gain examples and existing build verified. Written specification only; no audio/assets, playback code, real sound-quality test or media export delivered.
+
+**25 October DOC-40:** Q31 confirms calm and serious narration. Added shared delivery/voice-profile direction and written teammate starting instruction; aligned story/trailer/theme without changing approved timings, generic player address or mix/skip/provenance. Documentation/whitespace and existing build verified. No voice/audio/video or runtime playback generated/implemented.
+
+**25 October DOC-39:** Q29/Q30 confirm player-entered Cadet [Name]. Delivered identity/name-entry/session/restart/voice contract and updated UI/planned NameEntry/architecture/result submission. No post-run retyping/renaming; 18-column score schema unchanged. Markdown/name/schema examples and existing build verified. No name UI/code, dynamic narration or saved-run implementation delivered.
+
+**25 October DOC-38 / PREP-18:** Q28 selects mostly hidden living bodies/small seams. Delivered creature production instructions with body/binding/core and per-silhouette directions, retaining accepted sprites and separating decorative seams from gameplay weak points. World/story/boss/background agree; docs/build verified. Written contract complete, no actual art/assets or runtime delivery.
+
+**25 October DOC-37:** Q27 confirms Scavengers as the final collective/plural creature name; singular Scavenger and mutated Scavengers remain consistent with existing canon. Removed provisional world/story wording and corrected obsolete world dependencies. Documentation/whitespace and existing build verified. No new art/source/runtime; PREP-18 body/protected-core conditions remain open.
+
+**25 October DOC-36:** Recorded latest clarification: only short needed game-content questions; administrative/deadline/assignment questioning stops. Preserved no-Campaign-question and technical-authoring delegation. Current provisional creature name is under PREP-18 review, not approved/completed by this workflow update. Documentation/whitespace and existing build checked.
+
+**25 October DOC-35 / PREP-08 / PREP-09:** Owner stopped further questions. Delivered delegated [scoring/result specification](../02-gameplay/results-and-leaderboards.md), numerical ledger, score-first/tie rules, retirement/mutual handling, anti-farming, immutable result ownership, 18-field v1 local format, name/eligibility/duplicate handling and safe file limits/recovery. Updated planned registry and current UI/architecture; retired old deposit/two-mode schemas. Markdown links/tables, seven score calculations, schema field/name/board examples and existing build verified. Specifications only; no code/assets, gameplay/file acceptance implementation or balanced-release claim.
+
+**24 October DOC-34:** Q25 confirms Boss-mode retirement at station. Reused Retired preview/confirm/cancel/eligible-save flow; snapshot score, unique boss-clear count and active time without counting/launching pending boss or granting extra rewards. Documented zero-clear/cycle-boundary and mutual-destruction distinctions. Markdown/whitespace and existing build verified. No runtime station/results feature or scoring/schema completed.
+
+**24 October DOC-33:** Q24 selects automatic Boss ordering. Authored Shellback/Coilmaw/Brood Hauler/Nestheart cycle, launch-only ordinal commit, wrap/reset/failure behavior, upcoming preview and one-time rewards. Roster stage assignments reconciled. Sequence examples, Markdown/whitespace and existing build verified; documentation only, no bosses/director/UI implemented and PREP-02 remains partial.
+
+**24 October DOC-32:** Q23 confirms final competition upload/submission owner is not assigned. Updated overview, questionnaire and PROJECT-12 to state this explicitly; no person assigned by inference. Documentation/build checks verified. The actual assignment and submission remain open; no external action performed.
+
+**24 October DOC-31:** Q22 assigns AI-assisted trailer/gameplay-demo production to the implementing teammate; owner handles the context. Updated storyboard, questionnaire and task owners, preserving separate exports, actual gameplay evidence and provenance. Documentation/build verified. No media, external contact or submission performed; PROJECT-08/09 remain open.
+
+**24 October DOC-30:** Owner confirmed Professional category (Q21). Updated overview, tracker answer, questionnaire and task records. Documentation/build checks verified; no registration/forms, external submission or eligibility clearance implied. Credits remain placeholders and factual release work stays open.
+
+**24 October DOC-29 / PREP-15:** Q19/Q20 confirm simultaneous player/boss death records boss clear and ends the run without revival. Adopted same-step event resolution, terminal Mutual Destruction result, once-only credit and required-add/final-objective checks. Reconciled portal, gameplay, story and verification references. Markdown/whitespace and existing build checked. Documentation contract only; scoring/schema and T06/T10 runtime verification remain open.
+
+**24 October DOC-28 / PREP-11:** Owner selected in-play tips (Q18). Adopted the tutorial copy/trigger table with short nonblocking combat tips, safe-panel Skip Tips, pause Hide/Show, session-only repetition and mandatory-panel/input precedence. Portal copy now reflects F interaction and no ordinary retreat in Boss mode. Links/table shapes, whitespace and existing build verified. Completes the documentation contract only; T09 integration and first-player readability remain open.
+
+**24 October DOC-27:** Owner confirmed a working basic shield at every fresh-run start. Recorded Q17 and adopted existing rank-1 Deflector 20/20 online as delegated beta tuning. Specified no duplicate equipment shield or same-run travel refill; preserved card/battery distinctions. Markdown links/tables, whitespace and existing build checked for this docs-only checkpoint. No source/assets, runtime integration or new balance/playtest claim; PREP-03/T04 remain open.
 
 **24 October DOC-26:** Recorded Q15/Q16: fresh-run primary auto-fire OFF with LMB/E controls; eligible Swarm/Chaos station retirement records score and active survival time as Retired. Defined same-run toggle preservation, confirmation/cancel, no bonus/uncollected-loot credit and one-time result ownership. Source inspection confirms existing autoShoot=false/LMB/E baseline; documentation/build checks pass. No source/assets/runtime retirement implementation or new playtest claimed.
 

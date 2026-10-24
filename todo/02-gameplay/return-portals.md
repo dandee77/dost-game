@@ -13,7 +13,7 @@
 | Mid-fight retreat | Allowed through an eligible portal | Forbidden, including at full shield/energy |
 | Next launch | Resume suspended world at used portal position | Start next boss once; preserve build and wallet |
 
-Neither type heals the ship or resets upgrades. Pause remains available; quitting abandons the run. Same-step player death takes priority over portal travel and boss-clear progression.
+Neither type heals the ship or resets upgrades. Pause remains available; quitting abandons the run. Player death prevents portal travel. Under Q19/Q20, a same-step boss death still earns boss-clear credit before the run ends; it does not permit revival, station entry or the next encounter.
 
 ## Ordinary portal lifecycle
 

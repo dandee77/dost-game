@@ -1,5 +1,17 @@
 # UI Rules
 
+**25 October player-entered Cadet name:** After difficulty, show a name field in the existing menu flow, then Continue/Back. Normalize to the existing 3-12-character A-Z/0-9/space format; require a valid name and display Cadet separately. Consume confirmation input and preserve the draft on Back. Hub/briefings/results use Cadet {name}; leaderboard name uses the captured name alone. Results offer Submit Result/leave-unsaved confirmation, without another name entry or alias edit. Safe-area/font/button constants stay in Theme. See [identity contract](../todo/01-story/player-identity.md).
+
+**25 October result/leaderboard contract:** Use [current rules](../todo/02-gameplay/results-and-leaderboards.md): immutable results, visible outcome/eligibility, score and active time, Boss clears/Campaign progress, safe name entry and Saved/Retry state. Name/confirm/skip/back consume input once; ending skip cannot submit twice. Four-mode/difficulty board filters show current-rules top 10, latest run highlight and no mixed-rule comparison. Keep within established safe area and readable row style; paginate rather than shrink text. A failed save preserves the frozen result; unsupported/corrupt-file status must not imply a successful save. No online account/login or extra scene beyond existing planned boundaries.
+
+**24 October Q25 Boss station retirement:** Boss station also shows Retire Run. Preview score, bosses cleared and active time, then Confirm/Cancel. Distinguish completed bosses from the upcoming automatic encounter; confirmation cannot count/start that pending boss. Results show Retired with the same earned fields and one eligible save, not Victory/Defeated. No station retirement controls appear during combat or after mutual destruction. Swarm/Chaos retirement remains unchanged.
+
+**24 October automatic Boss sequence UI:** Station/launch preview shows upcoming boss name, encounter ordinal and cycle from authoritative run state. Use Launch/Cancel; no boss picker, next/random buttons or auto-launch timer. Cancel leaves the same upcoming boss. Repeating to Shellback after Nestheart is visibly the next encounter, not a new run or victory. An unavailable encounter gives a clear launch error without advancing or charging. Mutual destruction still ends the run without station/next-boss controls.
+
+**24 October mutual destruction result:** Q19/Q20 count a same-step boss kill even if the player dies, then end the run. Show **Mutual Destruction - Boss Cleared**, credited boss count, score/time and actual objective completion. Do not show Resume/Enter Station/Next Boss for the destroyed ship. If all final objectives resolved in that step, show Campaign completion and permit its frozen-result ending; otherwise do not imply final victory. Ordinary deaths remain Defeated. Results and ending never grant another reward or revive the player.
+
+**24 October Q18 tutorial:** Use short, skippable in-play tips, not a practice screen. Follow the [adopted copy/trigger/input contract](../todo/00-planning/decisions-and-gaps.md#6-in-play-tutorial---q18-confirmed-24-october). One passive tip within the safe area, clear of HUD and telegraphs; no combat pause/input capture. Mandatory panels suppress tips. Skip Tips is available in safe hub/pause panels; pause Help exposes Hide/Show Tips. Dismissal consumes its own input. Required blockers/errors remain visible even when optional tips are hidden. No new hotkey, combat voice or scene is required.
+
 **Primary-fire/retirement UI:** Fresh-run help shows Hold Shoot / E: Auto-fire (OFF initially). Preserve the selected toggle across same-run panels/station visits; UI input never leaks into firing. Swarm/Chaos station UI has Retire Run, score/time preview and Confirm/Cancel. Results label voluntary station completion **Retired**, display both score and active survival time, and permit eligible name entry once. Do not label it Defeated/Victory or give retirement bonuses.
 
 **Trailer voice consistency:** Owner confirmed the same original English AI narrator for intro/ending/trailer. Use one voice profile, consistent pronunciation and measured clip timing; retain readable story cards and existing export duration targets. Production follows the [voice contract](../todo/08-review/owner-questionnaire.md).
@@ -408,7 +420,7 @@ Existing overlay and stats, plus: mode, wave reached, scrap lost (cargo at death
 Same layout as the intro, `COLOR_LIFE` accents. Final card shows run stats and "ENDLESS MODE: THE JUNK KEEPS COMING".
 
 ### S-10 Leaderboard (`LeaderboardScene`)
-Title "LEADERBOARD". Two columns, Story (left) and Endless (right): rank, name, score, and time or waves. The latest entry is highlighted in `COLOR_SCRAP`. Back button.
+Title "LEADERBOARD". Current-rules mode/difficulty filters and top-10 rows: rank, name, score, active time and outcome, plus Boss clears or Campaign progress as relevant. Highlight latest run ID in COLOR_SCRAP; Back returns to MainMenu. Use the 25 October result contract; old two-column Story/Endless layout is retired.
 
 ### S-11 Credits (`CreditsScene`)
 Scrolling `secondary_font` text: game title, team and roles, coach, built with Raylib, AI tools and what they were used for, asset and font licenses, "Made for DOST Level Up 3.0". Back button.

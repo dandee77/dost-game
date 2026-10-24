@@ -29,7 +29,7 @@ Do not apply the 25% rule blindly to a new ability, an extra drone, a new weapon
 | Inertia Impact | +50 knockback magnitude | +12.5 knockback magnitude | Actual supported targets remain bounded by their knockback rules |
 | Shield Capacity | Deflector card: +5 capacity plus its full-rank shield effects | +1.25 capacity only | Does not grant a Deflector rank, reboot reduction or regeneration boost |
 
-The shield's starter remains rank 1, capacity 20, pending the existing starter-loadout adoption. Deflector is still an eligible field upgrade. Its card grants a full ability rank under the shield contract; a shop capacity purchase only increases the upper limit. Proposed total capacity:
+**24 October owner-confirmed starter:** Every fresh run starts with a working basic shield; acquisition from a card is not required. Adopt rank 1 and 20/20 online points as the delegated beta default. Deflector remains an eligible field upgrade to that single shield. Its card grants a full ability rank under the shield contract; a shop capacity purchase only increases the upper limit. Do not add debug equipment shielding as a second layer or refill the starter during same-run station/level transitions. Proposed total capacity:
 
 `maxShield = 20 + 5 * (deflectorCardRank - 1) + 1.25 * paidCapacityPurchases`
 

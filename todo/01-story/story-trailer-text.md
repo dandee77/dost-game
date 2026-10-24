@@ -1,5 +1,7 @@
 # Story Trailer — Text Only
 
+**25 October Q31 performance direction:** Read this with the selected shared original English narrator, calm and serious. Convey weight and resolve with measured pauses; intensifying footage/edit/music need not turn the voice into shouting. Keep the saved voice profile used by intro/ending. Final clip timing follows the production storyboard; this remains text, not audio/video.
+
 We kept throwing it away.
 
 Until it came back for us.

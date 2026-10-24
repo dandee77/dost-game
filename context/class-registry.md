@@ -227,7 +227,7 @@ All use the same pattern: `static X& GetInstance()` with a function-local static
 - Files: src/LeaderboardScene.hpp, src/LeaderboardScene.cpp
 - Status: planned (item 24)
 - Kind: scene `"Leaderboard"`
-- Behavior: two columns (Story, Endless), top 10 each from `Leaderboard`; highlights the latest entry from `RunContext`; Back button returns `"MainMenu"`.
+- Behavior (25 October target): four-mode/difficulty filters over current-rules boards, top 10 for each board, score/time and mode progress/outcome; highlight latest run ID. Read immutable RunContext lastResult; Back returns to MainMenu. Follow [score/result contract](../todo/02-gameplay/results-and-leaderboards.md), not the retired Story/Endless columns. Still planned.
 
 ### CreditsScene (planned)
 - Files: src/CreditsScene.hpp, src/CreditsScene.cpp
@@ -593,7 +593,7 @@ All use the same pattern: `static X& GetInstance()` with a function-local static
 - Files: src/RunContext.hpp, src/RunContext.cpp
 - Status: planned (item 05)
 - Kind: singleton
-- Fields: `GameMode mode` (`MODE_STORY`, `MODE_ENDLESS`), `unsigned int seed`, `RunResult lastResult` (mode, score, waves cleared, seconds, victory flag, leaderboard rank or -1)
+- Target data (25 October; not implemented): four-mode/difficulty/rules/seed identity and immutable RunResult containing unique run ID, terminal outcome, Campaign-complete flag, checked score/active milliseconds/counters, last active level, eligibility/debug flags and submission status. Game owns live run/score state; this boundary carries finalized cross-scene results. Follow [current schema/lifecycle](../todo/02-gameplay/results-and-leaderboards.md); old two-mode/victory-bool fields are superseded.
 
 ### RunRng (planned)
 - Files: src/RunRng.hpp
@@ -604,8 +604,8 @@ All use the same pattern: `static X& GetInstance()` with a function-local static
 ### Leaderboard and NameEntry (planned)
 - Files: src/Leaderboard.hpp/.cpp, src/NameEntry.hpp/.cpp
 - Status: planned (item 24)
-- Leaderboard API: `load()`, `save()`, `bool qualifies(GameMode, int score) const`, `int insert(const LeaderboardEntry&)` (returns rank or -1), `const std::vector<LeaderboardEntry>& top(GameMode) const`
-- NameEntry: UI widget for the game-over screen; reads `GetCharPressed()`, Backspace, Enter; uppercase letters, digits and space; 3 to 12 characters.
+- Target interface (25 October; signatures finalized during implementation): bounded load returning status/warnings, board lookup by rules/mode/difficulty, eligibility/rank comparison using the full immutable result, idempotent insertion by run ID, and atomic save returning success/retry reason. No int-score/two-mode shortcuts. File results-v1.csv, newest 100 plus top-10 retention and corruption/unknown-version policy follow [current contract](../todo/02-gameplay/results-and-leaderboards.md).
+- NameEntry (25 October Q29/Q30 target): planned UI widget in the prelaunch menu after difficulty; reads GetCharPressed/Backspace/Enter and validates 3-12 uppercase ASCII letters/digits/spaces. Continue requires valid input; Back preserves the draft. It does not create a new scene, own earned score or submit results. Capture name with run identity; results confirm submission using that name without retyping/renaming. See [identity contract](../todo/01-story/player-identity.md).
 
 ### PauseOverlay (planned)
 - Files: src/Pause.hpp, src/Pause.cpp (currently empty; class name `PauseOverlay`)

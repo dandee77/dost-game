@@ -1,6 +1,6 @@
 # Owner questionnaire - 24 October 2026
 
-Ask one question at a time. Skip settled decisions. Owner explicitly delegated the remaining Campaign details and requested no more Campaign questions. Preserve that delegation; only new owner instructions change it.
+**25 October latest clarification: ask about needed game content only.** Ask one short question about genuinely unresolved story/gameplay/presentation intent at a time. Do not continue deadline, paperwork or task-assignment questionnaires. Author routine technical/numerical details from existing direction. Preserve the owner's no-more-Campaign-questions delegation. Human release facts remain unconfirmed unless supplied. This clarification supersedes the immediately preceding blanket stop-question instruction.
 
 | Question | Answer / status | Consequence |
 |---|---|---|
@@ -20,6 +20,42 @@ Ask one question at a time. Skip settled decisions. Owner explicitly delegated t
 | Q14: Same narrator in trailer? | **Yes, same narrator - owner confirmed** | Intro, ending and trailer share one original English AI narrator/voice profile. |
 | Q15: Primary weapon auto-fire on a fresh run? | **Start OFF - owner confirmed** | Hold Shoot/LMB or press E to enable auto-fire; mouse aiming stays available. |
 | Q16: Submit Swarm/Chaos score after voluntary station retirement? | **Yes - owner confirmed** | Record score and active survival time with Retired outcome; normal ranked eligibility and duplicate prevention still apply. |
+| Q17: Start every run with a basic shield or earn it from a card? | **Start with a basic shield - owner confirmed** | One working starter shield in every mode/difficulty. Author default: Deflector rank 1, 20/20 online; cards upgrade it. No same-run travel refill or duplicate equipment shield. |
+| Q18: In-play tips or separate practice screen? | **Tips while playing - owner confirmed** | Short, skippable, nonblocking tips; no separate practice scene. Adopted copy/trigger/session/input rules are in the tutorial contract. |
+| Q19: Player and boss die at the same moment? | **Count it as a boss clear - owner confirmed** | Same simulation-step boss death receives ordinary clear credit even if the player dies. Supersedes the author's death-first boss-credit proposal. |
+| Q20: After that tie, end the run or revive at station? | **End run; record the boss clear - owner confirmed** | No resurrection, travel or continuation. Preserve boss credit once; final completion still requires all required final objectives resolved. |
+| Q21: Competition category? | **Professional - owner confirmed** | Use Professional in submission planning. This does not establish completed registration, signed forms or eligibility evidence. |
+| Q22: Who produces trailer and gameplay demo? | **Implementing teammate, with AI assistance; owner handles context - owner confirmed** | Assign both media tasks to teammate. Context/scripts/instructions stay with owner and this documentation assistance. Videos, provenance and final submission remain incomplete. |
+| Q23: Who handles final competition upload/submission? | **Not assigned yet - owner confirmed** | Leave upload ownership explicitly unassigned. PROJECT-12 stays open; do not infer the video producer or context author will submit. |
+| Q24: Boss mode automatic sequence or choose each next boss? | **Automatic sequence - owner confirmed** | Author order Shellback -> Coilmaw -> Brood Hauler -> Nestheart, repeating. Station launch stays deliberate; no boss picker or automatic launch. |
+| Q25: Boss-mode station retirement with score/boss-clear record? | **Yes - owner confirmed** | Add confirmed Retire Run at station, preserve earned score/clear count, label Retired and save once under normal eligibility. No extra clear, revival or mid-fight travel. |
+| Q26: Exact official submission cutoff hour on 25 October? | **Unconfirmed; owner instructed stop asking** | Leave official hour unknown. Continue context preparation without further questionnaires or a guessed cutoff. |
+| Q27: Keep Scavengers as the final creature name? | **Yes, keep Scavengers - owner confirmed** | Final collective/plural name; singular Scavenger, hostile descendants mutated Scavengers. Remove provisional-name wording; body/visual production remains separate. |
+| Q28: Expose mutated bodies or mostly hide them? | **Mostly hidden, small organic seams - owner confirmed** | Scrap dominates the silhouette; enclosed living core/binding tissue remains consistent with orbital support. Written creature brief supplies per-silhouette instructions; no art generated. |
+| Q29: Unnamed Pilot or named main character? | **Cadet then name - owner confirmed** | Address the character as Cadet [Name], retaining the cadet salvage-pilot role. |
+| Q30: Player-entered name or fixed story name? | **Player enters their name - owner confirmed** | Prelaunch name panel captures local run identity; mission/results use Cadet [Name]. No fixed protagonist name or dynamic spoken-name generation. |
+| Q31: Narrator's usual tone? | **Calm and serious - owner confirmed** | Same original English voice across intro/ending/trailer; measured delivery with restrained emotion, no shouting or new narrator per scene. |
+| Q32: Music style? | **Dark electronic / synth - owner confirmed** | Shared synth direction with restrained HOPE/story bed, driving ordinary combat and tense bosses; teammate audio brief supplies routing/delivery instructions. |
+
+## Boss-mode retirement
+
+[Retirement contract](../../context/game-design.md#24-october-boss-mode-retirement---q25-confirmed) extends the confirmed Swarm/Chaos station retirement flow to Boss. Preview score, uniquely credited boss clears and active time; Cancel retains the pending automatic sequence. Confirm ends the run with Retired and no new kill/reward/ordinal advance. Runtime station/results and score/schema implementation remain open.
+
+## Automatic Boss sequence
+
+The owner selected automatic ordering; exact order/repetition are delegated. [Sequence contract](../../context/game-design.md#24-october-automatic-boss-sequence---q24-confirmed) specifies the four-boss cycle, launch commit/reset rules, upcoming-boss preview, missing-content failures and one-time encounter rewards. It preserves the no-retreat/base/next-launch loop and Q19/Q20 terminal mutual destruction. Mode/difficulty add schedules, runtime implementation and balance remain open.
+
+## Simultaneous boss death and player loss
+
+Owner confirms clear credit and terminal run state, not a revival. [Outcome contract](../../context/game-design.md#24-october-simultaneous-boss-clear---q19q20-confirmed) defines same-step processing, Mutual Destruction display, per-mode results, final-objective checks, no cleanup/loot farming and one-time finalization. Runtime T06/T10 and exact scoring/schema remain open. Ordinary player deaths without a same-step boss kill remain defeat.
+
+## In-play tutorial
+
+Owner selected tips during play. [Tutorial contract](../00-planning/decisions-and-gaps.md#6-in-play-tutorial---q18-confirmed-24-october) supplies adopted copy/triggers, Skip/Hide/Show Tips, session-only seen state and mandatory-panel precedence. Tips never pause combat or obscure actionable errors. No combat narration, separate practice scene, tutorial rewards or persistent progression is added. PREP-11 design contract is delivered; T09 and a first-player runtime review remain open.
+
+## Basic shield at run start
+
+The owner confirmed availability; numerical tuning is delegated. Use the existing rank-1 Deflector baseline: 20 normal capacity, 20 current points, online, no overcharge/reboot debt. Initialize once per fresh run, including restart after death. Do not reset it at hub entry, Resume, level selection or wave transition. Deflector cards increase the existing shield's rank; paid capacity and batteries retain their separate contracts. Normal-play equipment must not stack another shield. Validate new runs in all four modes/difficulties, damaged/offline travel, repeat card picks, batteries and repeated restarts. Documentation decision recorded; PREP-03/T04 integration and gameplay checks remain open.
 
 ## Primary-fire default and retirement
 
@@ -79,6 +115,10 @@ Verify close/reopen retention, missing/malformed files, nonfinite/out-of-range g
 
 ## Narration contract
 
+**Q31 delivery:** Calm and serious is the usual tone. Use clear English diction, measured pacing and restrained emotion. Intro communicates regret/gravity without theatrical yelling; ending allows quiet hope without changing the voice's identity; trailer may grow more purposeful while retaining composure. Rising trailer pace comes from edit/action/music, not rushing or shouting the lines. Keep one saved original voice profile and pronunciation guide across all clips. Do not imitate a named real person or introduce another narrator for a different scene. Address player as Cadet/Pilot/you; no per-name voice generation.
+
+Teammate production starting instruction: "Original narrator voice, calm and serious, clear English, measured delivery, restrained emotional weight, readable pauses, natural sentence endings. Convey consequence and resolve; keep the same voice profile across the sequence." This is written direction, not a submitted generation prompt or generated audio. Measure actual spoken clips within existing beat totals; adjust script allocation rather than forcing rushed playback. Existing captions/skip/focus/mix/provenance rules still apply.
+
 The beta intro, ending and trailer require the **same original AI-generated English narrator**, owner confirmed. Preserve readable story cards and meaningful motion. Provider/voice profile/files remain production work; no audio/license review/disclosure completion is claimed. Record actual tool/model, prompt, source/output paths, edits and provenance in assets/ASSETS.md and the AI Usage Log during production.
 
 Use one consistent original voice direction, without imitating a named real person or referencing brands/games/movies in generation prompts. Spoken lines follow the approved card text and add no essential facts unavailable to a sound-off viewer. Read HOPE as the word Hope. Narration may finish over its associated motion beat after the story card clears; stop it before an unrelated beat. Measure actual clip duration rather than speeding the voice to fit a guessed interval.
@@ -87,6 +127,6 @@ Keep the existing 40-second intro and 24-second ending as production targets, ad
 
 Voice follows Master x SFX/Voice. Music follows Master x Music, with author-selected 0.35 duck during audible narration and normal gain afterward. Ducking never overwrites sliders. Mix validation/clip production remain PROJECT-05/07/09 work. Trailer voice is confirmed: reuse the same saved original voice profile and pronunciation/delivery direction as intro/ending. Avoid per-scene random voice selection; inspect all clips together for consistency. The 90-second trailer target includes narration; voice must fit associated text/footage beats without adding uncaptioned essential facts or extending the export automatically.
 
-## Still to ask or author
+## Remaining human facts and delegated authoring
 
-Continue non-Campaign questions only when an answer is needed. Hardware facts, recording/submission ownership and official cutoff remain missing. Team credit placeholders are owner-approved. Author delegated spawn/targeting/compatibility/scoring details instead of asking for every tuning value. No external contact/submission is authorized by this questionnaire.
+Only short game-content questions under the latest clarification. Hardware, registration/provenance evidence and exact official cutoff remain unconfirmed; do not ask those again in this content questionnaire. Q23 records the upload owner as explicitly unassigned. Q22 assigns AI-assisted video production to the implementing teammate and context to the owner. Credits remain placeholders. Author remaining spawn/targeting/compatibility/technical defaults; [score/results specification](../02-gameplay/results-and-leaderboards.md) supplies scoring/storage defaults. No external contact/submission is authorized by this register.

@@ -1,5 +1,17 @@
 # Story Cards, Animation and Trailer
 
+**25 October Q32 music:** Dark electronic/synth throughout. Intro uses restrained ominous textures; ending allows a quiet hopeful motif; trailer escalates rhythm/editing while the narrator stays calm and serious. [Audio handoff](../09-art/audio-direction.md) defines three shared music assets, scene routing, ducking and pause/skip/exit behavior. No music/audio is generated here.
+
+**25 October Q31 narrator performance:** Usual delivery is **calm and serious**, using the same original English voice in intro/ending/trailer. Intro carries measured regret, ending restrained hope, trailer purposeful composure; increased editing/action pace does not imply shouting/rushing the narration. [Voice contract](../08-review/owner-questionnaire.md#narration-contract) supplies teammate production direction. No voice audio is generated here.
+
+**25 October Q29/Q30 protagonist:** Player enters their name and is addressed as **Cadet [Name]**. [Identity contract](player-identity.md) places name entry after difficulty and before the hub, preserving it through the run/restart and capturing it in results. Runtime text substitutes the name; preproduced narration says Cadet/Pilot/you, with no per-name voice generation or fixed protagonist biography. Existing ship-based play remains unchanged.
+
+**25 October Q28 visual production:** Mutated Scavengers remain mostly enclosed by scrap armor, with small organic seams. Close-ups show binding tissue moving between plates rather than a fully exposed body/core. Establish living biology before mutation, then retained scrap around it. [Creature instructions](../09-art/creature-direction.md) preserve protected cores and accepted silhouettes; no footage/assets are produced here.
+
+**25 October Q27 creature name:** Scavengers is final, not provisional. Use Scavenger (singular), Scavengers (collective/plural) and mutated Scavengers (hostile descendants) consistently in cards, narration, trailer and later asset descriptions. Existing approved biological origin is unchanged; visual body details remain a separate content item.
+
+**24 October Q22 handoff:** Owner prepares the context; implementing teammate produces both the trailer and gameplay demonstration video using AI assistance. Use this storyboard, the standalone script, shared narrator contract and background brief as production inputs. The separate 3-5 minute gameplay demo records the actual build; AI may assist editing/captions/narration but generated scenes cannot stand in for demonstrated gameplay. The trailer may combine clearly contextual story animation with actual gameplay, retaining the 90-second draft within its 1-2 minute requirement. Teammate records tools/prompts/source rights and final exports in the existing provenance/AI logs. This checkpoint supplies instructions only; no recording, generation, editing or export is delivered.
+
 **24 October current production identity:** SCRAPBOUND: Last Hope, short form SCRAPBOUND. [Four beta levels](../02-gameplay/campaign-stages.md) permit three or four visits because unfinished unlocked levels stay available. Survival is removed; Boss repeats through base visits. Owner requires **the same original English AI narrator for intro, ending and trailer**, alongside readable text and motion. Credits use placeholders. [Voice/playback contract](../08-review/owner-questionnaire.md) defines consistency, pause/skip/mix/provenance. Dated five-mode framing below remains historical.
 
 **21 October 2026. Preparation only.** Canon: [world and campaign](world-and-campaign.md), governed by [project overview](../../context/project-overview.md). Scientific boundaries: [science notes](science-notes.md). Mechanics: [gameplay](../02-gameplay/gameplay.md). This revision replaces the former seed/tree narrative; it creates no art, audio, video or code.
@@ -21,7 +33,7 @@ No walking avatar, dialogue tree, new 3D environment or video-decoding library i
 
 ## 2. Story essentials
 
-Earth suffers prolonged climate disruption and waste accumulation. Scientists first engineer living waste-eaters, provisionally called Scavengers, for terrestrial facilities and protected orbital recovery pods. Humanity relies on them while continuing wasteful habits. A separate atmospheric treatment is developed in 2718 and released after five years in 2723. Unexpected exposure changes the creatures' DNA and behavior, making them hostile to humans. They take in material indiscriminately, digest suitable fractions and bind retained scrap into external armor. Across later generations, useful inherited shell-building traits become more common. Scrap remains nonliving. Transported organisms and residues spread exposure into orbit.
+Earth suffers prolonged climate disruption and waste accumulation. Scientists first engineer living waste-eaters called Scavengers for terrestrial facilities and protected orbital recovery pods. Humanity relies on them while continuing wasteful habits. A separate atmospheric treatment is developed in 2718 and released after five years in 2723. Unexpected exposure changes the creatures' DNA and behavior, making them hostile to humans. They take in material indiscriminately, digest suitable fractions and bind retained scrap into external armor. Across later generations, useful inherited shell-building traits become more common. Scrap remains nonliving. Transported organisms and residues spread exposure into orbit.
 
 By 2732, survivor estimates put population loss at roughly 99%, following nine years of attacks and infrastructure collapse. Selected existing orbital stations become defensible refuges. In 2733, the player joins **H.O.P.E. Colony — Habitat for Orbital Preservation and Endurance** as a cadet salvage pilot. Clear routes, recover useful materials and isolate the concentrated sources that keep the wreckage dangerous.
 
@@ -79,7 +91,7 @@ Show only implemented playable modes in a recorded gameplay claim. Campaign vict
 
 ## 6. Ending: proposed 24 seconds, three pairs
 
-Trigger after final guardian death, source shutdown and all required hostile resolution, provided the player survives. The result is committed once before presentation. The ending cannot collect leftover loot, grant a second boss reward, heal the ship or advance score/time.
+Trigger after final guardian death, source shutdown and all required hostile resolution. Q19/Q20 also permit final completion when those objectives and player death resolve in the same simulation step: record the boss clear, end the run and play the ending over its frozen result without revival. A boss kill with required hostiles still alive is not final completion. The result is committed once before presentation. The ending cannot collect leftover loot, grant a second boss reward, heal the ship or advance score/time.
 
 | Time | Beat | Text or moving scene |
 |---|---|---|

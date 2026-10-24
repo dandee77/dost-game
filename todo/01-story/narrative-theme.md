@@ -6,7 +6,7 @@
 
 Humanity kept treating the symptoms of its behavior while postponing the changes that would reduce the damage. Waste-eating creatures were a useful invention, but society treated their success as permission to keep producing and discarding more. The later atmospheric treatment became another promise that the consequences could be managed without changing those habits. Its unexpected interaction with the creatures turned that dependence into catastrophe.
 
-The requested “humanity got what it deserved” feeling is expressed as **consequences finally reaching the people who kept postponing responsibility**. The narrator can be severe and regretful. The creatures themselves are biological threats, not judges sent to punish humanity. The catastrophe is not proof that every individual victim deserved death; survivors include people who warned, repaired and tried to change things.
+The requested “humanity got what it deserved” feeling is expressed as **consequences finally reaching the people who kept postponing responsibility**. Q31 selects calm, serious narration: regret and severity come through measured wording/emphasis rather than shouting or an angry condemning character voice. The creatures themselves are biological threats, not judges sent to punish humanity. The catastrophe is not proof that every individual victim deserved death; survivors include people who warned, repaired and tried to change things.
 
 Scientific effort and cleanup still matter. The failure is dependence on interventions without enough prevention, oversight and follow-through. The ending earns hope by showing sustained work: recover resources, contain sources, reduce waste and protect what remains. HOPE must embody a different habit, not advertise another effortless cure.
 

@@ -1,5 +1,7 @@
 # Full game logic and statistics review
 
+**24 October outcome supersession:** Q19/Q20 replace the older proposed death-first boss tie: same-step player/boss death counts boss clear and ends the run without revival. [Current outcome contract](../../context/game-design.md#24-october-simultaneous-boss-clear---q19q20-confirmed) governs objective completion and results. Dated baseline observations below remain historical.
+
 **Later revision:** Read [balance implementation and context review](balance-and-context-review.md) first. Its implemented population/HP/loot/XP changes supersede the corresponding snapshot figures below; unchanged weapon/ability tables retain their original draft/code labels. The new review also lists unfinished context and the small set of decisions needing owner confirmation.
 
 **23 October 2026. Review snapshot prepared for the owner.** This document consolidates the game design and inspected prototype source. It does not implement new features or certify balance. Later accepted decisions belong in the authority documents, not only here.

@@ -1,5 +1,7 @@
 # Background art handoff - SCRAPBOUND: Last Hope
 
+**25 October creature visibility:** Infested nest/source landmarks use subdued organic seams within scrap-dominated structures. Follow [creature direction](creature-direction.md); do not paint a fully exposed core, interactive enemy or target into backdrop art. Existing file formats/low-contrast rules remain unchanged.
+
 **24 October 2026. Instructions only.** Owner explicitly assigns background production to the teammate who will implement the game. This checkpoint creates no images, animations, textures, prompts submitted to an image service or runtime changes. The teammate may create original art or use an approved generation workflow later and must record provenance at delivery.
 
 Read [UI rules](../../context/ui-rules.md), [hub/arena layouts](../02-gameplay/beta-layouts.md), [storyboard](../01-story/story-context.md) and [world canon](../01-story/world-and-campaign.md) before production. Keep the existing accepted player/enemy/debris art. Use original subject descriptions; no real brands, companies, people, games, movies or named-artist references in game content or prompts.

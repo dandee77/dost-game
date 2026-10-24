@@ -87,7 +87,7 @@ Leaderboard, story playback, credits, release and submission deliverables remain
 5. Paid repair commits cost and restoration together; cancel/insufficient funds gives neither free healing nor lost currency; partial affordable repair is correct.
 6. Skill rank purchases share actual effects with field cards while preserving paid-heal exclusions; stock does not reroll by reopening the shop.
 7. Each mode meets its own objective; a boss kill in Chaos continues the run and a final Campaign source clearance enters the ending once.
-8. No-loot effects can complete source objectives; simultaneous player death defeats the run under the proposed tie rule.
+8. No-loot effects can complete source objectives. Q19/Q20: simultaneous player/boss death records the boss clear and ends the run without revival/travel. Final completion also requires every final objective resolved in that step; test surviving adds, both event orders and duplicate callbacks.
 9. Ending skip reaches one finalized result; New Run removes source flags, wallet, upgrades, timers and suspended objects.
 10. Approved load/performance targets hold at the highest supported effect/rank combination; separate repeatable smoke checks confirm release packaging and actual demo-machine behavior.
 

@@ -1,5 +1,7 @@
 # Balance implementation and context review — 23 October 2026
 
+**24 October outcome supersession:** Q19/Q20 replace this review's earlier death-before-victory proposal for boss ties: count same-step boss death and end the run without revival. Follow the [current outcome contract](../../context/game-design.md#24-october-simultaneous-boss-clear---q19q20-confirmed). The dated observations below do not override that decision.
+
 Read this update before the [full statistics snapshot](full-game-review.md). That snapshot still contains all 26 weapon profiles, signatures, skill tables and upgrade arithmetic, but its old exponential progression, moving return requirement and spawn pacing are superseded by [game-design.md](../../context/game-design.md#23-october-implemented-population-and-progression-revision).
 
 ## Implemented in this pass

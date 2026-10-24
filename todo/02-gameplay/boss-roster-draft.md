@@ -1,5 +1,11 @@
 # Boss roster for review — 24 October 2026
 
+**25 October Q28 boss art:** Living cores remain mostly hidden behind scrap shells, with small organic seams. Shellback recovery parts armor enough to suggest binding tissue, not a fully exposed body. All four follow [creature direction](../09-art/creature-direction.md); visual seams create no extra weak point, hitbox, phase or damage rule.
+
+**24 October Q25 retirement:** A living Boss-mode player at the station can confirm Retire Run, preserving earned score, boss clears and active time as Retired. No pending encounter credit, extra reward or cycle advance. Cancel preserves the upcoming automatic boss. No mid-fight retirement/travel or revival; [current contract](../../context/game-design.md#24-october-boss-mode-retirement---q25-confirmed).
+
+**24 October Q24 sequence:** Boss mode uses an automatic repeating Shellback -> Coilmaw -> Brood Hauler -> Nestheart order, with each next spawn waiting for deliberate station launch. No boss picker. [Current sequence contract](../../context/game-design.md#24-october-automatic-boss-sequence---q24-confirmed) covers ordinals, resets, failures and repeats. All four are required for the authored beta; implementing one at a time does not reduce that scope.
+
 **Confirmed Boss-mode rule:** no retreat during a fight. Only the post-kill portal returns to base, without shield/energy requirements. The old starting-energy workaround is retired; zero energy cannot strand a victorious living player. Pause/settings remain available and quit abandons the run.
 
 **Owner follow-up:** Boss mode now repeats boss kill -> base portal -> services -> launch next boss, preserving the current run. It does not end after one boss. Boss phases and a named HP bar per living boss are requested. The [latest numerical authority](../../context/game-design.md#24-october-boss-mode-loop--owner-revision) records proposed phase thresholds, safe transitions, encounter cleanup and the confirmed boss-clear shield/energy bypass. The old Boss-mode half-energy start below is superseded, not adopted.
@@ -10,12 +16,12 @@ All bosses are mutated organisms inside salvaged shells. They fit the existing b
 
 | Proposed boss | Identity and core fight | Modes |
 |---|---|---|
-| **Shellback** | A broad organism armored with compressed panels. It marks a charge lane, rushes through it, then exposes its body during recovery. Its scrap fan prevents standing directly in front forever. | Campaign stage guardian; assignment pending; Boss; Chaos |
-| **Coilmaw** | A narrow organism wrapped in cable and coil fragments. It fires aimed volleys and a clearly indicated sweeping discharge. The player moves around it instead of outrunning a homing laser. | Optional Boss encounter; Chaos |
-| **Brood Hauler** | A mobile nest inside a broken cargo shell. It releases small enemies and places temporary residue pools. Killing adds opens space; occupied spawn slots suppress further releases. | Optional Boss encounter; Chaos |
-| **Nestheart** | A large nest attached to the contaminated recovery infrastructure. It combines broad volleys, a ring with a visible safe opening and small reinforcement groups. Defeating it isolates the campaign's main source. | Campaign stage guardian; assignment pending; Boss; Chaos |
+| **Shellback** | A broad organism armored with compressed panels. It marks a charge lane, rushes through it, then exposes its body during recovery. Its scrap fan prevents standing directly in front forever. | Campaign C01; Boss sequence slot 1; Chaos |
+| **Coilmaw** | A narrow organism wrapped in cable and coil fragments. It fires aimed volleys and a clearly indicated sweeping discharge. The player moves around it instead of outrunning a homing laser. | Campaign C02; Boss sequence slot 2; Chaos |
+| **Brood Hauler** | A mobile nest inside a broken cargo shell. It releases small enemies and places temporary residue pools. Killing adds opens space; occupied spawn slots suppress further releases. | Campaign C03; Boss sequence slot 3; Chaos |
+| **Nestheart** | A large nest attached to the contaminated recovery infrastructure. It combines broad volleys, a ring with a visible safe opening and small reinforcement groups. Defeating it isolates the campaign's main source. | Campaign C04; Boss sequence slot 4; Chaos |
 
-**Scope recommendation:** finish Shellback and Nestheart first. Add Coilmaw and Brood Hauler only when their encounters are playable and tested. Chaos can already increase pursuit with reinforcement instances of finished types; every instance has its own identity and attack state. Swarm remains boss-free; Chaos shares its core mechanics plus bosses. Survival is removed. Campaign needs one final boss per stage and minibosses in selected stages; exact placements remain content work.
+**Current beta scope:** all four bosses serve the authored Campaign and automatic Boss sequence; none is an optional final-beta omission. Implement and test one encounter at a time without marking the full mode complete early. Chaos uses finished enabled types, including reinforcement instances with unique identity/state; Swarm remains boss-free and shares ordinary mechanics with Chaos. Campaign assignments are C01/C02/C03/C04 as above; no beta miniboss is required. Older two-boss scope/miniboss recommendations are superseded.
 
 ## Intended progression and fairness
 
@@ -25,11 +31,11 @@ Only two major telegraphs reserve space simultaneously. This limits unavoidable 
 
 At 100 actual single-target DPS, base-health kill times before interruptions are 12/16/20/28 seconds. At 40 actual DPS they are 30/40/50/70 seconds. These are analytical checks, not measured encounter times; movement, target access, adds and player AoE change the result. If later builds melt a boss, increase encounter variety before increasing HP.
 
-Boss mode starts with a fresh build under the confirmed reset rule. The proposed half-energy start makes leaving that encounter possible before the boss pays salvage. It does not supply money, shield charge, levels or free repairs. This remains a review choice because it changes a mode's starting resources.
+Boss mode starts with a fresh build and the confirmed basic shield. Ordinary mid-fight retreat is forbidden. Only the post-kill portal returns a surviving player without energy/shield gates; the older half-energy starting grant is retired. A same-step player/boss death counts the kill but ends the run under Q19/Q20, without revival.
 
 ## Implementation and review gates
 
-- Confirm the concepts and whether to include the optional pair in the first release.
+- Complete state/attack/add/cleanup data for all four required beta encounters; do not treat the old optional-pair recommendation as a scope cut.
 - Implement the shared boss base and encounter ownership, then one boss at a time. The written roster is not T06 completion.
 - Verify attack tell/active/recovery timing at several frame rates, pause/hub suspension, finite boss damage from erasure skills, shared add caps and one-time rewards/source resolution.
 - Test every weapon family against each boss, overlapping attacks, portal re-entry, simultaneous defeat/victory and repeated instances with unique Animator IDs.
