@@ -1,12 +1,32 @@
 # Game Design
 
+## 24 October critical tiers and extreme fire rate — selected rules, implementation pending
+
+Critical chance is an uncapped rating expressed in percentage points. For rating C >= 0, let q = floor(C/100), p = C/100 - q. Each authored critical event gets tier K = q plus one with probability p. With the existing first-tier critical multiplier M = 2, use additive bonus tiers: `damageMultiplier = 1 + K*(M - 1)`. This delegated arithmetic gives tier 0/1/2/3 multipliers 1x/2x/3x/4x, without recursively multiplying crits. Expected multiplier is `1 + (C/100)*(M - 1)`.
+
+| Critical rating | Outcome |
+|---|---|
+| 25% | 75% normal 1x; 25% tier-one 2x |
+| 100% | Every critical event is tier one, 2x |
+| 125% | 75% tier-one 2x; 25% tier-two 3x |
+| 200% | Every critical event is tier two, 3x |
+| 250% | Half tier-two 3x, half tier-three 4x |
+
+Keep one critical roll per authored shot/volley/pulse/tick, shared by its existing damage descendants. Do not reroll for each descendant or grant primary-weapon critical bonuses to abilities without an explicit compatibility rule. A computational batch must not use one roll for all its otherwise independent attacks; preserve the corresponding tier-count distribution. Display rating and tier meaning rather than clamping the HUD at 100%.
+
+Owner selected continued multiplicative firing-speed growth and efficient high-rate processing. For n earned full-card increments and m paid increments, `cooldown = baseCooldown * 0.90^n * 0.975^m`; `rate = 1/cooldown`. Ten full increments give about 0.348678x cooldown / 2.867972x rate. Each card remains about +11.111% rate and each paid increment about +2.564% rate: smaller absolute time reductions are not diminishing relative DPS gains. Rate follows combat time, not rendered frames.
+
+Implementation must retain fractional shot credit, integrate rate changes over their correct time segments, and preserve earned attacks without a shots-per-frame gameplay cap. At extreme rates, group only equivalent damage events. Preserve firing direction/time, collision geometry, target eligibility, travel, penetration, damage attribution, critical outcomes and on-hit/signature rules. Never move overkill damage to an unrelated target or apply missed shots as automatic damage. Cosmetic tracers may be reduced independently. Fixed signature intervals and separately authored ability cooldowns do not inherit this primary-fire formula automatically.
+
+Use checked/log-domain rate arithmetic and an explicitly validated aggregate representation before floating-point underflow/overflow or per-shot processing becomes unsafe. Numerical limits must not silently become an upgrade cap. Stress tests must compare ordinary and aggregate paths for damage, crit distributions, proc counts, rewards, pause/reset and different frame rates. No unlimited-hardware or runtime-performance claim is made by this design.
+
 ## 24 October shield and battle-droid decisions — selected, integration pending
 
 - A hit against positive online shield is absorbed in full, even when damage exceeds remaining shield. Example: 5 shield against 20 damage becomes 0 shield and no hull damage from that hit; enter broken state once. No damage overflow to hull. Subsequent distinct hits follow the broken-shield/damage-immunity rules; this does not grant extra invulnerability.
 - Combat Drones are the allied battle droids. They persist until destroyed. Each destroyed slot rebuilds after **20 combat seconds**; hub, pause and mandatory cards freeze that timer. Base visits do not revive them. Upgrades must not heal surviving droids or reset existing rebuild timers.
 - The owner rejected fixed gameplay ceilings on skill ranks or the resulting army/count progression. Players may keep building a droid army and upgrading combat skills whenever an eligible random offer appears; no offer is guaranteed. Do not replace future count gains with damage-only upgrades or silently discard earned units to enforce a performance cap.
 - Performance work must preserve purchased/earned gameplay: efficient spatial queries, allocation reuse and cosmetic-only effect reduction are acceptable. Finite hardware and numeric representation still require stress testing and explicit failure handling; this decision is not a claim of unlimited runtime capacity. Any proposed gameplay cap requires a new owner decision.
-- Owner also removed numeric-attribute card-rank and paid-purchase caps. Weapon tiers still end at T5. Physical-size rules and valid numeric/stat domains remain separate; critical progression beyond 100% and extreme firing-speed handling are under follow-up review. Never charge for a no-effect upgrade or silently restore a rank cap.
+- Owner also removed numeric-attribute card-rank and paid-purchase caps. Weapon tiers still end at T5. Physical-size rules and valid numeric/stat domains remain separate; critical tiers and continued high-rate processing are selected above; implementation remains pending. Never charge for a no-effect upgrade or silently restore a rank cap.
 
 **Battle-droid targeting selected:** spread fire across valid nearby enemies, then concentrate when fewer targets remain. Delegated implementation: prefer targets with less allied committed damage relative to remaining HP; use range and stable entity IDs to break ties. Durable targets can receive several droids. Release stale reservations on target death, shot resolution or droid destruction; avoid retargeting every frame. Exact range/cadence remain tuning tasks, not an army cap.
 
@@ -158,7 +178,7 @@ T1 preserves the existing random inclusive 7–12 damage, with mean 9.5. Primary
 | Purchase cost to reach T2 / T3 / T4 / T5 | Owner-selected 500 / 1500 / 4000 / 10000 Trade Scrap; cumulative 500 / 2000 / 6000 / 16000 |
 | Ownership | One path/run; only immediate children, no respec/refund; new run resets |
 | Primary damage modifiers | Apply Payload once to every primary-owned damage component; automatic abilities retain their own tuning |
-| Critical handling | Existing 2x multiplier; one roll per emitted shot/volley/pulse/tick, shared by its damage descendants, never rolled recursively |
+| Critical handling | First tier 2x; higher tiers add one base-damage multiple each; one roll per authored shot/volley/pulse/tick shared by descendants, never recursive |
 | Sniper family distance bonus | `1 + 0.25 * clamp((travelDistance - 12) / 18, 0, 1)`: 1x through 12, 1.125x at 21, 1.25x from 30 |
 | Distance eligibility | Sniper Cannon, Railgun, Siege Railgun, Horizon Piercer and Sundering Lance direct shots only; not their secondary damage or Guided Launcher/Starfall |
 | Enemy penetration falloff | First enemy 100%, each later enemy 60% of that contact's distance-adjusted shot damage; one hit per projectile/enemy |
@@ -254,7 +274,7 @@ Future checks before any balance claim:
 | Attribute | Field-card increment | Purchased increment |
 |---|---|---|
 | Weapons Payload | +15 percentage points base-primary damage | +3.75 percentage points |
-| Critical Matrix | +5 percentage points critical chance | +1.25 percentage points; beyond-100% progression under review |
+| Critical Matrix | +5 percentage points critical chance | +1.25 percentage points; each full 100% guarantees another additive critical tier |
 | Overclocked Chambers | Cooldown multiplier 0.90 | Cooldown multiplier 0.975 |
 | Reinforced Hull | +20 max/current HP | +5 max HP only, no healing |
 | Thruster Overdrive | Move-speed multiplier 1.10 | Move-speed multiplier 1.025 |

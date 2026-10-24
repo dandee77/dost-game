@@ -6,6 +6,8 @@ Update this file after every completed build-plan item. Anyone reading it (teamm
 
 ## Current Status
 
+**24 October DOC-16:** Owner selected stronger critical tiers above 100% and continued multiplicative firing-speed gains with efficient damage processing. Recorded additive critical-bonus formula, examples, fractional shot accounting and equivalence constraints for grouped attacks. Documentation only; runtime changes and stress/performance verification remain pending.
+
 **24 October DOC-15:** Owner removed numeric-attribute rank/purchase caps and selected droid spread fire, concentrating when fewer targets remain. Recorded continuing prices and separate field/paid accounting. Weapon tiers remain capped at T5. Critical overflow and extreme firing-speed formulas are follow-up questions; documentation only, implementation pending.
 
 **24 October DOC-14:** Owner selected complete absorption of the shield-breaking hit, no fixed combat-skill/army-count cap, and persistent battle droids rebuilding individually after 20 combat seconds. Updated design, roster and task/review references. Attribute-cap scope remains a follow-up. Documentation only; source implementation and performance verification remain pending.
@@ -365,6 +367,7 @@ Required for Form 03 (Asset and AI Usage Disclosure). Organizers may request pro
 
 | Date | Item | Tool and model | Used for | Extent (Minimal / Moderate / Heavy) | Human review |
 |---|---|---|---|---|---|
+| 2026-10-24 | DOC-16 critical tiers and fire rate | Codex (OpenAI) | Record selected continuation rules, numerical examples and aggregation acceptance criteria. | Moderate | Owner selected both directions; exact implementation and stress tests pending |
 | 2026-10-24 | DOC-15 unlimited attributes and targeting | Codex (OpenAI) | Record owner answers, remove stale caps and document continuing price calculations and droid target policy. | Minimal | Owner confirmed cap removal and target behavior; extreme-stat formulas pending |
 | 2026-10-24 | DOC-14 shield and army decisions | Codex (OpenAI) | Record owner answers and reconcile progression/performance requirements. | Minimal | Owner selected shield, army and persistence rules; attribute scope pending; no source changes |
 | 2026-10-24 | DOC-13 context reconciliation | Codex (OpenAI) | Reconcile active formulas, portal/mode contracts, UI targets, task status and confirmation list without changing source. | Moderate | Owner requested continuing context; gameplay implementation and playtesting remain separate |

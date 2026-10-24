@@ -8,6 +8,8 @@ Record date, stable task ID, actual result, evidence/commit when known and anyth
 
 ## Verified preparation deliveries
 
+**24 October DOC-16:** Recorded critical tiers above 100%, continued multiplicative firing-speed growth and equivalent-event aggregation requirements. Verified rate example, 289 local links, whitespace and existing build (exit 0; no work required). Documentation only; no runtime aggregation, crit implementation or performance claim.
+
 **24 October DOC-15:** Recorded uncapped numeric-attribute ranks/purchases, continued linear prices and droid spread-fire targeting. 289 local links resolve, whitespace passes and existing build exits 0 (no work required). Critical overflow and extreme firing-rate formulas await answers. Documentation only; no runtime changes.
 
 **24 October DOC-14:** Recorded full-hit shield absorption, uncapped combat-skill/army progression and persistent droids with individual 20-combat-second rebuilds. 289 local links resolve; whitespace and existing build pass (no compilation needed). Attribute-cap scope and droid targeting are follow-up questions. Documentation only; runtime integration remains pending.

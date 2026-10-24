@@ -4,7 +4,9 @@
 
 ## Start here
 
-- [x] **DOC-15 — Unlimited attributes and droid targeting.** Record removed attribute rank/purchase caps, continued price formula and spread-fire targeting. Critical overflow and extreme firing-rate formulas await answers; source integration remains pending.
+- [x] **DOC-16 — Critical tiers and extreme fire-rate contract.** Record selected rules, tier/rate examples and aggregation acceptance requirements. Runtime implementation remains BAL-01/T04/T08/T10.
+
+- [x] **DOC-15 — Unlimited attributes and droid targeting.** Record removed attribute rank/purchase caps, continued price formula and spread-fire targeting. Critical overflow and extreme firing-rate rules subsequently selected in DOC-16; source integration remains pending.
 
 - [x] **DOC-14 — Record shield/army decisions.** Full-hit shield absorption, uncapped combat-skill/army progression, persistent droids and individual 20-second rebuilds. Attribute-cap scope subsequently resolved by DOC-15; runtime work remains T04/T10.
 

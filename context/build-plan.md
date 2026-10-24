@@ -2,9 +2,9 @@
 
 The order in which the game is built between **14 October** and the **25 October 2026** submission. Each numbered item is one unit of work: one branch, one pull request, one entry in `progress-tracker.md`. Do not start an item until its dependencies meet the Definition of Done in `code-standards.md`.
 
-## Current checkpoint — DOC-15 attribute progression and targeting
+## Current checkpoint — DOC-16 critical tiers and fire-rate rules
 
-Record removed numeric-attribute caps, continuing paid prices and droid spread-fire targeting. Reconcile active references and clarify bounded-stat continuation. Verify documentation and existing build; no source changes in this checkpoint.
+Record selected critical tiers above 100% and continued firing-speed gains, with concrete formulas and equivalent-event processing requirements. Verify documentation and existing build; no source changes in this checkpoint.
 
 ## Task-list maintenance for every work item
 

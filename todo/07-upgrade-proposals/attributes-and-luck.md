@@ -19,7 +19,7 @@ Do not apply the 25% rule blindly to a new ability, an extra drone, a new weapon
 | Attribute | One full field-card increment | One purchased increment | Notes |
 |---|---|---|---|
 | Weapons Payload | +15 percentage points of base primary damage | +3.75 percentage points | Primary attacks only; automatic ability damage keeps its own tuning |
-| Critical Matrix | +5 percentage points critical chance | +1.25 percentage points | Show percentage points; beyond-100% critical progression is under review, not a rank cap |
+| Critical Matrix | +5 percentage points critical chance | +1.25 percentage points | Uncapped rating; full 100% blocks add guaranteed critical tiers; remainder rolls the next tier |
 | Overclocked Chambers | Attack cooldown multiplied by 0.90 | Attack cooldown multiplied by 0.975 | Quarter of the 10% cooldown reduction; not a claim of exactly 25% of resulting DPS gain |
 | Reinforced Hull | +20 max HP and the existing +20 current-HP card grant | +5 max HP; no current-HP grant | Paid capacity is not free repair |
 | Thruster Overdrive | Move speed multiplied by 1.10 | Move speed multiplied by 1.025 | Preserve control and frame-rate independence |
@@ -47,7 +47,7 @@ For additive stats, add card and paid contributions. For multiplicative stats, a
 
 “Four purchases equal one card” is exact for additive increments. Compounded percentage modifiers differ slightly; display the actual result rather than promising identical totals.
 
-Owner confirmed 24 October: no fixed numeric-attribute card-rank or paid-purchase cap. Keep source counts separate, quarter-strength paid gains and no-free-repair rules. Weapon tiers still end at T5. Critical progression above 100% and extreme firing-rate handling need follow-up formulas; never sell a zero-effect increment or silently cap ranks.
+Owner confirmed 24 October: no fixed numeric-attribute card-rank or paid-purchase cap. Keep source counts separate, quarter-strength paid gains and no-free-repair rules. Weapon tiers still end at T5. Owner selected critical tiers beyond 100% and continued multiplicative fire-rate growth with equivalent-event aggregation. Canonical formulas and acceptance tests are in game-design.md; never sell a zero-effect increment or silently cap ranks.
 
 ## 4. Discrete cards and skill ranks
 
