@@ -4,7 +4,7 @@
 
 ## Access rules
 
-| Rule | Swarm, Survival, Chaos, Campaign ordinary return | Boss mode |
+| Rule | Swarm, Chaos, Campaign ordinary return | Boss mode |
 |---|---|---|
 | Creation | First readiness at 500 energy out of fixed 1000 | Only after valid boss death |
 | Count | Easy 3 / Hard 2 / Impossible 1 | One boss-clear portal on every difficulty |
@@ -24,6 +24,10 @@ Neither type heals the ship or resets upgrades. Pause remains available; quittin
 - **Return to Battle** means resume that expedition, not unpause. Place the player at the saved location with two combat seconds of damage protection. It restores no hull/shield. Opening panels cannot refresh protection.
 - Delegated default: primary auto-fire and offensive automatic skills wait through protection. Deliberate Shoot fires immediately and ends protection. Consume F once so arrival cannot trigger another interaction.
 - After resuming, reaching 500 charge creates a fresh set. Locked/unlocked flicker never rerolls an existing set.
+
+## Campaign wave-clear travel
+
+Every cleared wave returns to base without shield/energy requirements or energy payment. Resolve earned rewards and mandatory cards once, preserve run progression and start the next fight only on departure. Ordinary mid-wave retreat resumes the unfinished wave and does not advance it. See [campaign stages](campaign-stages.md).
 
 ## Boss-clear lifecycle
 

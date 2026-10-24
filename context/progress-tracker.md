@@ -6,6 +6,8 @@ Update this file after every completed build-plan item. Anyone reading it (teamm
 
 ## Current Status
 
+**24 October DOC-19:** Owner removed Survival, aligned Swarm/Chaos core mechanics with Chaos adding bosses, and selected a star-field stage Campaign. Stage 1 has five normal waves then a separate boss; return to base after every wave. Build/scrap carry across stages in the run; death resets. Thirty stages was an example, not a committed count. Stage data, miniboss placements and map routing remain to be authored. Documentation only; no runtime modes/map implemented.
+
 **24 October DOC-18:** Owner accepted Epic Blast Radius. Recorded full/paid additive base-radius gains, uncapped progression, damage-only geometry eligibility, per-attack snapshots and the explicit exception to older general size caps. Target roster now has 34 cards. Documentation only; runtime implementation and balance validation remain pending.
 
 **24 October DOC-17:** Owner selected scrap-only Legendary Luck, maximum rank 10, acquired/upgraded exclusively through field cards. Removed proposed paid Luck route and expanded target roster to 33 cards. Other rarity assignments and exact payout tuning remain proposals. Documentation only; card/loot runtime integration remains pending.
@@ -371,6 +373,7 @@ Required for Form 03 (Asset and AI Usage Disclosure). Organizers may request pro
 
 | Date | Item | Tool and model | Used for | Extent (Minimal / Moderate / Heavy) | Human review |
 |---|---|---|---|---|---|
+| 2026-10-24 | DOC-19 modes and Campaign stages | Codex (OpenAI) | Record owner mode revision and clarified wave/stage/reset rules; update active mode, map and lifecycle briefs. | Moderate | Owner confirmed stage-1 structure and same-run carryover; stage count undecided |
 | 2026-10-24 | DOC-18 Epic Blast Radius | Codex (OpenAI) | Record accepted Epic attribute, formula, compatibility and skill-size interaction. | Moderate | Owner accepted proposal; integration/testing pending |
 | 2026-10-24 | DOC-17 Legendary Luck and card tiers | Codex (OpenAI) | Reconcile selected Luck source/cap, remove shop route and present complete rarity roster. | Moderate | Luck rules selected; payout tuning and other tier assignments remain proposals |
 | 2026-10-24 | DOC-16 critical tiers and fire rate | Codex (OpenAI) | Record selected continuation rules, numerical examples and aggregation acceptance criteria. | Moderate | Owner selected both directions; exact implementation and stress tests pending |

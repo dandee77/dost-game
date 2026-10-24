@@ -2,13 +2,13 @@
 
 The order in which the game is built between **14 October** and the **25 October 2026** submission. Each numbered item is one unit of work: one branch, one pull request, one entry in `progress-tracker.md`. Do not start an item until its dependencies meet the Definition of Done in `code-standards.md`.
 
-## Current checkpoint — DOC-18 Epic Blast Radius
+## Current checkpoint — DOC-19 four modes and staged Campaign
 
-Record accepted Epic Blast Radius, full/paid gains, compatible effect geometry and interaction with older size limits; update roster to 34 cards. Verify documentation and existing build; no source changes in this checkpoint.
+Remove Survival from active mode scope, align Swarm/Chaos shared mechanics and record star-field Campaign stages with mandatory wave-clear base visits and same-run carryover. Verify documentation and existing build; no source changes in this checkpoint.
 
 ## Task-list maintenance for every work item
 
-**23 October owner implementation authorization:** The owner explicitly selected “Implement and update the stats document.” Earlier context-only restrictions below are historical. Current sequence: population-led enemy pacing; T01 progression/economy calculations; T02 consistent paired loot; T03 salvage-driven queued choices. Build and verify each checkpoint. Five-mode hub/shop/weapon/boss content is not silently declared implemented. The owner also reopened general balance and Chaos scheduling; Chaos uses all finished bosses with increasing concurrent pursuit over time.
+**23 October owner implementation authorization:** The owner explicitly selected “Implement and update the stats document.” Earlier context-only restrictions below are historical. Current sequence: population-led enemy pacing; T01 progression/economy calculations; T02 consistent paired loot; T03 salvage-driven queued choices. Build and verify each checkpoint. Four-mode hub/shop/weapon/boss content is not silently declared implemented. The owner also reopened general balance and Chaos scheduling; Chaos uses all finished bosses with increasing concurrent pursuit over time.
 
 Read [todo/06-task-list/tasks.md](../todo/06-task-list/tasks.md) before each item. During work, add missing requirements or discovered issues there and optional alternatives to [ideas.md](../todo/06-task-list/ideas.md). After verification, mark the matching task, append dated evidence to [completed.md](../todo/06-task-list/completed.md), and reconcile this plan, the root TODO index and progress tracker in the same change. Follow the [folder maintenance rules](../todo/06-task-list/README.md); partial work stays open. Implementation remains authorized; the current requested checkpoint is context reconciliation, with no source edits.
 
@@ -43,7 +43,7 @@ Affected older numbered items are reference work packages, with these revisions:
 | Older item | Current target replacement |
 |---|---|
 | 07 HUD/pause | Add return/XP/wallet/shield clarity and source-state-aware hub pause |
-| 11 WaveDirector | Five mode objectives; no timer/wave-clear upgrade cards |
+| 11 WaveDirector | Four mode objectives; no timer/wave-clear upgrade cards |
 | 12 Scrap/cargo | Paired reward: random trade currency and fixed salvage XP/return charge; isolated loot RNG; no cargo cap |
 | 13 Dock/return | Safe colony hub; shield/charge-gated return; suspended expedition; paid repair/recharge transactions |
 | 14 Dock shop | Delegated owned-skill rank purchases and four priced rare abilities; no seven-line gear ladder |
@@ -53,7 +53,7 @@ Affected older numbered items are reference work packages, with these revisions:
 | 24 Leaderboard | Separate mode/difficulty/rules identities; full UI remains later work |
 | 27 Tutorial | Hub interaction/portals, field scrap upgrades, shield-blocked Return Home |
 
-The old dated timeline is historical planning, not proof these items are finished. All five modes remain requested; a submission cut needs team direction. Follow the tracker for delivered work and unresolved boss content.
+The old dated timeline is historical planning, not proof these items are finished. Four modes remain requested; Survival was removed by the owner; a submission cut needs team direction. Follow the tracker for delivered work and unresolved boss content.
 
 Narrative production reference: [todo/01-story/story-context.md](../todo/01-story/story-context.md) supplies the revised source-containment story and confirmed alternating text-card/animated-footage format: five pairs for a 40-second intro, six pairs plus title for a 90-second trailer. This replaces the earlier seven-panel presentation target for items 20/21/30/31; illustrations may supply scenery but need actual moving actions. No asset generation is authorized, and the separate gameplay demo remains required.
 

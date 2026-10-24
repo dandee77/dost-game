@@ -1,5 +1,10 @@
 # Game Design
 
+## 24 October four-mode and staged Campaign revision
+
+Survival is removed. Swarm and Chaos share ordinary-enemy/economy/progression/return mechanics; Chaos adds bosses. Boss mode retains its no-retreat loop. Campaign uses star-field stages, safe base transit after every cleared wave, a final boss per stage and minibosses in selected stages. Stage 1 has five normal waves then a separate boss encounter. Stage count remains undecided; 30 was an example. Builds carry across stages in the same run; death/New Game resets stage progress. Wave-clear transit bypasses ordinary energy/shield gates and grants no free repair. Full contract: [campaign stages](../todo/02-gameplay/campaign-stages.md). Older ten-wave/fixed boss-slot/Survival numbers below are historical, not current targets.
+
+
 ## 24 October Blast Radius — owner-approved Epic attribute, implementation pending
 
 Add Blast Radius to field cards at Epic rarity and to the numeric-attribute shop. Each full card grants +10% of the compatible effect's base radius; each paid increment grants +2.5%. No fixed card-rank or purchase cap. Use the existing attribute price `200 + 100*n`, where n is prior paid Blast Radius purchases. This adds one card: 19 combat abilities, 13 existing augments, Luck and Blast Radius = **34 target cards**.
@@ -73,10 +78,10 @@ Each living boss receives a named bar with current/max HP and phase markers at 6
 
 | Boss | Base HP | Contact damage | Movement speed | Collision radius | Role |
 |---|---:|---:|---:|---:|---|
-| Shellback | 1200 | 12 | 12 | 10 | Campaign wave 5 guardian; space control |
+| Shellback | 1200 | 12 | 12 | 10 | Campaign stage guardian; assignment pending; space control |
 | Coilmaw | 1600 | 10 | 18 | 8 | Optional Boss/Chaos; aimed ranged pressure |
 | Brood Hauler | 2000 | 10 | 10 | 12 | Optional Boss/Chaos; bounded reinforcements |
-| Nestheart | 2800 | 15 | 8 | 14 | Campaign wave 10 guardian; combined mechanics |
+| Nestheart | 2800 | 15 | 8 | 14 | Campaign stage guardian; assignment pending; combined mechanics |
 
 Boss HP snapshot proposal: `roundHalfUp(baseHP * (1 + min(0.5, max(0, combatMinutes-5)*0.02)))`. No player-level/difficulty factor, no regeneration, no stacking encounter factor. HP caps at 1.5x after minute 30. Damage/speed stay fixed. Boss-mode fresh encounters use base HP. Ordinary finite damage applies to bosses; Nuclear Missile/Space Collapse must not erase them instantly. Damage is counted once per hit and actual HP removed excludes overkill.
 
@@ -139,13 +144,13 @@ Selected weapon prices remain 500/1500/4000/10000 (16000 total); battery sizes/p
 
 ## 23 October field-return portal contract — design only
 
-Ordinary portals apply to Swarm, Survival, Chaos and Campaign. Generate at fixed 500/1000 energy; Easy/Hard/Impossible counts are 3/2/1. F inside requires positive online shield and 500 energy at commit. Keep locked portals visible; level-ups never change the threshold. Successful use drains current energy, retires the set and suspends the expedition. Boss mode disables ordinary portals and creates one unrestricted post-kill base portal. See [return portals](../todo/02-gameplay/return-portals.md). Portal runtime remains pending.
+Ordinary portals apply to Swarm, Chaos and Campaign. Generate at fixed 500/1000 energy; Easy/Hard/Impossible counts are 3/2/1. F inside requires positive online shield and 500 energy at commit. Keep locked portals visible; level-ups never change the threshold. Successful use drains current energy, retires the set and suspends the expedition. Boss mode disables ordinary portals and creates one unrestricted post-kill base portal. See [return portals](../todo/02-gameplay/return-portals.md). Portal runtime remains pending.
 
 Selected re-entry: Resume returns the ship to the used portal's saved position with **2 combat seconds of damage protection**, ending immediately when the player fires. It restores no hull or shield and does not increase shield capacity. Delegated default: primary auto-fire and offensive automatic skills wait during protection; deliberate Shoot fires and ends it immediately. Portal input is consumed once.
 
 ## 23 October economy decisions — design only
 
-Owner selected higher weapon costs and a typical Swarm T5 target of **20–25 combat minutes**. Shared prices remain in 5-minute Survival, which normally finishes with a lower-tier build. These are pacing targets, not measured runtime results. Enemy-tier trade ranges and fixed salvage/XP/Return Home rewards do not increase implicitly.
+Owner selected higher weapon costs and a typical Swarm T5 target of **20–25 combat minutes**. Survival has been removed; shared prices apply to the four remaining modes. These are pacing targets, not measured runtime results. Enemy-tier trade ranges and fixed salvage/XP/Return Home rewards do not increase implicitly.
 
 | Selected economy rule | Value |
 |---|---|
@@ -287,7 +292,7 @@ Future checks before any balance claim:
 2. Run each T5 in a fixed-seed lone durable-target encounter and a mixed crowd encounter with at least three pilots. Record time-to-kill, actual landed DPS, incoming damage, clear rate and target uptime. Aim for median lone-target completion times within 15% of the roster median at intended fighting distances; a failed target leads to tuning, not declaring a path balanced from nominal DPS.
 3. Repeat with equal offensive card/shop budgets and with each supported pattern card. Do not publish a card/weapon pairing that silently wastes the card; exact burst/scatter/beam/cone mappings remain PREP-27, not implicitly approved here. Check high-rank attack-speed/crit and signature recursion.
 4. Every enabled encounter must remain completable by every path at the expected tier without requiring a rare compensating ability. Close-range routes require practical attack windows; no hard weapon-family immunity is proposed. This is an encounter acceptance requirement, not new boss authorship.
-5. Record time/wallet to each tier and affordable repair burden in real modes. Equal prices do not establish that T5 is reachable in 300-second Survival; economy/schedules remain deferred.
+5. Record time/wallet to each tier and affordable repair burden in real modes. Measure the shared Swarm/Chaos loop and Campaign carryover separately; Survival is removed.
 6. Verify no damage/reward loss under the combined multi-target/effect load, at both 30 and 144 FPS, plus hub suspension and new-run reset. Do not claim implementation readiness until compatibility, performance limits and runtime checks are resolved.
 
 ### Numeric attribute proposal numbers
@@ -345,7 +350,7 @@ The [skill/rarity roster](../todo/07-upgrade-proposals/automatic-skills-and-rari
 
 [Scrap types](../todo/03-economy/scrap-types.md) now uses the owner's **four** selected labels: Metal Fragments, Circuit Parts, Polymer Pieces and Power Cells, superseding the six-family draft. All feed one shared wallet, with enemy-tier reward values and visual/lore differences only. Existing trade ranges, fixed salvage and debris yields are unchanged. Weapon/upgrade/repair prices are revised by the 23 October decisions; older 20/21 October prices are superseded. Single-family merged pickups retain the label; different families display Mixed Salvage with conserved trade/salvage totals. There are no per-family wallets, recipes, conversion rates or statistics in the selected minimum scope.
 
-The ten-wave Campaign proposal now represents two source sectors, with guardians at five and ten. Guardian death stops that source's future emissions/adds; remaining required hostiles still block completion. No global HP reduction, reward reroll or purification-item requirement is introduced. Source shutdown flags persist through hub visits and reset with a fresh run. Same-step player death takes priority over victory. See [world and campaign](../todo/01-story/world-and-campaign.md).
+The staged Campaign replaces the old ten-wave/two-sector schedule; assign source guardians to authored stage bosses. Guardian death stops that source's future emissions/adds; remaining required hostiles still block completion. No global HP reduction, reward reroll or purification-item requirement is introduced. Source shutdown flags persist through hub visits and reset with a fresh run. Same-step player death takes priority over victory. See [world and campaign](../todo/01-story/world-and-campaign.md).
 
 Remaining numerical design gaps are explicit in [decisions and gaps](../todo/00-planning/decisions-and-gaps.md): complete spawn budgets, boss stats/attacks, auto-target ranges, arena dimensions, scoring weights and high-rank/performance limits. Existing prototype values are not automatically approved answers for those new systems. Adopt the proposed card distribution/targeting policy there before adding corresponding numeric tables here.
 
@@ -409,12 +414,12 @@ Paid hull service clears harmful player statuses only on completion of actual he
 
 Return cells below show **maximum / minimum usable charge**:
 
-| Level | Swarm | Survival | Boss | Chaos | Campaign |
-|---|---|---|---|---|---|
-| 1 | 1000 / 500 | 1000 / 500 | Post-kill only; no gate | 1000 / 500 | 1000 / 500 |
-| 2 | 1000 / 500 | 1000 / 500 | Post-kill only; no gate | 1000 / 500 | 1000 / 500 |
-| 5 | 1000 / 500 | 1000 / 500 | Post-kill only; no gate | 1000 / 500 | 1000 / 500 |
-| 10 | 1000 / 500 | 1000 / 500 | Post-kill only; no gate | 1000 / 500 | 1000 / 500 |
+| Level | Swarm | Boss | Chaos | Campaign |
+|---|---|---|---|---|
+| 1 | 1000 / 500 | Post-kill only; no gate | 1000 / 500 | 1000 / 500 during wave; clear bypasses gate |
+| 2 | 1000 / 500 | Post-kill only; no gate | 1000 / 500 | 1000 / 500 during wave; clear bypasses gate |
+| 5 | 1000 / 500 | Post-kill only; no gate | 1000 / 500 | 1000 / 500 during wave; clear bypasses gate |
+| 10 | 1000 / 500 | Post-kill only; no gate | 1000 / 500 | 1000 / 500 during wave; clear bypasses gate |
 
 The ordinary return target stays at 500 at every level. At 2 salvage per basic enemy, that threshold requires 250 collected kills. Those kills yield expected trade 500, possible 250-750. Measure actual first-return time, repair burden and purchases per visit; do not promise these values are balanced.
 
@@ -430,8 +435,8 @@ Replace Nano Repair with Shield Detonation: 50 damage, radius 35, 18 s internal 
 
 | Quantity | Proposed initial tuning |
 |---|---|
-| Survival duration | 300 combat seconds |
-| Campaign outline | 10 waves; boss content slots at 5 and 10; final boss ends campaign |
+| Removed mode | Survival; no timed-survival objective in current scope |
+| Campaign outline | Star-field stages; stage 1 has five normal waves plus a boss; base after each wave; later stage counts/content pending |
 | Chaos boss schedule | Draft: first opportunity at 300 combat seconds, then every 180 seconds; allowance `1 + floor(combatSeconds/900)`; no banked missed spawns |
 | Swarm | Endless normal-wave schedule; no bosses by default |
 | Boss mode | Repeating boss kill -> one unrestricted base portal -> services -> launch next boss; no mid-fight retreat |

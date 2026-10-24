@@ -1,5 +1,9 @@
 # UI Rules
 
+## Campaign star-field map and four-mode selection — target
+
+Show Swarm, Chaos, Boss and Campaign; remove Survival. Campaign map uses star-field nodes with run-local locked/available/current/cleared states, readable stage identity, normal-wave count and separate final-boss encounter. Some stage previews show miniboss presence. Stage count is undecided; do not imply 30 finished stages. Base departure says Next Wave or Stage Boss as appropriate. Clear transit grants no free repair. Keep map/panels in the established safe area and existing Game lifecycle; no map art/runtime is delivered by this context change.
+
 ## Current boss and portal HUD contract — target, not implemented
 
 Show a named HP bar whenever a boss appears, with current/max HP and phase markers. Multiple Chaos bosses need individually identifiable compact bars and a safe-area overflow view; never combine their health into one misleading total. Phase thresholds and attack tuning come from game-design.md. Unique encounter IDs distinguish repeated boss types.

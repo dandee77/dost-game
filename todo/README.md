@@ -1,6 +1,6 @@
 # TODO — Remaining Work
 
-Start here for unfinished game work. This folder sits beside `assets/`, `build/`, `context/` and `src/`.
+Current mode contract: [four modes and star-field Campaign](02-gameplay/campaign-stages.md). Survival is removed; stage count remains undecided. Start here for unfinished game work. This folder sits beside `assets/`, `build/`, `context/` and `src/`.
 
 For the latest owner-requested concepts, see [boss roster and attacks for review](02-gameplay/boss-roster-draft.md). New games always start fresh; no permanent gameplay progression is selected.
 

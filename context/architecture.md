@@ -1,5 +1,9 @@
 # Architecture
 
+## 24 October staged Campaign ownership — target
+
+Four modes remain; remove Survival from typed-mode/UI/objective plans. Swarm and Chaos share the ordinary director and rules; Chaos layers boss scheduling on top. Campaign owns stage index, encounter index and map availability in run state. Every wave clear finalizes rewards once, retires hazards and enters base without energy/shield gates; confirmed departure starts the next encounter. Stage 1 has five normal waves then a boss. Preserve progression across stages and reset stage/map state on death/New Game. No separate Scene or resetRun per stage, no persistent stage-unlock save implied. See [campaign stages](../todo/02-gameplay/campaign-stages.md).
+
 ## 24 October Boss-mode encounter lifecycle — target, not implemented
 
 Owner confirmed no mid-fight retreat: the mode policy must suppress ordinary portal generation and reject ordinary return interactions, including at full energy. Only the finalized boss-clear portal permits base travel. Do not implement this restriction solely by hiding a HUD button. Pause/settings do not constitute retreat; quit abandons the run and cannot preserve/retry the encounter as a free base visit.

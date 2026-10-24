@@ -8,6 +8,8 @@ Record date, stable task ID, actual result, evidence/commit when known and anyth
 
 ## Verified preparation deliveries
 
+**24 October DOC-19:** Removed Survival from active mode scope, aligned Swarm/Chaos core loop, and documented star-field Campaign stages with five normal waves plus a separate stage-1 boss, required wave-clear base visits and same-run cross-stage carryover. Thirty stages remains an example; route/miniboss layout questions remain open. Verified 296 local links, changed table shapes, whitespace and existing build (exit 0; no work required). Documentation only; map/mode implementation remains pending.
+
 **24 October DOC-18:** Added accepted Epic Blast Radius to the 34-card target roster, with full/paid additive base-radius gains, compatibility, skill-size interaction and snapshot rules. Verified 289 local links, radius example, whitespace and existing build (no work required). Documentation only; card/shop integration and runtime balance remain pending.
 
 **24 October DOC-17:** Recorded Legendary Luck, card-only acquisition/upgrades, maximum rank 10 and scrap-only effect; updated 33-card roster and removed paid Luck route from active briefs. Verified 289 local links, proposed payout mean, whitespace and existing build (no work required). Other rarity/payout tuning remains proposed; runtime implementation pending.

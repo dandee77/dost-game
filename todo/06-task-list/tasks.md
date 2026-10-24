@@ -4,6 +4,8 @@
 
 ## Start here
 
+- [x] **DOC-19 — Four modes and star-field Campaign.** Survival removed; Swarm/Chaos share mechanics except bosses. Stage 1 has five normal waves then a separate boss, with base after each wave. Builds carry across stages in the run; death resets. Total stages and detailed stage/miniboss data remain open; runtime T05/T06/T07/T09/T10 pending.
+
 - [x] **DOC-18 — Epic Blast Radius contract.** Record +10% base radius/card, +2.5%/purchase, uncapped additive growth, eligibility and radius snapshots; update 34-card roster. Runtime integration and balance tests remain T03/T08/T10.
 
 - [x] **DOC-17 — Legendary Luck and full card tiers.** Record card-only acquisition/upgrades, cap 10, scrap-only effect and 33-card tier roster. Payout tuning and remaining rarity assignments require review; runtime implementation remains pending.
@@ -32,7 +34,7 @@
 
 - [ ] **BAL-01 — Population-led balance pass.** Replace abrupt spawning/exponential HP targets, unify weapon/skill rewards, connect salvage leveling, verify rounding/overflow/reset and publish current versus pending stats. Pure calculations and regression checks do not certify human balance or complete the missing hub/boss/weapon features.
 
-The current work is context preparation. Resolve the design prerequisites below before their affected implementation checkpoint. Keep the requested five-mode scope visible; any submission reduction needs team direction. Release dates and original competition requirements remain in the [overview](../../context/project-overview.md) and [main tracker](../../context/progress-tracker.md).
+The current work is context preparation. Resolve the design prerequisites below before their affected implementation checkpoint. Keep the requested four-mode scope visible; any submission reduction needs team direction. Release dates and original competition requirements remain in the [overview](../../context/project-overview.md) and [main tracker](../../context/progress-tracker.md).
 
 ## Current owner review focus — 23 October economy, batteries and return portals
 
@@ -55,14 +57,14 @@ Reference for PREP-01 through PREP-16: [detailed gap register](../00-planning/de
 - [ ] **PREP-05 — P0 — Owner: gameplay designer.** Complete the automatic-skill targeting matrix. Done when each relevant ability has exact trigger/range, valid targets, tie handling, no-target behavior and cooldown commitment. G05; needed by T04.
 - [ ] **PREP-06 — P0 — Owner: gameplay/level designer.** Finalize Blink and other mobility automation. Legendary reactive rescue is confirmed; exact numerical/safety review is PREP-26. Done when triggers and legal destinations respect obstacles, barricades and arena bounds. G06; needed by T04.
 - [ ] **PREP-07 — P0 — Delegated — Owner: level designer.** Draw measurable hub and arena layouts. Done when entry/resume points, service/gate radii, separation, bounds, camera and safe flight paths are specified. G07; needed by T05/T06.
-- [ ] **PREP-08 — P0 — Owner: gameplay designer.** Publish the new scoring formula. Done when combat/objective awards, retirement, tie ordering and anti-farming rules cover all five modes without the retired deposit bonus. G08.
+- [ ] **PREP-08 — P0 — Owner: gameplay designer.** Publish the new scoring formula. Done when combat/objective awards, retirement, tie ordering and anti-farming rules cover all four modes without the retired deposit bonus. G08.
 - [ ] **PREP-09 — P1 — Owner: UI/programming owner.** Define local result/leaderboard data. Done when schema, mode/difficulty/rules identity, names, invalid files, duplicate prevention and debug eligibility are explicit. G09; depends on PREP-08.
 - [ ] **PREP-10 — P1 — Owner: UI designer.** Complete input/focus and readability requirements. Done when every panel has entry/exit/input consumption rules, visible blockers and readable safe-area layouts. G10.
 - [ ] **PREP-11 — P1 — Owner: UI/gameplay designer.** Adopt or revise the tutorial proposal. Done when final copy, triggers, dismissal, repetition and session-state rules are specified without stacking conflicting modals. G11.
 - [ ] **PREP-12 — P1 — Owner: presentation programmer.** Review story playback contracts against the supported cutscene pipeline. Done when intro/ending placement, advance/skip, destination and result ownership are ready for implementation. G12.
 - [ ] **PREP-13 — P1 — Owner: audio/UI owner.** Define music/SFX/volume routing. Done when field, hub, boss, pause and exit transitions cannot stack music or leave effects running. G13.
 - [ ] **PREP-14 — P0 — Owner: programming owner.** Define high-rank numerical safety and performance without fixed combat-skill or army-count caps. Done when overflow handling, cosmetic effect budgets, reward conservation and performance targets are measurable without silently discarding earned progression or replacing count gains with strength-only upgrades. G14.
-- [ ] **PREP-15 — P0 — Owner: gameplay designer.** Adopt consistent outcome precedence. Done when Survival/Boss/Campaign specify same-step death versus success and source/reward finalization agrees. Existing proposal: player death takes priority. G15.
+- [ ] **PREP-15 — P0 — Owner: gameplay designer.** Adopt consistent outcome precedence. Done when Boss/Campaign specify same-step death versus success and source/reward finalization agrees. Existing proposal: player death takes priority. G15.
 - [ ] **PREP-16 — P0 — Owner: producer/team.** Confirm submission scope and resolve the existing eligibility question. Done when the team's recorded decision addresses the inherited-code requirement and deliverable owners are assigned. G16 and tracker Open Question 1; no external message is authorized by this checklist.
 - [ ] **PREP-17 — P1 — Owner-deferred — Owner: team.** Choose a final game title. Done when selection is recorded in the overview/tracker and title-card references agree. Suggestions are in [suggested names](../05-suggested-names/README.md); SCRAPBOUND is a recommendation, not a selected title.
 - [ ] **PREP-18 — P1 — Owner: story/art owner.** Review final Scavenger name, body plan, biological binding layer and protected orbital core. Done when existing monster silhouettes have a consistent written biological explanation and later production references agree. See [world section 4.1](../01-story/world-and-campaign.md).
@@ -115,7 +117,7 @@ Reference: [remaining numbered/art work](../README.md), [build plan](../../conte
 
 - [ ] **REVIEW-07 — P1 — Owner: gameplay designer/testers.** Validate weapon-choice viability after implementation. Done when equal-investment fixed-seed lone-target/crowd/moving-target trials with at least three pilots record actual DPS, time-to-kill, incoming damage and completion, meeting the weapon ledger's acceptance gates. No enabled encounter may require a particular family. Arithmetic alone is insufficient. Depends on PREP-27 and implemented T08; execute as part of T10.
 
-- [ ] **REVIEW-01 — P1 — Owner: context author/team.** Reconcile historical requirements before implementation. Done when affected work uses the current five-mode, field-leveling, paid-service, biological-source design and records conflicts instead of restoring retired cargo/credits/tree/machine-origin rules. Historical logs remain intact.
+- [ ] **REVIEW-01 — P1 — Owner: context author/team.** Reconcile historical requirements before implementation. Done when affected work uses the current four-mode, field-leveling, paid-service, biological-source design and records conflicts instead of restoring retired cargo/credits/tree/machine-origin rules. Historical logs remain intact.
 - [ ] **REVIEW-02 — P1 — Owner-deferred — Owner: tester/gameplay designer.** Playtest the selected economy and pacing. Done when time to first card/return, wallet at hub, repair burden, purchases, shield-related deaths and mode/boss outcomes are measured and tuning changes recorded in the authoritative ledger.
 - [ ] **REVIEW-03 — P1 — Owner: tester/programmer.** Validate full reset and suspension across the final feature set. Done when restart/quit/death clears all run state and hub Resume preserves exactly the intended state, including source flags, pickups and timers.
 - [ ] **REVIEW-04 — P1 — Owner: tester/programmer.** Validate load, long runs and high ranks. Done when approved frame-time/memory budgets hold and numeric/effect limits preserve rewards and usable play.

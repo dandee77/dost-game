@@ -1,5 +1,7 @@
 # Project Overview
 
+**24 October mode revision:** Survival removed. Four modes remain: Swarm, Chaos, Boss and Campaign. Swarm/Chaos share their core loop; Chaos adds bosses. Campaign uses a star-field stage map, returns to base after every wave, and ends each stage with a boss. Stage 1 has five normal waves plus a separate boss. Total stage count is undecided (30 was an example). Builds carry between stages within the run; death resets. See [campaign stages](../todo/02-gameplay/campaign-stages.md).
+
 **24 October Blast Radius accepted:** Epic attribute, +10% base damage-area radius per field card and +2.5% per paid increment, additive and uncapped. Compatible explosions and damaging circular zones gain coverage without more damage per victim. Numerical authority defines compatibility and interaction with older skill-size limits. Context only; runtime card/shop integration pending.
 
 **24 October Luck decision:** Legendary field card, maximum rank 10, acquired and upgraded only through cards. Affects scrap payouts only; no paid Luck purchases or rarity/XP/energy benefit. With Epic Blast Radius added, the target roster contains 34 cards. Other rarity assignments remain proposed except confirmed Blink, Luck and Blast Radius.
@@ -20,7 +22,7 @@ The owner requires the [task-list folder](../todo/06-task-list/README.md) to be 
 
 **Latest implementation direction:** Owner authorized C++ balance fixes plus updated statistics. Early combat should be calm, later pressure should come primarily from enemy numbers, and HP growth should remain modest. Chaos rotates through all finished bosses and allows progressively more concurrent pursuers as combat time grows. Earlier context-only/general-balance deferrals are superseded for this work; missing boss content remains open.
 
-Ordinary field portals replace manual teleport in Swarm, Survival, Chaos and Campaign: fixed 1000 energy capacity, 500 to use, positive online shield and F inside. Easy/Hard/Impossible have 3/2/1 exits. Boss mode instead has one post-kill portal with no shield/energy gate and no mid-fight retreat. See [return portals](../todo/02-gameplay/return-portals.md) for persistence, input and placement contracts.
+Ordinary field portals replace manual teleport in Swarm, Chaos and Campaign: fixed 1000 energy capacity, 500 to use, positive online shield and F inside. Easy/Hard/Impossible have 3/2/1 exits. Boss mode instead has one post-kill portal with no shield/energy gate and no mid-fight retreat. See [return portals](../todo/02-gameplay/return-portals.md) for persistence, input and placement contracts.
 
 Resume returns the ship to the used portal position with two seconds of damage protection, ending on firing and restoring no hull/shield. Delegated input default: automatic primary fire and offensive automatic skills wait through protection; deliberate Shoot fires and ends protection.
 
@@ -28,7 +30,7 @@ Owner also selected appearance-matched scrap types. Five Shield Batteries—Tiny
 
 ## 23 October selected economy and materials
 
-Owner selected weapon costs **500/1500/4000/10000** (16000 total), targeting T5 at 20–25 Swarm combat minutes; 5-minute Survival keeps the shared prices and ends with lower tiers. Attribute/owned-rank prices increase 5x and special acquisitions 10x. Hull repair costs 10 scrap per missing HP and offers proportional affordable repair with exact previews. A Shield Battery shop item, used on purchase, replaces paid shield-recharge/full-service jobs; its five sizes, charge arithmetic and prices are settled above. Four selected salvage labels—Metal Fragments, Circuit Parts, Polymer Pieces and Power Cells—feed one wallet at existing enemy-tier values, with no material gates or free shield restoration. This reopens price/material review only; source and assets remain unchanged. See [game design](game-design.md).
+Owner selected weapon costs **500/1500/4000/10000** (16000 total), targeting T5 at 20–25 Swarm combat minutes; Survival has since been removed. Attribute/owned-rank prices increase 5x and special acquisitions 10x. Hull repair costs 10 scrap per missing HP and offers proportional affordable repair with exact previews. A Shield Battery shop item, used on purchase, replaces paid shield-recharge/full-service jobs; its five sizes, charge arithmetic and prices are settled above. Four selected salvage labels—Metal Fragments, Circuit Parts, Polymer Pieces and Power Cells—feed one wallet at existing enemy-tier values, with no material gates or free shield restoration. This reopens price/material review only; source and assets remain unchanged. See [game design](game-design.md).
 
 ## 23 October accepted weapon tree and draft stats
 
@@ -48,7 +50,7 @@ The owner's current design handoff is [todo/02-gameplay/gameplay.md](../todo/02-
 
 **Confirmed flow:** Open game -> Start Game -> select difficulty -> spawn in the mothership's safe orbital hub -> prepare -> fly to a mode portal -> confirm launch. The player stays in the ship. The visible colony must communicate that humanity lives in space. This is a single-player hub, not multiplayer matchmaking.
 
-Requested modes are **Swarm** (endless normal crowds), **Survival** (fixed-duration survival), **Boss** (focused boss encounter), **Chaos** (bosses and swarms together), and **Campaign** (staged progression ending with a boss). The no-boss Swarm distinction, durations and schedules are proposed defaults in the handoff. Older Story/Endless references in historical planning map to Campaign/Swarm; they are not the complete new mode list. The delegated four-boss roster now supplies concept/attack drafts; exact tuning and implementation remain pending.
+Requested modes are **Swarm** (endless normal crowds), **Boss** (focused boss encounter), **Chaos** (bosses and swarms together), and **Campaign** (staged progression ending with a boss). The no-boss Swarm distinction, durations and schedules are proposed defaults in the handoff. Older Story/Endless references in historical planning map to Campaign/Swarm; they are not the complete new mode list. The delegated four-boss roster now supplies concept/attack drafts; exact tuning and implementation remain pending.
 
 **Confirmed field progression:** collected scrap fills level progress and presents normal upgrade cards in the field. Docking is not required. Scrap also powers field-return portal eligibility at fixed 500/1000 energy with positive online shield outside Boss mode. Boss-clear portals bypass both gates. Portals replace the planned manual Return Home skill.
 
@@ -62,7 +64,7 @@ Current target controls: F = nearby hub/field-return-portal interaction, E retai
 
 New target screen additions: S-12 Difficulty (menu panel), S-13 Colony Hub (Game state), S-14 Portal Preview (hub panel). S-05 becomes field level-up, S-06 becomes the skill shop, S-07 gains settings/quit confirmation. Mode selection moves from S-03 into S-13/S-14. The screen table below lists target responsibilities; the tracker reports actual completion.
 
-Success for this expanded scope requires a real objective for every enabled portal, correct return/shield/resource behavior, field upgrades, shop transactions and complete run resets. Adding portals alone does not complete five modes. Any submission scope reduction needs team direction.
+Success for this expanded scope requires a real objective for every enabled portal, correct return/shield/resource behavior, field upgrades, shop transactions and complete run resets. Adding portals alone does not complete four modes. Any submission scope reduction needs team direction.
 
 ---
 
@@ -116,7 +118,7 @@ Proposed chronology: scientists develop a remediation medium in **2718**, releas
 
 Before 2718, scientists had already engineered waste-eating creatures, provisionally called Scavengers, for ground facilities and protected orbital cleanup systems. The later atmospheric treatment unexpectedly changes their DNA and disrupts feeding, growth and defensive behavior. They become hostile and collect material indiscriminately. Digestible fractions feed them; retained metal and other fragments are fastened by a biological binding layer into external armor around their living cores. Over later generations, useful inherited gathering/binding traits become more common among surviving lineages. The chemical starts the fictional mutation crisis; evolution then occurs across generations, while metal itself stays nonliving. Exposed organisms, contaminated cargo and residue on serviced hardware carry the disaster into orbit. Protected cores and repurposed propulsion support the fictional space creatures; an atmospheric cloud does not cross vacuum. This biological mechanism supersedes the earlier autonomous-machine proposal and remains science fiction.
 
-The campaign targets infested nests and concentrated residue sites that keep spreading exposure and hostile organisms. Proposed ten-wave outline retains boss slots at five and ten, now two source sectors; identities and attacks remain owner content. Defeating a source guardian stops that site's future emissions/adds. Remaining required hostiles must still be cleared. No random loot or purification item is needed to complete the objective.
+The campaign targets infested nests and concentrated residue sites that keep spreading exposure and hostile organisms. The star-field stage campaign replaces the ten-wave outline; every stage has a final boss, and some contain minibosses. Exact stage data remains to be authored. Defeating a source guardian stops that site's future emissions/adds. Remaining required hostiles must still be cleared. No random loot or purification item is needed to complete the objective.
 
 **Narrative theme:** humanity used cleanup inventions to postpone changing wasteful habits. The catastrophe is the accumulated consequence of neglect and overreliance on fixes after the damage. The survivors now choose sustained responsibility. Draft tagline: **“We kept throwing it away. Until it came back for us.”** See [theme and slogans](../todo/01-story/narrative-theme.md).
 
@@ -130,12 +132,11 @@ Presentation remains **short story card -> moving animation/gameplay -> next car
 | Mode | Goal | Ends when |
 |---|---|---|
 | Swarm | Endless normal-enemy salvage patrol; no bosses by default | Death or voluntary hub retirement |
-| Survival | Survive 300 combat seconds | Deadline reached alive, or death |
-| Boss | Defeat one authored boss encounter and required adds | Encounter complete, or death |
+| Boss | Repeating boss -> base -> next boss; no retreat | Death or quit; boss death continues the run |
 | Chaos | Endless swarms with scheduled bosses | Death or retirement; boss death does not end the run |
-| Campaign | Ten-wave proposed route with source bosses at five and ten | Final source encounter complete, or death |
+| Campaign | Star-field stages; waves/base visits, then a final boss per stage | Final authored stage complete, or death |
 
-Exact encounter tables and boss content remain to be authored. Same mode/difficulty/seed/rules and equivalent decisions reproduce the plan; player-level scaling means different decisions can change effective enemy HP. Separate mode/difficulty/rules leaderboard identities are required. See [decisions and gaps](../todo/00-planning/decisions-and-gaps.md) for scoring and schedule work still missing.
+Exact encounter tables and boss content remain to be authored. Same mode/difficulty/seed/rules and equivalent decisions reproduce the plan; ordinary enemy HP follows bounded combat time, not player level. Separate mode/difficulty/rules leaderboard identities are required. See [decisions and gaps](../todo/00-planning/decisions-and-gaps.md) for scoring and schedule work still missing.
 
 ---
 

@@ -16,7 +16,7 @@ Owner replaced manual Q teleport with [random field return portals](return-porta
 
 ## 23 October pricing/material follow-up
 
-Owner selected weapon costs 500/1500/4000/10000 (16000 per full path), targeting T5 around 20–25 combat minutes in Swarm. Survival keeps shared prices and normally ends with a lower-tier build. Numeric attribute and owned-skill-rank prices increase 5x, special acquisitions 10x. Hull repair costs 10 scrap per missing HP, with Full Repair and Repair What I Can Afford plus exact proportional previews. Shield Battery is a separate shop purchase replacing paid shield recharge; its five-size charge, replacement and price contract is adopted in game-design.md. Four selected material labels feed one wallet and retain enemy-tier reward values. This supersedes older prices/material-count and no-questions instructions; encounter/layout/boss decisions remain deferred. No runtime implementation is implied.
+Owner selected weapon costs 500/1500/4000/10000 (16000 per full path), targeting T5 around 20–25 combat minutes in Swarm. Survival has been removed; four modes share the price rules. Numeric attribute and owned-skill-rank prices increase 5x, special acquisitions 10x. Hull repair costs 10 scrap per missing HP, with Full Repair and Repair What I Can Afford plus exact proportional previews. Shield Battery is a separate shop purchase replacing paid shield recharge; its five-size charge, replacement and price contract is adopted in game-design.md. Four selected material labels feed one wallet and retain enemy-tier reward values. This supersedes older prices/material-count and no-questions instructions; encounter/layout/boss decisions remain deferred. No runtime implementation is implied.
 
 ## 21 October weapon/attribute/rarity follow-up
 
@@ -96,7 +96,7 @@ This is a focused source/doc audit, not a fresh runtime certification. No game b
 | C01 | Entry flow | **Confirmed:** open game -> Start Game -> choose difficulty -> enter game at the mothership -> prepare -> choose a mode through a portal |
 | C02 | Hub representation | **Confirmed by follow-up:** stay inside the ship and fly around a safe orbital colony hub. No walking pilot/cockpit exit system |
 | C03 | Human colony | **Confirmed:** visible settlement, not merely a generic starfield; mothership, occupied colony background, stations and portals |
-| C04 | Modes | **Confirmed direction:** Swarm/endless, timed Survival, Boss, Chaos with bosses plus swarms, Campaign ending in a boss |
+| C04 | Modes | **Current direction:** Swarm, Chaos (same core loop plus bosses), Boss, and star-field Campaign stages; Survival removed |
 | C05 | Boss content | **Pending content:** owner will develop bosses. Existing Hoarder/Core designs are reference proposals, not newly approved final content |
 | C06 | Level-up location | **Confirmed by follow-up:** normal upgrades happen in the field immediately through scrap progression; returning is not required |
 | C07 | Return Home | **Confirmed 23 October:** random field portals replace manual teleport; F inside with 50% energy and online positive shield; fixed capacity 1000 and threshold 500; Boss mode permits only its unrestricted post-kill portal |
@@ -204,31 +204,29 @@ There is no combat-field healing zone or physical shortcut to the hub that bypas
 
 ## 5. Mode contracts
 
-All five requested modes share movement, scrap collection, field leveling, shields, repair and shop rules. Ordinary return portals apply outside Boss mode; Boss mode uses its post-kill-only portal. Their encounter director and end condition differ. Difficulty is chosen before the hub; a mode is chosen inside it.
+All four requested modes share movement, scrap collection, field leveling, shields, repair and shop rules. Ordinary return portals apply outside Boss mode; Boss mode uses its post-kill-only portal. Their encounter director and end condition differ. Difficulty is chosen before the hub; a mode is chosen inside it.
 
 | Mode | Primary objective | Encounter character | Ends when | Return/resume |
 |---|---|---|---|---|
 | **Swarm** | Survive indefinitely and improve score | Escalating crowds of normal enemies; proposed default has no bosses so Chaos stays distinct | Death or voluntary retirement | Freeze encounter and survival clock; resume same pressure |
-| **Survival** | Survive a displayed fixed duration | Increasing pressure over a finite timer | Timer reaches zero while alive, or death | Countdown freezes at home; shopping time cannot win |
 | **Boss** | Defeat successive bosses | One encounter per launch; kill opens one base portal | Player death or quit; a kill advances the loop | No retreat; post-kill portal bypasses shield/energy; next launch keeps build and wallet |
 | **Chaos** | Survive indefinite mixed pressure | Swarms continue while scheduled bosses appear | Death or retirement; boss death is not victory | Preserve swarm budget, boss and schedule |
-| **Campaign** | Complete staged encounters and defeat the final boss | Ordered waves, checkpoints and story progression | Final boss defeated or player dead | Preserve current wave; completed waves stay complete |
+| **Campaign** | Clear star-field stages | Each stage has waves and a final boss; some have minibosses | Final authored stage cleared or death | Base after every wave; build carries across stages in the run; death resets |
 
 ### 5.1 Provisional scheduling
 
-- Survival: **300 seconds** combat time as the initial proposed duration. Display “Survive 5:00” before launch. This is a playtest target.
-- Campaign: reuse the old **10-wave outline** as a provisional structure, with midpoint boss slot at wave 5 and final boss slot at wave 10. The owner may replace the roster; do not fabricate final boss lore or attacks.
+- Campaign: star-field stages, each with normal waves and a final boss; stage 1 has five normal waves followed by a separate boss encounter. Return to base after each wave. Stage count remains undecided; see [campaign stages](campaign-stages.md).
 - Swarm: use the bounded combat-time population/spawn curve in game-design.md and CombatMath.hpp. No automatic boss spawns.
 - Chaos: use Swarm normal pressure. Draft first boss opportunity at **300 combat seconds**, then every **180 seconds**; concurrent allowance `1 + floor(combatSeconds/900)`. Rotate finished bosses, prefer types not alive, permit unique-ID reinforcements when every type is already present. Missed opportunities do not accumulate.
 - Boss mode: repeated boss -> post-kill portal -> base -> next launch. Ordinary portals are disabled. A kill creates one unrestricted base portal; advancing the encounter happens once on launch, never while shopping. Keep the mode unavailable until its boss and transition implementation exists.
-- Existing barricade event: can remain for Swarm, Survival and Chaos; proposed disabled in Boss and scheduled explicitly in Campaign. It must use expedition time and never trigger in the hub.
+- Existing barricade event: can remain for Swarm and Chaos; proposed disabled in Boss and scheduled explicitly in Campaign. It must use expedition time and never trigger in the hub.
 
 These schedules are proposed in the tuning ledger. New boss stats, attacks, animation sheets, phases, loot values and final story names remain pending content. A portal must not claim that a mode works if it only launches the current generic spawner.
 
 ### 5.2 Rules at boundaries
 
 - Campaign wave clear does not automatically grant an upgrade card. Only the scrap threshold does.
-- Proposed Campaign service checkpoints occur after completed waves. They can automatically offer safe hub transit without a Return Home charge or shield check because the encounter has ended.
+- Campaign returns to base after every cleared wave, bypassing shield/energy gates. Launch the next wave or separate stage boss only after preparation; preserve same-run progression.
 - Return during an active encounter uses ordinary field portals and fixed 500/1000 energy plus positive online shield, except Boss mode, which forbids retreat.
 - Objective success/death are resolved once. Proposed tie rule: player death in the same simulation step takes priority over victory.
 - After a terminal result, stop scoring and collection. Uncollected loot is not magically converted into currency or XP.
@@ -524,7 +522,7 @@ Required information, ordered for readability:
 - **Scrap** wallet at top center; lifetime collected in result/details, not mislabeled as available money.
 - Thin player-level progress bar immediately below: `Level L — progress / required`.
 - Separate portal-energy meter: `charge / maximum`, 50% marker, readiness/block reason and F hint only at a portal. Direction marker is limited to the selected detection range.
-- Mode objective and combat timer: Survival countdown, Campaign wave, Boss name/HP, Swarm/Chaos elapsed time.
+- Mode objective and combat timer: Campaign stage/wave, Boss name/HP, Swarm/Chaos elapsed time.
 - MENU button inside the top-right safe region.
 
 If the original scrap-total display is retained, label it “Collected” beside a clearly separate “Available” wallet. Never let a smooth visual counter determine affordability or readiness.
@@ -644,7 +642,7 @@ No unrelated refactors, dependencies, asset generation, online systems, save-gam
 - Start -> difficulty -> hub -> preview -> launch; cancel each panel and verify no ghost run/spawn.
 - Spend time in hub before launch: zero combat time and no hostile world effects.
 - Return during a boss projectile attack, repair, buy a skill, resume: enemy HP/phase, projectile position, spawn debt and loot match saved state.
-- Pause/cards/hub do not advance Survival countdown; surviving the entire combat duration wins exactly once.
+- Survival is absent from mode selection. Campaign clear/base/next-wave transitions commit once; base time cannot advance combat.
 - Swarm has no unintended old Endless boss wave; Chaos boss death does not end the run.
 - Campaign clears waves without free wave cards and wins only at the final required boss.
 - End run/change mode resets wallet, level, charge, skills, stock and director; no cross-mode farming.
@@ -680,9 +678,9 @@ Suggested future debug additions: `scrap add`, `scrap status`, `progress fill`, 
 4. Confirm field portal use drains all charge, uses F inside its zone, rechecks shield/energy and has no Q/manual skill fallback.
 5. Playtest 100/1,000 starting values, mode growth, drop income, level growth and shop costs together. The threshold moves while collecting; nominal 500-scrap return is not necessarily attainable at level 1.
 6. Supply actual bosses: identity, arena, telegraphs, phases, damage/HP, adds, durations and scrap rewards. Adopt or replace old Hoarder/Core proposals.
-7. Confirm Survival duration, Chaos cadence, Campaign structure and checkpoint travel.
+7. Finalize Chaos cadence and Campaign stage data/map routing; required wave-clear base visits are confirmed.
 8. Evaluate frozen-projectile reentry fairness and targeted shop progression against an injured boss. No hidden boss healing or free invulnerability is specified.
 9. Verify source-aware Reinforced Hull text/effects: free field card may grant current HP; paid rank may not bypass repair pricing.
-10. Decide submission priorities if all five modes cannot be verified by 25 October. Keep requested scope visible; a cut requires team direction.
+10. Decide submission priorities if all four modes cannot be verified by 25 October. Keep requested scope visible; a cut requires team direction.
 
 The useful first balance measurements are time to first field card, time to first eligible return, wallet at first shop visit, purchases per visit, shield-offline deaths, survival clear rate and boss time-to-kill. Record observed results before calling any proposed numbers balanced.

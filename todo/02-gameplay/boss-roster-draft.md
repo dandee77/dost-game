@@ -10,12 +10,12 @@ All bosses are mutated organisms inside salvaged shells. They fit the existing b
 
 | Proposed boss | Identity and core fight | Modes |
 |---|---|---|
-| **Shellback** | A broad organism armored with compressed panels. It marks a charge lane, rushes through it, then exposes its body during recovery. Its scrap fan prevents standing directly in front forever. | Campaign guardian at wave 5; Boss; Chaos |
+| **Shellback** | A broad organism armored with compressed panels. It marks a charge lane, rushes through it, then exposes its body during recovery. Its scrap fan prevents standing directly in front forever. | Campaign stage guardian; assignment pending; Boss; Chaos |
 | **Coilmaw** | A narrow organism wrapped in cable and coil fragments. It fires aimed volleys and a clearly indicated sweeping discharge. The player moves around it instead of outrunning a homing laser. | Optional Boss encounter; Chaos |
 | **Brood Hauler** | A mobile nest inside a broken cargo shell. It releases small enemies and places temporary residue pools. Killing adds opens space; occupied spawn slots suppress further releases. | Optional Boss encounter; Chaos |
-| **Nestheart** | A large nest attached to the contaminated recovery infrastructure. It combines broad volleys, a ring with a visible safe opening and small reinforcement groups. Defeating it isolates the campaign's main source. | Campaign final guardian at wave 10; Boss; Chaos |
+| **Nestheart** | A large nest attached to the contaminated recovery infrastructure. It combines broad volleys, a ring with a visible safe opening and small reinforcement groups. Defeating it isolates the campaign's main source. | Campaign stage guardian; assignment pending; Boss; Chaos |
 
-**Scope recommendation:** finish Shellback and Nestheart first. Add Coilmaw and Brood Hauler only when their encounters are playable and tested. Chaos can already increase pursuit with reinforcement instances of finished types; every instance has its own identity and attack state. Swarm remains boss-free and Survival remains its selected five-minute crowd mode.
+**Scope recommendation:** finish Shellback and Nestheart first. Add Coilmaw and Brood Hauler only when their encounters are playable and tested. Chaos can already increase pursuit with reinforcement instances of finished types; every instance has its own identity and attack state. Swarm remains boss-free; Chaos shares its core mechanics plus bosses. Survival is removed. Campaign needs one final boss per stage and minibosses in selected stages; exact placements remain content work.
 
 ## Intended progression and fairness
 

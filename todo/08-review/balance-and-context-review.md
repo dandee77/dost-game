@@ -59,7 +59,7 @@ This model reaches 16000 weapon savings around 24.64 minutes. It is an income ta
 | Chaos says one living boss versus owner wants growing pursuit | Latest selection wins: all finished bosses, two from 15 minutes, increasing allowance later; concrete initial schedule in game-design |
 | “Resume” might mean unpause | In hub design, “Return to Battle” means resume the suspended expedition; ordinary pause resumes the same current state |
 | Auto-fire cancels hub re-entry protection immediately | Delegated default: suspend auto-fire during the 2-second re-entry protection; deliberate Shoot fires and ends protection immediately; offensive automatic skills wait too |
-| T5 prices versus five-minute Survival | Keep shared prices and shorter Survival build, as owner selected |
+| Removed Survival mode | Owner removed it; Swarm and Chaos share core mechanics, Campaign uses star-field stages with base after every wave |
 | Repairs based on percent hull or actual deficit | Actual missing HP at 10 scrap/HP; preserve fractional affordable repair |
 
 The delegated re-entry default above is a future integration contract, not implemented protection. Other routine choices use existing safe-area UI, typed IDs, independent RNG, one action per input, same-step death before victory and existing reset ownership. These do not need repeated permission requests.
@@ -72,7 +72,7 @@ The delegated re-entry default above is a future integration contract, not imple
 | Skill math at very high ranks | Unbounded drones/zones/counts, cooldown/tick floors, multiplicative pattern growth, erasure rewards and damage accounting | No; preserve owner-selected uncapped combat-skill/army progression, optimize simulation and cosmetic effects, then measure. Do not call this pass a complete fix of all skill math |
 | Weapon tree | 26 nodes, 10 signatures, per-family card compatibility and equal-investment trials | No for routine mapping/tuning; accepted tree remains the basis |
 | Hub / portals / shop | Five gates, services, random exits, pointer range/placement, saved world resume and atomic purchases | No; use selected rules and delegated geometry/input defaults |
-| Five modes | Actual WaveDirector, objective/outcome logic, difficulty population data, campaign sources and boss integration | Roster direction accepted; any scope reduction still needs confirmation |
+| Four modes | Actual WaveDirector, objective/outcome logic, shared Swarm/Chaos mechanics, Campaign star-field stages, wave-clear base transitions and boss integration | Roster direction accepted; any scope reduction still needs confirmation |
 | Boss content | Final roster, visual identity, source relationship; attacks/phases/telegraphs/stats then require implementation | Owner liked the four concepts and requested phases/bars; exact draft tuning and production remain pending |
 | Economy | Full shop integration, rarity/Luck viability, measured T5 timing, repair burden and reward preservation | No; prices/formulas selected, remaining tuning delegated |
 | Between-run progression | Implement complete reset coverage across future systems | No; owner confirmed fresh starts with no permanent gameplay unlocks or stats |
