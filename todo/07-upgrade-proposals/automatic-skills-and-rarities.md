@@ -4,7 +4,7 @@
 
 ## 1. Complete target combat-ability list
 
-The earlier Nano Repair -> Shield Detonation target remains. There are **19 combat abilities** below plus **13 attribute/pattern augments**, 32 existing target entries, plus owner-selected Legendary Luck for **33 target cards**. Luck is capped at rank 10 and acquired/upgraded only through Legendary cards; it affects scrap payouts only. Field return portals are world interactions outside the card catalog, not an extra manual skill. New primary weapon families are equipment tree nodes, not added automatic-ability entries.
+The earlier Nano Repair -> Shield Detonation target remains. There are **19 combat abilities** below plus **13 attribute/pattern augments**, 32 existing target entries, plus owner-selected Legendary Luck and Epic Blast Radius for **34 target cards**. Luck is capped at rank 10 and acquired/upgraded only through Legendary cards; it affects scrap payouts only. Field return portals are world interactions outside the card catalog, not an extra manual skill. New primary weapon families are equipment tree nodes, not added automatic-ability entries.
 
 | Ability | Proposed rarity | Automatic behavior and duration category |
 |---|---|---|
@@ -51,13 +51,14 @@ For other timed abilities, retain the current duration/cooldown as the baseline 
 
 Proposed cooldown examples: rank 1 = 30 s; rank 2 = 28.5; rank 5 approximately 24.44; rank 10 approximately 18.91; high ranks stop at 12. Short, dangerous cooldown-free chain escapes are excluded by the snapshot/floor rules.
 
-## 3. Rarity of the 13 existing attribute/pattern cards plus Luck
+## 3. Rarity of the 13 existing attribute/pattern cards plus Luck and Blast Radius
 
 | Proposed rarity | Cards |
 |---|---|
 | Common | Weapons Payload, Overclocked Chambers, Reinforced Hull, Thruster Overdrive |
 | Uncommon | Critical Matrix, Rapid Fire, Phase Shift, Gyro Control, Inertia Impact |
 | Rare | Armor Piercing, Scatter Shot, Broadside Cannons, Tail Gunner |
+| Epic — owner confirmed | Blast Radius (compatible damage-area radius; uncapped ranks) |
 | Legendary — owner confirmed | Luck (maximum rank 10; field cards only) |
 
 Deflector remains in the ability table and the field pool. Numeric shop increments do not remove attribute cards. Luck is now in the Legendary field pool. Exclude it at rank 10; it has no shop acquisition or owned-rank listing.

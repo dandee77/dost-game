@@ -8,6 +8,8 @@ Record date, stable task ID, actual result, evidence/commit when known and anyth
 
 ## Verified preparation deliveries
 
+**24 October DOC-18:** Added accepted Epic Blast Radius to the 34-card target roster, with full/paid additive base-radius gains, compatibility, skill-size interaction and snapshot rules. Verified 289 local links, radius example, whitespace and existing build (no work required). Documentation only; card/shop integration and runtime balance remain pending.
+
 **24 October DOC-17:** Recorded Legendary Luck, card-only acquisition/upgrades, maximum rank 10 and scrap-only effect; updated 33-card roster and removed paid Luck route from active briefs. Verified 289 local links, proposed payout mean, whitespace and existing build (no work required). Other rarity/payout tuning remains proposed; runtime implementation pending.
 
 **24 October DOC-16:** Recorded critical tiers above 100%, continued multiplicative firing-speed growth and equivalent-event aggregation requirements. Verified rate example, 289 local links, whitespace and existing build (exit 0; no work required). Documentation only; no runtime aggregation, crit implementation or performance claim.

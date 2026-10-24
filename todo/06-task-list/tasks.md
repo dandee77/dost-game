@@ -4,6 +4,8 @@
 
 ## Start here
 
+- [x] **DOC-18 — Epic Blast Radius contract.** Record +10% base radius/card, +2.5%/purchase, uncapped additive growth, eligibility and radius snapshots; update 34-card roster. Runtime integration and balance tests remain T03/T08/T10.
+
 - [x] **DOC-17 — Legendary Luck and full card tiers.** Record card-only acquisition/upgrades, cap 10, scrap-only effect and 33-card tier roster. Payout tuning and remaining rarity assignments require review; runtime implementation remains pending.
 
 - [x] **DOC-16 — Critical tiers and extreme fire-rate contract.** Record selected rules, tier/rate examples and aggregation acceptance requirements. Runtime implementation remains BAL-01/T04/T08/T10.

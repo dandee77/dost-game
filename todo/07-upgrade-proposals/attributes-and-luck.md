@@ -18,6 +18,7 @@ Do not apply the 25% rule blindly to a new ability, an extra drone, a new weapon
 
 | Attribute | One full field-card increment | One purchased increment | Notes |
 |---|---|---|---|
+| Blast Radius — Epic, owner approved | +10% of each compatible effect's base damage radius | +2.5% of base radius | Add once after ability-rank radius; damage per victim unchanged; exact compatibility in game-design.md |
 | Weapons Payload | +15 percentage points of base primary damage | +3.75 percentage points | Primary attacks only; automatic ability damage keeps its own tuning |
 | Critical Matrix | +5 percentage points critical chance | +1.25 percentage points | Uncapped rating; full 100% blocks add guaranteed critical tiers; remainder rolls the next tier |
 | Overclocked Chambers | Attack cooldown multiplied by 0.90 | Attack cooldown multiplied by 0.975 | Quarter of the 10% cooldown reduction; not a claim of exactly 25% of resulting DPS gain |
@@ -33,6 +34,8 @@ The shield's starter remains rank 1, capacity 20, pending the existing starter-l
 `maxShield = 20 + 5 * (deflectorCardRank - 1) + 1.25 * paidCapacityPurchases`
 
 Retain fractional capacity internally. Previews display enough precision to show the actual +1.25 gain. If the chosen UI instead uses integers, approve a value-conserving accumulation policy before implementation; never charge for a silently rounded-away gain.
+
+Blast Radius is a separate additive source beyond an ability's own rank-five size progression. It has no fixed rank/purchase cap and uses the normal numeric-attribute price. Offer it only with a currently compatible effect; retain earned ranks through weapon changes. Exclude non-damaging geometry and direct-projectile hitboxes. Full formula, exclusions and snapshot rules are in game-design.md.
 
 ## 3. Shared derivation without granting fake ranks
 

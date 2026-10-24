@@ -6,6 +6,8 @@ Update this file after every completed build-plan item. Anyone reading it (teamm
 
 ## Current Status
 
+**24 October DOC-18:** Owner accepted Epic Blast Radius. Recorded full/paid additive base-radius gains, uncapped progression, damage-only geometry eligibility, per-attack snapshots and the explicit exception to older general size caps. Target roster now has 34 cards. Documentation only; runtime implementation and balance validation remain pending.
+
 **24 October DOC-17:** Owner selected scrap-only Legendary Luck, maximum rank 10, acquired/upgraded exclusively through field cards. Removed proposed paid Luck route and expanded target roster to 33 cards. Other rarity assignments and exact payout tuning remain proposals. Documentation only; card/loot runtime integration remains pending.
 
 **24 October DOC-16:** Owner selected stronger critical tiers above 100% and continued multiplicative firing-speed gains with efficient damage processing. Recorded additive critical-bonus formula, examples, fractional shot accounting and equivalence constraints for grouped attacks. Documentation only; runtime changes and stress/performance verification remain pending.
@@ -369,6 +371,7 @@ Required for Form 03 (Asset and AI Usage Disclosure). Organizers may request pro
 
 | Date | Item | Tool and model | Used for | Extent (Minimal / Moderate / Heavy) | Human review |
 |---|---|---|---|---|---|
+| 2026-10-24 | DOC-18 Epic Blast Radius | Codex (OpenAI) | Record accepted Epic attribute, formula, compatibility and skill-size interaction. | Moderate | Owner accepted proposal; integration/testing pending |
 | 2026-10-24 | DOC-17 Legendary Luck and card tiers | Codex (OpenAI) | Reconcile selected Luck source/cap, remove shop route and present complete rarity roster. | Moderate | Luck rules selected; payout tuning and other tier assignments remain proposals |
 | 2026-10-24 | DOC-16 critical tiers and fire rate | Codex (OpenAI) | Record selected continuation rules, numerical examples and aggregation acceptance criteria. | Moderate | Owner selected both directions; exact implementation and stress tests pending |
 | 2026-10-24 | DOC-15 unlimited attributes and targeting | Codex (OpenAI) | Record owner answers, remove stale caps and document continuing price calculations and droid target policy. | Minimal | Owner confirmed cap removal and target behavior; extreme-stat formulas pending |

@@ -1,6 +1,8 @@
 # Project Overview
 
-**24 October Luck decision:** Legendary field card, maximum rank 10, acquired and upgraded only through cards. Affects scrap payouts only; no paid Luck purchases or rarity/XP/energy benefit. The target roster now contains 33 cards. Other rarity assignments remain proposed except previously confirmed Blink.
+**24 October Blast Radius accepted:** Epic attribute, +10% base damage-area radius per field card and +2.5% per paid increment, additive and uncapped. Compatible explosions and damaging circular zones gain coverage without more damage per victim. Numerical authority defines compatibility and interaction with older skill-size limits. Context only; runtime card/shop integration pending.
+
+**24 October Luck decision:** Legendary field card, maximum rank 10, acquired and upgraded only through cards. Affects scrap payouts only; no paid Luck purchases or rarity/XP/energy benefit. With Epic Blast Radius added, the target roster contains 34 cards. Other rarity assignments remain proposed except confirmed Blink, Luck and Blast Radius.
 
 **24 October combat progression decision:** positive online shield absorbs the complete breaking hit without hull spillover. Combat Drones are persistent allied battle droids; each destroyed droid rebuilds after 20 combat seconds. Owner rejected fixed combat-skill rank/army-count caps; random offers still govern field access. Numeric-attribute rank and purchase caps are also removed; weapon tiers remain T1–T5. Droids spread fire across nearby enemies and concentrate when fewer remain. Critical ratings above 100% grant stronger tiers; firing-speed gains continue with efficient equivalent-event processing at extreme rates. These are selected targets, not completed integration.
 

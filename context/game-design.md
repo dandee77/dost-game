@@ -1,5 +1,26 @@
 # Game Design
 
+## 24 October Blast Radius — owner-approved Epic attribute, implementation pending
+
+Add Blast Radius to field cards at Epic rarity and to the numeric-attribute shop. Each full card grants +10% of the compatible effect's base radius; each paid increment grants +2.5%. No fixed card-rank or purchase cap. Use the existing attribute price `200 + 100*n`, where n is prior paid Blast Radius purchases. This adds one card: 19 combat abilities, 13 existing augments, Luck and Blast Radius = **34 target cards**.
+
+For each compatible effect, let R0 be its authored radius before ability-rank or attribute bonuses, Rskill its radius after that ability's own rank calculation, c the number of Blast Radius cards and p its paid increments. Derive once: `Rfinal = Rskill + R0*(0.10*c + 0.025*p)`. No multiplicative bonus stacking or repeated application to child effects. The existing rank-five limit on an ability's own physical-size growth still applies to Rskill; it does not clamp this separately earned attribute bonus. This is the explicit exception to older general physical-size-limit wording.
+
+Example with R0 = Rskill = 10: one card gives 11; one paid increment gives 10.25; two cards plus four paid increments give 13. A circular radius increase of 10% yields 21% more covered area; damage per victim is unchanged. Existing target-count, damage-falloff, tick, cooldown and per-victim hit rules remain unchanged by this attribute.
+
+| Eligible effect geometry | Application |
+|---|---|
+| Explosive primary projectiles, including explosive cannon branches and missiles | Blast radius only, not the flying projectile hitbox, guidance range or travel distance |
+| Circular damaging skill bursts and damaging pools/zones | Authored damage radius only; includes Radiant Halo, Shield Detonation, Corrosive Trail pools, Nuclear Missile and Armageddon blasts |
+| Singularity | Damage radius only; pull/acquisition radius and force do not grow from this attribute |
+| Circular weapon-signature explosions | Apply once to each authored blast's own base radius; child effects do not inherit an already increased radius and increase it again |
+
+Direct bullets, beams/cones, chain targeting distances, orbit paths/blade sizes, pickup radius, shield capacity, Blink travel, non-damaging push/defense effects and Space Collapse erasure are excluded. Compound skills require explicit per-effect eligibility; Realm Breaker is excluded until its damage geometry is mapped. The compatibility catalog must identify eligible effects using typed data, not skill-name branching.
+
+Offer Blast Radius only when the current build owns at least one compatible effect; use the same rule for its shop row. Existing ranks persist if a later weapon upgrade changes compatibility and apply to any subsequently acquired compatible effect. Never reset counts or charge for an ineligible/no-effect transaction. Snapshot radius at attack/zone creation so selecting a card does not retroactively expand existing attacks. Draw and collision must use the same derived radius.
+
+Acceptance for later implementation: card/shop quarter-strength math, independent source counts/prices, skill-size interaction, compatibility filters, no double application in signatures/children, unchanged single-victim damage, paused effects, snapshot/reset behavior and high-rank spatial-query performance. This document does not create the live card or claim measured balance.
+
 ## 24 October critical tiers and extreme fire rate — selected rules, implementation pending
 
 Critical chance is an uncapped rating expressed in percentage points. For rating C >= 0, let q = floor(C/100), p = C/100 - q. Each authored critical event gets tier K = q plus one with probability p. With the existing first-tier critical multiplier M = 2, use additive bonus tiers: `damageMultiplier = 1 + K*(M - 1)`. This delegated arithmetic gives tier 0/1/2/3 multipliers 1x/2x/3x/4x, without recursively multiplying crits. Expected multiplier is `1 + (C/100)*(M - 1)`.
@@ -318,7 +339,7 @@ Assign final reward and Luck snapshot at spawn using isolated base-loot and Luck
 | Three-slot Legendary gate probability | `1 - 0.995^3` = 0.014925125, approximately 1.49% |
 | Proposed drone persistence | Persistent until destroyed; per-missing-slot respawn uses existing 20 combat seconds |
 
-The [skill/rarity roster](../todo/07-upgrade-proposals/automatic-skills-and-rarities.md) assigns 19 combat abilities, 13 existing augments and the new Legendary Luck card (33 total target cards). Blink's direct-hit interception precedes shield/hull damage; already-negated hits and non-spatial status ticks do not trigger it. Ordinary card selection renormalizes only the non-Legendary tier weights over eligible entries. Luck does not alter these weights.
+The [skill/rarity roster](../todo/07-upgrade-proposals/automatic-skills-and-rarities.md) assigns 19 combat abilities, 13 existing augments, Legendary Luck and Epic Blast Radius (34 total target cards). Blink's direct-hit interception precedes shield/hull damage; already-negated hits and non-spatial status ticks do not trigger it. Ordinary card selection renormalizes only the non-Legendary tier weights over eligible entries. Luck does not alter these weights.
 
 ## 21 October material and campaign alignment (proposed; not implemented)
 
@@ -403,7 +424,7 @@ Deflector: rank-1 maximum 20, +5 per rank; online regeneration 2 points/s, +10% 
 
 Proposed starter Deflector rank 1 guarantees the utility has a normal-play shield. Rank increases preserve current points and elapsed cooldown debt; no free revival. Shield Batteries use the selected five-size shop contract above; normal field return requires an online positive shield. Hull-only repair does not restore shield or change its reboot. Hull has no passive field regeneration; Reinforced Hull's max/current-HP exception applies to free field cards only.
 
-Replace Nano Repair with Shield Detonation: 50 damage, radius 35, 18 s internal cooldown; +25% damage/rank, +10% radius/rank through rank 5, -10% cooldown with positive high-rank continuation. Trigger once on actual break, not repair/reset/upgrade. Existing combat/augment catalog is 32; Legendary Luck adds a 33rd target card. Return portals are separate.
+Replace Nano Repair with Shield Detonation: 50 damage, radius 35, 18 s internal cooldown; +25% damage/rank, +10% radius/rank through rank 5, -10% cooldown with positive high-rank continuation. Trigger once on actual break, not repair/reset/upgrade. Existing combat/augment catalog is 32; Legendary Luck and Epic Blast Radius expand the target roster to 34 cards. Return portals are separate.
 
 ### Modes, pickups and scaling
 
