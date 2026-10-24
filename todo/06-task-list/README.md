@@ -1,6 +1,6 @@
 # Task List and Idea Register
 
-**Last reviewed: 21 October 2026.** This folder is the working checklist for preparation, remaining implementation, issues needing attention and ideas. Current authorization is context-only preparation. Listed implementation tasks are for the teammate's later instruction.
+**Last reviewed: 24 October 2026.** This folder tracks preparation, implementation, issues and ideas. Implementation and updated statistics are authorized; the current checkpoint reconciles context files. Follow current acceptance criteria one buildable checkpoint at a time. Older context-only statements describe earlier sessions.
 
 | File | Purpose |
 |---|---|

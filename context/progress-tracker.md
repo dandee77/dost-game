@@ -6,6 +6,8 @@ Update this file after every completed build-plan item. Anyone reading it (teamm
 
 ## Current Status
 
+**24 October DOC-13 context reconciliation:** Replaced stale active XP/return/HP formulas, single-boss Chaos scheduling, manual teleport and Boss retreat text. Aligned review/task authority, accepted roster direction and remaining confirmations. Current contracts are distinct from historical dated entries below; those entries describe what was known then. Documentation only; hub, portals, unified shield, weapon tree, boss phases/HUD and high-rank math remain unfinished. Verification: 289 local Markdown links resolve, git diff --check passes and the existing build exits 0 (no work required). No source/runtime changes or new playtest claims.
+
 **24 October no-retreat decision confirmed:** Boss mode permits base travel only through its post-kill portal, which bypasses shield/energy. Suppress ordinary portals and their interactions during the fight; other modes retain normal gates. Pause/settings remain available and quit abandons the run. This closes the prior mid-fight-retreat question. Documentation only; boss/base/portal implementation remains pending.
 
 **24 October boss-clear gate confirmed:** Owner selected post-kill Boss-mode portals that bypass shield and energy requirements. A living player presses F inside; no energy payment, free healing or upgrade reset. Ordinary portal gates remain unchanged. Retired proposed starting-energy grant; optional mid-fight Boss-mode retreat is a separate open policy. Documentation updated, actual boss/base/portal implementation remains pending.
@@ -359,6 +361,7 @@ Required for Form 03 (Asset and AI Usage Disclosure). Organizers may request pro
 
 | Date | Item | Tool and model | Used for | Extent (Minimal / Moderate / Heavy) | Human review |
 |---|---|---|---|---|---|
+| 2026-10-24 | DOC-13 context reconciliation | Codex (OpenAI) | Reconcile active formulas, portal/mode contracts, UI targets, task status and confirmation list without changing source. | Moderate | Owner requested continuing context; gameplay implementation and playtesting remain separate |
 | 2026-10-24 | Boss-mode no-retreat decision | Codex (OpenAI) | Record owner-selected post-kill-only base access and align mode policy/acceptance cases. | Minimal | Owner explicitly rejected mid-fight retreat; no runtime implementation claimed |
 | 2026-10-24 | Boss-clear portal gate decision | Codex (OpenAI) | Propagate approved shield/energy bypass through mode, architecture and task references; retain ordinary gates and no-free-heal rule. | Minimal | Owner explicitly selected bypass. Documentation only; runtime implementation remains pending |
 | 2026-10-24 | Repeating Boss-mode contract | Codex (OpenAI) | Record post-kill portal/base/next-encounter flow, preserve run state, separate Campaign cleanup and capture requested boss phases/HP bars. | Moderate | Loop and phases/bars requested; portal gates awaiting answer; phase numbers remain proposed; no source/UI implementation |

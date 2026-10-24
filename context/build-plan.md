@@ -2,19 +2,23 @@
 
 The order in which the game is built between **14 October** and the **25 October 2026** submission. Each numbered item is one unit of work: one branch, one pull request, one entry in `progress-tracker.md`. Do not start an item until its dependencies meet the Definition of Done in `code-standards.md`.
 
+## Current checkpoint — DOC-13 context reconciliation
+
+Reconcile current progression, ordinary/Boss portal policies, Chaos schedule, review questions and task authority. Done when active tables agree with current decisions and implemented math, historical records remain labeled, local links resolve and the existing build passes. No source changes in this checkpoint.
+
 ## Task-list maintenance for every work item
 
 **23 October owner implementation authorization:** The owner explicitly selected “Implement and update the stats document.” Earlier context-only restrictions below are historical. Current sequence: population-led enemy pacing; T01 progression/economy calculations; T02 consistent paired loot; T03 salvage-driven queued choices. Build and verify each checkpoint. Five-mode hub/shop/weapon/boss content is not silently declared implemented. The owner also reopened general balance and Chaos scheduling; Chaos uses all finished bosses with increasing concurrent pursuit over time.
 
-Read [todo/06-task-list/tasks.md](../todo/06-task-list/tasks.md) before each item. During work, add missing requirements or discovered issues there and optional alternatives to [ideas.md](../todo/06-task-list/ideas.md). After verification, mark the matching task, append dated evidence to [completed.md](../todo/06-task-list/completed.md), and reconcile this plan, the root TODO index and progress tracker in the same change. Follow the [folder maintenance rules](../todo/06-task-list/README.md); partial work stays open. Current authorization remains context-only.
+Read [todo/06-task-list/tasks.md](../todo/06-task-list/tasks.md) before each item. During work, add missing requirements or discovered issues there and optional alternatives to [ideas.md](../todo/06-task-list/ideas.md). After verification, mark the matching task, append dated evidence to [completed.md](../todo/06-task-list/completed.md), and reconcile this plan, the root TODO index and progress tracker in the same change. Follow the [folder maintenance rules](../todo/06-task-list/README.md); partial work stays open. Implementation remains authorized; the current requested checkpoint is context reconciliation, with no source edits.
 
 ## 23 October economy checkpoint
 
-Selected weapon prices are 500/1500/4000/10000 (16000 total), Swarm T5 target is 20–25 combat minutes, and Survival retains shared prices/lower-tier outcomes. Attribute/owned-rank prices scale 5x, special acquisitions 10x. Hull repair is 10 scrap per missing HP with proportional affordable repair; Shield Battery replaces paid shield recharge. Four material labels use one wallet and existing enemy-tier values. Exact battery details/source mappings are under popup review. Adopt these contracts for future T02/T07/T08/T10; this documentation does not implement them.
+Selected weapon prices are 500/1500/4000/10000 (16000 total), Swarm T5 target is 20–25 combat minutes, and Survival retains shared prices/lower-tier outcomes. Attribute/owned-rank prices scale 5x, special acquisitions 10x. Hull repair is 10 scrap per missing HP with proportional affordable repair; Shield Battery replaces paid shield recharge. Four material labels use one wallet and existing enemy-tier values. Five battery sizes, replacement arithmetic and scaled prices are settled in game-design.md; per-variant material coverage still needs content verification. Adopt these contracts for future T02/T07/T08/T10; this documentation does not implement them.
 
 ## 23 October weapon-stat checkpoint
 
-Owner accepted names/path with T4/T5 choices (1/3/5/7/10 nodes). Full proposed profiles/signatures and analytical comparisons now exist in game-design.md. PREP-27 remains open for numerical adoption, exact card compatibility and combined effect limits; REVIEW-07 tracks live viability. Paper DPS is not completed T08/T10 gameplay. No source changes authorized.
+Owner accepted names/path with T4/T5 choices (1/3/5/7/10 nodes). Full proposed profiles/signatures and analytical comparisons now exist in game-design.md. PREP-27 remains open for numerical adoption, exact card compatibility and combined effect limits; REVIEW-07 tracks live viability. Paper DPS is not completed T08/T10 gameplay. Implementation authorization does not certify these draft values as balanced.
 
 ## 21 October weapon/attribute review checkpoint
 

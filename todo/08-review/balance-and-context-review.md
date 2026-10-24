@@ -72,21 +72,22 @@ The delegated re-entry default above is a future integration contract, not imple
 | Skill math at very high ranks | Unbounded drones/zones/counts, cooldown/tick floors, multiplicative pattern growth, erasure rewards and damage accounting | No; prepare bounded simulation with continued useful upgrades, then measure. Do not call this pass a complete fix of all skill math |
 | Weapon tree | 26 nodes, 10 signatures, per-family card compatibility and equal-investment trials | No for routine mapping/tuning; accepted tree remains the basis |
 | Hub / portals / shop | Five gates, services, random exits, pointer range/placement, saved world resume and atomic purchases | No; use selected rules and delegated geometry/input defaults |
-| Five modes | Actual WaveDirector, objective/outcome logic, difficulty population data, campaign sources and boss integration | Only final boss identities/content and any scope reduction need confirmation |
-| Boss content | Final roster, visual identity, source relationship; attacks/phases/telegraphs/stats then require implementation | Yes if owner wishes to supply or approve the concepts; no finished boss classes exist |
+| Five modes | Actual WaveDirector, objective/outcome logic, difficulty population data, campaign sources and boss integration | Roster direction accepted; any scope reduction still needs confirmation |
+| Boss content | Final roster, visual identity, source relationship; attacks/phases/telegraphs/stats then require implementation | Owner liked the four concepts and requested phases/bars; exact draft tuning and production remain pending |
 | Economy | Full shop integration, rarity/Luck viability, measured T5 timing, repair burden and reward preservation | No; prices/formulas selected, remaining tuning delegated |
-| Meta progression | Whether grind persists between runs | Yes; current accounting resets on a new run and no permanent progression was selected |
+| Between-run progression | Implement complete reset coverage across future systems | No; owner confirmed fresh starts with no permanent gameplay unlocks or stats |
 | Story / identity | Final title; remaining intro/ending/trailer animation/audio | Title needs confirmation; production and continuity can be organized autonomously |
 | UX / audio / results | Complete pause/settings, tutorial, leaderboard, accessibility, mixed sound and polished feedback | No routine approval needed; implementation/testing pending |
 | Release | Asset/font licenses, competition eligibility, target machine, forms, demo/trailer, packaging and submission | Human-only evidence/commitments need confirmation; do not invent clearance or submit externally without instruction |
 
 ## Confirmation list for the owner
 
-**24 October answers:** Items 1–2 below are resolved. Every new game resets gameplay; no permanent progression/unlocks. Boss drafting is delegated to us, and the [roster/attacks draft](../02-gameplay/boss-roster-draft.md) is ready for review. Final boss concept approval, optional roster scope and its proposed Boss-mode half-energy start remain open; title/release facts below remain open. Earlier recommendations for permanent cosmetic/content unlocks were not selected.
+Already settled: fresh starts; five battery sizes and replacement arithmetic; fixed ordinary return threshold; Boss-mode no retreat and unrestricted post-kill portal; repeating boss/base/launch loop; boss phases and visible HP bars. The owner liked the four drafted concepts. No repeat approval question is needed for these decisions.
 
-1. **Between-run grind:** keep every run fresh, or add permanent unlocks? Recommended first version: cosmetic/content unlocks only, avoiding permanent stat advantages that invalidate balance.
-2. **Boss concepts:** will you provide the final boss concepts, or should I draft the roster and attacks for your review? The Chaos reuse/escalation direction is already settled.
-3. **Final game title:** keep the working title for now, or select one from the existing name proposals? This does not block math work.
-4. **Release facts:** confirm the actual target PC/minimum hardware and who owns final eligibility/license evidence and submission approval. These are facts and commitments I cannot choose for you.
+1. **Final game title:** choose the release title when ready; the working title does not block gameplay work.
+2. **Release facts:** actual target PC/minimum hardware, responsibility for eligibility/license evidence, and final submission owner. These require human facts and commitments.
+3. **Any proposed scope reduction:** confirm before dropping requested modes or boss content. The current plan retains the requested scope; a cut is not silently authorized.
 
-Everything else above is implementation, verification or delegated tuning rather than another permission question. No public push or final balance certification is implied by this review.
+Boss phase thresholds, attack values, wave budgets, portal geometry, rarity/card compatibility and high-rank effect limits remain visible drafts or delegated tuning tasks. Prepare and verify them without treating every implementation detail as a permission question. The complete numerical reference is [game design](../../context/game-design.md); the older [full review](full-game-review.md) remains a historical prototype audit, not the current formula authority.
+
+No public push or final balance certification is implied by this review.

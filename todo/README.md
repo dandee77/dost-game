@@ -14,7 +14,7 @@ The owner requested this top-level handoff on **20 October 2026**. These files d
 
 ## Foldered preparation — 21 October revision
 
-Everything here is pending design/content/implementation preparation. No source, tests, assets or builds are changed by this session. The teammate provides the later implementation instruction; these files do not start that work automatically.
+This dated folder structure remains in use. Current implementation authorization and partial deliveries are recorded above and in the tracker; individual task acceptance criteria determine what remains. The current context reconciliation changes documentation only.
 
 ```text
 todo/

@@ -1,5 +1,13 @@
 # UI Rules
 
+## Current boss and portal HUD contract — target, not implemented
+
+Show a named HP bar whenever a boss appears, with current/max HP and phase markers. Multiple Chaos bosses need individually identifiable compact bars and a safe-area overflow view; never combine their health into one misleading total. Phase thresholds and attack tuning come from game-design.md. Unique encounter IDs distinguish repeated boss types.
+
+Ordinary portals show F, Shield Offline or the deficit to fixed 500 energy as appropriate. Boss mode shows no retreat prompt during a fight; its post-kill portal never displays a shield/energy lock. Consume the interaction once. Label hub re-entry **Return to Battle**, distinct from pause **Resume**; Boss-mode departure starts the next encounter. Show the two-second re-entry protection clearly, with auto-fire/offensive automatic skills waiting until it expires and deliberate Shoot ending it.
+
+Battery previews show current shield -> resulting shield, charge supplied, old excess replaced, normal regeneration cap, price and wallet afterward. A smaller battery may reduce total shield; show that result before purchase. Repair previews retain exact proportional healing and never promise free replenishment.
+
 ## 23 October repair/shop feedback
 
 Show Full Repair and Repair What I Can Afford at the berth with the quoted deficit, exact restored HP, cost and wallet afterward. Partial payment restores the same fraction of missing HP; retain fractional values instead of displaying a paid zero gain. Shield Battery is a separate shop purchase used immediately, distinct from Power Cell salvage. Disable purchase when nothing can be restored, and commit debit/effect together after validation. This is a design contract; no screen is implemented by this documentation.

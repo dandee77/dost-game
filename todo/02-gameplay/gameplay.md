@@ -6,7 +6,7 @@
 
 **24 October update:** Source implementation is now authorized. The latest [game-design balance revision](../../context/game-design.md#23-october-implemented-population-and-progression-revision) supersedes older XP/HP/return and Chaos schedule formulas below. [Current implementation/context review](../08-review/balance-and-context-review.md) identifies delivered and remaining work; this older handoff is not evidence that its full feature set exists.
 
-Design handoff updated **20 October 2026**. This replaces the former pause/scrap/difficulty context file. It describes the intended game and remaining work, **not an instruction to start implementing features in this documentation session**. The owner authorized publishing the documentation; their teammate will supply later implementation instructions. Start with [README.md](../README.md) for the full remaining-work index.
+Design handoff updated **20 October 2026**. This replaces the former pause/scrap/difficulty context file. It describes the intended game and remaining work, **not an instruction to start implementing features in this documentation session**. The owner authorized publishing the documentation; implementation was subsequently authorized, while this checkpoint remains documentation only. Start with [README.md](../README.md) for the full remaining-work index.
 
 No feature below is implemented merely because it is described here. Read [progress-tracker.md](../../context/progress-tracker.md) for implementation status. This session changes documentation only, under `context/` and the owner-requested top-level `todo/`.
 
@@ -99,7 +99,7 @@ This is a focused source/doc audit, not a fresh runtime certification. No game b
 | C04 | Modes | **Confirmed direction:** Swarm/endless, timed Survival, Boss, Chaos with bosses plus swarms, Campaign ending in a boss |
 | C05 | Boss content | **Pending content:** owner will develop bosses. Existing Hoarder/Core designs are reference proposals, not newly approved final content |
 | C06 | Level-up location | **Confirmed by follow-up:** normal upgrades happen in the field immediately through scrap progression; returning is not required |
-| C07 | Return Home | **Confirmed 23 October:** random field portals replace manual teleport; F inside with 50% energy and online positive shield; capacity grows with player level |
+| C07 | Return Home | **Confirmed 23 October:** random field portals replace manual teleport; F inside with 50% energy and online positive shield; fixed capacity 1000 and threshold 500; Boss mode permits only its unrestricted post-kill portal |
 | C08 | Manual combat skills | **Confirmed 23 October:** all skills automatic; F is a world/portal interaction, not a manual skill |
 | C09 | Scrap numbers | Owner's 100 level requirement and 1,000 return maximum are **example values**; use as proposed initial tuning, not tested final balance |
 | C10 | Accounting | **Confirmed:** tradeable scrap is random by enemy, starting at 1-3. **Delegated design:** separate random trade value from fixed salvage progress; one collected pickup carries both |
@@ -204,13 +204,13 @@ There is no combat-field healing zone or physical shortcut to the hub that bypas
 
 ## 5. Mode contracts
 
-All five requested modes share movement, scrap collection, field leveling, shield rules, Return Home, repair and skill shop. Their encounter director and end condition differ. Difficulty is chosen before the hub; a mode is chosen inside it.
+All five requested modes share movement, scrap collection, field leveling, shields, repair and shop rules. Ordinary return portals apply outside Boss mode; Boss mode uses its post-kill-only portal. Their encounter director and end condition differ. Difficulty is chosen before the hub; a mode is chosen inside it.
 
 | Mode | Primary objective | Encounter character | Ends when | Return/resume |
 |---|---|---|---|---|
 | **Swarm** | Survive indefinitely and improve score | Escalating crowds of normal enemies; proposed default has no bosses so Chaos stays distinct | Death or voluntary retirement | Freeze encounter and survival clock; resume same pressure |
 | **Survival** | Survive a displayed fixed duration | Increasing pressure over a finite timer | Timer reaches zero while alive, or death | Countdown freezes at home; shopping time cannot win |
-| **Boss** | Defeat the designated boss | One focused boss encounter; adds only if part of its design | Boss dead or player dead | Preserve boss HP, phase, adds and attack timing |
+| **Boss** | Defeat successive bosses | One encounter per launch; kill opens one base portal | Player death or quit; a kill advances the loop | No retreat; post-kill portal bypasses shield/energy; next launch keeps build and wallet |
 | **Chaos** | Survive indefinite mixed pressure | Swarms continue while scheduled bosses appear | Death or retirement; boss death is not victory | Preserve swarm budget, boss and schedule |
 | **Campaign** | Complete staged encounters and defeat the final boss | Ordered waves, checkpoints and story progression | Final boss defeated or player dead | Preserve current wave; completed waves stay complete |
 
@@ -218,9 +218,9 @@ All five requested modes share movement, scrap collection, field leveling, shiel
 
 - Survival: **300 seconds** combat time as the initial proposed duration. Display “Survive 5:00” before launch. This is a playtest target.
 - Campaign: reuse the old **10-wave outline** as a provisional structure, with midpoint boss slot at wave 5 and final boss slot at wave 10. The owner may replace the roster; do not fabricate final boss lore or attacks.
-- Swarm: reuse the existing planned Endless normal-wave budget/spawn formulas as initial tuning references; omit its old automatic boss-every-five-waves rule for this mode.
-- Chaos: reuse Swarm normal pressure initially; proposed first boss at **180 combat seconds**, minimum **180 combat seconds after the previous boss dies** before the next, maximum **one living boss**. Do not stack missed boss spawns after returning.
-- Boss mode: a single designated encounter initially, not an invented boss-rush ladder. Provide a configurable roster entry and honest unavailable state until a playable boss exists.
+- Swarm: use the bounded combat-time population/spawn curve in game-design.md and CombatMath.hpp. No automatic boss spawns.
+- Chaos: use Swarm normal pressure. Draft first boss opportunity at **300 combat seconds**, then every **180 seconds**; concurrent allowance `1 + floor(combatSeconds/900)`. Rotate finished bosses, prefer types not alive, permit unique-ID reinforcements when every type is already present. Missed opportunities do not accumulate.
+- Boss mode: repeated boss -> post-kill portal -> base -> next launch. Ordinary portals are disabled. A kill creates one unrestricted base portal; advancing the encounter happens once on launch, never while shopping. Keep the mode unavailable until its boss and transition implementation exists.
 - Existing barricade event: can remain for Swarm, Survival and Chaos; proposed disabled in Boss and scheduled explicitly in Campaign. It must use expedition time and never trigger in the hub.
 
 These schedules are proposed in the tuning ledger. New boss stats, attacks, animation sheets, phases, loot values and final story names remain pending content. A portal must not claim that a mode works if it only launches the current generic spawner.
@@ -229,7 +229,7 @@ These schedules are proposed in the tuning ledger. New boss stats, attacks, anim
 
 - Campaign wave clear does not automatically grant an upgrade card. Only the scrap threshold does.
 - Proposed Campaign service checkpoints occur after completed waves. They can automatically offer safe hub transit without a Return Home charge or shield check because the encounter has ended.
-- Return during an active encounter uses the selected field portals and unchanged shield/energy gates.
+- Return during an active encounter uses ordinary field portals and fixed 500/1000 energy plus positive online shield, except Boss mode, which forbids retreat.
 - Objective success/death are resolved once. Proposed tie rule: player death in the same simulation step takes priority over victory.
 - After a terminal result, stop scoring and collection. Uncollected loot is not magically converted into currency or XP.
 - Uncollected loot at an ordinary wave clear stays collectible until collected or the expedition ends; checkpoint travel freezes it.
@@ -269,16 +269,16 @@ For a collected batch, add its trade sum to total/wallet, resolve level threshol
 
 - Start player level at 1 and progress at 0.
 - Proposed first threshold is **100**, replacing the previous unimplemented base of 30.
-- Preserve prior difficulty growth proposals: Easy 5%, Hard 10%, Impossible 15%, compounded per player level.
-- `required(L,d) = roundHalfUp(100 * (1 + growth[d])^(L - 1))`.
+- All difficulties share the implemented linear requirement with a 600-salvage ceiling.
+- `required(L) = min(600, 100 + 20*(L - 1))`.
 - At threshold, subtract that threshold, retain all overflow, advance level by one and queue one card choice. If more thresholds are crossed, repeat in order.
-- The new level and return maximum take effect when the threshold is crossed. Cards remain mandatory pending choices, so combat/return cannot bypass unchosen rewards.
+- The new level takes effect when the threshold is crossed; return capacity remains 1000. Cards remain mandatory pending choices, so combat/return cannot bypass unchosen rewards.
 - Offer three distinct eligible entries, choose one, lock the offer, finish the exit animation and show the next queued choice before combat resumes.
 - A purchase does not advance player level. A free field pick does not spend wallet.
 - No 20-second card trigger and no extra wave-clear card.
 - Pure threshold functions, checked integer arithmetic and bounded processing must prevent overflow or an unbounded frame when debug input supplies very large values.
 
-Example, Easy: collect a batch with 250 salvage and 231 trade scrap from zero at level 1. Costs 100 and 105 are crossed. Result: level 3, progress 45/110, two queued picks, wallet/totalCollected 231 and returnCharge 250. Do not multiply either reward by the number of picks.
+Example, Easy: collect a batch with 250 salvage and 231 trade scrap from zero at level 1. Costs 100 and 120 are crossed. Result: level 3, progress 30/140, two queued picks, wallet/totalCollected 231 and returnCharge 250. Do not multiply either reward by the number of picks.
 
 ### 6.3 Reward eligibility
 
@@ -326,35 +326,23 @@ Use an explicit pickup behavior/type distinction, not a second ScrapManager. Ens
 
 The proposed ordinary-enemy pickup cap is **500**; preserve the existing **150** debris-orb cap as a separate existing budget. A cap merges incoming value locally into an existing pickup without deleting reward value or moving it directly into the wallet. No all-pairs nearest-neighbor searches each frame; reuse spatial/bounded queries.
 
-## 7. Return Home: the one manual utility
+## 7. Return portals
 
 ### 7.1 Identity and input
 
-Return Home is a baseline run utility, available from the first expedition. It is not a rare card, purchasable skill or twentieth combat skill. It does not change the combat catalog count.
-
-Proposed input: **Q** and a clickable Return Home HUD control. Q no longer casts the selected manual combat ability once the automatic/persistent conversion is implemented. Space does not remain an unrelated normal-play invincibility-skill key.
+Return is a world interaction, not an active skill, card or shop purchase. Press F inside a valid portal. No Q teleport or clickable remote escape is part of the selected design. Full lifecycle and Boss-mode exception: [return portals](return-portals.md).
 
 ### 7.2 Capacity and eligibility
 
-`returnMax(L,m) = 1000 + returnGrowth[m] * (L - 1)`
+Ordinary return uses fixed capacity 1000 and threshold 500 on all levels and difficulties. Salvage fills charge to the cap; excess still contributes its normal XP while trade contributes wallet/totalCollected. Level-ups preserve charge without changing capacity. Skill purchases never alter energy.
 
-`returnNeeded = ceil(returnMax * 0.50)`
+Spawn ordinary sets at readiness, with Easy/Hard/Impossible counts 3/2/1. Locations persist while locked and are retired together on use. Boss mode suppresses these sets: only its post-kill portal permits base entry, with no shield/energy requirement or payment.
 
-Proposed per-level growth: Swarm +50, Survival +75, Boss +100, Chaos +125, Campaign +100. These values and the examples are in game-design.md's tuning ledger.
-
-- The requirement is **50% of the current maximum**, not a permanently fixed 500.
-- Charge may continue accumulating from 50% to 100%.
-- On player level-up, preserve the absolute charge amount; do not preserve percentage or top it up for free.
-- If the threshold rises past current charge, readiness disappears and the HUD explains the new amount.
-- At the cap, additional scrap still increases wallet, total and level progress; it simply cannot increase return charge further.
-- Skill rank purchases do not alter player level or the return maximum.
-- Mode is fixed for the run so the player cannot lower the threshold by changing portals.
-
-Example: Swarm level 1 has max 1,000 and needs 500. At level 2 max is 1,050 and needs 525. A stored 510 stays 510, so the ship is no longer ready until it collects 15 more. Half of an odd maximum rounds up; use integer-safe arithmetic.
+Example: 510 charge is sufficient before and after a level-up, provided ordinary shield/input gates hold. Mode changes start a fresh run rather than rerolling the current expedition.
 
 ### 7.3 Eligibility check
 
-All conditions must hold:
+For ordinary return outside Boss mode, all conditions must hold:
 
 1. Player alive, active expedition and ordinary running state.
 2. No pause, console, card, shop, portal confirmation or terminal-result input capture.
@@ -489,7 +477,7 @@ See game-design.md for the canonical starting prices:
 
 Ordinary first skill acquisitions still come from field cards. Scrap Magnet/Combat Drone and eligible ordinary combat abilities retain standard rank pricing. Deflector uses capacity-only purchases; Blink is field-only for first acquisition and has a proposed premium owned-rank price. Numeric augment purchases follow the quarter-strength ledger; existing card caps remain. Prices are identical across modes/difficulties; no price RNG or price reroll.
 
-Owner selected these higher price scales on 23 October; they are not playtest-certified. Nominal 250 basic kills still yield expected trade 500 before level-driven return changes, but increased prices mean this no longer promises repair plus a skill purchase. Compare actual spending and tier timing to the 20–25-minute Swarm target, including repair/upgrade spending, without altering salvage growth or reward ranges implicitly.
+Owner selected these higher price scales on 23 October; they are not playtest-certified. Nominal 250 basic kills still yield expected trade 500 at the fixed 500 return threshold, but increased prices mean this no longer promises repair plus a skill purchase. Compare actual spending and tier timing to the 20–25-minute Swarm target, including repair/upgrade spending, without altering salvage growth or reward ranges implicitly.
 
 Purchase transaction: revalidate run state, item, current rank, eligibility, price and wallet; apply the rank/acquisition exactly once and debit exactly once. Reject stale or repeated click events without charging. If application fails, no currency is lost.
 
@@ -516,15 +504,13 @@ No successful selection/purchase can activate twice while its exit animation or 
 
 ## 10. Difficulty and enemy scaling
 
-Retain Easy/Hard/Impossible and their 5%/10%/15% progression growth proposals. Initial enemy HP factors are 1.00/1.25/1.50; initial enemy damage multipliers remain 1.0 for all.
+Easy/Hard/Impossible share XP requirements and ordinary HP/damage multipliers of 1.0. Difficulty should primarily change crowd pressure and ordinary portal availability. Exact mode population tables remain T06 work.
 
-Proposed HP computation:
+Implemented ordinary HP calculation:
 
-`spawnHP = roundHalfUp(baseHP * modeEncounterHPFactor * difficultyBaseHP * (1 + growth[difficulty])^(playerLevel - 1))`
+`spawnHP = roundHalfUp(baseHP * clamp(1 + (combatSeconds - 300)*0.025/60, 1, 2))`
 
-Apply each factor once, with checked bounds, minimum 1 and a documented maximum effective scaling factor (initial proposal 50x). Mode/wave factors come from the selected schedule; do not apply the old wave multiplier again in EnemyManager after the director already applied it.
-
-Snapshot HP at spawn. Level-up or shopping must not heal or resize existing enemies, rewrite boss phases or recalculate their remaining health. Difficulty does not automatically modify movement, hitboxes, scrap values or loot rarity.
+XP is `min(600, 100 + 20*(level - 1))` on all difficulties. The separate boss draft caps HP growth at 1.5x; never compound it with the ordinary curve. See game-design.md for current population curves and boss proposals. Snapshot HP at spawn. Level-up or shopping must not heal or resize existing enemies, rewrite boss phases or recalculate their remaining health. Difficulty does not automatically modify movement, hitboxes, scrap values or loot rarity.
 
 Difficulty preview describes its real effects and selected mode preview describes its real objective. Do not label difficulty choices as game modes in code/UI.
 

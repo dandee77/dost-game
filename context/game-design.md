@@ -84,13 +84,13 @@ Natural basic enemies store one trade roll of 1–3 and fixed salvage 2; ranged 
 
 Selected weapon prices remain 500/1500/4000/10000 (16000 total); battery sizes/prices and repair rate are unchanged. `RunProgress.hpp` supplies tested quote math for replacement batteries and proportional repairs, but the shop/service UI does not exist. Do not describe helper functions as purchasable gameplay.
 
-**Chaos direction selected by owner:** rotate all finished bosses; allow two simultaneous pursuers from minute 15 and progressively more later. Delegated initial schedule for future T06: first boss at minute 5, one attempt every 180 combat seconds, alive allowance `1 + floor(combatSeconds / 900)`. A full allowance skips that attempt without banking debt. Draw without replacement from enabled boss IDs, avoid a repeat until the roster is exhausted, and skip an already-living ID. When all distinct bosses are alive, wait; never invent missing bosses to fill slots. Later overlap may require performance and telegraph tuning. This replaces the earlier one-boss/after-death schedule. No boss classes or five-mode director are implemented by this change.
+**Chaos direction selected by owner:** rotate all finished bosses; allow two simultaneous pursuers from minute 15 and progressively more later. Delegated initial schedule for future T06: first boss at minute 5, one attempt every 180 combat seconds, alive allowance `1 + floor(combatSeconds / 900)`. A full allowance skips that attempt without banking debt. Draw without replacement from enabled boss IDs, avoid a repeat until the roster is exhausted, and prefer a type not already alive. When all enabled types are alive, permit reinforcements of an existing type with unique entity/Animator IDs; never invent missing boss types to fill slots. Later overlap may require performance and telegraph tuning. This replaces the earlier one-boss/after-death schedule. No boss classes or five-mode director are implemented by this change.
 
 ## 23 October field-return portal contract — design only
 
-Owner selected random return portals in the combat map, generated once energy reaches at least 50% of the current maximum: **Easy 3 / Hard 2 / Impossible 1**, across all modes. F inside a portal requests travel; shield must remain online/positive and energy at least the current threshold at commit. Portals may be far away. A pointer detects them at roughly one visible screen, with exact detection/placement constants pending. Portals persist until used or run end; a broken shield leaves them visible/locked. A higher level can raise the energy threshold: existing portals remain visible, display missing energy and unlock once charge recovers without moving. Successful return retires the full set; the next half-charge readiness after Resume generates fresh random positions. See [return portals](../todo/02-gameplay/return-portals.md). This replaces planned manual Q Return Home, without changing existing energy-growth or full-charge-consumption defaults. No source/assets changed.
+Ordinary portals apply to Swarm, Survival, Chaos and Campaign. Generate at fixed 500/1000 energy; Easy/Hard/Impossible counts are 3/2/1. F inside requires positive online shield and 500 energy at commit. Keep locked portals visible; level-ups never change the threshold. Successful use drains current energy, retires the set and suspends the expedition. Boss mode disables ordinary portals and creates one unrestricted post-kill base portal. See [return portals](../todo/02-gameplay/return-portals.md). Portal runtime remains pending.
 
-Selected re-entry: Resume returns the ship to the used portal's saved position with **2 combat seconds of damage protection**, ending immediately when the player fires. It restores no hull or shield and does not increase shield capacity. Protection/attack ordering, including auto-fire, must be explicit before implementation.
+Selected re-entry: Resume returns the ship to the used portal's saved position with **2 combat seconds of damage protection**, ending immediately when the player fires. It restores no hull or shield and does not increase shield capacity. Delegated default: primary auto-fire and offensive automatic skills wait during protection; deliberate Shoot fires and ends it immediately. Portal input is consumed once.
 
 ## 23 October economy decisions — design only
 
@@ -298,9 +298,9 @@ The ten-wave Campaign proposal now represents two source sectors, with guardians
 
 Remaining numerical design gaps are explicit in [decisions and gaps](../todo/00-planning/decisions-and-gaps.md): complete spawn budgets, boss stats/attacks, auto-target ranges, arena dimensions, scoring weights and high-rank/performance limits. Existing prototype values are not automatically approved answers for those new systems. Adopt the proposed card distribution/targeting policy there before adding corresponding numeric tables here.
 
-## 20 October proposed tuning ledger (not implemented or playtested)
+## Consolidated progression/economy ledger — reconciled 24 October
 
-The new product contract is [todo/02-gameplay/gameplay.md](../todo/02-gameplay/gameplay.md). The owner confirmed the hub/field progression/return direction, then required **paid base health repair** and **random trade scrap by enemy**, delegating shop inventory/prices to the author. The economy values below are selected design defaults, not playtested balance. The owner's 100/1,000 progression examples remain provisional. This ledger supersedes older cargo/credits, free-repair, one-value reward, wave-card and P6 base-30 targets.
+The new product contract is [todo/02-gameplay/gameplay.md](../todo/02-gameplay/gameplay.md). The owner confirmed the hub/field progression/return direction, then required **paid base health repair** and **random trade scrap by enemy**, delegating shop inventory/prices to the author. The economy values below are selected design defaults, not playtested balance. Progression accounting, paired rewards and ordinary population/HP pacing are implemented; hub, shops, shields, portals and bosses remain targets. This ledger supersedes older cargo/credits, free-repair, one-value reward, wave-card and P6 base-30 targets.
 
 ### Progression and Return Home
 
@@ -308,14 +308,14 @@ The new product contract is [todo/02-gameplay/gameplay.md](../todo/02-gameplay/g
 |---|---|
 | Starting player level/progress | 1 / 0 |
 | First field-upgrade requirement | 100 scrap |
-| Difficulty growth g | Easy 0.05; Hard 0.10; Impossible 0.15 |
-| Requirement at player level L | round half up of `100 * (1 + g)^(L - 1)` |
-| Return maximum | `1000 + modeGrowth * (L - 1)` |
-| Return availability | `ceil(maximum / 2)` and online shield with positive points |
-| Return growth per player level | Swarm 50; Survival 75; Boss 100; Chaos 125; Campaign 100 |
+| Difficulty effect on XP | None; all difficulties share the same requirement |
+| Requirement at player level L | `min(600, 100 + 20*(L - 1))` salvage; implemented |
+| Return maximum | Fixed 1000 at every level; implemented accounting |
+| Ordinary return availability | 500 charge and online shield with positive points; excludes Boss mode |
+| Boss-mode return | One post-kill portal, no shield/energy gate or payment; no mid-fight retreat |
 | Charge per collected salvage point | 1, capped at current maximum; independent of random trade value |
 | Successful field-return portal use | Drain current charge to zero; no wallet/XP cost |
-| Level-up capacity adjustment | Preserve absolute charge; recalculate maximum/threshold |
+| Level-up capacity adjustment | None; preserve charge, maximum 1000 and threshold 500 |
 | Low/mid salvage progress | Fixed 2 / 5; currency rolls listed separately below |
 | Owned standard rank r -> r+1 price | `500 + 250*r`; rank 1 -> 2 costs 750 |
 | Owned rare rank r -> r+1 price | `1000 + 375*r`; rank 1 -> 2 costs 1375 |
@@ -352,24 +352,24 @@ Paid hull service clears harmful player statuses only on completion of actual he
 | Player level | Easy requirement | Hard requirement | Impossible requirement |
 |---|---:|---:|---:|
 | 1 | 100 | 100 | 100 |
-| 2 | 105 | 110 | 115 |
-| 5 | 122 | 146 | 175 |
-| 10 | 155 | 236 | 352 |
+| 2 | 120 | 120 | 120 |
+| 5 | 180 | 180 | 180 |
+| 10 | 280 | 280 | 280 |
 
 Return cells below show **maximum / minimum usable charge**:
 
 | Level | Swarm | Survival | Boss | Chaos | Campaign |
 |---|---|---|---|---|---|
-| 1 | 1000 / 500 | 1000 / 500 | 1000 / 500 | 1000 / 500 | 1000 / 500 |
-| 2 | 1050 / 525 | 1075 / 538 | 1100 / 550 | 1125 / 563 | 1100 / 550 |
-| 5 | 1200 / 600 | 1300 / 650 | 1400 / 700 | 1500 / 750 | 1400 / 700 |
-| 10 | 1450 / 725 | 1675 / 838 | 1900 / 950 | 2125 / 1063 | 1900 / 950 |
+| 1 | 1000 / 500 | 1000 / 500 | Post-kill only; no gate | 1000 / 500 | 1000 / 500 |
+| 2 | 1000 / 500 | 1000 / 500 | Post-kill only; no gate | 1000 / 500 | 1000 / 500 |
+| 5 | 1000 / 500 | 1000 / 500 | Post-kill only; no gate | 1000 / 500 | 1000 / 500 |
+| 10 | 1000 / 500 | 1000 / 500 | Post-kill only; no gate | 1000 / 500 | 1000 / 500 |
 
-The return target moves as levels rise. At 2 salvage per basic enemy, the initial 500 threshold requires 250 collected kills before growth. Those kills yield expected trade 500, possible 250-750. Measure actual first-return time, repair burden and purchases per visit; do not promise these values are balanced.
+The ordinary return target stays at 500 at every level. At 2 salvage per basic enemy, that threshold requires 250 collected kills. Those kills yield expected trade 500, possible 250-750. Measure actual first-return time, repair burden and purchases per visit; do not promise these values are balanced.
 
 ### Retained shield target and new utility gate
 
-Deflector: rank-1 maximum 20, +5 per rank; online regeneration 2 points/s, +10% of base per rank. A hit against positive points is entirely absorbed even if it breaks the shield. Offline delay 10 s, minus 1 s/rank to a 5 s floor; restart at 50%, then restore the remaining half over 3 simulation seconds. No concurrent normal regeneration during that special restoration phase. Zero/offline shield blocks return; positive online shield permits it.
+Deflector: rank-1 maximum 20, +5 per rank; online regeneration 2 points/s, +10% of base per rank. A hit against positive points is entirely absorbed even if it breaks the shield. Offline delay 10 s, minus 1 s/rank to a 5 s floor; restart at 50%, then restore the remaining half over 3 simulation seconds. No concurrent normal regeneration during that special restoration phase. Zero/offline shield blocks ordinary return; positive online shield satisfies that gate. Boss-clear portals bypass this requirement.
 
 Proposed starter Deflector rank 1 guarantees the utility has a normal-play shield. Rank increases preserve current points and elapsed cooldown debt; no free revival. Shield Batteries use the selected five-size shop contract above; normal field return requires an online positive shield. Hull-only repair does not restore shield or change its reboot. Hull has no passive field regeneration; Reinforced Hull's max/current-HP exception applies to free field cards only.
 
@@ -381,19 +381,19 @@ Replace Nano Repair with Shield Detonation: 50 damage, radius 35, 18 s internal 
 |---|---|
 | Survival duration | 300 combat seconds |
 | Campaign outline | 10 waves; boss content slots at 5 and 10; final boss ends campaign |
-| Chaos boss schedule | First at 180 combat seconds, subsequent at least 180 seconds after previous boss death, one living boss maximum |
+| Chaos boss schedule | Draft: first opportunity at 300 combat seconds, then every 180 seconds; allowance `1 + floor(combatSeconds/900)`; no banked missed spawns |
 | Swarm | Endless normal-wave schedule; no bosses by default |
-| Boss mode | One designated boss encounter; roster/yield/content pending owner |
-| Enemy HP difficulty baseline | Easy 1.00, Hard 1.25, Impossible 1.50 |
-| Spawn HP | base HP * encounter factor * difficulty baseline * `(1+g)^(L-1)`, round half up, min 1 |
-| Effective HP scaling safety bound | Proposed 50x total; apply each factor once |
+| Boss mode | Repeating boss kill -> one unrestricted base portal -> services -> launch next boss; no mid-fight retreat |
+| Enemy HP difficulty baseline | 1.0 for all difficulties; difficulty should primarily change population pressure |
+| Ordinary spawn HP | Round half up of `baseHP * clamp(1 + (combatSeconds - 300)*0.025/60, 1, 2)`; implemented |
+| Effective HP scaling bound | Ordinary enemies 2x; separate boss draft 1.5x maximum; never multiply both curves |
 | Enemy damage baseline multiplier | 1.0 for all difficulties |
 | Ordinary enemy pickup cap | 500, no expiry, value-preserving local merging |
 | Existing debris orb budget | Preserve 150 and accepted visual/homing behavior |
 | Magnet | 60-unit base radius, existing 15 s cooldown / 5 s duration; pull faster than upgraded ship |
 | Magnet speed relation | `max(basePullSpeed, currentShipTopSpeed * 1.25)` |
 
-Enemy HP is snapshotted at spawn, not recalculated on player level-up. Shield/skill rank and player level are separate concepts. All numbers become Balance entries marked TUNE during implementation; none are changed in src by this documentation session. Preserve existing ability growth formulas in skills-commands.md except the explicitly revised shield, activation, magnet and Nano Repair replacement contracts.
+Enemy HP is snapshotted at spawn, not recalculated on player level-up. Shield/skill rank and player level are separate concepts. Implemented values are in Balance.hpp and the math helpers; remaining targets become Balance entries during implementation. This documentation session changes no source. Existing high-rank ability formulas still need bounded numerical and effect-budget review; they are not approved merely because the prototype uses them.
 
 The single source for gameplay rules and numbers. Code reads numbers from `src/Balance.hpp`; this file explains them. When a number changes, change both in the same commit. Values marked **TUNE** are first guesses for the item-28 balance pass.
 

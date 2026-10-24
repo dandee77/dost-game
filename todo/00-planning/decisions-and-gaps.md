@@ -6,7 +6,7 @@
 
 ## 23 October selected field return
 
-Owner replaced manual teleport with random portals appearing at half energy; F inside, online positive shield and half-current-capacity energy are required. Easy/Hard/Impossible spawn 3/2/1 portals across every mode. Exits can be far; pointer detection starts around one visible screen. Portals persist until used/run end and remain visible/locked after shield break or a raised energy threshold. Successful return retires the set and the next half-charge readiness generates fresh random locations. Numeric placement/detection and Resume details remain open in [return portals](../02-gameplay/return-portals.md). All skills are automatic; no manual fallback is selected.
+Ordinary portals use fixed 500/1000 energy, positive online shield and F inside; Easy/Hard/Impossible have 3/2/1 exits. Boss mode forbids mid-fight retreat and uses one post-kill portal bypassing shield/energy. Exits may be distant, with a roughly one-screen pointer. Portals persist until used/run end, and level-ups never move the threshold. Input defaults and remaining geometry verification are in [return portals](../02-gameplay/return-portals.md). All skills are automatic; no manual fallback is selected.
 
 ## 23 October active economy/material review
 

@@ -8,6 +8,8 @@ Record date, stable task ID, actual result, evidence/commit when known and anyth
 
 ## Verified preparation deliveries
 
+**24 October DOC-13:** Reconciled active XP/HP/return formulas, Boss-only post-kill travel, increasing Chaos pursuit, re-entry input defaults, HUD targets and task/confirmation status. Preserved historical audit records. Verified 289 local Markdown links, clean whitespace and existing build exit 0 (no work required). Documentation only; no new gameplay or playtest claim.
+
 **24 October Boss-mode retreat decision:** Owner selected no mid-fight retreat. Updated authority, architecture, gameplay, boss proposal and acceptance notes; ordinary portals are disabled only for Boss mode, whose post-kill portal remains unrestricted. This closes the policy question, not the mode implementation.
 
 **24 October boss-clear portal decision:** Owner confirmed shield/energy bypass for the Boss-mode post-kill portal. Updated active design/architecture/task references; ordinary portal gates and paid services remain intact. Documentation only; this completes the gate decision, not the portal implementation.
