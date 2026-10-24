@@ -4,6 +4,8 @@
 
 ## Start here
 
+- [x] **DOC-17 — Legendary Luck and full card tiers.** Record card-only acquisition/upgrades, cap 10, scrap-only effect and 33-card tier roster. Payout tuning and remaining rarity assignments require review; runtime implementation remains pending.
+
 - [x] **DOC-16 — Critical tiers and extreme fire-rate contract.** Record selected rules, tier/rate examples and aggregation acceptance requirements. Runtime implementation remains BAL-01/T04/T08/T10.
 
 - [x] **DOC-15 — Unlimited attributes and droid targeting.** Record removed attribute rank/purchase caps, continued price formula and spread-fire targeting. Critical overflow and extreme firing-rate rules subsequently selected in DOC-16; source integration remains pending.
@@ -34,7 +36,7 @@ The current work is context preparation. Resolve the design prerequisites below 
 
 Selected prices, materials, repair and the five-size battery design are recorded in game-design.md. PREP-28 is adopted; PREP-29 portal placement/input details remain open. Implementation is pending; no source/assets changed.
 
-Read [upgrade proposals](../07-upgrade-proposals/README.md). Confirmed: one weapon branch/run, mothership-only cannon tiers, 25% paid numeric gains, retained shield cards, automatic combat and Legendary reactive Blink. Owner resumed questions and accepted the latest weapon names/tree with T4/T5 branching (1/3/5/7/10 nodes). Full profiles/signatures are drafted in game-design.md; numbers, exact card compatibility and runtime balance remain open. Luck, other rarity grades/weights and Blink tuning remain proposals.
+Read [upgrade proposals](../07-upgrade-proposals/README.md). Confirmed: one weapon branch/run, mothership-only cannon tiers, 25% paid numeric gains, retained shield cards, automatic combat and Legendary reactive Blink. Owner resumed questions and accepted the latest weapon names/tree with T4/T5 branching (1/3/5/7/10 nodes). Full profiles/signatures are drafted in game-design.md; numbers, exact card compatibility and runtime balance remain open. Luck is confirmed Legendary, capped at 10 and field-card-only. Its payout tuning, other rarity grades/weights and Blink tuning remain proposals.
 
 **Current delegation:** boss concepts, mode schedules, layout defaults and broad balance review are reopened. Keep incomplete production tasks open, but do not wait for another implementation authorization. Final title, release commitments and any scope reduction still require owner input.
 
@@ -68,7 +70,7 @@ Reference for PREP-01 through PREP-16: [detailed gap register](../00-planning/de
 
 - [ ] **PREP-22 — P1 — Owner: owner/gameplay designer.** Names/graph adopted 23 October, with T4/T5 branching and ten finals. Keep open for explicit field-card-versus-cannon acquisition/compatibility review. Done when tree and field-card behavior form a complete adopted contract. Reference: [weapon tree](../07-upgrade-proposals/weapon-tree.md); branch locking is confirmed.
 - [ ] **PREP-23 — P1 — Owner: owner/gameplay designer.** Review numeric attribute/shield shop details. Done when the confirmed 25% gain has approved supported attributes, discrete exclusions, source accounting, limits and local draft prices. Reference: [attributes](../07-upgrade-proposals/attributes-and-luck.md).
-- [ ] **PREP-24 — P1 — Owner: owner/gameplay designer.** Review Luck source/effect. Done when shop-only versus Legendary card and exact reward/limits/snapshot rules are adopted. Reference: attributes/Luck proposal; no new drop system implemented.
+- [ ] **PREP-24 — P1 — Owner: owner/gameplay designer.** Luck source/cap settled: Legendary cards only, maximum rank 10, scrap-only effect. Keep open for exact payout strength and snapshot-rule review. Reference: attributes/Luck proposal; no new drop system implemented.
 - [ ] **PREP-25 — P1 — Owner: owner/gameplay designer.** Review the automatic roster, persistence categories and grades. Done when entries and acquisition exceptions are adopted; Blink grade/automation already confirmed. Reference: [skills/rarities](../07-upgrade-proposals/automatic-skills-and-rarities.md); weights are PREP-04.
 - [ ] **PREP-26 — P1 — Owner: owner/gameplay designer.** Review Blink rescue details. Done when cooldown/floor, protection, candidate safety, no-safe-spot outcome and no-free-refresh rules are approved. Owner intent is confirmed; current numbers are proposals.
 - [ ] **PREP-27 — P0 before weapons — Owner: gameplay designer.** Full T1-T5 profile/signature draft delivered 23 October with bounds and analytical DPS comparisons. Keep open for numerical adoption, exact family/card mappings and combined effect/performance limits. Done when these contracts are adopted and validation prerequisites are explicit. Boss/schedule/layout drafting is delegated; runtime delivery remains separate.
@@ -86,7 +88,7 @@ T01–T03 are partial (accounting, paired loot and queued choices delivered); th
 - [ ] **T05 — P1 — Owner: gameplay/UI programmer.** Implement Start -> difficulty -> safe ship-based hub, stations and portal previews. Done when real flow and input ownership work with measurable geometry. Depends on T01 and PREP-07/PREP-10.
 - [ ] **T06 — P1 — Owner: gameplay programmer.** Implement five real mode objectives and campaign source encounters. Done when each enabled portal has its promised schedule/outcome and actual boss content. Depends on T05 and PREP-01/PREP-02/PREP-15.
 - [ ] **T07 — P1 — Owner: gameplay/UI programmer.** Implement gated field return portals (F interaction), suspended encounter/resume and paid hull repair; batteries are separate shop purchases. Done when charge/shield gates, preserved world state and atomic repair/cancel behavior pass. Depends on the shield/hub contracts.
-- [ ] **T08 — P1 — Owner: gameplay/UI programmer.** Implement the approved mothership weapon tree, quarter-strength numeric attributes, Luck if adopted, eligible whole skill ranks and fixed special stock. Done when rank effects, prices, ownership, stock persistence and atomic transactions pass without free-heal exploits. Depends on T03/T05/T07.
+- [ ] **T08 — P1 — Owner: gameplay/UI programmer.** Implement the approved mothership weapon tree, quarter-strength numeric attributes, exclude card-only Luck, implement eligible whole skill ranks and fixed special stock. Done when rank effects, prices, ownership, stock persistence and atomic transactions pass without free-heal exploits. Depends on T03/T05/T07.
 - [ ] **T09 — P1 — Owner: UI programmer.** Integrate HUD, pause/settings, input capture and tutorial. Done when required status and errors are readable and no input leaks into another state. Depends on adopted UI/tutorial/audio requirements.
 - [ ] **T10 — P1 — Owner: team.** Verify full gameplay and reset/balance/performance behavior. Done when the later runtime acceptance checklist passes and measured limitations are recorded. Depends on the implemented promised scope; document actual deferred work.
 

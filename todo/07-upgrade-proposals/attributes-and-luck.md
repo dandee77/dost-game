@@ -63,18 +63,12 @@ Owner-selected 23 October numeric attribute price (5x prior draft): purchase `n 
 
 Spending is atomic with the granted increment and requires the hub shop. No standard numeric augment is also sold through the old full-rank purchase row: that would bypass the 25% rule. Failed/stale/duplicate transactions do not charge. If a hard stat limit would make the purchase grant no effect, disable it and do not charge; previews show any clamped final gain. Paid max-HP/capacity gains preserve absolute current health/shield and all break/reboot state.
 
-## 6. Luck recommendation
+## 6. Legendary Luck — owner-selected rules
 
-**Proposed initial direction:** Luck is workshop-only. Keep it off the permanent combat HUD, but show its current rank, exact effect and next price in workshop details. A deliberately hidden effect with unexplained prices would be difficult for the player to assess. No Luck field card is added in this draft; a Legendary Luck card remains a later alternative for owner review.
+Luck affects trade scrap only. It is acquired and upgraded exclusively through Legendary field cards and has a maximum rank of 10. This is an explicit exception to uncapped ordinary attributes/skills. No workshop acquisition or paid rank is permitted. At rank 10, remove Luck from eligible offers. Luck never improves XP, return energy, card rarity, material family or shop stock.
 
-Luck improves the **quality of the existing trade-value roll**, not the chance that a normally eligible enemy drops anything. Eligible enemies already yield their stored reward on an allowed death. No chests, rare equipment drops or new material drop table is introduced.
+Proposed payout tuning: rank r grants a 10% * r chance to keep the higher of two independent uniform rolls within the enemy's existing trade range, reaching 100% at rank 10. The amount never exceeds that range. This preserves guaranteed ordinary drops; Luck improves their value, not drop existence. Apply initially to ordinary basic/ranged/heavy enemies, excluding bosses, debris and no-drop deaths. Exact payout strength remains a proposal for review, separate from confirmed acquisition and cap.
 
-Proposed ranks: 0-5. Each rank gives a 10% chance to use the higher of two independent uniform trade rolls, capped at 50%. The result stays inside the existing tier's inclusive range. Salvage XP, Return Home charge, score, material family, card rarity and skill stock are unaffected. Ordinary debris, bosses, excluded death causes and hypothetical future elite content do not receive the bonus in this initial proposal.
+Snapshot rank and final reward at enemy spawn using isolated loot/Luck randomness. Later cards, kills, pickup merges or base visits cannot reroll stored rewards. A rank-10 basic enemy roll has mean 22/9 (about 2.444), versus 2 without Luck: about +22.2% trade on average, not +100% scrap and not a guaranteed maximum roll.
 
-For later reward assignment, the ordinary loot RNG still assigns one base amount at enemy spawn. A separate Luck RNG supplies its check and comparison amount. Both the final stored amount and Luck snapshot are assigned at spawn, never on death/collection. A later Luck purchase cannot improve existing suspended enemies or reroll world pickups. Reopening the shop or returning cannot farm a second roll. Luck cannot override Space Collapse/barricade/despawn no-drop rules.
-
-Example: a basic enemy's base roll is 1; a successful Luck comparison rolls 3, so its stored trade amount is 3 and fixed salvage remains 2. If the comparison fails, keep 1. If both rolls are 1, keep 1. Without Luck, the existing uniform base distribution remains intact; with Luck, the final distribution intentionally favors higher values.
-
-Proposed Luck price, aligned to the selected 5x non-weapon scale if this support node is adopted: `400 + 200*n`; prices 400/600/800/1000/1200, total 4000. Luck and this support-node interpretation remain pending review. This is a support-node proposal, not a normal quarter-strength combat attribute, and cannot recursively improve its own price or offer rarity. At rank 5, expected basic-enemy trade rises from 2 to 20/9 (about 2.222), not beyond its 1-3 range.
-
-The workshop tree has independent Weapon, Attributes and Support/Luck branches. No mandatory Luck purchase blocks a cannon, shield or repair. No cross-run unlock currency, permanent research grind or extra material inventory is added.
+Show rank, current effect and next effect in the card/details UI; no permanent HUD meter is required. Weapon and numeric-attribute shop branches remain separate. No Luck purchase is required for progression and no cross-run unlock currency is introduced.

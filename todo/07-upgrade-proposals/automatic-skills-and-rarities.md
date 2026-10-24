@@ -4,7 +4,7 @@
 
 ## 1. Complete target combat-ability list
 
-The earlier Nano Repair -> Shield Detonation target remains. There are **19 combat abilities** below plus **13 attribute/pattern augments**, total 32 existing target entries. Luck is a separate proposed shop node. Field return portals are world interactions outside the card catalog, not an extra manual skill. New primary weapon families are equipment tree nodes, not added automatic-ability entries.
+The earlier Nano Repair -> Shield Detonation target remains. There are **19 combat abilities** below plus **13 attribute/pattern augments**, 32 existing target entries, plus owner-selected Legendary Luck for **33 target cards**. Luck is capped at rank 10 and acquired/upgraded only through Legendary cards; it affects scrap payouts only. Field return portals are world interactions outside the card catalog, not an extra manual skill. New primary weapon families are equipment tree nodes, not added automatic-ability entries.
 
 | Ability | Proposed rarity | Automatic behavior and duration category |
 |---|---|---|
@@ -17,7 +17,7 @@ The earlier Nano Repair -> Shield Detonation target remains. There are **19 comb
 | Laser Rings | Rare | Persistent orbiting blades once acquired; no duration gap. Existing rank/count/radius rules apply, without a fixed gameplay count cap; optimize cosmetic presentation separately |
 | Lightning Ring | Rare | Temporary ring around the ship, then recharge; damages/stuns nearby enemies during the window |
 | Chain Lightning | Rare | Selects a valid nearby target automatically and chains through distinct targets; instantaneous event |
-| Combat Drone | Rare | Proposed persistent companions until destroyed; each missing slot returns after its combat respawn delay. No free revival on hub/shop opening |
+| Combat Drone | Rare | Owner-confirmed persistent companions until destroyed; each missing slot returns after its combat respawn delay. No free revival on hub/shop opening |
 | Shield Detonation | Rare | Instant shield-break event when its own cooldown is ready; does not restore the shield |
 | Plasma Beam | Epic | Timed forward/cone damage; automatically aims toward a valid enemy while preserving the authored cast snapshot |
 | Hologram Clone | Epic | Temporary decoy/firing copy, then recharge; primary weapon inherited at clone creation, not free future weapon replacement |
@@ -51,15 +51,16 @@ For other timed abilities, retain the current duration/cooldown as the baseline 
 
 Proposed cooldown examples: rank 1 = 30 s; rank 2 = 28.5; rank 5 approximately 24.44; rank 10 approximately 18.91; high ranks stop at 12. Short, dangerous cooldown-free chain escapes are excluded by the snapshot/floor rules.
 
-## 3. Rarity of the 13 attribute/pattern cards
+## 3. Rarity of the 13 existing attribute/pattern cards plus Luck
 
 | Proposed rarity | Cards |
 |---|---|
 | Common | Weapons Payload, Overclocked Chambers, Reinforced Hull, Thruster Overdrive |
 | Uncommon | Critical Matrix, Rapid Fire, Phase Shift, Gyro Control, Inertia Impact |
 | Rare | Armor Piercing, Scatter Shot, Broadside Cannons, Tail Gunner |
+| Legendary — owner confirmed | Luck (maximum rank 10; field cards only) |
 
-Deflector remains in the ability table and the field pool. Numeric shop increments do not remove attribute cards. Luck is not in this field catalog in the initial recommendation; a Legendary Luck card remains an explicit later alternative.
+Deflector remains in the ability table and the field pool. Numeric shop increments do not remove attribute cards. Luck is now in the Legendary field pool. Exclude it at rank 10; it has no shop acquisition or owned-rank listing.
 
 ## 4. Proposed field-offer weighting
 
@@ -69,7 +70,7 @@ To keep Legendary genuinely rare when lower tiers become exhausted, first perfor
 
 Remove an offered entry from the current panel's remaining pool so it cannot appear twice. If no ordinary entry remains after a failed gate, show fewer options rather than silently increasing Legendary odds. The unbounded-rank ordinary ability pool normally supplies repeat candidates, but the empty-pool behavior must still be correct. Offers remain locked across panel reopen/pause; no free reroll, hidden pity system or Luck adjustment is proposed.
 
-With eligible Legendary entries and three populated slots, the probability of at least one Legendary gate is `1 - 0.995^3`, about **1.49% per three-choice offer**. That is a gate probability, not a guaranteed Blink rate: the eligible Legendary pool also includes Space Collapse and Armageddon.
+With eligible Legendary entries and three populated slots, the probability of at least one Legendary gate is `1 - 0.995^3`, about **1.49% per three-choice offer**. That is a gate probability, not a guaranteed Blink rate: the eligible Legendary pool also includes Space Collapse, Armageddon and Luck (until rank 10).
 
 ## 5. Workshop availability and grade versus price
 

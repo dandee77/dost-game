@@ -8,6 +8,8 @@ Record date, stable task ID, actual result, evidence/commit when known and anyth
 
 ## Verified preparation deliveries
 
+**24 October DOC-17:** Recorded Legendary Luck, card-only acquisition/upgrades, maximum rank 10 and scrap-only effect; updated 33-card roster and removed paid Luck route from active briefs. Verified 289 local links, proposed payout mean, whitespace and existing build (no work required). Other rarity/payout tuning remains proposed; runtime implementation pending.
+
 **24 October DOC-16:** Recorded critical tiers above 100%, continued multiplicative firing-speed growth and equivalent-event aggregation requirements. Verified rate example, 289 local links, whitespace and existing build (exit 0; no work required). Documentation only; no runtime aggregation, crit implementation or performance claim.
 
 **24 October DOC-15:** Recorded uncapped numeric-attribute ranks/purchases, continued linear prices and droid spread-fire targeting. 289 local links resolve, whitespace passes and existing build exits 0 (no work required). Critical overflow and extreme firing-rate formulas await answers. Documentation only; no runtime changes.

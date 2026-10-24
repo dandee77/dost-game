@@ -289,19 +289,19 @@ No fixed numeric-attribute rank or purchase cap (owner confirmed 24 October). Ow
 
 Owner-selected 5x owned-rank pricing: ordinary combat abilities use `500 + 250*r`; the existing four special abilities use `1000 + 375*r`; Deflector is excluded from whole-rank rows. Proposed owned Blink pricing is scaled to `3000 + 750*r`, first upgrade 3750; its inclusion/acquisition contract stays under review and first acquisition remains field-only. Owner-selected 10x special acquisition prices: Singularity 2400, Space Collapse 2800, Nuclear Missile 3200 and Armageddon 4000; stock rules are unchanged.
 
-### Luck proposal numbers
+### Luck — selected acquisition/cap, proposed payout tuning
 
 | Quantity | Proposed value |
 |---|---|
-| Source | Workshop-only Support node, not a field card in the initial recommendation |
-| Rank | 0-5 |
-| Quality-check chance | `0.10 * rank`, capped at 0.50 |
+| Source | Legendary field cards only, both acquisition and upgrades; no shop purchase |
+| Rank | 0 unowned; 1–10 owned; owner-selected exception to uncapped attributes |
+| Quality-check chance | Proposed `0.10 * rank`, reaching 1.0 at rank 10 |
 | Success | Keep higher of independent base/comparison uniform trade rolls inside the existing tier range |
 | Eligible reward tiers | Low/basic, mid/ranged, high/heavy only; not bosses/debris/excluded causes |
-| Prices, if Luck adopted | Proposed 5x support-price alignment: `400 + 200*n`; 400/600/800/1000/1200, total 4000; Luck itself and this support-node interpretation remain under review |
-| Basic mean at Luck 0 / 5 | 2 / 20/9, approximately 2.222 at rank 5 |
+| Price / eligibility | No price; remove from offers at rank 10; never substitute a paid Luck rank |
+| Proposed basic mean at Luck 0 / 5 / 10 | 2 / 20/9 / 22/9; approximately 2 / 2.222 / 2.444 |
 
-Assign final reward and Luck snapshot at spawn using isolated base-loot and Luck RNG state. Currency spending, later Luck purchase, kill cause, pickup merging or collection cannot reroll existing assigned values. Salvage, Return Home, score, card rarity and material family are unchanged by Luck. Existing uniform enemy range tables below describe the base roll; Luck intentionally biases the final eligible distribution while preserving the same inclusive bounds.
+Assign final reward and Luck snapshot at spawn using isolated base-loot and Luck RNG state. Currency spending, later Luck card, kill cause, pickup merging or collection cannot reroll existing assigned values. Salvage, Return Home, score, card rarity and material family are unchanged by Luck. Existing uniform enemy range tables below describe the base roll; Luck intentionally biases the final eligible distribution while preserving the same inclusive bounds.
 
 ### Blink and rarity proposal numbers
 
@@ -318,7 +318,7 @@ Assign final reward and Luck snapshot at spawn using isolated base-loot and Luck
 | Three-slot Legendary gate probability | `1 - 0.995^3` = 0.014925125, approximately 1.49% |
 | Proposed drone persistence | Persistent until destroyed; per-missing-slot respawn uses existing 20 combat seconds |
 
-The [skill/rarity roster](../todo/07-upgrade-proposals/automatic-skills-and-rarities.md) assigns all 19 combat abilities and 13 augments. Blink's direct-hit interception precedes shield/hull damage; already-negated hits and non-spatial status ticks do not trigger it. Ordinary card selection renormalizes only the non-Legendary tier weights over eligible entries. Luck does not alter these weights.
+The [skill/rarity roster](../todo/07-upgrade-proposals/automatic-skills-and-rarities.md) assigns 19 combat abilities, 13 existing augments and the new Legendary Luck card (33 total target cards). Blink's direct-hit interception precedes shield/hull damage; already-negated hits and non-spatial status ticks do not trigger it. Ordinary card selection renormalizes only the non-Legendary tier weights over eligible entries. Luck does not alter these weights.
 
 ## 21 October material and campaign alignment (proposed; not implemented)
 
@@ -403,7 +403,7 @@ Deflector: rank-1 maximum 20, +5 per rank; online regeneration 2 points/s, +10% 
 
 Proposed starter Deflector rank 1 guarantees the utility has a normal-play shield. Rank increases preserve current points and elapsed cooldown debt; no free revival. Shield Batteries use the selected five-size shop contract above; normal field return requires an online positive shield. Hull-only repair does not restore shield or change its reboot. Hull has no passive field regeneration; Reinforced Hull's max/current-HP exception applies to free field cards only.
 
-Replace Nano Repair with Shield Detonation: 50 damage, radius 35, 18 s internal cooldown; +25% damage/rank, +10% radius/rank through rank 5, -10% cooldown with positive high-rank continuation. Trigger once on actual break, not repair/reset/upgrade. Combat catalog remains 32; Return Home is separate.
+Replace Nano Repair with Shield Detonation: 50 damage, radius 35, 18 s internal cooldown; +25% damage/rank, +10% radius/rank through rank 5, -10% cooldown with positive high-rank continuation. Trigger once on actual break, not repair/reset/upgrade. Existing combat/augment catalog is 32; Legendary Luck adds a 33rd target card. Return portals are separate.
 
 ### Modes, pickups and scaling
 
