@@ -2,9 +2,9 @@
 
 The order in which the game is built between **14 October** and the **25 October 2026** submission. Each numbered item is one unit of work: one branch, one pull request, one entry in `progress-tracker.md`. Do not start an item until its dependencies meet the Definition of Done in `code-standards.md`.
 
-## Current checkpoint — DOC-19 four modes and staged Campaign
+## Current checkpoint — DOC-20 Campaign portal/map flow
 
-Remove Survival from active mode scope, align Swarm/Chaos shared mechanics and record star-field Campaign stages with mandatory wave-clear base visits and same-run carryover. Verify documentation and existing build; no source changes in this checkpoint.
+Record portal -> star-field map -> whole-stage selection, reference interpretation, predecessor unlocking and active-stage continuity. Verify documentation and existing build; no source changes in this checkpoint.
 
 ## Task-list maintenance for every work item
 

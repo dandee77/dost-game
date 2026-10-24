@@ -1,6 +1,6 @@
 # Project Overview
 
-**24 October mode revision:** Survival removed. Four modes remain: Swarm, Chaos, Boss and Campaign. Swarm/Chaos share their core loop; Chaos adds bosses. Campaign uses a star-field stage map, returns to base after every wave, and ends each stage with a boss. Stage 1 has five normal waves plus a separate boss. Total stage count is undecided (30 was an example). Builds carry between stages within the run; death resets. See [campaign stages](../todo/02-gameplay/campaign-stages.md).
+**24 October mode revision:** Survival removed. Four modes remain: Swarm, Chaos, Boss and Campaign. Swarm/Chaos share their core loop; Chaos adds bosses. Campaign portal entry opens a star-field stage-selection map with connected clickable circles. Each circle is a whole stage; stage 1 starts available and clearing its predecessor unlocks each connected successor for that run. Campaign returns to base after every wave, and ends each stage with a boss. Stage 1 has five normal waves plus a separate boss. Total stage count is undecided (30 was an example). Builds carry between stages within the run; death resets. See [campaign stages](../todo/02-gameplay/campaign-stages.md).
 
 **24 October Blast Radius accepted:** Epic attribute, +10% base damage-area radius per field card and +2.5% per paid increment, additive and uncapped. Compatible explosions and damaging circular zones gain coverage without more damage per victim. Numerical authority defines compatibility and interaction with older skill-size limits. Context only; runtime card/shop integration pending.
 

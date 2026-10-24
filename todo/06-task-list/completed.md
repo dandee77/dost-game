@@ -8,6 +8,8 @@ Record date, stable task ID, actual result, evidence/commit when known and anyth
 
 ## Verified preparation deliveries
 
+**24 October DOC-20:** Recorded Campaign portal/map/stage selection and owner-selected predecessor unlocks. Clarified circle = whole stage, safe map cancel, current-stage continuation and reference limits. Verified 296 local links, whitespace and existing build (no work required). Documentation only; exact graph/miniboss structure and runtime remain pending.
+
 **24 October DOC-19:** Removed Survival from active mode scope, aligned Swarm/Chaos core loop, and documented star-field Campaign stages with five normal waves plus a separate stage-1 boss, required wave-clear base visits and same-run cross-stage carryover. Thirty stages remains an example; route/miniboss layout questions remain open. Verified 296 local links, changed table shapes, whitespace and existing build (exit 0; no work required). Documentation only; map/mode implementation remains pending.
 
 **24 October DOC-18:** Added accepted Epic Blast Radius to the 34-card target roster, with full/paid additive base-radius gains, compatibility, skill-size interaction and snapshot rules. Verified 289 local links, radius example, whitespace and existing build (no work required). Documentation only; card/shop integration and runtime balance remain pending.

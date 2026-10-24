@@ -4,6 +4,8 @@
 
 ## Start here
 
+- [x] **DOC-20 — Campaign portal/map flow.** Portal opens a star-field map; each circle is one stage. Stage 1 initially available; clearing predecessors unlocks connected successors within the run. Preserve active-stage continuity and define cancel/input handling. Exact graph/miniboss placement and runtime implementation remain pending.
+
 - [x] **DOC-19 — Four modes and star-field Campaign.** Survival removed; Swarm/Chaos share mechanics except bosses. Stage 1 has five normal waves then a separate boss, with base after each wave. Builds carry across stages in the run; death resets. Total stages and detailed stage/miniboss data remain open; runtime T05/T06/T07/T09/T10 pending.
 
 - [x] **DOC-18 — Epic Blast Radius contract.** Record +10% base radius/card, +2.5%/purchase, uncapped additive growth, eligibility and radius snapshots; update 34-card roster. Runtime integration and balance tests remain T03/T08/T10.

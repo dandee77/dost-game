@@ -2,7 +2,7 @@
 
 ## Campaign star-field map and four-mode selection — target
 
-Show Swarm, Chaos, Boss and Campaign; remove Survival. Campaign map uses star-field nodes with run-local locked/available/current/cleared states, readable stage identity, normal-wave count and separate final-boss encounter. Some stage previews show miniboss presence. Stage count is undecided; do not imply 30 finished stages. Base departure says Next Wave or Stage Boss as appropriate. Clear transit grants no free repair. Keep map/panels in the established safe area and existing Game lifecycle; no map art/runtime is delivered by this context change.
+Show Swarm, Chaos, Boss and Campaign; remove Survival. Entering the base Campaign portal opens a map panel before combat. Circular stage nodes connected by route lines represent whole stages, not individual waves. Stage 1 starts available; clearing a predecessor unlocks connected successors for the current run. A selected available node shows details and a Launch action; Cancel returns to base. The image reference does not add a three-star rating system. Campaign map uses star-field nodes with run-local locked/available/current/cleared states, readable stage identity, normal-wave count and separate final-boss encounter. Some stage previews show miniboss presence. Stage count is undecided; do not imply 30 finished stages. Base departure says Next Wave or Stage Boss as appropriate. Clear transit grants no free repair. Keep map/panels in the established safe area and existing Game lifecycle; no map art/runtime is delivered by this context change.
 
 ## Current boss and portal HUD contract — target, not implemented
 

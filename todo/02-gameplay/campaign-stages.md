@@ -18,6 +18,16 @@ Swarm and Chaos share the same ordinary-enemy spawning, progression, economy, re
 - Death ends the run and resets campaign run progress. New Game starts fresh. No permanent stage unlocks, checkpoint saves or banked builds are added.
 - The old single ten-wave campaign with bosses at waves 5/10 is superseded. Existing boss concepts remain reusable; old wave assignments no longer bind them to those positions.
 
+## Portal-to-map flow and reference interpretation — owner clarified
+
+Entering/interacting with the Campaign portal in the base opens the star-field stage-selection map instead of immediately launching combat. Preserve the established F portal interaction; merely opening the map starts no fight and spends no resources. The supplied reference establishes connected circular stage nodes and visible route links, translated into a space/star-field presentation. It does not approve its pictured names, terrain, three-star ratings or other game content.
+
+Each clickable circle represents one whole Campaign stage containing its normal waves and final boss, not a single wave. Selecting an available circle chooses that stage for launch. Delegated UI default: show its name, normal-wave count, separate boss and miniboss information with a Launch action; Cancel/Escape returns to the base without changing progression. Consume input so selecting a circle cannot also fire or launch twice.
+
+Owner confirmed predecessor-based unlocking: stage 1 is initially available; clearing a stage's boss encounter and required survivors unlocks its connected successor stages for that run. Locked circles may show a preview but cannot launch. Repeated completion callbacks cannot unlock/award twice. Unlocks and stage completion reset on death/New Game. The precise route graph (single path versus forks) remains authored content; connected nodes do not require a randomly generated map.
+
+Between waves of an unfinished stage, the base departure continues that stage's next encounter. Opening the map must not silently abandon, reset or skip the active stage. After its final encounter clears, the map allows selection of an unlocked successor. Completed nodes show their status; reward-farming replays or mid-stage switching are not authorized by this flow.
+
 ## Delegated transition and ownership contract
 
 A normal wave clears when its authored spawn budget is exhausted and all required hostiles are resolved. Boss encounters additionally require the stage boss dead; required adds cannot be silently ignored. Same-step player death wins over clear. Miniboss death alone does not clear an unfinished wave or grant a separate base visit.
@@ -26,7 +36,7 @@ Wave completion triggers safe base transit, bypassing ordinary shield/energy gat
 
 Use distinct pending-clear and launch states: record a clear once, retire the encounter once, and start the next wave/boss only on confirmed departure. Never regenerate the cleared wave or increment twice on repeated input. Keep this within Game/run ownership rather than switching scenes or calling resetRun on each base visit. Mid-wave ordinary retreat retains existing gates and resumes the same unfinished encounter; it does not count as a wave clear.
 
-Map status is run-local: locked, available, current and cleared. Show stage identity, wave count, final boss and miniboss presence when known. Use existing UI safe areas and show the separate boss encounter explicitly. Do not display 30 nodes as confirmed content. Node routing/branching and individual stage data remain to be defined; no map art or playable map is created by this document.
+Map status is run-local: locked, available, current and cleared. Show stage identity, wave count, final boss and miniboss presence when known. Use existing UI safe areas and show the separate boss encounter explicitly. Do not display 30 nodes as confirmed content. Predecessor unlocking is selected; exact route graph and individual stage data remain to be defined; no map art or playable map is created by this document.
 
 ## Remaining implementation and tuning
 

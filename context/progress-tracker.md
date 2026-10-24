@@ -6,6 +6,8 @@ Update this file after every completed build-plan item. Anyone reading it (teamm
 
 ## Current Status
 
+**24 October DOC-20:** Owner clarified Campaign portal -> star-field map -> clickable whole-stage circle -> stage waves/boss, and selected connected successor unlocking after predecessor clears. Stage 1 starts available; unlocks last only for the run. Reference supplies node/route layout, not a three-star system or copied content. Recorded map cancel/launch and unfinished-stage continuity defaults; exact graph/miniboss structure remains pending. Documentation only.
+
 **24 October DOC-19:** Owner removed Survival, aligned Swarm/Chaos core mechanics with Chaos adding bosses, and selected a star-field stage Campaign. Stage 1 has five normal waves then a separate boss; return to base after every wave. Build/scrap carry across stages in the run; death resets. Thirty stages was an example, not a committed count. Stage data, miniboss placements and map routing remain to be authored. Documentation only; no runtime modes/map implemented.
 
 **24 October DOC-18:** Owner accepted Epic Blast Radius. Recorded full/paid additive base-radius gains, uncapped progression, damage-only geometry eligibility, per-attack snapshots and the explicit exception to older general size caps. Target roster now has 34 cards. Documentation only; runtime implementation and balance validation remain pending.
@@ -373,6 +375,7 @@ Required for Form 03 (Asset and AI Usage Disclosure). Organizers may request pro
 
 | Date | Item | Tool and model | Used for | Extent (Minimal / Moderate / Heavy) | Human review |
 |---|---|---|---|---|---|
+| 2026-10-24 | DOC-20 Campaign portal/map flow | Codex (OpenAI) | Interpret supplied node-map reference and record selected predecessor unlocking plus panel transition rules. | Minimal | Owner confirmed map interaction and unlock policy; no rendered map or runtime changes |
 | 2026-10-24 | DOC-19 modes and Campaign stages | Codex (OpenAI) | Record owner mode revision and clarified wave/stage/reset rules; update active mode, map and lifecycle briefs. | Moderate | Owner confirmed stage-1 structure and same-run carryover; stage count undecided |
 | 2026-10-24 | DOC-18 Epic Blast Radius | Codex (OpenAI) | Record accepted Epic attribute, formula, compatibility and skill-size interaction. | Moderate | Owner accepted proposal; integration/testing pending |
 | 2026-10-24 | DOC-17 Legendary Luck and card tiers | Codex (OpenAI) | Reconcile selected Luck source/cap, remove shop route and present complete rarity roster. | Moderate | Luck rules selected; payout tuning and other tier assignments remain proposals |
