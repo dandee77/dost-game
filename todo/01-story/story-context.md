@@ -1,17 +1,19 @@
 # Story Cards, Animation and Trailer
 
+**24 October current production identity:** SCRAPBOUND: Last Hope, short form SCRAPBOUND. [Four beta levels](../02-gameplay/campaign-stages.md) permit three or four visits because unfinished unlocked levels stay available. Survival is removed; Boss repeats through base visits. Owner requires **the same original English AI narrator for intro, ending and trailer**, alongside readable text and motion. Credits use placeholders. [Voice/playback contract](../08-review/owner-questionnaire.md) defines consistency, pause/skip/mix/provenance. Dated five-mode framing below remains historical.
+
 **21 October 2026. Preparation only.** Canon: [world and campaign](world-and-campaign.md), governed by [project overview](../../context/project-overview.md). Scientific boundaries: [science notes](science-notes.md). Mechanics: [gameplay](../02-gameplay/gameplay.md). This revision replaces the former seed/tree narrative; it creates no art, audio, video or code.
 
 The owner-requested [text-only story trailer](story-trailer-text.md) preserves the standalone storytelling script. It is an untimed literary draft; the existing 90-second production outline below retains its separate text/footage timing. This publication creates no audio or video.
 
 ## 1. Presentation contract
 
-The owner's confirmed format is **short story text -> animation/gameplay -> next story text -> next moving scene**, with rising trailer pacing. Text introduces an idea; the next shot demonstrates it. Narration is optional. Story cards and meaningful moving action are required.
+The confirmed format is **short story text -> animation/gameplay -> next story text -> next moving scene**, with rising trailer pacing. Text introduces an idea; the next shot demonstrates it. Intro/ending/trailer share one original English AI narrator. Readable story cards and meaningful motion remain required.
 
 - TEXT: a short original sentence, high contrast, comfortable reading hold inside the CRT-safe area. Subtle background movement is allowed.
 - FOOTAGE: story text clears before action begins. Ships move, machinery works, living waste-eaters move inside scrap shells, enemies attack or salvage is collected. Panning over an otherwise static image cannot be the only movement in every shot.
 - CONNECTION: an idea about the colony is followed by the inhabited colony; an idea about recovery is followed by actual recovery.
-- AUDIO: music bridges cuts; effects follow visible events. Understandable with sound off. Optional narration follows the text rather than introducing essential off-screen facts.
+- AUDIO: music bridges cuts; effects follow visible events. Intro/ending/trailer narration follows English story text without adding essential off-screen facts. Preserve the same voice/profile and pronunciation across all three. Sound-off viewing remains understandable. Voice may finish over associated motion after the card clears, with no unrelated overlap.
 - TIMING: intervals below include fades. Keep most of each three-second text interval fully readable; do not spend it on a slow typewriter reveal.
 - ORIGINALITY: use original wording, composition and animation. Production prompts describe subject, materials, mood and motion directly; no real game, movie, brand, person or artist references in game content or prompts.
 
@@ -108,9 +110,9 @@ The separate gameplay demonstration remains a different deliverable. This traile
 | 63-75 s | FOOTAGE | Paid repair and skill purchase visibly spend currency. Portal preview shows objective; launch into a mode that actually works. Preserve readable actions rather than flashing every menu |
 | 75-78 s | TEXT | “Silence the sources. Give Earth another chance.” |
 | 78-86 s | FOOTAGE | Actual implemented source-boss pressure, pilot evasion and retaliation. End with a hopeful survey-craft/colony/Earth composition; do not spoil the entire ending |
-| 86-90 s | TITLE | Approved final game title and approved team/competition text. Four-second readable hold, fading toward the opening for a loop |
+| 86-90 s | TITLE | SCRAPBOUND: Last Hope, plus approved team/competition text. Four-second readable hold, fading toward the opening for a loop |
 
-Text totals 18 seconds, footage 68 and title four. Transitions are inside these intervals. Voice is optional. Keep story sentences off the busy action; native HUD and accessible speech subtitles can remain when needed.
+Text totals 18 seconds, footage 68 and title four. Transitions/narration remain inside the 90-second export. Use the same English AI voice as intro/ending; measure real clip timing and carry a line into its associated footage when necessary. Keep story sentences off busy action; HUD and accessible speech subtitles may remain when needed.
 
 If a feature is unavailable when recording, use truthful existing footage and revise the edit within the required duration. Lore scenes may illustrate fiction but must not masquerade as proof of functioning mechanics. Do not invent final boss footage before its design and implementation exist.
 
@@ -126,7 +128,7 @@ If a feature is unavailable when recording, use truthful existing footage and re
 
 ## 9. Production inventory and acceptance
 
-Needed later: reusable story-card treatment; five intro motion blocks; three ending motion blocks; six trailer footage blocks; title card; original music/effects and optional voice. A block may reuse layers or contain several cuts; these counts do not require one new full-screen image per beat.
+Needed: story cards; five intro motion blocks; three ending blocks; six trailer footage blocks; title card; music/effects and original English AI voice clips for all three using one saved voice profile. Blocks can reuse layers/cuts; no one-image-per-beat requirement. The written decision delivers no audio/provider/provenance approval or exported media.
 
 For every asset produced later, record source/license, creator/tool, prompt when generated, date and edits in assets/ASSETS.md. This preparation session adds no assets or provenance claims.
 
@@ -141,4 +143,4 @@ For every asset produced later, record source/license, creator/tool, prompt when
 - [ ] Dates, colony name, source mechanics and scientific framing match world-and-campaign.md.
 - [ ] Actual gameplay footage shows valid costs, shield/return conditions and available modes.
 - [ ] All skip/advance paths consume input and enter their destination once.
-- [ ] Final boss names, optional voice, title and asset samples receive team review before production.
+- [ ] Inspect final boss/art samples, approved title treatment, original English AI narration delivery/provenance and actual clip timing before export.

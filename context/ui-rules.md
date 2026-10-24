@@ -1,8 +1,30 @@
 # UI Rules
 
+**Primary-fire/retirement UI:** Fresh-run help shows Hold Shoot / E: Auto-fire (OFF initially). Preserve the selected toggle across same-run panels/station visits; UI input never leaks into firing. Swarm/Chaos station UI has Retire Run, score/time preview and Confirm/Cancel. Results label voluntary station completion **Retired**, display both score and active survival time, and permit eligible name entry once. Do not label it Defeated/Victory or give retirement bonuses.
+
+**Trailer voice consistency:** Owner confirmed the same original English AI narrator for intro/ending/trailer. Use one voice profile, consistent pronunciation and measured clip timing; retain readable story cards and existing export duration targets. Production follows the [voice contract](../todo/08-review/owner-questionnaire.md).
+
+**24 October background production/checkpoint UI:** [Written background brief](../todo/09-art/background-brief.md) is for the teammate to produce; no images are generated in this checkpoint. After a Campaign normal clear and earned cards, show **Enter Station** and **Next Wave** (or **Stage Boss**), with current hull/shield/wallet and paid-service reminder. No auto travel/countdown. These station entries show no shield/energy lock. After non-final level clear, show station or next-level map; map Cancel returns to its originating checkpoint/hub. Consume each action once; focus pause preserves pending choice. Final victory and Boss-mode portal rules remain separate.
+
+**Campaign duration copy:** Call each map circle a Level in player-facing copy; Stage remains a technical synonym. Node previews show estimated active combat time for the selected level and difficulty, including its boss, using game-design.md. Do not show a whole-route estimate as that level's duration or render a countdown implying automatic clear/defeat. Base, shopping, cards and pause do not consume the estimate; faster clears remain valid.
+
+**24 October beta Campaign map:** Display C01 -> C02/C03 -> C04. C01 unlocks both middle levels; either middle clear unlocks C04, and other unlocked, unfinished levels remain available. Three or four levels may be completed before the ending. Remove the exclusive-route-lock label. Previews show counts (5/3/3/4), separate boss and per-level duration; cancel is harmless. Use the [beta stage contract](../todo/02-gameplay/campaign-stages.md).
+
+**24 October confirmed Settings/result controls:** Focus loss pauses; focus regain requires explicit Resume. Preserve underlying panels/transactions/offers and consume the refocus click. Settings shares three Master/Music/SFX-Voice sliders and Low/Medium/High quality, **Medium default**, across menu/pause. Audio/graphics save locally across launches; preview live and show save failures without blocking play. Swarm/Chaos show score and survival time; score determines rank. Credits use marked placeholders until names are supplied. Intro/ending now require original AI English narration alongside readable text. See [owner questionnaire](../todo/08-review/owner-questionnaire.md).
+
+### Beta graphics preset presentation
+
+| Preset | CRT/barrel passes | Cosmetic particle/flash/trail draw budget | Gameplay/UI |
+|---|---|---|---|
+| Low | Bypass effect passes; show the scene directly | One quarter of existing full-quality cosmetic budget | Same logical canvas, camera, input, telegraphs, sprites, boss bars and required UI |
+| Medium - default | Enabled | Half of existing full-quality cosmetic budget | Same gameplay and required UI |
+| High | Enabled | Existing full-quality cosmetic budget | Same gameplay and required UI |
+
+Ratios are delegated beta rendering defaults and belong in Config during implementation. They apply to presentation-only feedback, not damaging pools, projectile collisions, drones, enemies or attack events. Never reduce actual earned counts or rewards. Preserve the existing logical canvas and mouse transforms; no internal-resolution scaling is required for this beta policy. Decorative suppression uses isolated cosmetic state and cannot advance loot/card/encounter RNG differently. Apply changes between frames, with existing renderer ownership and cleanup; changing quality cannot restart a run. Profile all presets before claiming supported hardware or FPS.
+
 ## Campaign star-field map and four-mode selection — target
 
-Show Swarm, Chaos, Boss and Campaign; remove Survival. Entering the base Campaign portal opens a map panel before combat. Circular stage nodes connected by route lines represent whole stages, not individual waves. Stage 1 starts available; clearing a predecessor unlocks connected successors for the current run. A selected available node shows details and a Launch action; Cancel returns to base. The image reference does not add a three-star rating system. Campaign map uses star-field nodes with run-local locked/available/current/cleared states, readable stage identity, normal-wave count and separate final-boss encounter. Some stage previews show miniboss presence. Stage count is undecided; do not imply 30 finished stages. Base departure says Next Wave or Stage Boss as appropriate. Clear transit grants no free repair. Keep map/panels in the established safe area and existing Game lifecycle; no map art/runtime is delivered by this context change.
+Show Swarm, Chaos, Boss and Campaign; remove Survival. Entering the base Campaign portal opens a map panel before combat. Circular stage nodes connected by route lines represent whole stages, not individual waves. Stage 1 starts available; clearing a predecessor unlocks connected successors for the current run. A selected available node shows details and a Launch action; Cancel returns to base. The image reference does not add a three-star rating system. The four-node beta map uses run-local locked/available/current/cleared states plus route-unavailable reasons, readable identity, normal-wave count and a separate final boss. Beta has no required miniboss; later expansion may add them. Base departure says Next Wave or Stage Boss as appropriate. Clear transit grants no free repair. Keep map/panels in the established safe area and existing Game lifecycle; no map art/runtime is delivered by this context change.
 
 ## Current boss and portal HUD contract — target, not implemented
 
@@ -268,7 +290,7 @@ Existing sheets (sizes measured from the current files). "Frame" is width x heig
 | `mid_level_enemy_destruct` | | 64 x 64 | 7 | 15 | |
 | `debris` | debris.png | 96 x 96 | 1 | fixed by variant | Scrap clump plus nine variants |
 | `debris_destruct` | debris_destruct.png | 96 x 96 | 8 | reference only | Previous breakup sheet; live fragments now use intact art |
-| `background1` to `background4` | background1-4.png | 500 x 500 | 1 | tiled parallax | Orbit layers: far stars, Earth haze, debris field, near dust |
+| `background1` to `background4` | background1-4.png | 500 x 500 | 1 | tiled parallax | Shared space layers; draw order is 1,3,4,2. Unique Earth/station landmarks do not repeat in tiles; see background brief |
 | `health_bar`, `health` | healthBar.png, health.png | 128 x 16 | 1 | screen 1000 x 150 | Hull bar frame and fill |
 | `wasd_keys` | wasd_keys.png | 67 x 43 | 3 | world 16 x 10 | Keep |
 | `e_key` | e_key.png | 19 x 21 | 3 | world 5 x 5 | Keep |

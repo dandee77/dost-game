@@ -1,6 +1,20 @@
 # Project Overview
 
-**24 October mode revision:** Survival removed. Four modes remain: Swarm, Chaos, Boss and Campaign. Swarm/Chaos share their core loop; Chaos adds bosses. Campaign portal entry opens a star-field stage-selection map with connected clickable circles. Each circle is a whole stage; stage 1 starts available and clearing its predecessor unlocks each connected successor for that run. Campaign returns to base after every wave, and ends each stage with a boss. Stage 1 has five normal waves plus a separate boss. Total stage count is undecided (30 was an example). Builds carry between stages within the run; death resets. See [campaign stages](../todo/02-gameplay/campaign-stages.md).
+**24 October controls/retirement:** Fresh runs start primary auto-fire OFF; hold Shoot/LMB or toggle E. Swarm/Chaos allow confirmed station retirement with score and active survival time recorded under **Retired**, subject to ordinary leaderboard eligibility. Same-run pauses/station visits preserve the firing toggle without firing in inactive states. [Questionnaire](../todo/08-review/owner-questionnaire.md) records confirmed Q15/Q16 and remaining implementation work.
+
+**24 October trailer voice confirmed:** Intro, ending and trailer share the same original AI-generated English narrator for consistency. Preserve readable story cards, current duration targets and recorded AI/asset provenance. This selects production direction; no narration or video is produced here.
+
+**24 October background/checkpoint revision:** Owner assigns background creation to the implementing teammate; provide [art instructions](../todo/09-art/background-brief.md) only, with no image generation or asset edits here. Campaign wave clears now offer **Enter Station** or **Next Wave / Stage Boss**. Optional station entry after a clear bypasses energy/shield and grants no healing; services stay paid. This replaces compulsory station visits after every wave. No runtime implementation is claimed.
+
+**24 October questionnaire decisions:** Unlocked, unfinished Campaign levels remain available; remaining Campaign choices are delegated, with no further Campaign questions. Swarm/Chaos rank by score and show survival time. Focus loss auto-pauses with explicit Resume. Settings has Master/Music/SFX sliders, Low/Medium/High quality (**Medium default**) and local preference persistence. Credits use placeholders. Weapons Payload affects primary weapons only. Intro/ending include original AI-generated **English narration** alongside text. [Answer register](../todo/08-review/owner-questionnaire.md) separates confirmed choices from defaults and unknown hardware facts. Runtime/asset integration remains unfinished.
+
+**Release title selected, 24 October:** **SCRAPBOUND: Last Hope**; **SCRAPBOUND** is the short form. This names the game in context/production copy. Runtime menu/executable/assets are unchanged by this documentation checkpoint.
+
+**Campaign duration clarified, 24 October:** Owner means around 30 minutes or less for **each selected map level/circle**, including its waves and boss. Exact times are delegated; beta targets increase by level/difficulty in game-design.md, reaching 30 active combat minutes for the final level on Impossible. Base, shopping, cards and pause are excluded. This is not an entire-map time limit or a mandatory wait. Stage/level mean the same map unit; the three-stage-route phrase referred only to the author's proposed graph traversal.
+
+**24 October context-first beta handoff:** Owner wants detailed context first for a teammate to use on **25 October**, then the playable build. Beta has four authored levels, C01 unlocking C02/C03 and either middle clear unlocking C04; three or four may be completed before the ending because unfinished unlocked levels stay available. Normal-wave counts are 5/3/3/4, each with a separate boss; see [beta scope](../todo/02-gameplay/campaign-stages.md). Future expansion remains possible. Earlier Monday answer was corrected to tomorrow's handoff; exact official cutoff remains unknown. No runtime implementation is claimed. [Readiness inventory](../todo/08-review/context-readiness-audit.md) tracks remaining work.
+
+**24 October mode revision:** Survival removed. Swarm, Chaos, Boss and Campaign remain; Swarm/Chaos share ordinary mechanics and Chaos adds bosses. Campaign portal opens connected level circles; C01 starts available and predecessor clears unlock successors. Normal wave clears offer optional station or direct continuation; each level ends with a separate boss. Beta has four authored levels, C01 with five normal waves plus boss. Thirty levels was an example. Builds carry within the run; death resets. See [campaign stages](../todo/02-gameplay/campaign-stages.md).
 
 **24 October Blast Radius accepted:** Epic attribute, +10% base damage-area radius per field card and +2.5% per paid increment, additive and uncapped. Compatible explosions and damaging circular zones gain coverage without more damage per victim. Numerical authority defines compatibility and interaction with older skill-size limits. Context only; runtime card/shop integration pending.
 
@@ -76,7 +90,7 @@ The game is built on top of **Space Ablaze**, a C++/Raylib shooter previously ma
 
 | Item | Value |
 |---|---|
-| Working title | TBD. Refer to it as "the game" until the team decides; record the title in `progress-tracker.md` |
+| Release title | **SCRAPBOUND: Last Hope**; short form **SCRAPBOUND**, selected 24 October |
 | Engine | C++20, Raylib 5.5, CMake |
 | Platform | Windows PC (primary, used at the finals), Linux and macOS builds also work |
 | Category | Student or Professional (record in `progress-tracker.md`) |
@@ -118,13 +132,13 @@ Proposed chronology: scientists develop a remediation medium in **2718**, releas
 
 Before 2718, scientists had already engineered waste-eating creatures, provisionally called Scavengers, for ground facilities and protected orbital cleanup systems. The later atmospheric treatment unexpectedly changes their DNA and disrupts feeding, growth and defensive behavior. They become hostile and collect material indiscriminately. Digestible fractions feed them; retained metal and other fragments are fastened by a biological binding layer into external armor around their living cores. Over later generations, useful inherited gathering/binding traits become more common among surviving lineages. The chemical starts the fictional mutation crisis; evolution then occurs across generations, while metal itself stays nonliving. Exposed organisms, contaminated cargo and residue on serviced hardware carry the disaster into orbit. Protected cores and repurposed propulsion support the fictional space creatures; an atmospheric cloud does not cross vacuum. This biological mechanism supersedes the earlier autonomous-machine proposal and remains science fiction.
 
-The campaign targets infested nests and concentrated residue sites that keep spreading exposure and hostile organisms. The star-field stage campaign replaces the ten-wave outline; every stage has a final boss, and some contain minibosses. Exact stage data remains to be authored. Defeating a source guardian stops that site's future emissions/adds. Remaining required hostiles must still be cleared. No random loot or purification item is needed to complete the objective.
+The campaign targets infested nests and concentrated residue sites that keep spreading exposure and hostile organisms. The four-stage branching beta replaces the ten-wave outline; every stage has a final boss, with minibosses reserved for later expansion. Exact wave budgets remain to be authored. Defeating a source guardian stops that site's future emissions/adds. Remaining required hostiles must still be cleared. No random loot or purification item is needed to complete the objective.
 
 **Narrative theme:** humanity used cleanup inventions to postpone changing wasteful habits. The catastrophe is the accumulated consequence of neglect and overreliance on fixes after the damage. The survivors now choose sustained responsibility. Draft tagline: **“We kept throwing it away. Until it came back for us.”** See [theme and slogans](../todo/01-story/narrative-theme.md).
 
 The ending opens a corridor for survey, containment and cleanup teams. Earth remains damaged and climate recovery takes time. No special tree, seed quest or instant cure remains. Other modes are repeatable operations and are not locked behind Campaign completion.
 
-Presentation remains **short story card -> moving animation/gameplay -> next card -> next scene**. [Story and trailer](../todo/01-story/story-context.md) specifies a proposed 40-second intro before the menu once per application launch, 24-second ending and 90-second trailer. All sequences have explicit skip/input/result rules. Final title, boss content, art and optional voice remain pending.
+Presentation remains **short story card -> moving animation/gameplay -> next card -> next scene**. [Story/trailer](../todo/01-story/story-context.md) targets 40-second intro, 24-second ending and 90-second trailer. All share the same original English AI narrator, with readable text and explicit playback/skip/input/result rules. Title is SCRAPBOUND: Last Hope; boss/art/audio/video production remains unfinished.
 
 ---
 ## Game Modes
@@ -157,10 +171,9 @@ Current delivered behavior remains in the progress tracker; writing this loop do
 |---|---|
 | W A S D | Move (8 directions) |
 | Mouse | Aim (the ship turns toward the cursor) |
-| Left mouse button | Shoot |
-| E | Toggle auto-fire |
-| Q | Return Home when shield and charge permit (target) |
-| F | Nearby hub interaction (target) |
+| Left mouse button | Hold to shoot; fresh runs start with auto-fire OFF |
+| E | Toggle primary auto-fire ON/OFF |
+| F | Nearby hub service, mode gate or eligible field-return portal interaction (target) |
 | P or Esc | Pause |
 | Mouse click | Menus, augment cards, shop |
 | Space / Enter / click | Advance one presentation beat; Esc skips the sequence (proposed) |
@@ -195,12 +208,12 @@ Hub, shop, repairs, pause and cards remain Game states/panels, not scene switche
 
 ## Features In Scope
 
-- Five requested mode objectives, with honest availability until their content exists.
+- Four requested mode objectives, with honest availability until their content exists.
 - Ship-based HOPE hub, portals, field upgrades, shield-gated Return Home and same-expedition suspension/resume.
 - Random trade/fixed salvage rewards, material flavor, paid hull/shield service and targeted skill shop.
 - Existing accepted ship/enemy/debris/equipment/skill/art/performance work retained as the baseline.
 - Proposed automatic combat skills, starter Deflector and Shield Detonation replacement described in the gameplay handoff.
-- Intro/ending, local leaderboard, credits, tutorial and minimal shared volume controls.
+- Intro/ending with original English AI narration, local leaderboard, placeholder credits and tutorial; shared Master/Music/SFX sliders, Medium-default graphics presets and locally saved presentation preferences.
 - Original/licensed production assets and required disclosures, trailer, separate demo and submission materials.
 
 All are target scope, not a declaration of completion. Full boss content, spawn tables, score rules, loadout integration, targeting, UI/audio and release verification remain visible in the gap register. A smaller submission scope requires team direction.
@@ -213,7 +226,7 @@ All are target scope, not a declaration of completion. Full boss content, spawn 
 - Material-specific crafting, inventory management or player trading.
 - Controller support, mobile/web builds, key-rebinding UI and localization for this preparation scope.
 
-Minimal volume controls are in scope; the previous blanket Settings exclusion is retired.
+Three audio sliders, graphics presets and local presentation-preference persistence are in scope under the questionnaire decisions; gameplay saves remain excluded.
 ## After Submission (before the 26 November finals)
 
 Only after the 25 October submission: polish pass, extra augment and upgrade options, a third boss phase, better VFX, expanded settings, Filipino voice lines, balance from playtests. Track these under "Finals Backlog" in `build-plan.md`.

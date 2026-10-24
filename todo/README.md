@@ -1,6 +1,10 @@
 # TODO — Remaining Work
 
-Current mode contract: [four modes and star-field Campaign](02-gameplay/campaign-stages.md). Survival is removed; stage count remains undecided. Start here for unfinished game work. This folder sits beside `assets/`, `build/`, `context/` and `src/`.
+Current mode contract: [four modes and star-field Campaign](02-gameplay/campaign-stages.md). Survival is removed; beta has four authored levels, three or four visited before final completion. Other unlocked, unfinished levels remain available. Start here for unfinished work beside `assets/`, `build/`, `context/` and `src/`.
+
+**Latest background/wave-clear direction:** Teammate produces backgrounds using the [written art brief](09-art/background-brief.md); no images are created in this context checkpoint. Campaign normal clears offer optional Enter Station or Next Wave/Stage Boss, superseding compulsory base travel. [Checkpoint details](02-gameplay/campaign-stages.md).
+
+**24 October beta handoff:** SCRAPBOUND: Last Hope. Context first for 25 October implementation. [Readiness inventory](08-review/context-readiness-audit.md) tracks gaps; [questionnaire answers](08-review/owner-questionnaire.md) record current choices/delegation. The [four-level beta](02-gameplay/campaign-stages.md) permits visiting either or both middle levels before the final; [layouts](02-gameplay/beta-layouts.md) have numerical defaults. Full wave/difficulty data and runtime remain unfinished.
 
 For the latest owner-requested concepts, see [boss roster and attacks for review](02-gameplay/boss-roster-draft.md). New games always start fresh; no permanent gameplay progression is selected.
 
@@ -56,6 +60,7 @@ Read the required context references first, then the planning register, world/sc
 | File | What remains to be done |
 |---|---|
 | [Field return portals](02-gameplay/return-portals.md) | Selected random portal/F interaction replacing manual teleport; shield/half-energy gates, limited-range pointer; count/placement/replenishment still open |
+| [Background art handoff](09-art/background-brief.md) | Instructions for teammate production: scene identities, shared layers, verified replacement formats, prompt starting points and delivery checks; no assets generated |
 | [Weapon/attribute/rarity review](07-upgrade-proposals/README.md) | Five-tier weapon proposal, 25% shop attributes, Luck, complete automatic roster and Legendary Blink; details awaiting confirmation |
 | [Maintained task list](06-task-list/tasks.md) | Prioritized open work, decisions and verified preparation checkboxes; update when work changes |
 | [Ideas and attention](06-task-list/ideas.md) | Suggestions and alternatives with explicit review status; not automatically active scope |
@@ -75,14 +80,14 @@ The handoffs now live in topic folders. `gameplay.md` was formerly `context/todo
 
 ## Gameplay implementation checkpoints
 
-All remain pending. Completed P6 pause/timing work and existing skills/equipment/art are dependencies to preserve, not tasks to rebuild.
+T01-T03 have delivered subparts; all ten checkpoints retain unfinished acceptance criteria. Completed P6 pause/timing work and existing skills/equipment/art are dependencies to preserve, not tasks to rebuild.
 
 - [ ] **T01:** Mode/difficulty data, paired trade/salvage accounting, progression/return formulas and reset contracts.
 - [ ] **T02:** Central enemy rewards, deterministic random trade values, pickups and radius magnet.
 - [ ] **T03:** Field level-up cards, overflow/queued choices, shared card descriptions; remove timed trigger.
 - [ ] **T04:** Persistent shield, automatic combat skills, Shield Detonation and starter-shield contract.
 - [ ] **T05:** Start -> difficulty -> safe colony hub, service stations and portal previews.
-- [ ] **T06:** Real Swarm, Survival, Boss, Chaos and Campaign objectives; owner-supplied boss content.
+- [ ] **T06:** Real Swarm, Boss, Chaos and branching beta Campaign objectives; implement the delegated boss roster/content.
 - [ ] **T07:** Shield/energy-gated field return portals, encounter suspension/resume, hull repair and separate Shield Battery shop purchases.
 - [ ] **T08:** Mothership weapon tree, quarter-strength attributes and eligible skill/special offers after proposal approval; atomic spending and persistent stock.
 - [ ] **T09:** HUD, pause/settings, input capture and tutorial integration.

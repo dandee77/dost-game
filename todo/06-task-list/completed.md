@@ -1,12 +1,26 @@
 # Completed Work and Evidence
 
-**Last updated: 23 October 2026.** Append verified deliveries here whenever a task is completed. Keep the corresponding checkbox in [tasks.md](tasks.md) synchronized. The detailed historical implementation record remains in [progress tracker](../../context/progress-tracker.md).
+**Last updated: 24 October 2026.** Append verified deliveries here whenever a task is completed. Keep the corresponding checkbox in [tasks.md](tasks.md) synchronized. The detailed historical implementation record remains in [progress tracker](../../context/progress-tracker.md).
 
 ## Completion record format
 
 Record date, stable task ID, actual result, evidence/commit when known and anything still incomplete. A context draft, an implemented feature, an automated check and human playtest approval are distinct achievements. Use precise language about which one finished.
 
 ## Verified preparation deliveries
+
+**24 October DOC-26:** Recorded Q15/Q16: fresh-run primary auto-fire OFF with LMB/E controls; eligible Swarm/Chaos station retirement records score and active survival time as Retired. Defined same-run toggle preservation, confirmation/cancel, no bonus/uncollected-loot credit and one-time result ownership. Source inspection confirms existing autoShoot=false/LMB/E baseline; documentation/build checks pass. No source/assets/runtime retirement implementation or new playtest claimed.
+
+**24 October DOC-25:** Recorded Q14 Yes: intro, ending and trailer share one original English AI narrator. Reconciled pending notices, saved-profile/pronunciation direction, readable text and measured clip timing within 40/24/90-second targets. Markdown and existing build verified. No generated audio/images/video/source; narration provider/assets/export remain open.
+
+**24 October DOC-24:** Delivered [background instructions](../09-art/background-brief.md) for teammate production only: shared tile/menu/hub/map/level directions, original prompt examples, format/readability/provenance requirements. Verified four local 500x500 PNGs, menu 4500x1024 with ten 900x512 frames, and source layer order 1/3/4/2. Reconciled owner optional Campaign station/continue choice through current scope, numerical/lifecycle/UI/gameplay/portal/layout references. Markdown/consistency checks and existing build verified. No backgrounds, assets, source or runtime behavior changed; production and checkpoint integration remain open.
+
+**24 October DOC-23:** Created [questionnaire register](../08-review/owner-questionnaire.md), distinguishing confirmed answers, delegated defaults and unknown hardware. Corrected map locking; documented optional visits (15/19 encounters), score/time, focus pause, three audio sliders, Medium-default graphics, versioned local preferences, credit placeholders, primary-only Payload and required original English AI narration. Verified Markdown, map/preference/gain arithmetic and existing build. No source/assets or new runtime claim; questionnaire continues outside Campaign.
+
+**24 October DOC-22:** Owner clarified that around 30 minutes or less applies to each selected Campaign map circle/level, with exact times delegated. Recorded beta level/difficulty targets, active-combat clock exclusions, later-level progression and required-hostile clear semantics; removed the active Stage 1-versus-route question. Documentation checks and existing build verified. No timer-enforced completion/failure, runtime wave budgets or measured playtest claim.
+
+**24 October DOC-21:** Delivered [file-level readiness inventory](../08-review/context-readiness-audit.md) separating current runtime, 59 starting open umbrella tasks, missing specifications, stale instructions and human release evidence. Owner prioritizes context for the original creator's implementation on 25 October. Authored delegated beta Campaign graph/counts/boss assignments (four nodes, three stages per route) and [dimensioned hub/arena/portal layout](../02-gameplay/beta-layouts.md). Confirmed links/table shapes, both routes and count arithmetic, hub interaction-ring separation/bounds, whitespace and existing build (exit 0, no work required). No source/assets/playtest changes. Per-stage Impossible pacing interpretation, full detailed data, remaining reconciliation and runtime work remain open.
+
+**24 October PREP-17:** Owner selected **SCRAPBOUND: Last Hope**, short form **SCRAPBOUND**, from the saved Last Hope naming option. Overview/tracker/naming record and trailer title-card copy agree. This completes the context title decision; it does not deliver a logo, runtime rebrand, exported media or name-availability research.
 
 **24 October DOC-20:** Recorded Campaign portal/map/stage selection and owner-selected predecessor unlocks. Clarified circle = whole stage, safe map cancel, current-stage continuation and reference limits. Verified 296 local links, whitespace and existing build (no work required). Documentation only; exact graph/miniboss structure and runtime remain pending.
 

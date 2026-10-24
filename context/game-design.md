@@ -1,8 +1,71 @@
 # Game Design
 
+## 24 October primary-fire and endless retirement decisions
+
+Owner confirmed primary auto-fire starts **OFF** on each new run/restart; hold LMB/Shoot or press E to enable it. Aiming remains mouse-controlled. Same-run pauses/station visits preserve the toggle, suppressing fire while inactive; audio/graphics persistence never saves it between runs. Existing re-entry protection and cooldown-debt rules still apply.
+
+Owner confirmed Swarm/Chaos players may retire at the station and submit **score plus survival time** with outcome **Retired**. Preview/confirm once, freeze actual earned score and active-combat seconds, then allow ordinary eligible name entry. No retirement/victory bonus, cleanup rewards or credit for uncollected suspended loot. Score remains primary; retain mode/difficulty/rules/debug eligibility and one-time submission. Cancel preserves the expedition. Exact scoring weights remain unfinished. [Lifecycle details](../todo/08-review/owner-questionnaire.md#primary-fire-default-and-retirement).
+
+## 24 October optional station checkpoint - owner revision
+
+After a Campaign normal wave clears, offer **Enter Station** or **Next Wave / Stage Boss**. Station travel after a clear is optional and bypasses shield/energy/payment; services remain paid. Direct continuation preserves actual hull/shield, build, wallet and cooldown debt without healing, energy debit or a free mid-wave re-entry protection refresh. Freeze combat/regeneration/rebuild clocks while choosing. Finalize required hostiles, earned rewards and queued cards once before the choice, then launch the pending encounter only on deliberate action. After a non-final level clear, offer station or next-level map; final victory retains ending/results. Boss-mode portal/base loop and ordinary mid-fight return gates remain as selected. Full [checkpoint contract](../todo/02-gameplay/campaign-stages.md#optional-station-visit-after-a-wave---latest-owner-revision).
+
+This supersedes older mandatory-base-after-every-wave wording. Per-level time targets exclude checkpoint decisions as well as base/cards/pause. No automatic countdown, timed clear, free repair or extra wave-clear card is added. Background art production is assigned to the teammate under the [written art brief](../todo/09-art/background-brief.md); this checkpoint generates no assets or runtime code.
+
+## 24 October Campaign pacing clarification - per selected level
+
+The owner clarified that **one selected Campaign map circle/level** should take around 30 minutes or less, with exact pacing delegated. A level is a whole stage: all its normal waves plus its separate boss. This is not a 30-minute target for the entire connected map. The earlier Stage 1-versus-route question is resolved; no further pacing permission is needed before authoring budgets.
+
+Use these beta completion targets in **active combat minutes**, including the level's boss:
+
+| Selected level | Easy | Hard | Impossible |
+|---|---:|---:|---:|
+| C01 - Outer Approach | 15 | 20 | 25 |
+| C02 - Relay Graveyard | 18 | 23 | 28 |
+| C03 - Freight Ruins | 18 | 23 | 28 |
+| C04 - Source Nest | 20 | 25 | 30 |
+
+These exact values are delegated authoring defaults, not times chosen individually by the owner or measured playtest results. They keep later beta levels longer while keeping each at or below the requested approximately 30-minute planning target. Future Campaign expansion may use longer targets through an explicit content revision; the beta table does not authorize inventing additional stages.
+
+Measure from the first combat update of the selected level to its valid final clear. Sum active combat across its waves/boss and any ordinary retreat/resume. Exclude base visits, shopping, repair service, cards, pause, console capture and presentation. A new level starts a new level-duration measurement; lifetime run combat time and the existing bounded HP curve do not reset on base visits or new levels. Preserve the previously selected build/economy carryover.
+
+Tune authored spawn budgets, composition and cadence toward these durations using the expected carryover build at that level. Difficulty changes pressure under the existing same-HP/damage/reward rules; the shorter Easy target does not mean higher enemy firepower or stronger enemies. A normal wave still clears only after its finite spawn budget and required hostiles are resolved. Faster skilled clears are allowed. These are pacing targets, not a forced waiting period, 30-minute countdown, auto-clear, auto-defeat or guarantee that every build finishes by the target. Do not inflate boss HP merely to consume the allotted time.
+
+Acceptance before a balance claim: measure each level/difficulty independently, include both middle alternatives, record incoming build and elapsed active combat, preserve the clock across base/pause/cards, and verify that no timer bypasses remaining hostiles. Exact wave budgets/spawn tables and actual playtests remain PREP-02/T06/T10 work. Selecting a level previews **that level's** estimated duration, not the sum of the author's proposed multi-level route.
+
+## 24 October delegated beta layout geometry
+
+Owner delegated layouts from the current HOPE setting. These are selected beta authoring defaults, not source changes or tested balance. During implementation, gameplay geometry belongs in Balance, search limits in Config and panel/draw geometry in Theme. Detailed flow: [beta layouts](../todo/02-gameplay/beta-layouts.md).
+
+| World-space item | Beta default |
+|---|---|
+| Hub mothership / arrival position | (0,0) / (0,40) |
+| Workshop / hull repair berth | (-60,0) / (60,0) |
+| Swarm / Chaos / Boss / Campaign gate centers | (-90,-80) / (-30,-100) / (30,-100) / (90,-80) |
+| Service and gate interaction radii | 12 world units; F inside, no automatic entry |
+| Hub boundary | Radius 200; warning from 180; legal ship-center radius 200 minus actual ship collision radius |
+| Boss/Campaign arena | Radius 220 around entry origin; warning from 200; legal center radius 220 minus ship radius; no boundary damage |
+| Fresh finite-encounter arrival clearance | No initially overlapping hostile/solid within 24 of player center |
+| Ordinary portal placement radius | 70-140 from ship; whole 12-unit interaction disk remains in legal space |
+| Portal minimum center separation | 36 from player and 36 from each other portal |
+| Placement search | 32 random candidates per missing exit; then eight stable headings at radii 70/105/140; retry after 1 combat second if still illegal |
+| Ordinary portal pointer detection | Center distance <= one current world viewport width; width = virtual canvas width / actual camera zoom |
+
+The 3840-wide canvas at zoom 20 gives a 192-world-unit detection radius. Zoom recomputes this radius; window resizing/letterboxing does not. Failed placement preserves energy/readiness and retries; search bounds cannot silently become a smaller exit-count policy. Mid-fight Boss retreat remains forbidden.
+
+Hub modules are non-solid scenery for beta. Preserve existing BarricadeEvent geometry when scheduled. Boundary correction projects to legal radius without damage; arena and barricade membership both constrain Blink destinations.
+
+## 24 October delegated beta Campaign content baseline
+
+Owner confirmed branching routes and delegated beta count. Four authored levels: C01 (five normal waves, Shellback) unlocks C02 (three, Coilmaw) and C03 (three, Brood Hauler); either middle clear unlocks C04 (four, Nestheart). Each has a separate boss. A run may complete one middle level (12 normal waves + three bosses = 15 encounters) or both (15 normal waves + four bosses = 19 encounters) before C04. No beta miniboss is required. Counts are authoring defaults, not tested tuning; wave budgets/mixes/cadence and difficulty schedules remain unfinished.
+
+C01 unlocks both middle nodes; launching one does not lock the other. After the active level clears, other unlocked, unfinished levels stay available. C04 uses an OR prerequisite, not both branches. Cleared levels cannot be replayed for rewards. Map preview/cancel does not mutate state; death/New Game resets progress. Final C04 clear resolves required survivors/rewards and freezes one victory result before the ending. Account for optional-level carryover in tuning. See [full map contract](../todo/02-gameplay/campaign-stages.md).
+
+**24 October endless rankings:** Owner chose score as the primary Swarm/Chaos ranking and requested survival time alongside it. Record actual active combat seconds, excluding base/cards/pause/focus pause. Score weights remain PREP-08 work; duration must not replace the primary score order. Delegated tie default: longer combat survival, then stable insertion order. Keep boards separated by mode/difficulty/rules and exclude debug-assisted results under the result contract.
+
 ## 24 October four-mode and staged Campaign revision
 
-Survival is removed. Swarm and Chaos share ordinary-enemy/economy/progression/return mechanics; Chaos adds bosses. Boss mode retains its no-retreat loop. Campaign uses star-field stages, safe base transit after every cleared wave, a final boss per stage and minibosses in selected stages. Stage 1 has five normal waves then a separate boss encounter. Stage count remains undecided; 30 was an example. Builds carry across stages in the same run; death/New Game resets stage progress. Wave-clear transit bypasses ordinary energy/shield gates and grants no free repair. Full contract: [campaign stages](../todo/02-gameplay/campaign-stages.md). Older ten-wave/fixed boss-slot/Survival numbers below are historical, not current targets.
+Survival is removed. Swarm/Chaos share ordinary mechanics, with bosses added by Chaos. Boss mode retains no retreat. Campaign uses the four-level beta map, optional station checkpoints after normal wave clears and a separate final boss per level. Stage 1 has five normal waves plus boss. Thirty levels was an example; minibosses belong to expansion. Build/progress carries within the run; death/New Game resets it. Optional cleared-wave station entry bypasses shield/energy and grants no free repair. See [campaign stages](../todo/02-gameplay/campaign-stages.md). Older fixed slots/mandatory base/Survival text is historical.
 
 
 ## 24 October Blast Radius — owner-approved Epic attribute, implementation pending
@@ -436,7 +499,7 @@ Replace Nano Repair with Shield Detonation: 50 damage, radius 35, 18 s internal 
 | Quantity | Proposed initial tuning |
 |---|---|
 | Removed mode | Survival; no timed-survival objective in current scope |
-| Campaign outline | Star-field stages; stage 1 has five normal waves plus a boss; base after each wave; later stage counts/content pending |
+| Campaign outline | Four beta map levels; C01 has five normal waves plus boss; wave clears offer optional station or direct next fight; detailed budgets pending |
 | Chaos boss schedule | Draft: first opportunity at 300 combat seconds, then every 180 seconds; allowance `1 + floor(combatSeconds/900)`; no banked missed spawns |
 | Swarm | Endless normal-wave schedule; no bosses by default |
 | Boss mode | Repeating boss kill -> one unrestricted base portal -> services -> launch next boss; no mid-fight retreat |

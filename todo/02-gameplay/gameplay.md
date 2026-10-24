@@ -1,5 +1,9 @@
 # TODO: Colony Hub, Game Modes, Scrap Progression and Return Home
 
+**24 October latest wave-clear revision:** Owner selected optional station visits: clear -> earned rewards/cards -> safe choice Enter Station or Next Wave/Stage Boss. Station entry after a clear bypasses shield/energy without payment/healing; shop/repair remains paid. No automatic base transit. [Campaign checkpoint contract](campaign-stages.md) governs finalization, pending launch, map origin/cancel and final victory. Ordinary gated mid-fight return and Boss-mode post-kill/base loop are unchanged. [Background instructions](../09-art/background-brief.md) are for the teammate to create assets; this session creates none.
+
+**24 October questionnaire overrides:** [Answer register](../08-review/owner-questionnaire.md) confirms score-first Swarm/Chaos with survival time shown, focus-loss pause/explicit Resume, Master/Music/SFX sliders, Low/Medium/High quality with Medium default and locally saved audio/graphics. Payload affects primary weapons only; abilities use their own upgrades. Intro/ending require original AI English narration; Credits retain marked placeholders. Unlocked unfinished levels stay available; remaining Campaign choices are delegated, with no more Campaign questions. These override affected older proposals below; runtime integration stays open.
+
 **Boss-mode gate settled:** no mid-fight retreat or ordinary return portals, even with sufficient shield/energy. Only boss death reveals the unrestricted base portal. Other modes' ordinary return gates remain unchanged. New boss creation still waits for the player's next base launch.
 
 **Latest Boss-mode revision:** repeated boss encounters with a base portal after each kill; the next boss starts only when launching from base. Same-run build/wallet persist. This supersedes one-boss mode victory and the proposed half-energy start. Boss-clear portals bypass shield/energy requirements; see the latest game-design.md section. Boss phases and named HP bars are requested, not implemented yet.
@@ -226,11 +230,11 @@ These schedules are proposed in the tuning ledger. New boss stats, attacks, anim
 ### 5.2 Rules at boundaries
 
 - Campaign wave clear does not automatically grant an upgrade card. Only the scrap threshold does.
-- Campaign returns to base after every cleared wave, bypassing shield/energy gates. Launch the next wave or separate stage boss only after preparation; preserve same-run progression.
+- Campaign clears offer optional station or direct Next Wave/Stage Boss. Selected cleared-wave station entry bypasses shield/energy with no payment/healing. Preserve progression and launch the pending encounter only once through deliberate action.
 - Return during an active encounter uses ordinary field portals and fixed 500/1000 energy plus positive online shield, except Boss mode, which forbids retreat.
 - Objective success/death are resolved once. Proposed tie rule: player death in the same simulation step takes priority over victory.
 - After a terminal result, stop scoring and collection. Uncollected loot is not magically converted into currency or XP.
-- Uncollected loot at an ordinary wave clear stays collectible until collected or the expedition ends; checkpoint travel freezes it.
+- At Campaign clear, preserve/credit already-earned encounter loot once and resolve earned choices before the checkpoint; cleanup creates no drops. Ordinary mid-fight retreat freezes uncollected loot in the suspended encounter instead.
 - Boss deaths use the selected boss-tier reward range once. Their final encounters remain pending; content tuning can override the explicit tier in Balance, never accidentally inherit low-enemy rewards.
 - Separate leaderboard/result identities by mode, difficulty and rules version. The full leaderboard UI is a later feature; record sufficient metadata now.
 
@@ -548,8 +552,8 @@ Visible pause overlay: **Resume**, **Settings**, **Quit to Main Menu**, with con
 - Card selection owns its input and does not open another pause layer.
 - Shop/portal panels close with Esc to hub; subsequent Esc can pause.
 - F5 capture remains highest priority and preserves the underlying state.
-- Shared Settings panel works from both main menu and pause. Required master volume only; separate music/SFX sliders only if the existing audio structure supports them.
-- Settings are session preferences and survive a run reset. File persistence/fullscreen are deferred; key rebinding/controller settings are out of scope.
+- Shared Settings panel from menu/pause requires Master, Music and Sound Effects sliders. Gains multiply Master once; add Low/Medium/High cosmetic graphics presets under the current questionnaire contract. Focus loss pauses even from a modal; returning to the window never resumes automatically.
+- Audio/graphics preferences survive run reset and are saved locally across launches under the questionnaire settings.cfg contract. This is presentation-only persistence, not run saving. Fullscreen, rebinding and controller settings remain outside this checkpoint.
 
 ## 12. Ownership and lifecycle contract
 
@@ -678,7 +682,7 @@ Suggested future debug additions: `scrap add`, `scrap status`, `progress fill`, 
 4. Confirm field portal use drains all charge, uses F inside its zone, rechecks shield/energy and has no Q/manual skill fallback.
 5. Playtest 100/1,000 starting values, mode growth, drop income, level growth and shop costs together. The threshold moves while collecting; nominal 500-scrap return is not necessarily attainable at level 1.
 6. Supply actual bosses: identity, arena, telegraphs, phases, damage/HP, adds, durations and scrap rewards. Adopt or replace old Hoarder/Core proposals.
-7. Finalize Chaos cadence and Campaign stage data/map routing; required wave-clear base visits are confirmed.
+7. Finalize Chaos cadence and Campaign wave budgets against current level/map data; station visits at cleared-wave checkpoints are optional.
 8. Evaluate frozen-projectile reentry fairness and targeted shop progression against an injured boss. No hidden boss healing or free invulnerability is specified.
 9. Verify source-aware Reinforced Hull text/effects: free field card may grant current HP; paid rank may not bypass repair pricing.
 10. Decide submission priorities if all four modes cannot be verified by 25 October. Keep requested scope visible; a cut requires team direction.

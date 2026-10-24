@@ -27,7 +27,7 @@ Neither type heals the ship or resets upgrades. Pause remains available; quittin
 
 ## Campaign wave-clear travel
 
-Every cleared wave returns to base without shield/energy requirements or energy payment. Resolve earned rewards and mandatory cards once, preserve run progression and start the next fight only on departure. Ordinary mid-wave retreat resumes the unfinished wave and does not advance it. See [campaign stages](campaign-stages.md).
+A cleared Campaign wave offers optional Enter Station or direct Next Wave/Stage Boss after rewards/cards finalize once. Only selected station entry travels to base, with no shield/energy gate or payment/healing. Either direct launch or later station departure starts the pending encounter once. Checkpoint time freezes combat; no auto travel/countdown. Ordinary mid-wave retreat still uses gates and resumes the unfinished wave. See [campaign stages](campaign-stages.md).
 
 ## Boss-clear lifecycle
 

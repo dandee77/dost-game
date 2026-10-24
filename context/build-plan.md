@@ -2,9 +2,9 @@
 
 The order in which the game is built between **14 October** and the **25 October 2026** submission. Each numbered item is one unit of work: one branch, one pull request, one entry in `progress-tracker.md`. Do not start an item until its dependencies meet the Definition of Done in `code-standards.md`.
 
-## Current checkpoint — DOC-20 Campaign portal/map flow
+## Current checkpoint — DOC-26 primary fire and retirement
 
-Record portal -> star-field map -> whole-stage selection, reference interpretation, predecessor unlocking and active-stage continuity. Verify documentation and existing build; no source changes in this checkpoint.
+Record Q15/Q16: primary auto-fire OFF on fresh runs, LMB/Shoot and E controls; Swarm/Chaos station retirement records score/survival with Retired outcome. Define toggle lifecycle, confirmation, ranked eligibility and one-time finalization; verify docs/existing build. Documentation only, no source/assets. Continue delegated numerical/technical authoring from the [answer register](../todo/08-review/owner-questionnaire.md); Campaign questions remain delegated.
 
 ## Task-list maintenance for every work item
 

@@ -1,8 +1,18 @@
 # Architecture
 
+**24 October optional wave checkpoint:** Finalize a Campaign wave once, freeze the cleared encounter and offer station or direct continuation. Game/run ownership retains one pending next encounter; either direct launch or later station departure consumes it once. No scene switch/resetRun, automatic base transit, duplicate index increment or extra reward. Map opened after a non-final level clear remembers checkpoint versus hub origin so Cancel restores the correct state. Checkpoint time freezes combat/shield regeneration/droid rebuilds. Boss-mode base visits and ordinary mid-fight retreat remain separate policies. See [current clear contract](../todo/02-gameplay/campaign-stages.md).
+
+**Background handoff boundary:** The [background brief](../todo/09-art/background-brief.md) assigns art production/integration to the teammate. Preserve current four-layer order/keys/frame formats; add non-repeating level landmarks through existing Game/ResourceManager/render ownership when delivered. No generated assets, new renderer/class or runtime registration is created by the brief.
+
+**24 October beta map ownership:** Use four authored IDs C01-C04: C01 unlocks C02/C03, either middle clear unlocks C04. Keep unlocked/completed IDs and active encounter in Game/run/director ownership; no exclusive route-lock state. Other unlocked, unfinished levels remain selectable after the current level clears. Preview/cancel does not mutate progression. Preserve values across base/pause/cards and clear on death/New Game. Final clear freezes one result before ending playback. See [beta map contract](../todo/02-gameplay/campaign-stages.md).
+
+**24 October focus/audio/graphics settings:** Owner confirmed focus-loss auto-pause with explicit Resume, three shared Master/Music/SFX sliders, Low/Medium/High graphics with **Medium default**, and local audio/graphics persistence. [Questionnaire contracts](../todo/08-review/owner-questionnaire.md) define input/modal preservation, gains and settings.cfg schema/failure handling. Application owns preferences, focus detection and renderer application; Game retains pause source/panel. Preferences survive resetRun/application relaunch; no gameplay state is saved. Graphics alter cosmetics only, preserving simulation and gameplay RNG. Save on committed settings actions, not per frame. Required original English AI narration follows presentation ownership and SFX/Voice routing; skip/pause/exit stops or freezes the correct clip.
+
+**Delegated layout ownership:** [Beta layouts](../todo/02-gameplay/beta-layouts.md) define ship-based hub interaction, separate field/hub positions, finite versus roaming arenas and portal placement/fallback. Numerical geometry belongs to game-design.md/Balance; screen geometry belongs to Theme. The isolated portal stream, pending-placement retry and route data are run-owned state and must freeze/reset with their encounter. No additional world, currency or shield singleton is required.
+
 ## 24 October staged Campaign ownership — target
 
-Four modes remain; remove Survival from typed-mode/UI/objective plans. Swarm and Chaos share the ordinary director and rules; Chaos layers boss scheduling on top. Campaign portal interaction opens a Game-owned map panel; selecting/launching an available stage commits once. Campaign owns stage index, encounter index and map availability in run state. Start with stage 1 available; stage-clear finalization unlocks connected successors once. Opening/canceling the map cannot mutate encounter state, RNG or currency. Between-wave departure continues the current stage rather than restarting it. Every wave clear finalizes rewards once, retires hazards and enters base without energy/shield gates; confirmed departure starts the next encounter. Stage 1 has five normal waves then a boss. Preserve progression across stages and reset stage/map state on death/New Game. No separate Scene or resetRun per stage, no persistent stage-unlock save implied. See [campaign stages](../todo/02-gameplay/campaign-stages.md).
+Four modes remain; Swarm/Chaos share ordinary rules and Chaos layers bosses. Campaign uses a Game-owned map and run-local level/encounter/unlock data. C01 starts available; clear callbacks unlock successors once. Opening/canceling maps cannot mutate RNG/currency/progression. Wave clear finalizes rewards/hazards, then offers optional station or direct next encounter. Only selected station travel enters base, without energy/shield gates. Confirmed direct launch or station departure starts the pending fight once. C01 has five normal waves plus boss; progression carries between levels, while death/New Game resets it. No Scene/resetRun per level or permanent unlock save. See [campaign stages](../todo/02-gameplay/campaign-stages.md).
 
 ## 24 October Boss-mode encounter lifecycle — target, not implemented
 
@@ -424,6 +434,8 @@ It resets, in order: every run singleton (`EnemyManager`, `DebrisManager`, `Bull
 - The current augment code uses `rand()`; the target uses `RunRng`, so augment offers are also deterministic per seed. Record the decision if the team prefers random offers.
 
 ### Persistence
+
+Owner-confirmed presentation persistence uses Application-owned settings.cfg under the [questionnaire schema](../todo/08-review/owner-questionnaire.md): three audio gains and graphics preset, Medium default, safe file failure handling and no run state. This is separate from leaderboard data. The older two-mode CSV example below is historical schema planning; PREP-09 must reconcile it with four-mode/difficulty/rules identity and one-time results before implementation.
 
 `Leaderboard` reads and writes `leaderboard.txt` next to the executable, one entry per line:
 

@@ -1,12 +1,12 @@
 # Ideas and Questions to Review
 
-**Last reviewed: 23 October 2026.** All entries below are **proposed** until their status changes. They are context ideas, not instructions to implement new features. [Open tasks](tasks.md) tracks required decisions and execution. Avoid turning every idea into extra sprint scope.
+**Last reviewed: 24 October 2026.** Entries are **proposed** until their status changes. They are context ideas, not instructions to implement new features. [Open tasks](tasks.md) tracks required decisions and execution. Avoid turning every idea into extra sprint scope.
 
 For each update, retain the ID and record one status: Proposed, Needs decision, Accepted, Deferred or Rejected. Accepted means the team adopted the idea into an authority document; it does not mean implemented. Add the decision date/reason and linked task when that happens.
 
 ## Narrative and identity
 
-- **IDEA-01 — Proposed — Owner: team.** Consider SCRAPBOUND, with Last Hope as an optional subtitle. Why: connects armor-bound organisms and salvage-dependent survivors. Next: compare the [saved name options](../05-suggested-names/README.md), choose the final wording and record PREP-17. No title is selected yet.
+- **IDEA-01 — Accepted 24 October — Owner: team.** Owner selected **SCRAPBOUND: Last Hope**, short form **SCRAPBOUND**. PREP-17 title decision is complete; menu/logo/media production remains open. See [naming record](../05-suggested-names/README.md).
 - **IDEA-02 — Proposed — Owner: story/art.** Use one close-up showing digestible material entering the body while undigested plates are bound into the shell. Why: explains existing scrap silhouettes visually. Next: decide where to place it inside the existing intro/trailer intervals; no additional duration or sprite replacement is implied.
 - **IDEA-03 — Proposed — Owner: story/art.** Show incoming waste continuing to grow beside a successful pre-disaster processing creature. Why: demonstrates the neglect theme without another exposition paragraph. Next: review against the adopted [theme](../01-story/narrative-theme.md).
 - **IDEA-04 — Proposed — Owner: story/art.** Reuse the same mothership landmark in intro, hub, return and ending. Why: makes home recognizable with a small reusable production set. Next: adopt a silhouette/layout during PREP-07 and retain consistency.

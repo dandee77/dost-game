@@ -1,6 +1,6 @@
 # Suggested Game Names
 
-**21 October 2026. Naming preparation only.** These are suggestions for team review. The final game title remains undecided; H.O.P.E. Colony remains the settlement name.
+**Selected 24 October 2026:** **SCRAPBOUND: Last Hope**, with **SCRAPBOUND** as its short form. Owner selected the saved Last Hope option. H.O.P.E. Colony remains the settlement name. The alternatives below preserve the earlier naming review; they are not competing current titles. Runtime menu/executable/logo changes remain implementation work.
 
 | Suggested title | Meaning and fit |
 |---|---|
