@@ -475,7 +475,7 @@ See game-design.md for the canonical starting prices:
 | Nuclear Missile, unowned rare offer | 3200 | Acquire rank 1; existing burst effect |
 | Armageddon, unowned rare offer | 4000 | Acquire rank 1; existing sustained barrage |
 
-Ordinary first skill acquisitions still come from field cards. Scrap Magnet/Combat Drone and eligible ordinary combat abilities retain standard rank pricing. Deflector uses capacity-only purchases; Blink is field-only for first acquisition and has a proposed premium owned-rank price. Numeric augment purchases follow the quarter-strength ledger; existing card caps remain. Prices are identical across modes/difficulties; no price RNG or price reroll.
+Ordinary first skill acquisitions still come from field cards. Scrap Magnet/Combat Drone and eligible ordinary combat abilities retain standard rank pricing. Deflector uses capacity-only purchases; Blink is field-only for first acquisition and has a proposed premium owned-rank price. Numeric augment purchases follow the quarter-strength ledger; numeric-attribute card/purchase caps are removed; weapon tiers still end at T5. Prices are identical across modes/difficulties; no price RNG or price reroll.
 
 Owner selected these higher price scales on 23 October; they are not playtest-certified. Nominal 250 basic kills still yield expected trade 500 at the fixed 500 return threshold, but increased prices mean this no longer promises repair plus a skill purchase. Compare actual spending and tier timing to the 20–25-minute Swarm target, including repair/upgrade spending, without altering salvage growth or reward ranges implicitly.
 
@@ -493,7 +493,7 @@ Generate both presentations from the same live stat functions, not independent h
 
 - Physical radius/range/length/width/distance stops growing after rank 5.
 - Ability counts and other supported numerical growth continue beyond rank 5; cooldown remains positive.
-- Passive augments keep their existing cap of 10 where applicable.
+- Numeric-attribute ranks and paid purchases have no fixed cap under the 24 October decision; bounded-value stats need valid continued-growth formulas.
 - Combat Drone checks: ranks 1..6 -> count 1..6, HP 30/45/60/75/90/105, shot damage 15/19/23/26/30/34.
 - Space Collapse checks: radius 32/36.8/41.6/46.4/51.2, then stays 51.2; zone count continues by one per rank. Always show “Enemies killed drop no scrap.”
 - Shield Detonation requires owned Deflector; rank purchases cannot skip prerequisites.

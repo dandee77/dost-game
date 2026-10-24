@@ -19,7 +19,7 @@ Do not apply the 25% rule blindly to a new ability, an extra drone, a new weapon
 | Attribute | One full field-card increment | One purchased increment | Notes |
 |---|---|---|---|
 | Weapons Payload | +15 percentage points of base primary damage | +3.75 percentage points | Primary attacks only; automatic ability damage keeps its own tuning |
-| Critical Matrix | +5 percentage points critical chance | +1.25 percentage points | Clamp probability at 100%; show percentage points, not ambiguous percent |
+| Critical Matrix | +5 percentage points critical chance | +1.25 percentage points | Show percentage points; beyond-100% critical progression is under review, not a rank cap |
 | Overclocked Chambers | Attack cooldown multiplied by 0.90 | Attack cooldown multiplied by 0.975 | Quarter of the 10% cooldown reduction; not a claim of exactly 25% of resulting DPS gain |
 | Reinforced Hull | +20 max HP and the existing +20 current-HP card grant | +5 max HP; no current-HP grant | Paid capacity is not free repair |
 | Thruster Overdrive | Move speed multiplied by 1.10 | Move speed multiplied by 1.025 | Preserve control and frame-rate independence |
@@ -47,7 +47,7 @@ For additive stats, add card and paid contributions. For multiplicative stats, a
 
 “Four purchases equal one card” is exact for additive increments. Compounded percentage modifiers differ slightly; display the actual result rather than promising identical totals.
 
-Proposed per-run purchase limit: eight paid increments per listed attribute. Existing persistent augment cards keep their rank-10 cap; paid counts are separately bounded and may add their specified smaller benefit beyond that card cap. Deflector card ranks keep their existing ability progression. Reassess these draft bounds during the deferred economy/balance review; do not silently treat them as tested limits.
+Owner confirmed 24 October: no fixed numeric-attribute card-rank or paid-purchase cap. Keep source counts separate, quarter-strength paid gains and no-free-repair rules. Weapon tiers still end at T5. Critical progression above 100% and extreme firing-rate handling need follow-up formulas; never sell a zero-effect increment or silently cap ranks.
 
 ## 4. Discrete cards and skill ranks
 
@@ -59,7 +59,7 @@ Shop tabs become **Weapon Tree**, **Attributes**, **Owned Skills** and **Special
 
 ## 5. Local price proposal
 
-Owner-selected 23 October numeric attribute price (5x prior draft): purchase `n + 1` costs `200 + 100*n`, with n the prior paid count. First four prices are 200, 300, 400, 500; eight purchases total 4400. Each attribute tracks its own count. No luck-based discount, random price or service coupon is introduced.
+Owner-selected 23 October numeric attribute price (5x prior draft): purchase `n + 1` costs `200 + 100*n`, with n the prior paid count. First four prices are 200, 300, 400, 500; the first eight purchases total 4400, and buying may continue. Purchase N costs `100*N + 100`; cumulative cost is `50*N*N + 150*N`. Each attribute tracks its own count. No luck-based discount, random price or service coupon is introduced.
 
 Spending is atomic with the granted increment and requires the hub shop. No standard numeric augment is also sold through the old full-rank purchase row: that would bypass the 25% rule. Failed/stale/duplicate transactions do not charge. If a hard stat limit would make the purchase grant no effect, disable it and do not charge; previews show any clamped final gain. Paid max-HP/capacity gains preserve absolute current health/shield and all break/reboot state.
 

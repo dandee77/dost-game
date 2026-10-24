@@ -1,6 +1,6 @@
 # Project Overview
 
-**24 October combat progression decision:** positive online shield absorbs the complete breaking hit without hull spillover. Combat Drones are persistent allied battle droids; each destroyed droid rebuilds after 20 combat seconds. Owner rejected fixed combat-skill rank/army-count caps; random offers still govern field access. Numeric-attribute cap scope awaits clarification. These are selected targets, not completed integration.
+**24 October combat progression decision:** positive online shield absorbs the complete breaking hit without hull spillover. Combat Drones are persistent allied battle droids; each destroyed droid rebuilds after 20 combat seconds. Owner rejected fixed combat-skill rank/army-count caps; random offers still govern field access. Numeric-attribute rank and purchase caps are also removed; weapon tiers remain T1–T5. Droids spread fire across nearby enemies and concentrate when fewer remain. These are selected targets, not completed integration.
 
 **Boss-mode retreat decision:** no mid-fight retreat. Ordinary return portals are disabled in Boss mode regardless of energy/shield. The base portal appears only after boss death and bypasses both requirements. Other modes keep their ordinary return rules.
 

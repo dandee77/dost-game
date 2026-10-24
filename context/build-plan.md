@@ -2,9 +2,9 @@
 
 The order in which the game is built between **14 October** and the **25 October 2026** submission. Each numbered item is one unit of work: one branch, one pull request, one entry in `progress-tracker.md`. Do not start an item until its dependencies meet the Definition of Done in `code-standards.md`.
 
-## Current checkpoint — DOC-14 shield and army decisions
+## Current checkpoint — DOC-15 attribute progression and targeting
 
-Record owner-selected full-hit shield absorption, uncapped skill/army progression and persistent droids with individual 20-second rebuilds. Reconcile affected review/task references and ask whether numeric-attribute caps are included. Verify documentation and existing build; no source changes in this checkpoint.
+Record removed numeric-attribute caps, continuing paid prices and droid spread-fire targeting. Reconcile active references and clarify bounded-stat continuation. Verify documentation and existing build; no source changes in this checkpoint.
 
 ## Task-list maintenance for every work item
 

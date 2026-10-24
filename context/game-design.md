@@ -6,7 +6,9 @@
 - Combat Drones are the allied battle droids. They persist until destroyed. Each destroyed slot rebuilds after **20 combat seconds**; hub, pause and mandatory cards freeze that timer. Base visits do not revive them. Upgrades must not heal surviving droids or reset existing rebuild timers.
 - The owner rejected fixed gameplay ceilings on skill ranks or the resulting army/count progression. Players may keep building a droid army and upgrading combat skills whenever an eligible random offer appears; no offer is guaranteed. Do not replace future count gains with damage-only upgrades or silently discard earned units to enforce a performance cap.
 - Performance work must preserve purchased/earned gameplay: efficient spatial queries, allocation reuse and cosmetic-only effect reduction are acceptable. Finite hardware and numeric representation still require stress testing and explicit failure handling; this decision is not a claim of unlimited runtime capacity. Any proposed gameplay cap requires a new owner decision.
-- Existing physical-size limits, positive cooldown floors, weapon tiers and numeric-attribute caps are separate contracts. Whether the owner also wants numeric-attribute caps removed is pending clarification; do not infer that weapon tiers or all cooldown floors disappear.
+- Owner also removed numeric-attribute card-rank and paid-purchase caps. Weapon tiers still end at T5. Physical-size rules and valid numeric/stat domains remain separate; critical progression beyond 100% and extreme firing-speed handling are under follow-up review. Never charge for a no-effect upgrade or silently restore a rank cap.
+
+**Battle-droid targeting selected:** spread fire across valid nearby enemies, then concentrate when fewer targets remain. Delegated implementation: prefer targets with less allied committed damage relative to remaining HP; use range and stable entity IDs to break ties. Durable targets can receive several droids. Release stale reservations on target death, shot resolution or droid destruction; avoid retargeting every frame. Exact range/cadence remain tuning tasks, not an army cap.
 
 ## 24 October Boss mode loop — owner revision
 
@@ -252,7 +254,7 @@ Future checks before any balance claim:
 | Attribute | Field-card increment | Purchased increment |
 |---|---|---|
 | Weapons Payload | +15 percentage points base-primary damage | +3.75 percentage points |
-| Critical Matrix | +5 percentage points critical chance | +1.25 percentage points, probability capped at 100% |
+| Critical Matrix | +5 percentage points critical chance | +1.25 percentage points; beyond-100% progression under review |
 | Overclocked Chambers | Cooldown multiplier 0.90 | Cooldown multiplier 0.975 |
 | Reinforced Hull | +20 max/current HP | +5 max HP only, no healing |
 | Thruster Overdrive | Move-speed multiplier 1.10 | Move-speed multiplier 1.025 |
@@ -263,7 +265,7 @@ Future checks before any balance claim:
 
 Each purchase's gain is 25% of the listed card increment; compounded modifiers need not make four purchases exactly equal one card. Keep actual derived previews. Preserve fractional shield values. Capacity formula: `20 + 5*(deflectorCardRank - 1) + 1.25*paidCapacityPurchases`. Current HP/shield and cooldown debt are preserved on paid capacity increases.
 
-Proposed eight paid purchases per numeric attribute per run, owner-selected price `200 + 100*n` (5x prior draft) where n is its prior paid count: 200/300/400/500/600/700/800/900, total 4400. Persistent augment card ranks retain their existing cap 10; paid counts are independently capped and add their specified benefit. Deflector card rank remains an ability rank. Discrete Rapid Fire/Armor Piercing/Scatter/Broadside/Tail Gunner cards are field-only in the draft; no fractional projectiles or duplicate full-rank shop route.
+No fixed numeric-attribute rank or purchase cap (owner confirmed 24 October). Owner-selected price `200 + 100*n` (5x prior draft) where n is its prior paid count: 200/300/400/500/600/700/800/900, the first eight total 4400, not a purchase limit. Purchase N costs `100*N + 100`; total cost for N purchases is `50*N*N + 150*N`. Field ranks and paid counts remain separate sources and add their specified benefit without fixed rank/count caps. Deflector card rank remains an ability rank. Discrete Rapid Fire/Armor Piercing/Scatter/Broadside/Tail Gunner cards are field-only in the draft; no fractional projectiles or duplicate full-rank shop route.
 
 Owner-selected 5x owned-rank pricing: ordinary combat abilities use `500 + 250*r`; the existing four special abilities use `1000 + 375*r`; Deflector is excluded from whole-rank rows. Proposed owned Blink pricing is scaled to `3000 + 750*r`, first upgrade 3750; its inclusion/acquisition contract stays under review and first acquisition remains field-only. Owner-selected 10x special acquisition prices: Singularity 2400, Space Collapse 2800, Nuclear Missile 3200 and Armageddon 4000; stock rules are unchanged.
 

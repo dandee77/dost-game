@@ -4,7 +4,9 @@
 
 ## Start here
 
-- [x] **DOC-14 — Record shield/army decisions.** Full-hit shield absorption, uncapped combat-skill/army progression, persistent droids and individual 20-second rebuilds. Numeric-attribute cap scope remains a follow-up; runtime work remains T04/T10.
+- [x] **DOC-15 — Unlimited attributes and droid targeting.** Record removed attribute rank/purchase caps, continued price formula and spread-fire targeting. Critical overflow and extreme firing-rate formulas await answers; source integration remains pending.
+
+- [x] **DOC-14 — Record shield/army decisions.** Full-hit shield absorption, uncapped combat-skill/army progression, persistent droids and individual 20-second rebuilds. Attribute-cap scope subsequently resolved by DOC-15; runtime work remains T04/T10.
 
 - [x] **DOC-13 — Reconcile active context contracts.** Correct stale formulas, ordinary/Boss portal exceptions, Chaos scheduling, delegated work and confirmation lists; Verified 289 local links, whitespace and existing build. Documentation does not complete T04–T10.
 
