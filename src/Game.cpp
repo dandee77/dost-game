@@ -38,6 +38,7 @@ Game::Game()
 {
     restartButton = nullptr;
     mainMenuButton = nullptr;
+    for (int i = 0; i < MAX_SOUND_INSTANCES; i++) scoreSounds[i] = {};
 }
 
 Game::~Game()
@@ -45,8 +46,14 @@ Game::~Game()
     skills.reset();
     barricadeEvent.reset();
     ScrapManager::GetInstance().reset();
-    if (restartButton) delete restartButton;
-    if (mainMenuButton) delete mainMenuButton;
+    for (int i = 0; i < MAX_SOUND_INSTANCES; i++) {
+        if (scoreSounds[i].stream.buffer != nullptr) {
+            UnloadSound(scoreSounds[i]);
+            scoreSounds[i] = {};
+        }
+    }
+    if (restartButton) { delete restartButton; restartButton = nullptr; }
+    if (mainMenuButton) { delete mainMenuButton; mainMenuButton = nullptr; }
 }
 
 void Game::createUpgradeOffer()
@@ -109,6 +116,7 @@ void Game::resetRun()
     ExplosionConfettiManager::GetInstance().reset();
     GameOverOverlay::GetInstance().reset();
     DamageOverlay::GetInstance().reset();
+    killCounter.reset();
 }
 
 void Game::onSwitch()
@@ -186,12 +194,15 @@ void Game::onSwitch()
     Animator::GetInstance().Play("e_key_tutorial");
 
     for (int i = 0; i < MAX_SOUND_INSTANCES; i++) {
+        if (scoreSounds[i].stream.buffer != nullptr) {
+            UnloadSound(scoreSounds[i]);
+        }
         scoreSounds[i] = LoadSound("assets/sounds/score_sound.wav");
     }
 
     // Initialize game over buttons
-    if (restartButton) delete restartButton;
-    if (mainMenuButton) delete mainMenuButton;
+    if (restartButton) { delete restartButton; restartButton = nullptr; }
+    if (mainMenuButton) { delete mainMenuButton; mainMenuButton = nullptr; }
     restartButton = new Button(Rectangle{GAME_SCREEN_WIDTH/2.0f - 400, 1600, 800, 120}, "RESTART", 120, BUTTON_CENTERED);
     mainMenuButton = new Button(Rectangle{GAME_SCREEN_WIDTH/2.0f - 400, 1780, 800, 120}, "MAIN MENU", 120, BUTTON_CENTERED);
 

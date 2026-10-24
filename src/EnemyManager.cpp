@@ -119,9 +119,11 @@ void EnemyManager::spawnEnemy(Vector2 playerPos, float elapsed)
 
 void EnemyManager::removeEnemy(const std::string& id)
 {
-    // Animator::GetInstance().Stop(enemies[index]->getEnemyID());
-    enemies[id]->destruct(); 
-    enemies.erase(id);
+    const auto it = enemies.find(id);
+    if (it != enemies.end()) {
+        if (it->second) it->second->destruct();
+        enemies.erase(it);
+    }
 }
 
 void EnemyManager::reset()

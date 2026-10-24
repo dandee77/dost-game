@@ -1,5 +1,8 @@
 #pragma once
 #include "raylib.h"
+#include <cstddef>
+#include <string>
+#include <vector>
 class Player;
 class Game;
 class DebugTools;
@@ -15,9 +18,13 @@ struct EquipmentTestAccess {
     static void restart(Game& game);
     static void camera(Game& game, float dt);
     static void barricadeContact(Game& game, Vector2 previousPosition);
+    static void createUpgradeOffer(Game& game);
+    static bool chooseUpgrade(Game& game, std::size_t index);
+    static void damageEquipmentEnemy(Game& game, const std::string& id, int damage, Vector2 direction, float knockback, bool dropSkillScrap = true);
 #ifdef GAME_DEBUG
     static void execute(DebugTools& debug, Player* player, BarricadeEvent* barricade = nullptr);
     static void complete(DebugTools& debug);
     static void moveSuggestion(DebugTools& debug, int direction);
+    static std::vector<std::string> completions(const DebugTools& debug);
 #endif
 };

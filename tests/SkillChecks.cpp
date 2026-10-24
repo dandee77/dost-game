@@ -63,10 +63,10 @@ int runSkillChecks(const std::string& artifactDirectory)
     auto& bullets = BulletManager::GetInstance().getBullets();
     clear(game);
     enemy("weapon-reward", {0, -10}, 1);
-    game.damageEquipmentEnemy("weapon-reward", 100, {}, 0);
+    EquipmentTestAccess::damageEquipmentEnemy(game, "weapon-reward", 100, {}, 0);
     require(ScrapManager::GetInstance().pendingValue() == 2,
         "Ordinary weapon kills earn the same salvage as automatic skills");
-    game.damageEquipmentEnemy("weapon-reward", 100, {}, 0);
+    EquipmentTestAccess::damageEquipmentEnemy(game, "weapon-reward", 100, {}, 0);
     const auto earned = ScrapManager::GetInstance().collectAll();
     require(earned.trade == 2 && earned.salvage == 2,
         "Repeated damage on a removed enemy cannot duplicate its reward");
@@ -87,7 +87,7 @@ int runSkillChecks(const std::string& artifactDirectory)
         "Earned salvage opens a card choice without waiting for a timer");
     game.augmentCards.front().isAnimationComplete = true;
     game.augmentCards.front().isIntroPlaying = false;
-    require(game.chooseUpgrade(0) && game.progress.queuedChoices == 2 && !game.chooseUpgrade(0),
+    require(EquipmentTestAccess::chooseUpgrade(game, 0) && game.progress.queuedChoices == 2 && !EquipmentTestAccess::chooseUpgrade(game, 0),
         "One selected card consumes exactly one queued level");
     // Repeating an ability pick must change real combat, not only its label.
     clear(game);
@@ -253,14 +253,14 @@ int runSkillChecks(const std::string& artifactDirectory)
         game.augmentCards.emplace_back(Vector2{}, Vector2{1200, 300}, ABILITY_SPACE_COLLAPSE, pick);
         game.augmentCards.emplace_back(Vector2{}, Vector2{1200, 300}, ABILITY_COMBAT_DRONE, 1);
         for (auto& card : game.augmentCards) { card.isAnimationComplete = true; card.isIntroPlaying = false; }
-        require(game.chooseUpgrade(0) && game.skills.level(ABILITY_SPACE_COLLAPSE) == pick, "Real card selection learns then upgrades ability");
-        require(!game.chooseUpgrade(0) && !game.chooseUpgrade(1) && game.skills.level(ABILITY_COMBAT_DRONE) == 0,
+        require(EquipmentTestAccess::chooseUpgrade(game, 0) && game.skills.level(ABILITY_SPACE_COLLAPSE) == pick, "Real card selection learns then upgrades ability");
+        require(!EquipmentTestAccess::chooseUpgrade(game, 0) && !EquipmentTestAccess::chooseUpgrade(game, 1) && game.skills.level(ABILITY_COMBAT_DRONE) == 0,
             "One choice locks all cards until the selection exits");
     }
     clear(game);
     std::set<int> offered;
     for (int round = 0; round < 100; ++round) {
-        game.createUpgradeOffer(); std::set<int> distinct;
+        EquipmentTestAccess::createUpgradeOffer(game); std::set<int> distinct;
         for (const auto& card : game.augmentCards) {
             const int key = card.getAbilityId() == ABILITY_COUNT ? static_cast<int>(card.getAugmentId()) : AUG_COUNT + static_cast<int>(card.getAbilityId());
             require(distinct.insert(key).second, "Offer never contains duplicate choices"); offered.insert(key);
@@ -270,14 +270,14 @@ int runSkillChecks(const std::string& artifactDirectory)
     for (const auto& info : abilityCatalog()) for (int pick = 0; pick < 5; ++pick) game.skills.upgrade(info.id);
     for (const auto& info : augmentCatalog()) if (info.id != AUG_NANO_REPAIR)
         for (int pick = 0; pick < 10; ++pick) applyAugment(player, info.id);
-    game.createUpgradeOffer();
+    EquipmentTestAccess::createUpgradeOffer(game);
     require(game.augmentCards.size() == Balance::UPGRADE_OFFER_COUNT &&
         std::any_of(game.augmentCards.begin(), game.augmentCards.end(), [](const Card& card) { return card.getAbilityId() != ABILITY_COUNT; }),
         "Level-five abilities remain available after passive augments are maxed");
     game.gameState = GAME_AUGMENT_SELECTION;
     game.progress.queuedChoices = 1;
     game.augmentCards.front().isAnimationComplete = true; game.augmentCards.front().isIntroPlaying = false;
-    require(game.chooseUpgrade(0), "Full-health run can still finish the picker");
+    require(EquipmentTestAccess::chooseUpgrade(game, 0), "Full-health run can still finish the picker");
     clear(game);
     std::set<std::string> keys;
     for (const auto& info : augmentCatalog()) {
@@ -463,7 +463,7 @@ int runSkillChecks(const std::string& artifactDirectory)
     game.executeDebugCommand("skill upgrade combat-drone extra");
     require(game.skills.level(ABILITY_COMBAT_DRONE) == 2, "Malformed upgrade command cannot grant a level");
     game.debugTools.input = "skill equip ";
-    require(game.debugTools.completions().size() == 18, "Autocomplete exposes all eighteen abilities");
+    require(EquipmentTestAccess::completions(game.debugTools).size() == 18, "Autocomplete exposes all eighteen abilities");
 #endif
     EquipmentTestAccess::restart(game);
     require(player.getMaxHealth() == 100 && player.getAugmentLevel(AUG_WEAPONS_PAYLOAD) == 0 &&
