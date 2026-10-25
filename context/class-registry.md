@@ -248,6 +248,7 @@ All use the same pattern: `static X& GetInstance()` with a function-local static
 - Gotchas: no virtual `getRadius()`; collision radii are read from class-specific methods (`getHitbox().width`, `getDebrisSize()`). Item 10 adds `virtual float getCollisionRadius() const` with a default of `rect.width / 2`.
 
 ### Player
+- Beta target [loadout decision](../todo/02-gameplay/beta-loadout.md): base engine, one accepted cannon profile/fire loop and one live point shield, with rank-1 Deflector driving its capacity. Legacy equipment shields/deflector-hit counters/Space guard cannot stack in normal play; prototype builds/chassis remain debug/deferred. Initialize only on true new run, not station/Resume. Current fields/APIs below remain source baseline until migration.
 - P5: owns 14 typed augment levels, max health, damage multiplier, critical chance/RNG, and temporary deflector charges. `applyAugment`, `getAugmentLevel`, `getMaxHealth`, `scaleAttackDamage`, `teleport`, `setDeflectorHits`, `getDeflectorHits`, `fireClone`, `getPrimaryInterval`, `getLaserDamage`, `takeContactDamage` expose the needed behavior. `init` resets every new field. All primary weapons support damage/critical, burst and pattern augments; health HUD and hull art read maxHealth. General PlayerStats consolidation remains item 08.
 - P3: `resolveBarricadeContact(Vector2 correctedPosition, Vector2 normal, Vector2 source)` always corrects position/velocity for living players, but calls normal damage only in PLAYER_DEFAULT. Existing shields, debug invincibility, stun and iframe timers remain authoritative.
 - Files: src/Player.hpp, src/Player.cpp
@@ -277,6 +278,7 @@ All use the same pattern: `static X& GetInstance()` with a function-local static
 - Constructors: Debris(playerPos) chooses a variant; Debris(playerPos, DebrisKind) chooses a specific variant. Ten typed variants share behavior; no random scale.
 - API: update(), draw(), getDebrisID(), getDebrisSize() (fixed collision radius from Balance), getKind(), getTextureKey(), getDisplayName(), destruct(bool harvestable = false).
 - Draw dimensions come from Theme; collision radius and scrap yield come from Balance. Body remains centered within a 96 x 96 frame. DebrisInfo stores texture, display name and a unique destructTexture key. Destruct queues that variant's own eight-frame sheet and saved final-fleck layout.
+- Planned material metadata: [ten-kind mapping](../todo/03-economy/scrap-types.md#3-assignment-rules) assigns nine METAL kinds and POLYMER Coil, with no amount changes or material RNG. DebrisInfo has no material field yet; add typed metadata to existing profile/reward owners during T02 rather than creating a parallel manager.
 - IDs use a monotonic counter and are never reused. Collision circles are retained for all silhouettes. No new entity class per art variant.
 ### ScrapPickup
 - Files: src/ScrapPickup.hpp/.cpp
@@ -299,6 +301,7 @@ All use the same pattern: `static X& GetInstance()` with a function-local static
 ## Enemies
 
 ### Enemy
+- Q43 planned presentation: damaged living normal enemies expose current/spawn-scaled maximum HP for [small overhead bars](ui-rules.md#damaged-normal-enemy-health-bars--q43-confirmed-25-october). Reuse the already-planned `maxHealth`/`getMaxHealth()` below, initialize after final spawn tuning and keep current `Entity::getHealth()`. No health-bar entity/singleton or guessed denominator. Boss HUD remains separate; source HP storage/rendering is not changed by this documentation.
 - P6 checkpoint 1: protected virtual `advanceCooldowns(float dt)` advances knockback recharge; `updateWithStatus(dt)` calls it even while stunned, before suppressing movement/fire.
 - P5: owns stun/corrosion clocks; `applyStun`, `applyCorrosion`, `updateWithStatus(dt)`, `getContactDamage`, `isStunned`, `isCorroded`. Corrosion slows movement and halves contact/new projectile damage; stun prevents movement/fire. Barricade formations ignore both statuses to preserve their shared event clock. Temporary speed changes are restored after update.
 - P3: `canReceiveKnockback() const` is virtual; `getPreviousPosition() const` defaults to current position and is overridden for moving barricade sweeps. `BARRICADE_ENEMY` appended to EnemyType.
@@ -345,7 +348,7 @@ All use the same pattern: `static X& GetInstance()` with a function-local static
 - Behavior: homing. Each frame it lerps its direction toward the player (`turnSpeed` 5) and moves at 15 to 30 units/s. Kamikaze on contact. HP 30.
 - Sprites: picks one of three variants at random: `low_level_enemy1` (10 frames), `low_level_enemy2` (5), `low_level_enemy3` (5); destruct `*_destruct` (8, 8, 7 frames). All frames 64 x 64 px.
 - 15 October art: variant 1 crushed-can biter, variant 2 leaking-battery crawler, variant 3 cracked-monitor parasite. Mutated-trash pixel art with dusty mauve metal, purple tissue and toxic-green features. Matching individual breakup sheets, existing animation keys/counts/timings and collision behavior preserved. Originals archived under assets/textures/legacy/low-enemies; source prompts and export registration in assets/source/low-enemies.
-- Gotchas: the constructor initializes `textureName` with one random roll and the animation with a second, separate roll; `textureName` is unused for drawing. Harmless; do not rely on `textureName`.
+- Gotchas: the constructor initializes `textureName` with one random roll and the animation with a second, separate roll; `textureName` is unused for drawing. [Planned material assignment](../todo/03-economy/scrap-types.md#metadata-ownership-and-exceptions) must derive sprite and METAL/POWER/CIRCUIT family from one selected typed variant. Current mismatch is not harmless if reused as reward metadata; no source fix is delivered by this note.
 
 ### BarricadeEnemy
 - Files: src/BarricadeEnemy.hpp, src/BarricadeEnemy.cpp
@@ -551,6 +554,8 @@ All use the same pattern: `static X& GetInstance()` with a function-local static
 - `Card` stores an `AugmentId`, so Game no longer compares titles. Game samples three distinct catalog entries using a reset `std::mt19937`; shared RunRng integration stays deferred. No duplicate skill-class hierarchy is needed.
 
 ### SkillSystem
+- Q45 planned HUD: [19-icon contract](ui-rules.md#compact-automatic-ability-hud--q45-confirmed-25-october) reuses level/cooldown/isActive/drawStatus and Game's HUD integration. Expose read-only cast-time cooldown span and actual active/shield/droid facts as needed; do not create another timer/owner or derive debt from current-rank tuning. Source selected-Q text remains prototype behavior; icon rendering/data additions are not implemented here.
+- 25 October target only: Q33 independent enemy acquisition, 19-ability matrix, persistent Deflector/Rings/droids and deterministic Blink safety are in [automatic-targeting.md](../todo/02-gameplay/automatic-targeting.md). Q34 confirms nearest valid single target without boss bias, stable ID ties and separate group/droid rules. Reuse this owner, revalidate stable IDs and emit results to Game; no new targeting/shield singleton. Current 18-ID/manual APIs below are not yet converted.
 - P5.1: `upgrade(AbilityId)`, `level(AbilityId)`; free `abilityTuning(id, level)` and `abilityUpgradeDescription`. Earned levels continue past five; radius/range growth stops at five while count, damage, duration and recharge continue. Repeated equip upgrades, while re-equip after unequip preserves rank. State snapshots `castLevel`; pools snapshot stats. Collapse zones use dynamic storage; drone values have real HP, independent movement/fire and contact cooldown. Existing resets clear both levels and drones; no extra singleton reset required.
 - Files: src/SkillSystem.hpp/.cpp
 - Status: implemented P5 (17 October)
@@ -675,6 +680,7 @@ All use the same pattern: `static X& GetInstance()` with a function-local static
 - Planned item 08: incoming enemy/boss damage amounts remain separate; this prototype adds player projectile damage only.
 
 ### DamageIndicator / DamageIndicatorManager
+- Q44 target: [all-hit popup contract](ui-rules.md#floating-damage-numbers--q44-confirmed-25-october) requires actual applied damage, explicit critical tier, same-target/tier cosmetic buckets and frame-time pause/reset rules. Extend these existing owners; current integer/position/maxDamage API below has no stable target/critical metadata or grouping. Constructor's max-damage comparison is not a reliable critical event. No source API is changed here.
 - Files: src/DamageIndicator.*, src/DamageIndicatorManager.*
 - Status: existing
 - Kind: value + singleton

@@ -1,6 +1,8 @@
 # Story Trailer — Text Only
 
-**25 October Q31 performance direction:** Read this with the selected shared original English narrator, calm and serious. Convey weight and resolve with measured pauses; intensifying footage/edit/music need not turn the voice into shouting. Keep the saved voice profile used by intro/ending. Final clip timing follows the production storyboard; this remains text, not audio/video.
+**25 October Q42 captions:** Caption every final spoken trailer line, including speech over animated/gameplay footage. Supply timed phrase cues from the actual recording and readable captions in the export; avoid duplicate overlays on already-captioned footage. This untimed script does not itself deliver audio, cue timing or video.
+
+**25 October Q31/Q41 performance direction:** Read this with the shared original AI-generated English narrator: natural human sound, calm and serious. Convey weight and resolve with natural emphasis and measured pauses; intensifying footage/edit/music need not turn the voice into shouting or robotic station processing. Keep the saved voice profile used by intro/ending. Final clip timing follows the production storyboard; this remains text, not audio/video.
 
 We kept throwing it away.
 
@@ -18,6 +20,8 @@ We spent it making more waste.
 
 In 2718, scientists announced another breakthrough: an atmospheric treatment that could help our wounded world recover.
 
+<!-- Q36 confirms exact fictional years 2718/2723/2732/2733. Keep this production note out of narration and displayed text. Script wording remains draft. -->
+
 Five years later, we released it.
 
 We never understood what it would do to the life we had already created.
@@ -32,7 +36,7 @@ With each generation, the creatures that survived became better adapted to a wor
 
 Then they came for the people still living in it.
 
-Within nine years, only one in a hundred remained.
+By 2732, an estimated one in a hundred people remained.
 
 The survivors fled to stations they could still defend. They patched the walls, restored the lights, and gave their refuge a name.
 

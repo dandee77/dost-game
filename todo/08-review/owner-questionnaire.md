@@ -1,5 +1,7 @@
 # Owner questionnaire - 24 October 2026
 
+**25 October current instruction:** Owner is away; hold questions until they return. Continue delegated context authoring from confirmed choices. Do not invent human release facts or treat unanswered preferences as owner approvals.
+
 **25 October latest clarification: ask about needed game content only.** Ask one short question about genuinely unresolved story/gameplay/presentation intent at a time. Do not continue deadline, paperwork or task-assignment questionnaires. Author routine technical/numerical details from existing direction. Preserve the owner's no-more-Campaign-questions delegation. Human release facts remain unconfirmed unless supplied. This clarification supersedes the immediately preceding blanket stop-question instruction.
 
 | Question | Answer / status | Consequence |
@@ -36,6 +38,19 @@
 | Q30: Player-entered name or fixed story name? | **Player enters their name - owner confirmed** | Prelaunch name panel captures local run identity; mission/results use Cadet [Name]. No fixed protagonist name or dynamic spoken-name generation. |
 | Q31: Narrator's usual tone? | **Calm and serious - owner confirmed** | Same original English voice across intro/ending/trailer; measured delivery with restrained emotion, no shouting or new narrator per scene. |
 | Q32: Music style? | **Dark electronic / synth - owner confirmed** | Shared synth direction with restrained HOPE/story bed, driving ordinary combat and tense bosses; teammate audio brief supplies routing/delivery instructions. |
+| Q33: Automatic abilities choose enemies or follow mouse? | **Choose enemies automatically - owner confirmed** | Primary weapon still follows mouse; abilities acquire/aim independently with no forced ship rotation. Target matrix authors individual trigger/range/fallback rules. |
+| Q34: Single-target abilities prioritize nearby boss or nearest threat? | **Nearest threat** | Choose nearest valid enemy from the attack origin; no boss bias. Stable ID breaks equal-distance ties. Droids retain spread fire and area attacks retain group selection. Written PREP-05 delivered; runtime conversion remains open. |
+| Q35: Hide upgrade cards that cannot benefit the current weapon or abilities? | **Hide them until useful** | Filter current-build compatibility before sampling; permit useful new abilities and preserve owned ranks. Full HP/cooldowns are not incompatibility. Exact weapon mapping remains open. |
+| Q36: Exact story years or relative dates only? | **Keep proposed years 2718–2733** | Confirm breakthrough 2718, release 2723, collapse estimate 2732, cadet deployment 2733. Preserve five/nine-year intervals; chronology approval does not approve every script line or deliver media. |
+| Q37: Legendary cards random or guaranteed after an unlucky streak? | **Random, with no guarantee** | No pity counter, escalating miss-streak odds or forced milestone/run-end Legendary. Luck remains scrap-only; proposed numerical gate/grades and actual sampler remain open. |
+| Q38: Must choose an upgrade card or allow skipping? | **Pick one card** | Every nonempty offer requires an explicit valid pick; no Skip or deferred combat. Pause/focus preserves the offer; process queued picks once before resuming. Empty-pool recovery remains open. |
+| Q39: State roughly 99% lost or omit the figure? | **State the estimate of how many are left** | Use “By 2732, an estimated 1% of humanity remained,” equivalent to the existing roughly 99% loss. No absolute census is established; do not invent a population total or imply all survivors live at HOPE. |
+| Q40: Keep firing-pattern cards alongside the station weapon tree? | **Keep compatible pattern cards** | Cards modify the equipped primary; station purchases evolve its tier/branch. Authored 26-node pattern eligibility preserves dormant ranks and excludes recursive secondary patterns; exact numerical combinations/remaining mappings/runtime stay open. |
+| Q41: Natural human narration or robotic station voice? | **Natural human voice** | Original AI-generated English narrator sounds human, calm and serious; same saved voice across intro/ending/trailer. No robotic filter or new station-AI character. Actual clip production remains open. |
+| Q42: Keep narration subtitles visible during animated scenes? | **Yes—caption all spoken lines** | Timed English captions continue over footage; matching story cards avoid duplicate text. Captions remain with mute/missing voice, freeze with pause and clear on skip/exit. Production/rendering/export remain open. |
+| Q43: Show normal-enemy health bars or bosses only? | **Normal enemies too, when damaged** | Small overhead bars while alive/below full HP/in view; no fade timeout. Use actual spawn-scaled max HP and preserve across presets. Bosses keep named HUD; normal adds get small bars. Implementation remains open. |
+| Q44: Floating damage numbers for all hits, critical only or hidden? | **All hits** | Positive outgoing damage from primary/abilities/periodic effects remains visible. Actual applied amount, explicit critical tier and same-target/tier cosmetic grouping; existing popup owners reused. Complete hit metadata/grouping/runtime readability remain open. |
+| Q45: Combat HUD cooldown icons for learned automatic abilities? | **Yes—compact ability icons** | One read-only icon per owned ability, ranks and genuine cooldown/active/persistent states. Starter shield and independent droid rebuilds use accurate owner data; no manual skill prompts. Art/HUD integration remains open. |
 
 ## Boss-mode retirement
 
@@ -114,6 +129,10 @@ Preview slider changes live. Persist on slider release, confirmed preset change 
 Verify close/reopen retention, missing/malformed files, nonfinite/out-of-range gains, unknown schema/preset, failed writes, mute restoration, graphics changes at a safe render boundary and exact originating pause/panel restoration. Saving preferences does not authorize mid-run save games.
 
 ## Narration contract
+
+**Q42 full speech coverage:** Caption all spoken lines across intro/ending/trailer, including voice carried over animation. [Caption/cue contract](../01-story/story-context.md#complete-narration-captions--q42-confirmed-25-october) preserves large-card/footage alternation, avoids duplicate text and synchronizes pause/mute/missing-voice/skip behavior. Actual clips, timed cues, renderer and exports remain production/runtime work.
+
+**Q41 vocal sound:** Use a natural human voice for the original AI-generated narrator, retaining calm/serious English delivery and one shared profile. Natural emphasis/pauses and clear dry speech; no robotic cadence or metallic/vocoder station effect. [Production instruction](../09-art/audio-direction.md#narration-and-sound-effects) leaves gender/pitch/provider to the teammate within this direction. AI disclosure remains required; no generated audio, human-performer credit or new in-world narrator identity is implied.
 
 **Q31 delivery:** Calm and serious is the usual tone. Use clear English diction, measured pacing and restrained emotion. Intro communicates regret/gravity without theatrical yelling; ending allows quiet hope without changing the voice's identity; trailer may grow more purposeful while retaining composure. Rising trailer pace comes from edit/action/music, not rushing or shouting the lines. Keep one saved original voice profile and pronunciation guide across all clips. Do not imitate a named real person or introduce another narrator for a different scene. Address player as Cadet/Pilot/you; no per-name voice generation.
 

@@ -1,6 +1,34 @@
 # TODO — Remaining Work
 
-**25 October current workflow:** Owner clarified: questions only about needed game content, one at a time. Routine technical/numerical and remaining Campaign details stay delegated; no administrative questions. [Score/results](02-gameplay/results-and-leaderboards.md), [creature direction](09-art/creature-direction.md) and [audio direction](09-art/audio-direction.md) complete PREP-08/09/18/13 writing; [Cadet identity](01-story/player-identity.md) is specified. Current open umbrella count: 52. Runtime/art/audio remain unfinished and unconfirmed human facts stay explicit; earlier counts/workflows below are historical snapshots.
+**Latest written delivery — 25 October DOC-58:** [Material source coverage](03-economy/scrap-types.md#3-assignment-rules) completes PREP-20 with explicit debris, basic/ranged/heavy and guardian mappings plus future source/visual acceptance. Current open umbrella count **43**. Metadata/art/runtime implementation remains open; these are not 43 unanswered questions. Context files only, with questions held while owner away. Earlier counts are historical.
+
+**Latest written delivery — 25 October:** PREP-23/24 [numeric attributes and Luck](03-economy/attribute-and-luck-contract.md) is adopted from existing defaults, including exact source/price/payout/snapshot math. Current open umbrella count **44**; source/asset/runtime/economy work remains open. Context/planning only, questions held. Earlier dated counts are historical.
+
+**25 October latest written delivery:** [34-card chooser/rarity/acquisition](07-upgrade-proposals/beta-card-selection.md) and [26-node card capabilities](07-upgrade-proposals/card-compatibility.md) complete PREP-04/25. Current open umbrella count **46**. Actual gameplay code/assets/statistical/readability work remain open. Context/planning only; hold questions while owner away. Earlier counts are historical.
+
+**25 October latest delivery — context only:** PREP-03's [beta loadout/equipment inclusion](02-gameplay/beta-loadout.md) specification is delivered. One normal cannon/base engine/persistent shield, no legacy stacking or station reinitialization. Runtime remains open; current umbrella count is **48**. Owner is away: hold questions and continue Markdown preparation. Earlier counts below are historical snapshots.
+
+**Current instruction — owner away:** Hold questions until they return; continue delegated context authoring. Q45 compact owned-ability HUD is specified for all 19 entries in [UI rules](../context/ui-rules.md#compact-automatic-ability-hud--q45-confirmed-25-october). Actual icon art/metadata/renderer remain open; 49 open umbrella tasks. Earlier question workflows below are historical.
+
+**25 October Q44:** All positive outgoing hits show damage numbers, with explicit critical styling and accurate applied totals. [Popup contract](../context/ui-rules.md#floating-damage-numbers--q44-confirmed-25-october) reuses existing indicator owners and groups rapid hits only by target/tier. Source integration/readability/performance remain open; 49 open umbrella tasks.
+
+**25 October Q43:** Damaged normal enemies show small overhead HP bars; bosses retain named bars and phases. [Written display rules](../context/ui-rules.md#damaged-normal-enemy-health-bars--q43-confirmed-25-october) cover real scaled max HP, visibility, layout/presets and overlap. Actual storage/rendering/readability validation remain open; 49 open umbrella tasks.
+
+**25 October Q42:** All spoken lines receive English captions, including voice over moving footage. [Cue/readability/playback/export contract](01-story/story-context.md#complete-narration-captions--q42-confirmed-25-october) preserves separate main story cards and avoids duplicate overlays. Actual cue/audio assets, renderer and exports remain open; 49 open umbrella tasks.
+
+**25 October Q41:** Shared original AI-generated English narrator sounds natural and human, calm and serious. [Production instructions](09-art/audio-direction.md#narration-and-sound-effects) preserve one profile; teammate handles remaining voice-production details. Actual audio/playback remain open; 49 open umbrella tasks.
+
+**25 October Q40:** Compatible firing-pattern cards remain beside station-only cannon evolution. [26-node qualitative matrix](07-upgrade-proposals/weapon-tree.md#pattern-card-compatibility-by-cannon-node) specifies eligibility and root/secondary/signature boundaries. Numerical combinations/remaining mappings/runtime stay open; 49 open umbrella tasks.
+
+**25 October Q39:** Story states **an estimated 1% of humanity remained by 2732**, derived from the existing roughly 99% loss. World/intro/trailer/science copy agrees; no absolute headcount established. Final copy review/media remain open; 49 open umbrella tasks.
+
+**25 October Q38:** Upgrade offers require one explicit valid card pick; no Skip or deferred combat. [Choice/queue policy](07-upgrade-proposals/automatic-skills-and-rarities.md#4-proposed-field-offer-weighting) preserves locked offers across pause/focus and processes pending choices before resuming. Empty-pool recovery and runtime remain open; 49 open umbrella tasks.
+
+**25 October Q37:** Legendary field cards stay random, with no pity guarantee or miss-streak increase. [Policy](07-upgrade-proposals/automatic-skills-and-rarities.md#4-proposed-field-offer-weighting) is confirmed; numerical gate/grades/acquisition and runtime remain open. Umbrella count stays 49.
+
+**25 October Q35/Q36:** Cards hide until useful to the current build; [eligibility policy](07-upgrade-proposals/attributes-and-luck.md#current-build-card-eligibility--q35-confirmed-25-october) preserves owned ranks and useful new abilities. Exact weapon mapping/rarity remain open. Story dates 2718/2723/2732/2733 are confirmed; final copy review remains open. No runtime/media delivery; umbrella count remains 49.
+
+**25 October current workflow:** Owner clarified: questions only about needed game content, one at a time. Routine technical/numerical and remaining Campaign details stay delegated; no administrative questions. Score/results, creature/audio direction and Blink safety writing are delivered; Cadet identity is specified. Q34 nearest-threat confirmation completes the written [target matrix](02-gameplay/automatic-targeting.md). Current open umbrella count: 49. Runtime/art/audio remain unfinished and unconfirmed human facts stay explicit; earlier counts/workflows below are historical snapshots.
 
 **24 October Q19/Q20:** Simultaneous player/boss death records boss clear and ends the run without revival. [Outcome contract](../context/game-design.md#24-october-simultaneous-boss-clear---q19q20-confirmed) completes PREP-15 design. Current open umbrella count is 56; earlier counts below are dated snapshots. Runtime/scoring/results remain unfinished.
 
@@ -67,6 +95,7 @@ Read the required context references first, then the planning register, world/sc
 |---|---|
 | [Field return portals](02-gameplay/return-portals.md) | Selected random portal/F interaction replacing manual teleport; shield/half-energy gates, limited-range pointer; count/placement/replenishment still open |
 | [Scoring, results and leaderboards](02-gameplay/results-and-leaderboards.md) | Adopted four-mode score/event/outcome/tie rules, names, versioned local data, anti-farming and safe save/recovery; runtime still open |
+| [Automatic targeting/Blink](02-gameplay/automatic-targeting.md) | 19-ability target/trigger/debt matrix, nearest single target, droid spread and safe Blink defaults; written contract delivered, runtime open |
 | [Background art handoff](09-art/background-brief.md) | Instructions for teammate production: scene identities, shared layers, verified replacement formats, prompt starting points and delivery checks; no assets generated |
 | [Scavenger art direction](09-art/creature-direction.md) | Confirmed hidden-body/seam direction with low/boss silhouette guidance and enclosed orbital cores; teammate produces actual assets |
 | [Audio direction and routing](09-art/audio-direction.md) | Dark synth track/SFX/voice handoff, scene matrix, one-owner gains/fades/focus/skip/exit/failure rules; production/runtime pending |

@@ -1,5 +1,106 @@
 # UI Rules
 
+## Compact automatic-ability HUD — Q45 confirmed, 25 October
+
+Show one compact icon for each owned automatic/persistent ability, including the rank-1 starter Deflector. Use the 19-entry target catalog, not the 18-entry manual prototype or all 34 field cards. Numeric/pattern attributes, Luck, weapon tiers and world portals are not ability cooldown icons. Filter owned entries in stable target-catalog order; acquisition may insert a new entry, but cooldown changes never reorder icons. No locked/unowned placeholders or earned rank/army cap.
+
+Icons are read-only combat information: no casting, manual selection, intercepted Shoot/mouse aim or Q/Space skill prompts. Full names, exact rank/effect and detailed timers belong in paused build details using the same owner snapshot. Each icon has a rank badge; abbreviate large display values while retaining exact values in details, never clamp actual ranks.
+
+| State | Combat presentation | Meaning / source |
+|---|---|---|
+| Cooldown debt > 0 | Dimming/radial mask and remaining seconds rounded upward | Real combat-time debt; mask denominator is cooldown captured at activation, not new-rank tuning |
+| Timed effect active | Steady active border plus any actual cooldown debt | Active and cooldown can coexist; no display-induced reset |
+| Debt zero, timed effect inactive | RDY | Waiting for its valid target/trigger, not a promise of a current hittable enemy |
+| Active window open after debt reaches zero | ACT | No duplicate overlapping cast merely because cooldown is zero |
+| Persistent Laser Rings | ON plus rank | No invented cooldown/despawn |
+| Deflector | ON/OFF; real reboot debt when applicable | One authoritative shield; main shield HUD owns points/overcharge |
+| Combat Drone | Living/earned slots and rebuilding indicator | No universal army cooldown; paused details show individual destroyed-slot timers |
+| Blink protection active | Active border plus actual Blink cooldown | Guard and cooldown separate; failed safe-point searches spend neither |
+| Return protection/combat suspension | Preserve state and dim action status | No hidden ticking, free activation or cooldown refund |
+
+Display-only ceil must not mutate a positive float debt into zero. Missing/invalid timing metadata shows a neutral unknown marker, never invented RDY. Drawing reads snapshots only: no targeting, RNG, lock refresh, cast, shield refill or droid rebuild.
+
+Authored logical-canvas defaults, to be added to Theme: origin (220,1500), ten columns, cell pitch 128, icon 96 square centered in the cell, rank/state labels with existing readable caption styling. All 19 fit two rows within x 220..1500 and y 1500..1756, above the named boss-bar region near y 1900 and away from upper resource HUD. Keep complete tile/text bounds inside the safe area; compose tips/captions/panels around required HUD. Apply the canvas transform once, not world-camera scaling. All presets preserve information; optional glow may be reduced.
+
+Teammate art instructions: consistent original pictograms, square transparent 96x96 PNGs if new raster icons are produced; register actual files/provenance later. No images generated here. Missing art uses these unique glyphs on simple tiles; fallback is not final artwork.
+
+| Ability | Fallback glyph | Pictogram direction |
+|---|---|---|
+| Scrap Magnet | SM | Magnet drawing scrap |
+| Repulsor Pulse | RP | Outward circular pulse |
+| Deflector Shield | DS | Closed shield |
+| Radiant Halo | RH | Bright corona |
+| Corrosive Trail | CT | Droplet and trail |
+| Point-Defense Interceptor | PI | Shot stopped at boundary |
+| Laser Rings | LR | Orbiting blade |
+| Lightning Ring | LT | Ring and bolt |
+| Chain Lightning | CL | Linked lightning nodes |
+| Combat Drone | CD | Small companion craft |
+| Shield Detonation | SD | Broken shield and burst |
+| Plasma Beam | PB | Focused beam |
+| Hologram Clone | HC | Paired ship silhouettes |
+| Realm Breaker | RB | Split rift |
+| Nuclear Missile | NM | Generic warhead and burst |
+| Singularity | SG | Inward spiral |
+| Space Collapse | SC | Folding tiles |
+| Armageddon | AR | Cluster of impacts |
+| Blink Drive | BD | Offset ship and motion gap |
+
+Pause/cards/console/focus and station visits preserve actual timers/ranks. Show icons only over their displayed combat arena, not hub/map/story/results. New Run clears old ownership/timers, then shows the real starter state. Resume/new encounter cannot reset debt through UI. Reuse SkillSystem level/cooldown/isActive/drawStatus and Game's HUD pass; accurate shield/droid read-only data still needs integration. No independent HUD timers/singleton. Source still draws selected-Q prototype text, not this 19-icon target.
+
+Later acceptance: starter-only/all-19/stable-order HUD; 0.01 s debt displays 1 without becoming ready; ready/no-target and active/debt-zero distinctions; rank purchase preserves mask denominator/debt; persistent shield/rings and independent rebuilds; pause/focus/return/reset; no click-to-cast/input theft; art fallback; all presets/window scales. Inspect real crowded layout/readability later. Written specification only; no icon art, snapshot API, renderer or playtest delivered.
+
+## Floating damage numbers — Q44 confirmed, 25 October
+
+Show floating numbers for all positive resolved player-owned damage to hostile enemies/bosses and existing HP-based combat obstacles: primary shots, supported secondary/signature damage, automatic abilities, droids/clone and damage-over-time ticks. Ordinary hits remain visible, not only critical hits or bosses. Misses, blocked/immune zero-damage events, cleanup/despawn and objects without a numerical damage model produce no invented damage number. Player incoming damage retains its existing hull/shield/HUD feedback; this contract covers outgoing combat numbers.
+
+Use actual damage applied to that target, after its damage rules and limited to the health removed, not raw attack power or overkill. A 12-damage hit removing a target's final 5 HP contributes 5. A lethal hit still creates its number at the saved impact position; the popup owns its position/value and must not dereference a removed enemy. Game's authoritative resolved-hit path emits the cosmetic fact once; duplicate callbacks cannot award a second amount. The display never deals damage, grants loot/score, changes critical rolls or advances signature counters.
+
+Critical styling uses the attack's resolved critical tier, including the existing tiers above 100% rating. Ordinary amounts use the existing light text color; critical amounts use the existing accent color plus a textual CRIT marker so color is not the only cue. Tier one may show `24 CRIT`; higher tiers show a compact explicit tier, e.g. `36 CRIT2`. Amount is the already-resolved damage, not multiplied again for display. Never infer a critical from damage equaling a maximum roll; a strong normal hit is still normal. Abilities without an authored critical rule retain ordinary styling.
+
+At ordinary rates, show each resolved hit promptly. Rapid hits may accumulate into the same visible number only for the same stable target ID and same critical tier within a short fixed cosmetic bucket. The first hit displays immediately; later matching hits update its exact stored sum. Never merge different enemies or merge normal damage into a critical label. The bucket uses `[firstHit, firstHit + window)`: a hit exactly at the end starts a new bucket. Its boundary is not extended by every hit. Keep full precision internally and round only the final displayed text; positive sub-unit damage must not become a false zero. Use an explicit `<0.1` display below that precision. Actual hit/critical/proc/reward calculations remain separate from cosmetic grouping.
+
+| Planned Theme token / existing UI rule | Authored default | Purpose |
+|---|---|---|
+| DAMAGE_NUMBER_BUCKET | 0.1 combat seconds | Same-target/same-tier aggregation window, first hit visible immediately |
+| DAMAGE_NUMBER_LIFETIME | 1.5 combat seconds | Preserve the prototype lifetime; starts at first hit and is not refreshed by bucket additions |
+| TEXT_WORLD_DAMAGE | Existing UI-rule size 4 world units | Use world-space font size once; source still has the literal until Theme migration |
+| Normal / critical color | Existing COLOR_TEXT / COLOR_ACCENT | Textual critical tier also distinguishes outcomes |
+
+Draw through existing DamageIndicatorManager world-space rendering, above impact sprites but clear of mandatory telegraphs, overhead HP bars, HUD and captions. Use saved impact anchors, readable offsets and deterministic/isolated cosmetic drift; cosmetic motion cannot consume encounter/loot/card/critical RNG. Theme owns lifetime/window/font/motion/style constants when implemented. All presets retain ordinary and critical feedback; reduce decoration or coalesce same-target/same-tier cosmetic output under load rather than hide normal hits. Exact extreme-load rendering budgets remain PREP-14/T10, not a claim that arbitrarily many separate texts fit every machine.
+
+Only running combat advances bucket age, drift/fade and lifetime with frame time. Pause/cards/console/hub freeze these clocks; do not show a suspended field's numbers over hub/map/story/results. New run/reset and retiring an arena clear its cosmetic buckets/indicators; reset cannot preserve stale IDs or delayed totals. No popup may change terminal results or continue allocating from an abandoned encounter.
+
+Current baseline is partial: DamageIndicatorManager/Indicator already exist, Game calls their reset/update/draw and several hit paths add integer values. Equipment damage uses actual HP removed, while the legacy bullet popup passes raw damage; the constructor styles by `damage >= maxDamage`, not explicit critical metadata. Bucket grouping, fractional values and consistent authoritative-hit coverage are future work. Extend these existing owners rather than adding another popup manager. Written acceptance: ordinary and critical single hits, 12 into 5 HP -> 5, same-target tier-zero 3+4 -> 7, different target/tier separation, lethal cleanup, small fractional totals, pause/reset, all presets and dense continuous-fire readability. No source fix or runtime visual test is delivered here.
+
+## Damaged normal-enemy health bars — Q43 confirmed, 25 October
+
+Show a small overhead health bar for every visible living normal enemy with `0 < currentHP < maxHP`. Include basic/ranged/heavy enemies and normal boss-owned adds; spawning at full HP shows no bar. Successful damage reveals the bar as soon as the enemy remains alive below maximum. No timeout: keep it while damaged, hide immediately on full healing, death/despawn or leaving view, and restore it on re-entry if still damaged. Damage rejected by immunity or dealing zero cannot reveal a full-health enemy's bar. Pause freezes underlying HP and retains the same visible bars; a new run cannot inherit bars/HP snapshots. Only the displayed combat arena supplies these bars; do not draw a suspended field's bars over hub/map/story/result panels.
+
+Use each entity's actual spawn-scaled maximum HP, captured after its final spawn tuning, rather than its untuned archetype base or highest recently observed health. If a future mechanic explicitly changes maximum HP, update the authoritative maximum and derive the display from that same state. Presentation cannot heal, recalculate difficulty/HP, change targeting or create an enemy shield/armor statistic. Current source has inherited current health; Enemy's maximum-health/getter is a planned addition, not an API already delivered here.
+
+Bars show a simple current/max fill ratio, clamped for drawing only; no name, numeric HP text, boss phase marker, hit-timer fade or decorative animation. Keep the named boss HUD with actual numbers/phases; bosses do not also get this ordinary overhead bar. Player/drone bars keep their separate rules. Debris, barricade formation segments, pickups, scenery and friendly colony traffic do not acquire normal-enemy bars from this decision.
+
+Project the top-center of the rendered enemy bounds once into screen space and draw a horizontal bar above it, without sprite rotation or double camera scaling. Keep it anchored to that entity; no off-screen arrows or clamping an off-screen enemy's bar to the screen edge. Clip to the combat viewport and respect HUD/panel masks. Do not obscure mandatory telegraphs, captions or interaction errors. Do not add remote enemy detection or a target-selection system just to draw health.
+
+Authored presentation defaults, to be added to Theme during implementation:
+
+| Planned Theme token | Logical canvas pixels / value | Purpose |
+|---|---|---|
+| NORMAL_ENEMY_HP_WIDTH | 100 | Fixed readable screen-space width |
+| NORMAL_ENEMY_HP_HEIGHT | 12 | Total bar height including border |
+| NORMAL_ENEMY_HP_GAP | 12 | Gap above projected sprite top |
+| NORMAL_ENEMY_HP_BORDER | 2 | Border inset; fill uses remaining interior |
+| Track / fill / border | Existing COLOR_PANEL / COLOR_DANGER / COLOR_TEXT_MUTED | Distinguish remaining HP without extra palette/assets |
+
+Use the current logical-canvas transform at each window size; these are not world-unit dimensions. Every Low/Medium/High preset retains these required bars with the same health information, not a particle budget or an optional enemy-count cap. In overlaps, draw farther enemies first and nearer enemies last, with stable entity ID ties; preserve each bar's true anchor rather than merging unrelated health. Use viewport/spatial culling and simple primitives; no per-frame texture/font allocation or logging. Crowded readability/performance still needs runtime validation.
+
+Later acceptance: full enemy hidden; nonlethal hit shows correct fraction; lethal first hit never leaves a detached bar; paused damage/HP cannot advance; off-screen/re-entry preserves real fraction; healing to full hides; different spawn-scaled HP yields correct denominator; boss adds obey normal rules while bosses retain named bars; restart clears old entities; all presets/window scales retain the information. Example: a spawned 50-HP enemy at 25 HP shows half fill; a scaled 100-HP enemy at 25 shows quarter fill. Written target only; no renderer or HP storage code is implemented here.
+
+**25 October Q42 narration captions:** Show English captions for all speech, including narration over moving scenes and muted playback. A matching story card serves as its caption while visible; otherwise one compact block, at most two wrapped lines, inside the existing CRT-safe area with readable body font/high-contrast backing. Keep clear of action/HUD/Skip hint; split cues rather than shrink text. Pause/focus freezes the cue, Resume restores it, and skip/advance/exit clears it with its voice clip. [Full contract](../todo/01-story/story-context.md#complete-narration-captions--q42-confirmed-25-october) supplies timing/fallback/export rules. Written UI target only; no renderer/export delivered.
+
+**25 October Q38 mandatory cards:** Nonempty upgrade panels require an explicit valid card pick; no Skip, timer auto-pick, cash replacement or dismiss-to-combat. One remaining option still requires confirmation. Show pending-choice count; freeze combat behind the panel. Pause/focus Resume restores that same offer. Consume selection and transition inputs so they cannot activate another card, shoot or enter a portal. Allow existing confirmed abandonment; no banked picks. [Queue/input contract](../todo/07-upgrade-proposals/automatic-skills-and-rarities.md#4-proposed-field-offer-weighting) applies; exact empty-pool recovery and runtime validation remain open.
+
 **25 October player-entered Cadet name:** After difficulty, show a name field in the existing menu flow, then Continue/Back. Normalize to the existing 3-12-character A-Z/0-9/space format; require a valid name and display Cadet separately. Consume confirmation input and preserve the draft on Back. Hub/briefings/results use Cadet {name}; leaderboard name uses the captured name alone. Results offer Submit Result/leave-unsaved confirmation, without another name entry or alias edit. Safe-area/font/button constants stay in Theme. See [identity contract](../todo/01-story/player-identity.md).
 
 **25 October result/leaderboard contract:** Use [current rules](../todo/02-gameplay/results-and-leaderboards.md): immutable results, visible outcome/eligibility, score and active time, Boss clears/Campaign progress, safe name entry and Saved/Retry state. Name/confirm/skip/back consume input once; ending skip cannot submit twice. Four-mode/difficulty board filters show current-rules top 10, latest run highlight and no mixed-rule comparison. Keep within established safe area and readable row style; paginate rather than shrink text. A failed save preserves the frozen result; unsupported/corrupt-file status must not imply a successful save. No online account/login or extra scene beyond existing planned boundaries.

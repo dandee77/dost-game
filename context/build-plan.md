@@ -2,9 +2,9 @@
 
 The order in which the game is built between **14 October** and the **25 October 2026** submission. Each numbered item is one unit of work: one branch, one pull request, one entry in `progress-tracker.md`. Do not start an item until its dependencies meet the Definition of Done in `code-standards.md`.
 
-## Current checkpoint — DOC-41 synth audio handoff
+## Current checkpoint — DOC-58 material source coverage
 
-Record Q32: dark electronic/synth. Complete written PREP-13 production/routing contract: three shared tracks, state/transition matrix, one playback owner, Master/Music/SFX/voice/duck/mute, focus/skip/exit and missing-resource behavior. Verify actual current music mappings, docs/matrix/gain examples and existing build. No audio generation/runtime delivery; PROJECT-07/T09/T10/media work stay open. Remaining technical schedules/targeting/compatibility authoring follows the readiness inventory.
+Deliver PREP-20 written material coverage for ten debris kinds, three basic variants, ranged/heavy and four planned guardians. Inspect existing sprites/source; preserve reward values and no-drop/merge semantics; record the independent basic-sprite selectors for later T02 integration. Verified profile coverage, Markdown-only scope, links/tables and unchanged-source build. Actual metadata/art/loot acceptance remains open. Next preparation priorities are encounter/spawn data, portal geometry/lifecycle and the ordered implementation handoff. Context/planning only; hold questions while owner away.
 
 ## Task-list maintenance for every work item
 

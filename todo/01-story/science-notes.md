@@ -34,10 +34,10 @@ Use “mutated after exposure, then evolved across generations” in detailed lo
 
 | Story statement | Status | Writing rule |
 |---|---|---|
-| Waste-eaters already exist when scientists develop a separate atmospheric treatment in 2718 | Fictional future event; date proposed | Describe it as experimental and intended to support a larger recovery program |
+| Waste-eaters already exist when scientists develop a separate atmospheric treatment in 2718 | Fictional future event; date owner-confirmed Q36 | Describe it as experimental and intended to support a larger recovery program |
 | Atmospheric deployment follows five years later | Fictional chronology | Show development, release and failure as separate events |
 | Chemical exposure changes engineered waste-eaters' DNA and behavior | Confirmed fictional premise, not a demonstrated organism or predictable effect | Biological cores are alive; scavenged shells remain nonliving |
-| Approximately 99% die in nine years | Fictional survivor estimate | Include infrastructure collapse and exposure, not just direct monster attacks |
+| By 2732, an estimated 1% of humanity remained after nine years | Fictional survivor estimate; Q39 requests survivor-focused wording | Equivalent to roughly 99% loss; no absolute census is established. Include infrastructure collapse and exposure, not just direct monster attacks |
 | Selected orbital stations offer refuge | Setting choice | Local isolation and screened routes make them viable; orbit still contains hazards |
 | Concentrated source sites continually produce contamination | Fictional encounter premise | Infested nests and residue reservoirs have supplies, dispersal equipment and a shutdown condition |
 | Boss defeat permits restoration missions | Gameplay and story outcome | Containment opens a corridor; climate recovery remains unfinished |

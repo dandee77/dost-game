@@ -2,7 +2,7 @@
 
 **25 October Q32 music:** Dark electronic/synth throughout. Intro uses restrained ominous textures; ending allows a quiet hopeful motif; trailer escalates rhythm/editing while the narrator stays calm and serious. [Audio handoff](../09-art/audio-direction.md) defines three shared music assets, scene routing, ducking and pause/skip/exit behavior. No music/audio is generated here.
 
-**25 October Q31 narrator performance:** Usual delivery is **calm and serious**, using the same original English voice in intro/ending/trailer. Intro carries measured regret, ending restrained hope, trailer purposeful composure; increased editing/action pace does not imply shouting/rushing the narration. [Voice contract](../08-review/owner-questionnaire.md#narration-contract) supplies teammate production direction. No voice audio is generated here.
+**25 October Q31/Q41 narrator performance:** Use the same original AI-generated English voice across intro/ending/trailer, with **natural human sound** and **calm, serious** delivery. Intro carries measured regret, ending restrained hope, trailer purposeful composure; increased editing/action pace does not imply shouting/rushing. Preserve natural sentence stress/pauses without robotic station processing. [Voice contract](../08-review/owner-questionnaire.md#narration-contract) supplies teammate production direction; gender/pitch/provider remain production choices. No voice audio is generated here.
 
 **25 October Q29/Q30 protagonist:** Player enters their name and is addressed as **Cadet [Name]**. [Identity contract](player-identity.md) places name entry after difficulty and before the hub, preserving it through the run/restart and capturing it in results. Runtime text substitutes the name; preproduced narration says Cadet/Pilot/you, with no per-name voice generation or fixed protagonist biography. Existing ship-based play remains unchanged.
 
@@ -23,7 +23,7 @@ The owner-requested [text-only story trailer](story-trailer-text.md) preserves t
 The confirmed format is **short story text -> animation/gameplay -> next story text -> next moving scene**, with rising trailer pacing. Text introduces an idea; the next shot demonstrates it. Intro/ending/trailer share one original English AI narrator. Readable story cards and meaningful motion remain required.
 
 - TEXT: a short original sentence, high contrast, comfortable reading hold inside the CRT-safe area. Subtle background movement is allowed.
-- FOOTAGE: story text clears before action begins. Ships move, machinery works, living waste-eaters move inside scrap shells, enemies attack or salvage is collected. Panning over an otherwise static image cannot be the only movement in every shot.
+- FOOTAGE: the large story card clears before action begins; Q42 narration captions remain visible while speech continues. Ships move, machinery works, living waste-eaters move inside scrap shells, enemies attack or salvage is collected. Panning over an otherwise static image cannot be the only movement in every shot.
 - CONNECTION: an idea about the colony is followed by the inhabited colony; an idea about recovery is followed by actual recovery.
 - AUDIO: music bridges cuts; effects follow visible events. Intro/ending/trailer narration follows English story text without adding essential off-screen facts. Preserve the same voice/profile and pronunciation across all three. Sound-off viewing remains understandable. Voice may finish over associated motion after the card clears, with no unrelated overlap.
 - TIMING: intervals below include fades. Keep most of each three-second text interval fully readable; do not spend it on a slow typewriter reveal.
@@ -35,9 +35,9 @@ No walking avatar, dialogue tree, new 3D environment or video-decoding library i
 
 Earth suffers prolonged climate disruption and waste accumulation. Scientists first engineer living waste-eaters called Scavengers for terrestrial facilities and protected orbital recovery pods. Humanity relies on them while continuing wasteful habits. A separate atmospheric treatment is developed in 2718 and released after five years in 2723. Unexpected exposure changes the creatures' DNA and behavior, making them hostile to humans. They take in material indiscriminately, digest suitable fractions and bind retained scrap into external armor. Across later generations, useful inherited shell-building traits become more common. Scrap remains nonliving. Transported organisms and residues spread exposure into orbit.
 
-By 2732, survivor estimates put population loss at roughly 99%, following nine years of attacks and infrastructure collapse. Selected existing orbital stations become defensible refuges. In 2733, the player joins **H.O.P.E. Colony — Habitat for Orbital Preservation and Endurance** as a cadet salvage pilot. Clear routes, recover useful materials and isolate the concentrated sources that keep the wreckage dangerous.
+By 2732, an estimated 1% of humanity remained after nine years of attacks and infrastructure collapse. Q39 asks to state survivors; no absolute headcount is established. Selected existing orbital stations become defensible refuges. In 2733, the player joins **H.O.P.E. Colony — Habitat for Orbital Preservation and Endurance** as a cadet salvage pilot. Clear routes, recover useful materials and isolate the concentrated sources that keep the wreckage dangerous.
 
-Dates are proposed. Five development years, collapse in less than a decade, cadet role and the source-cleanup campaign are the owner's direction. Orbit remains contaminated; screened stations are locally safer, not a claim that space is clean. No radiation accident, special seed or magical planet-restoration object drives the story.
+Q36 confirms the exact fictional years: breakthrough 2718, release 2723, collapse estimate 2732 and cadet deployment 2733. Retain five development years and the nine-year collapse interval across story, trailer and background-screen instructions. Orbit remains contaminated; screened stations are locally safer, not a claim that space is clean. No radiation accident, special seed or magical planet-restoration object drives the story. This confirms chronology only, not every draft line or completed playback.
 
 Theme: dependence on cleanup delayed responsibility until the consequences became unavoidable. Selected tagline: **“We kept throwing it away. Until it came back for us.”** See [narrative theme](narrative-theme.md) for slogans, tone and an optional synopsis passage. The timed script below uses shorter lines that fit its reading windows.
 
@@ -51,7 +51,7 @@ Proposed placement: once per application launch, after Loading and before Main M
 | 3-8 s | FOOTAGE | Show a benign waste-eater processing selected refuse, then its protected orbital recovery pod. More waste arrives. Cut to an atmospheric-treatment trial labeled 2718: a separate program begins |
 | 8-11 s | TEXT | “Five years later, our treatment changed them.” |
 | 11-16 s | FOOTAGE | Show the 2723 release, then an altered waste-eater pulling fragments against its body and binding them into a rough shell before lunging. A contaminated transport reaches an orbital pod; its living core moves. No chemical wave crosses vacuum |
-| 16-19 s | TEXT | “By 2732, only one in a hundred remained.” |
+| 16-19 s | TEXT | “By 2732, an estimated 1% of humanity remained.” |
 | 19-24 s | FOOTAGE | Abandoned surface routes give way to evacuation craft and patched orbital stations. Construction arms link reused modules; warm windows reveal people still surviving |
 | 24-27 s | TEXT | “H.O.P.E. became our home. You became its cadet.” |
 | 27-32 s | FOOTAGE | Mothership reveal; cadet ship launches from its berth, defeats a small threat and collects salvage. Show a recognizable ship and colony landmark |
@@ -114,7 +114,7 @@ The separate gameplay demonstration remains a different deliverable. This traile
 | 3-15 s | FOOTAGE | Living waste-eaters process refuse on Earth and inside orbital pods; incoming waste keeps increasing. Show the separate atmospheric project labeled 2718, then five years of development ending at a 2723 deployment display |
 | 15-18 s | TEXT | “2723. The treatment changed more than the sky.” |
 | 18-30 s | FOOTAGE | Atmospheric exposure reaches the waste-eaters. Show uncontrolled gathering: digestible refuse disappears into the body while plates remain fixed in a fibrous outer casing. Cut across later years to descendants wearing varied scrap shells and attacking service equipment. Exposed organisms/residues travel with cargo to orbital recovery pods. End on evacuation and abandoned infrastructure |
-| 30-33 s | TEXT | “One in a hundred survived. H.O.P.E. gave us a home.” |
+| 30-33 s | TEXT | “An estimated 1% remained. H.O.P.E. became our refuge.” |
 | 33-45 s | FOOTAGE | Reused stations connect, habitation lights brighten and a cadet ship leaves the mothership. Move into real flight, shooting and collected salvage |
 | 45-48 s | TEXT | “Recover what we need. Return when you can.” |
 | 48-60 s | FOOTAGE | Collection crosses a field-level threshold, the player chooses an upgrade and demonstrates it. Show eligible Return Home with positive online shield and sufficient charge |
@@ -124,11 +124,27 @@ The separate gameplay demonstration remains a different deliverable. This traile
 | 78-86 s | FOOTAGE | Actual implemented source-boss pressure, pilot evasion and retaliation. End with a hopeful survey-craft/colony/Earth composition; do not spoil the entire ending |
 | 86-90 s | TITLE | SCRAPBOUND: Last Hope, plus approved team/competition text. Four-second readable hold, fading toward the opening for a loop |
 
-Text totals 18 seconds, footage 68 and title four. Transitions/narration remain inside the 90-second export. Use the same English AI voice as intro/ending; measure real clip timing and carry a line into its associated footage when necessary. Keep story sentences off busy action; HUD and accessible speech subtitles may remain when needed.
+Text totals 18 seconds, footage 68 and title four. Transitions/narration remain inside the 90-second export. Use the same English AI voice as intro/ending; measure real clip timing and carry a line into its associated footage when necessary. Large story cards clear before action; Q42 requires compact captions for every spoken line, including speech over footage. Preserve HUD/action readability rather than omitting captions.
 
 If a feature is unavailable when recording, use truthful existing footage and revise the edit within the required duration. Lore scenes may illustrate fiction but must not masquerade as proof of functioning mechanics. Do not invent final boss footage before its design and implementation exist.
 
 ## 8. Playback and transition contract for later implementation
+
+### Complete narration captions — Q42 confirmed, 25 October
+
+Caption every spoken line in English across intro, ending and trailer, including narration carried into animated/gameplay footage. Beta captions are always shown, including when Master/SFX is muted; no new settings toggle or live speech-recognition service is required. Retain the alternating large story-card/footage structure. A timed story card can itself caption an exactly matching spoken line while that card is visible; do not duplicate identical text in a second overlay. If speech differs, or continues after the card clears, show the matching compact caption for that phrase. Main story cards never remain as large overlays over footage merely to serve as subtitles.
+
+Author phrase-level cues against the final voice clips: sequence/beat ID, voice-clip ID, start/end offset and text. Offsets use the clip/presentation timeline, not active combat time or the audible gain. Cover the complete spoken wording, allowing equivalent written numerals such as 1% for “one percent”; retain qualifiers like “estimated.” No unspoken extra lore or essential missing words. Split long speech into readable cues instead of shrinking text, scrolling, a typewriter reveal or karaoke highlighting. No automatic transcription/generation is performed here.
+
+Draw one caption block inside the existing CRT-safe screen area using the established readable body font and high-contrast backing. At most two wrapped lines; keep it separate from the Skip hint, title, key action and HUD. Recompose framing or split a cue if needed. Do not add a speaker-name row for the single narrator or read the player's entered name. Exact layout constants belong in Theme when implemented; use the existing font/safe-area rules, not tiny export-only subtitles.
+
+Pause/focus loss freezes the current cue with voice/presentation; explicit Resume continues that same point. Muting audio changes gain, not cue progression. If a voice asset is unavailable, authored presentation cues/story cards still render on the planned timeline; never gate captions on whether sound is audible or successfully loaded. Such fallback does not deliver required narration. Advancing/skipping clears the current cue and stops its clip together; no old cue may leak into the next beat/menu/frozen result. Continuing the same voice line into its associated footage preserves its cue; unrelated scene transitions cannot carry that line across.
+
+Teammate delivers timed cue data with final voice clips. The standalone trailer export includes readable burned-in captions; keep an editable cue/subtitle source as production material, with no new runtime subtitle-format library required. Caption any added spoken trailer/demo line too. If actual captured footage already displays the same caption, avoid burning a duplicate over it. Cue timing fits the existing 40/24/90-second targets; captions do not extend sequences or mutate results.
+
+Later acceptance: every spoken line is readable at actual display size, all voice-over-footage is captioned, a matching story card has no duplicate overlay, silent/missing-voice viewing retains captions, pause/focus resumes the same cue, skip/advance cleans up and normal endings expose the same single frozen result. Written specification only; no caption renderer, real audio timing audit or exported video is delivered.
+
+### General playback and destinations
 
 - Intro completion or Skip Intro reaches Main Menu once. It does not create a run. Start and difficulty confirmation remain explicit player actions.
 - Ending completion or Skip Ending reaches the already finalized run result once. It cannot restart combat or duplicate leaderboard submission.
@@ -144,7 +160,8 @@ Needed: story cards; five intro motion blocks; three ending blocks; six trailer 
 
 For every asset produced later, record source/license, creator/tool, prompt when generated, date and edits in assets/ASSETS.md. This preparation session adds no assets or provenance claims.
 
-- [ ] Text precedes footage and clears before related action.
+- [ ] Main story cards precede footage and clear before related action; compact narration captions continue as required by Q42.
+- [ ] Every spoken line has a complete readable caption; matching visible cards avoid duplicate overlays, including mute/pause/skip/missing-voice cases.
 - [ ] Every motion block has a visible action, not only a stationary image.
 - [ ] Sound-off viewing communicates catastrophe, refuge, cadet mission and recovery purpose.
 - [ ] Text holds are readable at the real display size, within the CRT safe area.

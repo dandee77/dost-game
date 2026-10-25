@@ -1,5 +1,68 @@
 # Game Design
 
+## 25 October material profile coverage
+
+Adopt [explicit debris/enemy/guardian families](../todo/03-economy/scrap-types.md#3-assignment-rules): nine metal debris kinds plus polymer Coil; basic can/battery/monitor map to METAL/POWER/CIRCUIT, ranged/heavy to METAL, Shellback/Brood Hauler to METAL, Coilmaw to POLYMER and Nestheart to CIRCUIT. Material does not change any reward range, Luck eligibility, Salvage, score, energy, shop cost or service. Planned heavy/boss visuals must follow these profile instructions. Metadata implementation and actual art/runtime acceptance remain open.
+
+## 25 October adopted attributes and Luck
+
+Adopt existing numeric attribute field/quarter-paid values and selected per-node price 200+100*n as beta defaults; eight ordinary numeric field attributes plus Blast Radius and the paid-only Shield Capacity mapping yield ten numeric shop rows. Five discrete projectile cards remain field-only. Preserve separate full-card/paid counts, actual current Hull/shield on paid capacity gains, uncapped ordinary growth and shared precise previews. [Source/accounting contract](../todo/03-economy/attribute-and-luck-contract.md) formalizes inventory, snapshots and worked values. Adopt Luck rank r comparison probability 0.10*r, maximum rank 10, using max of two independent in-range trade rolls only on success; base roll and Luck comparison use separate spawn-time streams. Ordinary basic/ranged/heavy only, excluding bosses/debris/no-drop sources; fixed Salvage/score/rarity/energy/family unchanged. Details/means/gate/draw order are linked. These are delegated written defaults, not actual integration or measured economy/balance.
+
+## 25 October beta card catalog and selection
+
+Adopt [34-entry beta catalog/selection](../todo/07-upgrade-proposals/beta-card-selection.md) under delegation: grade counts 6/9/9/6/4; three distinct slot attempts; Legendary gate 50/10000; ordinary weights 4500/3000/1800/650 over remaining nonempty tiers. No pity/retry/exhaustion promotion. Require ordinary eligibility before generation; invalid data preserves the pick and offers confirmed restart/menu rather than a trapped empty panel. Apply [typed capabilities](../todo/07-upgrade-proposals/card-compatibility.md), actual benefit and Luck cap. Special stock remains three fixed entries from the selected four; Blink first acquisition and all Luck ranks remain field-only. Owned Blink price is 3000+750*r. These adopt existing proposals as written beta defaults, not measured balance or separately owner-approved numbers. Complete RNG/acquisition/lifecycle contract is linked; actual chooser/stock implementation remains open.
+
+## 25 October card capability mapping
+
+Adopt [26-node typed card capabilities](../todo/07-upgrade-proposals/card-compatibility.md) as the beta eligibility defaults under delegation: 18 projectile-pattern profiles, 16 direct/beam penetration profiles and nine primary circular-blast profiles. Armor Piercing adds one direct enemy contact per earned rank; existing later-contact damage factor is 0.60, with no wall/arc/flame/explosion-target bonus. Blast Radius also qualifies through explicitly owned tagged damaging circular abilities. Primary offensive attributes remain primary-only; copy geometry into clone once under its own tuning, not a second stack of player attributes. Existing radius/source/snapshot formulas remain authoritative. Numerical combined-fire/signature performance and actual handler delivery remain open; eligibility writing is not measured balance or source implementation.
+
+## 25 October beta loadout and shield inclusion
+
+Adopt the existing 100/100 hull baseline, T1 Starter Cannon, base engine and Q17's one persistent rank-1 Deflector at 20/20 online points for every new run. Start all other ability/card/paid counts and wallet/salvage/return charge at zero; primary auto-fire off. Shield capacity C0 is 20 for battery pricing. [Loadout integration contract](../todo/02-gameplay/beta-loadout.md) defers prototype engine/shield/build selection from normal play, prevents legacy point/hit-counter/Space shields stacking and defines fresh versus same-run initialization. No new source values or implemented shield migration is implied.
+
+## 25 October pattern cards and cannon tree — Q40 confirmed
+
+Compatible firing-pattern cards remain alongside station-only cannon evolution. Cards modify the equipped primary and cannot grant a new weapon/tier/branch. [26-node pattern matrix](../todo/07-upgrade-proposals/weapon-tree.md#pattern-card-compatibility-by-cannon-node) authors Rapid Fire/Scatter/Broadside/Tail eligibility: projectile root volleys support them; continuous beam/arc/flame profiles do not. Rapid Fire is extra burst shots in the current catalog, not cooldown reduction. Preserve dormant owned ranks across incompatible weapon changes and filter new offers under Q35. Never recursively copy patterns into signature/secondary effects or add signature ledgers per projectile/direction. Exact burst/fan/penetration/signature-load numerical adoption and runtime balance remain PREP-27/PREP-14/T08/T10; no code is delivered.
+
+## 25 October mandatory card choice — Q38 confirmed
+
+Each nonempty upgrade offer requires one explicit valid card pick, even when fewer than three options exist. No Skip, timer auto-pick, cash replacement or deferred combat resumption. Successful application consumes one queued choice once; process the next offer from the updated build before unfreezing combat. Pause/focus Resume restores the same locked offer. Quit/abandon/reset/terminal outcomes follow existing lifecycle; no banked picks or revival. [Choice contract](../todo/07-upgrade-proposals/automatic-skills-and-rarities.md#4-proposed-field-offer-weighting) records input/queue handling and the still-open empty-pool recovery requirement. PREP-04 and T03/T09 runtime acceptance remain open.
+
+## 25 October Legendary randomness — Q37 confirmed
+
+Legendary field cards stay random with no pity guarantee or miss-streak probability increase. Elapsed time, upgrade count, boss milestones and prior outcomes cannot force or compensate a Legendary. Eligibility and distinct-card rules still apply; Luck affects scrap only. [Rarity policy](../todo/07-upgrade-proposals/automatic-skills-and-rarities.md#4-proposed-field-offer-weighting) distinguishes this confirmed rule from proposed numerical weights/gate and acquisition exceptions. A run may have no Legendary; consecutive successes are allowed. PREP-04/25 exact sampler adoption and T03 runtime remain open.
+
+## 25 October useful-card eligibility — Q35 confirmed
+
+Hide field cards with no supported benefit to the equipped weapon/owned abilities. New ability acquisition counts; future unowned weapons/abilities cannot qualify modifier-only cards. Full health/shield, empty targets and cooldowns do not change structural compatibility. Preserve ranks across equipment changes; filter before sampling each new offer and retain locked offers. [Eligibility contract](../todo/07-upgrade-proposals/attributes-and-luck.md#current-build-card-eligibility--q35-confirmed-25-october) defines caps, stale choices and shop handling. Exact weapon mapping and rarity/exhaustion adoption remain PREP-04/22/25/27; no runtime chooser is delivered.
+
+## 25 October automatic targeting and Blink defaults
+
+Q33 confirms automatic enemy selection for abilities, independent of mouse-aimed primary weapons. [Complete target matrix](../todo/02-gameplay/automatic-targeting.md) covers all 19 abilities, geometry, no-target/debt/snapshot behavior and droid/Blink safety. Q34 confirms nearest valid enemy from the attack origin for single-target selection, without boss bias; equal distances use stable ID. Area group selection and droid spread fire remain separate. Written PREP-05 is delivered. These are target rules, not the current manual-skill prototype or measured balance.
+
+| Numerical control | Authored beta value / rule |
+|---|---|
+| Ground-placement/common acquisition bound P | 90 world units; target centers visible and legal |
+| Inactive no-target retry / ordinary target refresh | 0.1 combat seconds; immediate invalidation when an ID dies/leaves validity; never a firing-rate cap |
+| Group-center candidates | Nearest 32 valid anchors, distance then stable ID; no cap on affected victims or earned attack count |
+| Chain first target / hop distance | Captured Chain Lightning range R (base 45); later hops within R/2; 6 + rank - 1 distinct victims maximum |
+| Plasma Beam acquisition | Captured beam range R, base 65; automatic direction, existing cone geometry |
+| Clone acquisition / placement | Captured base range 60; existing 18-unit behind/left/right/front offset search |
+| Ground areas | Existing base radii: Nuclear 55, Singularity 42, Realm Breaker 24, Space Collapse 32, Armageddon blast 22; center placement within P |
+| Player-centered areas | Existing base radii: Repulsor 30, Radiant Halo 32, Lightning Ring 25, Interceptor 38; Detonation uses selected base 35 |
+| Laser Rings | Existing base orbit radius 18, blade radius 4; persistent, actual count and contact interval retained |
+| Corrosive Trail | Existing base pool radius 8, pool lifetime 3 s; at least 1 world unit between emitted pools after the first |
+| Armageddon target region | Enemy anchors within central 0.85 viewport dimensions and P; no empty-cursor casts |
+| Droids | Fire range 35 from droid; visible pursuit within P of player; reservations refresh 0.2 combat seconds; per-slot destroyed rebuild 20 combat seconds |
+| Magnet | Selected 60-unit radius; existing 15 s cooldown/5 s window and selected pull-speed rule |
+| Blink cooldown | max(12, 30 * 0.95^(rank-1)) combat seconds |
+| Blink travel | 35 * (1 + 0.15 * min(rank-1, 4)); rank 1 = 35, rank 5+ = 56 |
+| Blink candidates | 3 radii times 8 headings = 24; fixed order, no RNG |
+| Blink threat test | 0.25 combat-second predicted swept paths; player collider plus 2-unit safety margin |
+| Blink protection | 2 s direct-hit protection; unchanged by Phase Shift; failure grants nothing/spends no cooldown |
+
+Unchanged rank damage/duration/interval growth uses existing Balance tuning, with physical-size growth through rank five and separate applicable Blast Radius as already selected. Persistent Deflector/Laser Rings/droids override old timed-duration prototypes. All numbers move to Balance on implementation; presentation/query-work budgets belong in Config as appropriate. Primary-only Weapons Payload does not automatically multiply ability/clone damage. Complete weapon/card compatibility and extreme-rank numerical scheduling remain separate open work.
+
 ## 25 October scoring defaults - beta r1
 
 Author-selected implementation defaults under the owner's delegation; not implemented or playtested. Current rules identity: `beta-2026-10-25-r1`. [Result/leaderboard contract](../todo/02-gameplay/results-and-leaderboards.md) defines event ownership, worked examples, outcome precedence, ties, storage and acceptance cases.
@@ -418,6 +481,8 @@ Future checks before any balance claim:
 
 ### Numeric attribute proposal numbers
 
+**25 October adoption:** The unchanged table below is now the adopted written beta starting-value table under delegated design, governed by the [source/accounting contract](../todo/03-economy/attribute-and-luck-contract.md). The legacy heading is retained for links. Separate owner-confirmed constraints from these authored numbers; code/economy balance remains unverified.
+
 | Attribute | Field-card increment | Purchased increment |
 |---|---|---|
 | Weapons Payload | +15 percentage points base-primary damage | +3.75 percentage points |
@@ -442,7 +507,7 @@ Owner-selected 5x owned-rank pricing: ordinary combat abilities use `500 + 250*r
 |---|---|
 | Source | Legendary field cards only, both acquisition and upgrades; no shop purchase |
 | Rank | 0 unowned; 1–10 owned; owner-selected exception to uncapped attributes |
-| Quality-check chance | Proposed `0.10 * rank`, reaching 1.0 at rank 10 |
+| Quality-check chance | Adopted beta `0.10 * rank`, reaching 1.0 at rank 10; isolated spawn-time comparison |
 | Success | Keep higher of independent base/comparison uniform trade rolls inside the existing tier range |
 | Eligible reward tiers | Low/basic, mid/ranged, high/heavy only; not bosses/debris/excluded causes |
 | Price / eligibility | No price; remove from offers at rank 10; never substitute a paid Luck rank |

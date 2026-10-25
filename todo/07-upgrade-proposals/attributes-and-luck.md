@@ -1,5 +1,7 @@
 # Quarter-Strength Attributes, Shield and Luck
 
+**25 October adopted written contract:** [Attribute/Luck source and payout contract](../03-economy/attribute-and-luck-contract.md) adopts this existing table's initial field/paid values, ten numeric shop rows, discrete exclusions, per-node prices and exact Luck comparison/snapshot rules under current delegation. It supersedes older pending-adoption text below. No runtime stats/loot/shop implementation or balanced-economy claim.
+
 **21 October 2026. Context only.** Owner confirmed purchased attribute gains at **25% of a corresponding field card**, shield retained in cards, and mothership cannon progression. Remaining limits, prices and Luck details are proposals for later review. Numerical authority: pending-review ledger in [game design](../../context/game-design.md).
 
 **23 October pricing update:** Owner selected 5x numeric-attribute and owned-skill-rank prices, and 10x special-skill acquisition prices. Gains are unchanged. Exact current prices are in game-design.md; the earlier low-price draft is superseded. Luck adoption remains open.
@@ -54,6 +56,8 @@ Owner confirmed 24 October: no fixed numeric-attribute card-rank or paid-purchas
 
 ## 4. Discrete cards and skill ranks
 
+**Q40 confirmed:** Compatible firing-pattern cards remain alongside station-only cannon tiers. [26-node pattern matrix](weapon-tree.md#pattern-card-compatibility-by-cannon-node) defines authored projectile eligibility and dormant ranks. Rapid Fire means extra burst shots, distinct from Overclocked Chambers' cooldown reduction. Numerical composition and remaining penetration mappings are still open; field pattern retention does not authorize unsupported beam/arc/flame copies or fractional shop projectiles.
+
 Rapid Fire, Armor Piercing, Scatter Shot, Broadside Cannons and Tail Gunner remain full discrete field-card upgrades. Their purchase tab is disabled/absent in this draft because quarter of a bullet, penetration hit or firing direction is not meaningful. No four-purchase fractional-bullet queue is proposed.
 
 Other owned automatic abilities retain the prior whole-rank skill-upgrade offers, except **Deflector uses the capacity node instead of a full-rank shop offer**. Shield Detonation is its own combat ability and is not removed. Owned Blink has its separate Legendary rank-price proposal in the ledger; its first acquisition remains field-only. Whole skill ranks do not masquerade as quarter-strength attributes.
@@ -66,11 +70,27 @@ Owner-selected 23 October numeric attribute price (5x prior draft): purchase `n 
 
 Spending is atomic with the granted increment and requires the hub shop. No standard numeric augment is also sold through the old full-rank purchase row: that would bypass the 25% rule. Failed/stale/duplicate transactions do not charge. If a hard stat limit would make the purchase grant no effect, disable it and do not charge; previews show any clamped final gain. Paid max-HP/capacity gains preserve absolute current health/shield and all break/reboot state.
 
+## Current-build card eligibility — Q35 confirmed, 25 October
+
+**25 October mapping delivered:** [Typed 26-node capabilities](card-compatibility.md) now define every field-card family's structural prerequisites and explicit damaging-radius tags. This replaces the earlier unknown per-node eligibility below; exact burst/fan/signature numerical composition and runtime remain open.
+
+Owner selects **hide cards until useful**. Before sampling each new field offer, filter against the equipped weapon and owned abilities. A card must supply a supported benefit through acquisition or its next rank. A future cannon branch or not-yet-owned ability cannot justify a modifier-only card. Acquiring an unowned ability is itself a new capability and does not require prior ownership of that same ability.
+
+Evaluate structural compatibility, not momentary need. Full HP/shield does not hide genuine maximum-HP/shield improvements. Empty targets, no nearby scrap, cooldowns, offline shielding or temporary return protection do not make a functional ability incompatible. Luck remains eligible below rank 10 even without nearby pickups; its explicit rank-10 cap still excludes further cards.
+
+Blast Radius requires a currently equipped/owned compatible damaging area effect; a possible future explosion weapon is insufficient. Weapons Payload strengthens the current primary only. Pattern/penetration/rate cards require a supported effect on that primary profile. Unknown compatibility stays excluded until the exact 26-node weapon/card matrix defines a benefit; that mapping remains PREP-22/27 work.
+
+Recompute eligibility for new offers after accepted choices/equipment changes. Existing offers stay locked across pause/reopen; no free reroll, rarity boost or replacement is added. Preserve earned ranks through equipment changes; incompatible modifiers become dormant and resume when compatible, becoming eligible for further ranks then. No refund or rank erasure. Prevent equipment mutation while a field choice is pending; an unexpectedly stale invalid choice is disabled without granting/spending anything or silently rerolling.
+
+Apply this filter before distinct-entry/rarity sampling without consuming RNG merely to check compatibility. Q35 itself did not choose weights; subsequent delegated [beta selection](beta-card-selection.md) now adopts the written weights/exhaustion contract. Shops reuse compatibility facts and no-effect blocking without regenerating fixed stock or adding acquisition access. Runtime remains open.
+
+Written acceptance examples: direct-shot-only build cannot receive Blast Radius; learning a compatible damaging zone makes it eligible for the next new offer; an unowned attack ability can appear; a full shield can receive a genuine upgrade; rank-10 Luck cannot appear. Exact mappings and runtime T03/T08/T10 acceptance remain open. Documentation only.
+
 ## 6. Legendary Luck — owner-selected rules
 
 Luck affects trade scrap only. It is acquired and upgraded exclusively through Legendary field cards and has a maximum rank of 10. This is an explicit exception to uncapped ordinary attributes/skills. No workshop acquisition or paid rank is permitted. At rank 10, remove Luck from eligible offers. Luck never improves XP, return energy, card rarity, material family or shop stock.
 
-Proposed payout tuning: rank r grants a 10% * r chance to keep the higher of two independent uniform rolls within the enemy's existing trade range, reaching 100% at rank 10. The amount never exceeds that range. This preserves guaranteed ordinary drops; Luck improves their value, not drop existence. Apply initially to ordinary basic/ranged/heavy enemies, excluding bosses, debris and no-drop deaths. Exact payout strength remains a proposal for review, separate from confirmed acquisition and cap.
+Adopted payout tuning: rank r grants a 10% * r chance to keep the higher of two independent uniform rolls within the enemy's existing trade range, reaching 100% at rank 10. The amount never exceeds that range. This preserves guaranteed ordinary drops; Luck improves value, not drop existence. Apply to reward-eligible ordinary basic/ranged/heavy enemies, excluding bosses, debris and no-drop sources. The linked contract fixes base/Luck stream separation, exact gate/draw order and spawn snapshots; actual integration/balance remain open.
 
 Snapshot rank and final reward at enemy spawn using isolated loot/Luck randomness. Later cards, kills, pickup merges or base visits cannot reroll stored rewards. A rank-10 basic enemy roll has mean 22/9 (about 2.444), versus 2 without Luck: about +22.2% trade on average, not +100% scrap and not a guaranteed maximum roll.
 

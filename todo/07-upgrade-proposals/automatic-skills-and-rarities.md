@@ -1,4 +1,8 @@
-# Automatic Skills, Blink and Proposed Rarity
+# Automatic Skills, Blink and Beta Rarity
+
+**25 October adopted written catalog:** [Beta selection contract](beta-card-selection.md) adopts all 34 grades, independent gate/ordinary weights, fixed acquisition exceptions, deterministic draw order and safe exhausted-pool handling under existing delegation. [Complete card capabilities](card-compatibility.md) supplies all 26 weapon mappings. This supersedes proposal/pending-adoption language in older notes below; exact combined-fire numerical tuning and actual runtime remain open. Owner-confirmed choices and authored defaults remain distinct.
+
+**25 October targeting update:** Q33 confirms abilities acquire/aim at enemies independently of mouse-aimed primary fire. Q34 confirms nearest valid single target without boss bias, with stable ID ties and separate group/droid policies. [Complete target matrix](../02-gameplay/automatic-targeting.md) delivers PREP-05 writing: all 19 trigger/range/no-target/cast rules and concrete Blink safety. Adopt its Blink/mobility defaults under delegation rather than waiting for another tuning questionnaire. Rarity/weapon compatibility and actual runtime conversion remain unfinished.
 
 **21 October 2026. Context only.** The owner confirmed automatic combat skills and Legendary reactive Blink; the 23 October field return portals supersede manual Return Home. Other tier assignments/weights remain proposals for later confirmation. Existing implementation behavior is recorded in [skills commands](../../context/skills-commands.md), not changed by these documents.
 
@@ -6,7 +10,7 @@
 
 The earlier Nano Repair -> Shield Detonation target remains. There are **19 combat abilities** below plus **13 attribute/pattern augments**, 32 existing target entries, plus owner-selected Legendary Luck and Epic Blast Radius for **34 target cards**. Luck is capped at rank 10 and acquired/upgraded only through Legendary cards; it affects scrap payouts only. Field return portals are world interactions outside the card catalog, not an extra manual skill. New primary weapon families are equipment tree nodes, not added automatic-ability entries.
 
-| Ability | Proposed rarity | Automatic behavior and duration category |
+| Ability | Adopted beta rarity | Automatic behavior and duration category |
 |---|---|---|
 | Scrap Magnet | Common | Starts its timed local collection window when eligible released pickups are in range; respects radius and existing exclusions |
 | Repulsor Pulse | Common | Periodic instantaneous push when nearby enemies make a pulse useful; otherwise stays ready |
@@ -28,7 +32,7 @@ The earlier Nano Repair -> Shield Detonation target remains. There are **19 comb
 | Armageddon | Legendary | Timed automatic barrage with bounded effects; no manual target/cast button |
 | Blink Drive | **Legendary — owner confirmed** | Reactive interception of a direct incoming hit, legal on-screen relocation and short protected breathing window; full contract below |
 
-Rarity describes proposed field-offer frequency, not a random multiplier to skill damage. Already owned abilities can coexist. No limited active-slot inventory or skill swap button is introduced.
+Rarity describes adopted beta field-offer frequency, not a random multiplier to skill damage. Already owned abilities can coexist. No limited active-slot inventory or skill swap button is introduced.
 
 Companion persistence is owner-confirmed on 24 October: use a 20-combat-second per-destroyed-slot rebuild delay, frozen outside combat. Existing drone count/HP/damage growth remain; the owner rejected fixed army/count or combat-skill rank caps. Continued ranks depend on eligible random offers or established paid rank purchases, not guaranteed cards. A rank increase adds a slot under the normal spawn contract; it cannot heal an existing drone. Owner selected spread-fire targeting across nearby enemies, concentrating when fewer remain. Prefer under-covered targets while allowing multiple droids against durable enemies; exact range, reservation accounting and retarget cadence remain delegated implementation details. Per-slot timing prevents repeated whole-swarm creation while living drones remain. This differs from the current timed prototype and is not implemented.
 
@@ -53,7 +57,7 @@ Proposed cooldown examples: rank 1 = 30 s; rank 2 = 28.5; rank 5 approximately 2
 
 ## 3. Rarity of the 13 existing attribute/pattern cards plus Luck and Blast Radius
 
-| Proposed rarity | Cards |
+| Adopted beta rarity | Cards |
 |---|---|
 | Common | Weapons Payload, Overclocked Chambers, Reinforced Hull, Thruster Overdrive |
 | Uncommon | Critical Matrix, Rapid Fire, Phase Shift, Gyro Control, Inertia Impact |
@@ -65,11 +69,23 @@ Deflector remains in the ability table and the field pool. Numeric shop incremen
 
 ## 4. Proposed field-offer weighting
 
-The desired nominal per-slot proportions are Common 45%, Uncommon 30%, Rare 18%, Epic 6.5%, Legendary 0.5%. The three-option card panel still uses distinct eligible entries and the existing card RNG, isolated from loot/shop/cosmetic RNG. An entry's rarity does not increase the strength of an otherwise identical rank.
+**Q38 confirmed, 25 October — mandatory choice:** When a nonempty upgrade offer appears, the player must explicitly pick one valid card. No Skip/Decline, automatic timed selection, cash replacement or banking the choice while resuming combat. Fewer than three valid options still require a pick, including a one-card offer. No free reroll is introduced.
+
+Keep the offer and its pending choice until the existing rank/acquisition API successfully applies that card once. Then consume exactly one pending choice, lock further input and finish the panel exit. If more choices are queued, generate the next offer from the updated build before combat resumes; do not reuse the previous panel's eligibility snapshot. A declined/invalid application cannot consume a choice or award anything. Combat/mode time, cooldowns and world simulation remain frozen throughout the queued-choice chain.
+
+Esc/P may open the ordinary pause layer; Resume returns to the same locked offer, never directly to combat. Focus loss also preserves it and requires explicit Resume. Offer opening/closing, choice, pause and focus-transition input is consumed so it cannot shoot, interact with a portal, buy or select a second card. Returning to station/checkpoint waits for all queued picks; quitting/abandoning remains possible through the existing confirmation and discards that run, without banking unresolved picks. Terminal outcome/reset discards unresolved offers under existing lifecycle rules; mandatory choice cannot delay death/frozen results or revive the ship.
+
+Q38 requires a valid choice, not an invented empty card. The adopted [selection contract](beta-card-selection.md#exact-sampler-and-exhaustion) requires ordinary eligibility before any draws and defines diagnostic restart/menu recovery for invalid data, preserving the pending choice without a forced Legendary, random retry or combat resume. Runtime must not ship a normal configuration that reaches this diagnostic. Written policy only, not a verified UI.
+
+**Q37 confirmed, 25 October:** Legendary field cards remain random, with **no guarantee after an unlucky streak**. Do not track a pity counter, raise the gate with missed offers/elapsed time, force a Legendary at a level/boss milestone or compensate at run end. Each slot's gate uses the same adopted base probability regardless of prior outcomes; rarity eligibility still applies. Independent randomness can produce consecutive Legendaries or a whole run without one. This decision confirms the no-guarantee policy, not the proposed 0.5% numerical gate, every grade assignment or shop-acquisition exceptions below. Luck remains scrap-only and cannot change card rarity. No runtime sampler is delivered here.
+
+**Q35 confirmed:** Apply [current-build eligibility](attributes-and-luck.md#current-build-card-eligibility--q35-confirmed-25-october) before this sampler. Hide cards without supported current benefit; useful new abilities remain available. Preserve owned ranks and locked panels. Typed mappings/weights/exhaustion are now specified in the adopted contract; numerical combined-fire tuning/runtime remain open.
+
+Adopted beta nominal per-slot proportions are Common 45%, Uncommon 30%, Rare 18%, Epic 6.5%, Legendary 0.5%. The three-option card panel uses distinct eligible entries and the existing card RNG, isolated from loot/shop/cosmetic RNG. An entry's rarity does not increase the strength of an otherwise identical rank.
 
 To keep Legendary genuinely rare when lower tiers become exhausted, first perform an independent **0.5% Legendary gate** for each slot. On success, choose uniformly among remaining eligible Legendary entries. If there are none, continue through ordinary tiers. On gate failure, sample only eligible Common/Uncommon/Rare/Epic tiers in relative weights 45/30/18/6.5, renormalized over available non-Legendary tiers; then choose uniformly from that tier's eligible entries. Do not automatically promote a failed gate into a Legendary.
 
-Remove an offered entry from the current panel's remaining pool so it cannot appear twice. If no ordinary entry remains after a failed gate, show fewer options rather than silently increasing Legendary odds. The unbounded-rank ordinary ability pool normally supplies repeat candidates, but the empty-pool behavior must still be correct. Offers remain locked across panel reopen/pause; no free reroll, hidden pity system or Luck adjustment is proposed.
+Remove an offered entry from the current panel's remaining pool so it cannot appear twice. If no ordinary entry remains after a failed gate, show fewer options rather than silently increasing Legendary odds. The unbounded-rank ordinary ability pool normally supplies repeat candidates, but the empty-pool behavior must still be correct. Offers remain locked across panel reopen/pause; no free reroll is proposed. Q37 confirms no pity guarantee, and the confirmed scrap-only Luck contract excludes rarity adjustment.
 
 With eligible Legendary entries and three populated slots, the probability of at least one Legendary gate is `1 - 0.995^3`, about **1.49% per three-choice offer**. That is a gate probability, not a guaranteed Blink rate: the eligible Legendary pool also includes Space Collapse, Armageddon and Luck (until rank 10).
 
@@ -79,4 +95,4 @@ The previous four acquisition offers remain a separate **Special Offers** select
 
 **Blink first acquisition is field-only** in the proposal, to preserve the owner's request that it be very rare. It does not join the guaranteed or fixed acquisition shop stock. Once learned, its proposed whole-rank shop cost is `3000 + 750*r` for current rank r after the selected 5x owned-rank scale, so rank 1 -> 2 costs 3750. Blink's exact adoption remains pending. Cards can also grant later ranks. The selected 23 October scale makes special owned ranks `1000 + 375*r` and ordinary owned ranks `500 + 250*r`; special first acquisitions use 10x their prior prices. See the numerical ledger; no rank benefits or rarity weights change. Deflector capacity and numeric augments use the separate quarter-strength attribute contract instead.
 
-No claim is made that the rarity or acquisition prices are balanced. The complete roster, grade assignments, confirmed persistent-drone behavior and proposed weighting are presented for later confirmation; don't mark PREP-04/05 complete solely because these candidate tables exist.
+The adopted selection contract completes written rarity/acquisition/eligibility decisions; it does not certify balance or implement the chooser/shop. PREP-05 targeting remains a separate delivered specification. Numerical combined-fire tuning, actual metadata/handlers and statistical/runtime validation remain open.

@@ -1,6 +1,8 @@
 # Weapon, Attribute, Luck and Automatic-Skill Review
 
-**Updated 23 October 2026. Context only; implementation remains unauthorized.** Owner resumed iterative questions, accepted the latest weapon names/path with T4/T5 choices, and requested balanced stats. This supersedes the earlier no-questions instruction for active weapon review. Numerical tuning and card compatibility remain drafts. Read [weapon tree](weapon-tree.md), [attributes and luck](attributes-and-luck.md) and [automatic skills and rarities](automatic-skills-and-rarities.md).
+**Latest written adoption, 25 October:** [34-card selection](beta-card-selection.md) and [full typed capabilities](card-compatibility.md) specify grades, gate/weights, acquisition exceptions, distinct locked offers, fixed stock and safe invalid-pool recovery. They supersede earlier candidate/adoption gaps below. Primary numerical composition/high-rank safety and actual runtime remain open; context/planning only.
+
+**Updated 25 October 2026. Current checkpoint is documentation only.** Q40 confirms compatible pattern cards beside station-only cannon evolution; [26-node pattern matrix](weapon-tree.md#pattern-card-compatibility-by-cannon-node) records authored eligibility. Q35 hides useless cards, Q37 excludes Legendary pity guarantees and Q38 requires one valid choice from each nonempty offer. Luck is Legendary/field-only/rank-10/scrap-only; Blink's written safety contract is delivered. Exact numerical composition, remaining card mappings/rarity and runtime stay open. Read [weapon tree](weapon-tree.md), [attributes and luck](attributes-and-luck.md) and [automatic skills and rarities](automatic-skills-and-rarities.md). Earlier dated economy/deferral text below is historical; latest overview/design/task status wins.
 
 **23 October economy follow-up:** Owner selected 500/1500/4000/10000 weapon prices, 20–25-minute Swarm T5 target and shared prices in Survival. Numeric attributes/owned ranks cost 5x prior quotes, special acquisitions 10x. Hull repair costs 10 scrap/missing HP with proportional affordable repair; Shield Battery replaces paid shield recharge. Four selected scrap labels share one wallet and unchanged enemy-tier values. Battery details/source mappings are under popup review. Numerical weapon performance and actual income pacing still require validation.
 
@@ -24,7 +26,7 @@
 | Shotgun specializations | Flak Cannon and Flamethrower; Shrapnel splits at T5, Inferno stays straight |
 | Paid attributes | Continuous numeric gains at quarter strength; discrete extra-shot/pierce/direction cards remain field-only |
 | Engines | Movement attributes stay in cards/shop; separate engine chassis tree deferred, with no new manual boost key |
-| Luck | Workshop-only support node, visible in workshop details; affects trade-value quality within existing enemy ranges, not field XP, Return Home or card rarity |
+| Luck | Confirmed Legendary field cards only, maximum rank 10, scrap-only; exact payout tuning remains PREP-24 review, with no workshop purchase |
 | Blink tuning | 30-second base cooldown, 5% multiplicative reduction per additional rank, 12-second floor; two seconds of post-blink protection |
 | Ability card tiers | Common, Uncommon, Rare, Epic, Legendary; full roster in the skill brief |
 | Legendary offers | Independent 0.5% per-slot eligibility gate; Blink first acquisition is field-only, not guaranteed stock |
@@ -36,9 +38,9 @@ The full proposed stat/signature ledger is in [game design](../../context/game-d
 ## Review checklist
 
 - [x] **UPG-REVIEW-01:** Owner accepted the latest names/tree on 23 October, with T4/T5 choices, ten finals and Flamethrower under Shotgun. Stat adoption remains open.
-- [ ] **UPG-REVIEW-02:** Review each family's strengths, weaknesses and interaction with the existing augment cards. Confirm the interpretation that field attributes can strengthen attacks while cannon model/tier changes remain mothership-only.
+- [ ] **UPG-REVIEW-02:** Q40 confirms compatible pattern cards beside station-only cannon evolution; 26-node pattern eligibility is authored. Finish exact numerical composition and remaining card mappings before claiming complete weapon/card validation.
 - [ ] **UPG-REVIEW-03:** Review the quarter-strength attribute list, discrete-card exclusions, shield-capacity-only purchases and proposed purchase limits/prices.
-- [ ] **UPG-REVIEW-04:** Review Luck as a workshop-only stat, with no legendary card in the initial proposal, and its restricted reward effect.
+- [ ] **UPG-REVIEW-04:** Luck source/cap/scrap-only effect is confirmed: Legendary field cards, maximum rank 10, no workshop. Review exact payout strength/snapshot integration under PREP-24; do not reopen its settled source.
 - [ ] **UPG-REVIEW-05:** Review the complete automatic-skill roster, duration categories and rarity assignments. Blink's Legendary grade is already confirmed.
 - [ ] **UPG-REVIEW-06:** Review Blink's proposed cooldown floor, protected duration, destination selection and no-safe-position behavior.
 - [ ] **UPG-REVIEW-07:** Review card weighting and which first acquisitions are workshop offers versus field-only. Confirmed automation is not a complete numerical targeting matrix.

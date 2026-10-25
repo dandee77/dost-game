@@ -1,5 +1,7 @@
 # World, Colony and Campaign
 
+**25 October Q39 survivor wording:** Owner asks to state the estimated survivors. Use **“An estimated 1% of humanity remained”** by 2732, or **“an estimated one in a hundred”** in narration. This is the survivor share implied by the existing roughly 99% loss, not a new population total. No pre-collapse headcount is established, so do not invent a count in millions/billions. The estimate concerns humanity as a whole; HOPE is one refuge, not necessarily home to every survivor. Preserve the 2733 cadet deployment and gradual-recovery ending.
+
 **25 October Q28 visual decision:** Mutated Scavengers keep their living bodies mostly hidden beneath scrap armor, with small organic seams. [Creature production brief](../09-art/creature-direction.md) maps this to accepted silhouettes and four bosses, including protected orbital cores. Written direction only, not delivered art.
 
 **25 October Q27 naming decision:** **Scavengers** is the final collective/species label for the engineered waste-eaters, confirmed by the owner. Singular: **Scavenger**. Use **mutated Scavengers** for hostile descendants and **scrap creatures** only as survivor slang. Mutation does not require a replacement species name. Body visibility/production design remains separate; this confirmation creates no new artwork.
@@ -17,9 +19,9 @@
 | Pilot | A newly assigned **cadet salvage pilot** | Confirmed role; “Collector” may be an occupational call sign, not a separate protagonist |
 | Enemy origin | Engineered waste-eating creatures on Earth and in orbital cleanup installations mutate after exposure to the later atmospheric treatment | Confirmed owner revision |
 | Mechanism | Unexpected chemical exposure changes the creatures' DNA and disrupts feeding, growth and defensive behavior; they become hostile to humans | Confirmed fictional premise; detailed biology remains invented |
-| Catastrophe | Approximately 99% of humanity dies within less than a decade | Confirmed fictional scale; an in-world estimate, not a factual prediction |
+| Catastrophe | By 2732, an estimated 1% of humanity remained after nine years of collapse | Q39 survivor-focused wording; in-world estimate, not an absolute census or factual prediction |
 | Hope | Human cooperation, containment, recovered resources and gradual restoration | Confirmed replacement for the retired magical-tree solution |
-| Dates | Research breakthrough 2718; release 2723; collapse estimate 2732; player deployment 2733 | Proposed exact chronology |
+| Dates | Research breakthrough 2718; release 2723; collapse estimate 2732; player deployment 2733 | Owner confirmed Q36, 25 October |
 
 The colony acronym belongs to a place, not automatically the final game title. No title, logo or asset is created here. The old settlement name and tree-based ending are retired. No radiation explanation, sacred seed quest, chosen-one prophecy or instant planet-healing object remains in active canon.
 
@@ -37,7 +39,7 @@ The altered creatures lost the limits that had once kept their waste intake sele
 
 Earth's atmosphere did not carry a cloud through the vacuum of space. Exposed organisms, contaminated cargo and residues on serviced hardware reached orbital cleanup installations through existing transport routes. The same waste-processing network that had been trusted to protect humanity helped spread the disaster. Orbital Scavengers sheltered living cores inside damaged recovery pods and scrap shells; their ability to function there remains part of the future technology of this setting.
 
-By 2732, survivor estimates placed the loss of human life at roughly 99%. Attacks, ruined food and supply systems, exposure and collapsing shelter compounded the environmental crisis. Humanity had built systems to consume its garbage and treated them as permission to avoid changing its habits. The catastrophe grew from that dependence and the neglected risks of combining interventions.
+By 2732, an estimated 1% of humanity remained. Attacks, ruined food and supply systems, exposure and collapsing shelter compounded the environmental crisis. Humanity had built systems to consume its garbage and treated them as permission to avoid changing its habits. The catastrophe grew from that dependence and the neglected risks of combining interventions.
 
 Survivors reclaimed stations that could still be screened and defended. They linked habitation modules, repaired life support and established isolated approaches. Some orbital sites were easier to protect than settlements surrounded by infested surface waste, but space was never clean or universally safe. Their refuge became **H.O.P.E. Colony: Habitat for Orbital Preservation and Endurance**.
 
@@ -54,12 +56,12 @@ Theme and approved draft slogans: [narrative theme](narrative-theme.md).
 | 2718 | Separate atmospheric-treatment breakthrough | Scientists believe a climate-recovery tool is possible | Date card or laboratory screen in longer trailer |
 | 2718-2723 | Five years of development | Interaction with established waste-eaters is missed; cleanup is relied on instead of sufficient prevention | Mention five years in text; montage implies elapsed time |
 | 2723 | Atmospheric deployment and unexpected failure | Exposed waste-eaters mutate on Earth; transport spreads exposure to orbital populations | Show ground waste as well as orbital debris |
-| 2723-2732 | Cascading attacks and infrastructure collapse | Approximately 99% estimated population loss over nine years | Restrained text and abandoned infrastructure; no graphic suffering required |
+| 2723-2732 | Cascading attacks and infrastructure collapse | An estimated 1% of humanity remained by 2732, after nine years | Restrained survivor-focused text and abandoned infrastructure; no graphic suffering required |
 | By 2732 | Survivors adapt existing stations | Colony is reused infrastructure, not a new city built overnight | Patched modules, mismatched trusses and working life support |
 | 2733 | Cadet deployment | Player begins recovery operations | First playable hub arrival after Start/difficulty |
 | Campaign ending | Local sources isolated; first cleanup corridor opened | Long-term restoration becomes feasible | Survey and containment teams enter; Earth remains visibly damaged |
 
-Dates are a proposed chronology. If changed, update every storyboard date and keep the five-year development and under-ten-year collapse intervals. Do not quietly turn the 99% figure into a real scientific forecast.
+Q36 confirms this fictional chronology, including exact years on authored date cards/screens. Keep 2723 - 2718 = five development years, 2732 - 2723 = nine years of collapse and deployment in 2733. Later copy edits cannot silently shift these anchors. Q39 presents the scale as an estimated 1% remaining, equivalent to the former roughly 99% loss. It remains an in-world estimate, not a real scientific forecast; these decisions do not approve every script line or deliver assets/playback.
 
 ## 4. What the organisms can and cannot do
 
