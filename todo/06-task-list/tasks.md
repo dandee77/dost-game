@@ -4,6 +4,8 @@
 
 ## Start here
 
+- [x] **DOC-60 — Deeper cross-contract review delivered25 October.** Fault outcome/18-column serialization/ranked and score-validity rules, consumed friendly contacts/status expiry under return guard, preserved P/Esc/MENU and exact pre-step stall gate specified. Record/policy/source/Markdown/file-and-heading/build checks pass. Context only;32 actual-work tasks remain, with no new required content question found.
+
 - [x] **DOC-59 — All six remaining context areas delivered25 October.** [Implementation handoff](../00-planning/implementation-handoff.md) supplies encounters/spawn/geometry, exact portals, weapon/high-rank safety, full panel/settings input, final copy/planned cutscene flow and ordered dependencies/acceptance. Q46 warning/shake answer recorded. Numeric/coverage/file-and-heading-link/table/context-scope/existing-build checks pass. Eleven written PREP tasks closed;32 actual implementation/production/review/release tasks remain. PREP-16/30 human facts/approval stay open.
 
 - [x] **DOC-58 / PREP-20 — Material source coverage.** Ten debris kinds, three basic variants, ranged/heavy and four guardian profiles assigned; inspected current sprites/source and documented variant-selection mismatch. Coverage/policy/Markdown/existing build verified. Actual metadata/art/loot acceptance remains open; 43 open umbrella tasks.

@@ -2,9 +2,9 @@
 
 The order in which the game is built between **14 October** and the **25 October 2026** submission. Each numbered item is one unit of work: one branch, one pull request, one entry in `progress-tracker.md`. Do not start an item until its dependencies meet the Definition of Done in `code-standards.md`.
 
-## Current checkpoint — DOC-59 remaining beta context delivered
+## Current checkpoint — DOC-60 cross-contract integrity review delivered
 
-All six written areas are delivered in [the implementation handoff](../todo/00-planning/implementation-handoff.md) and its linked encounter, portal, weapon/numeric, UI/settings and final-script appendices. Verified stage/roster/composition/clock/geometry arithmetic and coverage, all local file/heading links, Markdown tables/scope and unchanged-source build. Q46 owner answer is recorded; other defaults are delegated initial tuning, not measured balance. PREP-01/02/07/10/12/14/19/21/22/27/29 writing complete;32 umbrella implementation/production/review/release tasks remain. Current changes are context files only. Next actual implementation slice is H00 baseline audit, followed by H01 typed run/reset/RNG; do not begin source work as part of this documentation delivery.
+Owner requests push then a further context review; both remote dev branches verified at f1955ac before review. Delivered explicit fault outcome/18-field schema/eligibility, consumed friendly contacts/skipped offensive ticks during return guard, preserved P/Esc/MENU manual pause and exact pre-step long-stall Continue gate. Verified record fields/flags, cross-contract policies, P/Esc source baseline, all file/heading links/tables, context-only scope and unchanged-source build. No new owner content decision was needed. Completed six-area handoff and32 actual-work tasks remain; runtime/asset/human acceptance is separate. Next source slice remains H00 only as part of a later implementation task.
 
 ## Task-list maintenance for every work item
 

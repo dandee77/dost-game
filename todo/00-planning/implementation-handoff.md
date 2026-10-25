@@ -1,5 +1,7 @@
 # SCRAPBOUND: Last Hope — beta implementation handoff
 
+**25 October integrity supplement:** [Results](../02-gameplay/results-and-leaderboards.md#terminal-result-and-event-order) now explicitly serialize technical End Run as unranked `fault` in the same18-field schema; Retry/cosmetic/save errors cannot invent a second outcome. [Return protection](../02-gameplay/return-portals.md#exact-commit-resume-and-reset-order) consumes suppressed projectile contacts and skips offensive ticks without banking damage. [Input matrix](../02-gameplay/ui-input-and-settings.md) preserves P/Esc/MENU manual pause and explicit focus/stall gates; delta>0.25 pauses before any combat advance and discards the whole interrupted interval. These close technical contract gaps, not new gameplay features or owner questions.
+
 25 October2026. This is the entry point for the implementing teammate. The owner requested completion of the context first; this delivery changes Markdown only. It does not claim that the beta, art/audio, media or submission is complete. Use current dev; c445aef was the last published source/context baseline before this context completion. Preserve teammate changes when pulling. Build one checkpoint at a time and follow AGENTS.md throughout.
 
 ## Product scope and authority

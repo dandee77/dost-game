@@ -1,5 +1,9 @@
 # Game Design
 
+## 25 October cross-contract integrity supplement
+
+Technical-fault confirmation uses the result contract's explicit unranked `fault` token; Retry, cosmetic allocation failures and save failures cannot reclassify a finalized outcome. Ordinary return guard suppresses damage/status/knockback/proc credit while consuming actual friendly projectile contacts and allowing effects to expire normally, without stored catch-up. Existing P/Esc/MENU manual pause remains; focus/performance gates require explicit Resume/Continue. Wall delta>0.25 seconds pauses before simulation and discards that interrupted interval, while<=0.25 may advance its normal slices. [Results](../todo/02-gameplay/results-and-leaderboards.md), [portal](../todo/02-gameplay/return-portals.md) and [input/numerical](../todo/04-verification/numerical-and-load-contract.md) appendices hold exact rules. These are delegated integration clarifications, not actual source fixes or new rank/count limits.
+
 ## 25 October optional low-hull warning and shake
 
 Q46 selects visual-only low-hull warning with optional Settings toggle and soft red gradient from screen edges, plus configurable shake. Adopt feedback thresholds hull<=25% enter,>30% exit; these affect presentation only, no damage/AI/stat changes. [UI/input appendix](../todo/02-gameplay/ui-input-and-settings.md) owns fade/alpha/layout/shake data and persistence. Defaults warning On/shake Low are delegated; no warning alarm, no HUD/aim shake, no rapid flashing. Actual UI/effects remain open.

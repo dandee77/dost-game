@@ -1,5 +1,7 @@
 # TODO — Remaining Work
 
+**Latest25 October DOC-60 review:** [Handoff supplement](00-planning/implementation-handoff.md) closes technical consistency gaps for fault records, return-guard projectile/status handling and P/Esc/focus/stall input. Both remotes were already synchronized before review. Documentation/build checks pass; no additional required gameplay answer found. **32 actual-work tasks remain**; no new code/assets or playable-feature completion is claimed.
+
 **Current —25 October DOC-59: written game context ready for implementation.** Start with [the complete handoff](00-planning/implementation-handoff.md). All six remaining specification areas are supplied, including Q46's optional red-edge warning/shake settings. Eleven written PREP items closed; **32 umbrella tasks remain for actual implementation/production/testing/release/human review**. These are not unanswered design questions. Current changes are context Markdown only; owner is available for needed content, with no further answer required for this handoff. Older delivery counts/owner-away instructions below are historical.
 
 **Latest written delivery — 25 October DOC-58:** [Material source coverage](03-economy/scrap-types.md#3-assignment-rules) completes PREP-20 with explicit debris, basic/ranged/heavy and guardian mappings plus future source/visual acceptance. Current open umbrella count **43**. Metadata/art/runtime implementation remains open; these are not 43 unanswered questions. Context files only, with questions held while owner away. Earlier counts are historical.

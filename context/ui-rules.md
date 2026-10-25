@@ -1,5 +1,7 @@
 # UI Rules
 
+**25 October integrity follow-up:** P/Esc/MENU retain manual pause; only explicit Resume/Continue releases focus/performance gates, and modal input never leaks through. Technical End Run displays Simulation Fault with the actual committed diagnostic score, unranked; save failures preserve the original outcome with Retry. Return protection cannot bank suppressed friendly contacts/status ticks for damage on expiry. Follow the current input/result/portal contracts; these are written integration rules, not completed UI/gameplay.
+
 ## 25 October complete panel and visual-comfort contract
 
 [All-panel input/settings specification](../todo/02-gameplay/ui-input-and-settings.md) supplies entry/exit/focus/input consumption for every normal panel, keyboard controls, disabled/error/transaction handling and safe layouts. Q46 confirms visual-only low-hull warning, optionally disabled in Settings, and configurable screen shake. Use soft stationary red side gradients (transparent center, no alarm/flashing),25% enter/30% leave hull thresholds, On default; shake Off/Low/Medium/High with delegated Low default and stable HUD/aim. These independently saved preferences extend settings.cfg. This current contract supersedes older no-shake, five-mode, optional-voice, growing-energy and combined-shield-repair presentation text below. No renderer/settings code or usability test is delivered here.

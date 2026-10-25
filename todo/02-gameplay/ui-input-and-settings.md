@@ -26,11 +26,11 @@ Esc closes only the top layer, except a mandatory card/clear checkpoint/story wh
 | Purchase quote | Buy from any workshop row | Confirm commits once; Cancel/Esc returns same row/scroll | Preview exact before/after/price/locks; stale quote blocked with reason |
 | Repair berth | F berth; Full Repair focus if useful | Quote Full or Affordable; Confirm->3-second service; Esc before commit cancels | Field frozen; paid service timeline only; no free component refill |
 | Repair active | Accepted quote and reserved transaction | No launch/second purchase; pause/settings/focus allowed; no ordinary Cancel refund | Complete debit+heal atomically at service completion; source state preserved while paused. Confirmed run abandonment rolls back reserved quote without healing |
-| Field flight | Valid launch/Resume | WASD/aim/Shoot/E; F inside exit; Esc->Pause | Sole ordinary combat owner; no fire behind any panel |
+| Field flight | Valid launch/Resume | WASD/aim/Shoot/E; F inside exit; Esc/P/MENU->Pause | Sole ordinary combat owner; no fire behind any panel |
 | Mandatory cards | Earned level after combat event settlement; first valid card focus | Pick one; Esc opens Pause and returns to SAME offer; no Skip | Freeze combat, preserve RNG/panel/queued choices; next offer uses applied build |
 | Wave/level checkpoint | Required hostiles resolved, loot/cards finalized once | Enter Station or Next Wave/Stage Boss/Select Next Level; Esc->Pause | Freeze combat; no auto countdown, heal or repeated rewards |
 | Boss clear | Valid living clear; visible unrestricted exit | Fly to exit, fresh F->hub; Esc->Pause | Safe arena travel, no next boss until later launch; earned loot finalized once |
-| Pause | Esc or focus gate from authorized state; Resume focus | Resume restores exact source; Settings nested; Quit asks confirmation | Freeze field/hub/repair/story clock as appropriate; no reset/reroll |
+| Pause | Esc/P/MENU from authorized free flight; Resume focus | Resume button or fresh Esc/P restores exact source; Settings nested; Quit asks confirmation | Freeze field/hub/repair/story clock as appropriate; no reset/reroll |
 | Focus pause | Lose focus from any active state | After return require fresh explicit Resume; Esc cannot secretly resume | Preserve all layers/transaction IDs/offers/scroll/cues; consume refocus click |
 | Settings | Menu or Pause; Master slider focus | Preview changes; Back/Esc persists then restores exact origin | No run reset. Failure to save shows message and retains session values |
 | Abandon / Quit confirm | Explicit exit/new-mode action; Cancel focus | Confirm terminates/resets only intended run; Cancel/Esc restores origin | No transaction debit/reward/launch on Cancel; no hidden retirement score |
@@ -39,8 +39,11 @@ Esc closes only the top layer, except a mandatory card/clear checkpoint/story wh
 | Leaderboard | Menu/result action; current mode/difficulty board focus | Board selectors, Back/Esc->recorded origin | Local historical data only; no gameplay unlock |
 | Credits | Menu action; Back focus | Back/Esc->menu | Clearly marked contributor placeholders; no fabricated names |
 | Simulation fault | Unsafe prospective numerical/allocation state; Retry focus | Retry only if safe; End Run confirms unranked diagnostic result | Freeze before affected mutation; no random rerolls or silent truncation |
+| Long-stall performance pause | Wall-frame delta>0.25 seconds before combat advance; Continue focus | Fresh explicit Continue; Quit confirms abandonment. Focus loss adds its usual gate | Freeze previous committed state, discard excess wall time; no added survival time, catch-up attack storm or protection refresh |
 
 On focus loss while Settings/confirm/repair/card is open, place one focus gate over that stack; do not create nested repeated Pause layers. Resume removes the focus gate and returns to that exact still-paused panel, rather than launching combat. Repeated focus changes create no repeated save/transaction/voice start. Terminal outcomes discovered in an authorized combat step settle before newly requested nonterminal panels. Lost focus before that step prevents it entirely.
+
+P preserves the existing source pause shortcut for hub/field free flight and ordinary manual Pause. Under Settings/cards/map/confirmation/story/focus/stall gates it does not dismiss a panel, advance story or bypass explicit Resume/Continue. Esc still follows the top-panel matrix rather than acting as a global unpause. MENU is the screen button for the same manual-pause action. Opening/closing manual Pause consumes the trigger; repeated key state cannot both close Pause and fire/launch. Focus/stall Continue requires its explicit focused action, not a held P/Esc from before the interruption.
 
 ## Readable layouts and keyboard behavior
 

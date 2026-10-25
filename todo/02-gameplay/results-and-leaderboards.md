@@ -43,8 +43,11 @@ Game/run owner aggregates valid events from one simulation step, then selects on
 | Fatal player damage without a same-step boss death | `defeat` | Keep already earned score/progress; no ordinary-wave fatal-tie clear |
 | Living player confirms station retirement in Swarm/Chaos/Boss | `retired` | Earned score/time; Boss includes credited boss count; no pending encounter credit |
 | Player confirms abandon/exit from an unfinished run | `abandoned` | No competitive submission; optional recent-result record only |
+| Player confirms End Run from an unresolved simulation-capacity/numerical fault | `fault` | Last fully committed score/progress/time, unranked diagnostic result; no invented victory, retirement bonus, loot or new objective credit |
 
 After terminal decision: stop simulation/scoring/collection, freeze an immutable result, clear pending travel/shop/launch/card requests, then perform ending/results flow. Do not force a posthumous card choice. New effects and later-step damage cannot extend a terminal run to obtain a boss kill. Remaining hostile cleanup gives nothing. A dying ship cannot enter the station even if its boss clear counts. Victory/mutual/retirement confirmation cannot be reclassified by later callbacks.
+
+The `fault` outcome completes the [numerical-failure contract](../04-verification/numerical-and-load-contract.md#representation-and-failure-semantics). Retry does not finalize a result; only confirmed End Run does. Preserve the last fully committed state, never partially completed faulting transactions or unprocessed simulation time. An already committed ordinary terminal result cannot later become fault because a cosmetic/save/presentation operation fails. Optional cosmetic allocation failure reduces cosmetic output within the adopted budget; it is not a gameplay-simulation fault. A result-file write failure remains Saved/Retry UI on the SAME result, not a second fault outcome.
 
 Snapshot rules identity and seed at fresh-run creation. A result contains unique run ID, mode/difficulty, outcome, Campaign-complete flag, score/validity, active time, uniquely credited boss count, normal-wave count, completed-level count, lifetime trade collected, final level, ranked eligibility and debug flags. Wallet is not lifetime trade. Active time accumulates only running combat delta and converts to floored milliseconds once at finalization; station, pause, card, console capture, wave-clear choice, map, intro/ending and menu time are excluded. Never round each frame separately.
 
@@ -56,7 +59,7 @@ Board key is `(rules, mode, difficulty)` with modes `swarm|chaos|boss|campaign` 
 
 Swarm/Chaos/Boss: score descending, active milliseconds descending, then earlier accepted record wins. Campaign: score descending, Campaign-complete true first, completed levels descending, boss clears descending, active milliseconds ascending, then earlier accepted record wins. Score always remains primary; no sorting by wallet or converting all outcomes to victory. Display survival time in `mm:ss` or `hh:mm:ss`, with exact stored milliseconds used only to break ties. Boss rows also show boss clears; Campaign rows show completion/progress. Keep 10 entries per board. Display the latest run's frozen result even when it does not enter the top 10.
 
-`victory`, `defeat`, `mutual` and `retired` may qualify if otherwise eligible. `abandoned`, numeric failure, debug-mutated runs, partial-content rosters and unsupported rules never qualify. Compiling a debug build or opening the console alone does not taint a run. Commands that mutate gameplay (spawn, kill, grant, equip, upgrade, heal, invincibility, seek, seed replacement) irreversibly taint the current run. Stats, hitboxes, ordinary settings and mute do not. Turning a cheat off cannot restore eligibility. New Game resets run-local taint; sound/graphics changes preserve eligibility.
+`victory`, `defeat`, `mutual` and `retired` may qualify if otherwise eligible. `abandoned`, `fault`, numeric failure, debug-mutated runs, partial-content rosters and unsupported rules never qualify. Compiling a debug build or opening the console alone does not taint a run. Commands that mutate gameplay (spawn, kill, grant, equip, upgrade, heal, invincibility, seek, seed replacement) irreversibly taint the current run. Stats, hitboxes, ordinary settings and mute do not. Turning a cheat off cannot restore eligibility. New Game resets run-local taint; sound/graphics changes preserve eligibility.
 
 ## Name entry and one-time submission
 
@@ -80,6 +83,14 @@ Example data row:
 
 Generate a distinct 128-bit run ID independently of gameplay RNG and verify it against loaded IDs; the seed itself is not a run ID. Format as 32 lowercase hex characters. Rules IDs are bounded to 64 ASCII letters/digits/dot/underscore/hyphen. Seed/score/time/counters/flags are checked unsigned decimal; booleans are 0/1. final_level is `none|C01|C02|C03|C04`; Campaign uses its actual last active level. Require exact field count, legal enums, valid name and no trailing junk. A structurally valid record with unknown rules is retained as non-current history, never ranked as current. Schema mismatch disables writes to that file; do not guess field meanings.
 
+Legal outcome enum is exactly `victory|mutual|defeat|retired|abandoned|fault`. A fault row always has ranked=0, campaign_complete=0; score_valid stays1 if the last committed score is representable and becomes0 only on actual score arithmetic failure. Other numeric/allocation faults need not falsely invalidate a valid earned score. Keep the existing18 columns/version1; no free-text error column. Current in-memory results may show a bounded diagnostic reason; loaded fault history shows Simulation Fault, without inventing the original cause. Recent history may save it through the same explicit submission/atomic-write path; it never enters a top10 board.
+
+Valid diagnostic example (not a competitive record):
+
+```text
+fedcba9876543210fedcba9876543210,beta-2026-10-25-r1,swarm,hard,42,fault,0,1520,1,90000,0,0,0,120,none,0,0,PILOT
+```
+
 Maximum read size 1 MiB, line length 1024 bytes and 4096 data rows. Reject oversized/unknown-format files non-destructively with one visible load error; do not auto-overwrite them with an empty board. Missing file means an empty first-run history. Skip malformed individual rows within a recognized bounded v1 file and report one aggregate warning, not one per frame. Validate ranked=true against flags/outcome/score validity; never trust that bit by itself. First valid duplicate run ID wins; identical or conflicting later duplicates are skipped and counted in the warning. Do not execute or render unchecked arbitrary text from a damaged row.
 
 Maintain the newest 100 accepted results plus top 10 for each loaded board, deduplicated by run ID and written in stable acceptance order. No full-history browsing screen is required. If the union would exceed the bounded format, refuse the save with a clear storage-limit error and preserve file/in-memory result; never prune a current top-10 board silently. Legacy leaderboard.txt remains untouched; there is no fabricated migration of Story/Endless scores to the new rules.
@@ -97,5 +108,6 @@ For save: construct the validated deduplicated image in memory, write a sibling 
 7. Test missing, valid, duplicate, malformed, truncated, oversized and unknown-schema files, write denial, replacement failure and retry. Old data and current result survive failed writes.
 8. Check prelaunch name validation/capture, no post-run re-entry/rename, leaving without submission, click-through prevention, ending skip, repeat result entry and taint that remains after disabling cheats.
 9. Repeat New Game/restart/quit: only current run-local ledger/pending result clears; settings and successfully saved records remain. Clean release packaging still needs a real target-machine test.
+10. Technical Retry preserves the run without finalizing; confirmed End Run emits one fault row with18 fields and no ranking. Allocation fault preserves a valid prior score; actual score overflow sets score_valid=0. Cosmetic failure and save failure never reclassify an existing victory/defeat/mutual/retired result.
 
 Specification delivery completes PREP-08/09 only. PROJECT-06, runtime scoring integration, package validation and all listed acceptance tests remain unfinished until actually implemented and run.
