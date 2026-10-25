@@ -1,5 +1,21 @@
 # Game Design
 
+## 25 October optional low-hull warning and shake
+
+Q46 selects visual-only low-hull warning with optional Settings toggle and soft red gradient from screen edges, plus configurable shake. Adopt feedback thresholds hull<=25% enter,>30% exit; these affect presentation only, no damage/AI/stat changes. [UI/input appendix](../todo/02-gameplay/ui-input-and-settings.md) owns fade/alpha/layout/shake data and persistence. Defaults warning On/shake Low are delegated; no warning alarm, no HUD/aim shake, no rapid flashing. Actual UI/effects remain open.
+
+## 25 October adopted weapon and numerical appendices
+
+Adopt existing26 weapon profiles/10 signature rows below as initial beta tuning and [exact composition](../todo/07-upgrade-proposals/weapon-composition.md): root snapshots, independent root critical outcomes, primary Payload once, B=1+Rapid, N+Scatter, bank multiplier1+2*Broadside+Tail, sub-burst offsets j*T/(2*B), native+AP contacts and one signature ledger per root. This replaces obsolete fixed-delay burst slowdown and leaves native secondary limits unchanged. [Numerical/load appendix](../todo/04-verification/numerical-and-load-contract.md) adopts existing ordinary ability base/growth values plus all19 explicit target overrides, shield reboot/restoration, source separation, checked/log arithmetic, exact-event aggregation restrictions, visible technical-fault recovery, cosmetic budgets and measurable benchmarks. It completes written PREP-14/22/27; actual exact simulation, memory/performance and balance remain open. No fixed skill/army/numeric-purchase gameplay cap is introduced. Numerical appendix tables are part of this document's authority; older proposed/manual/int-saturation assumptions below are superseded.
+
+## 25 October adopted portal appendix
+
+Adopt [placement/detection/Resume data](../todo/02-gameplay/return-portals.md#adopted-placement-detection-and-protection-appendix--25-october) as the detailed numerical appendix for PREP-29: isolated PORT seed domain, bounded32-random/24-stable candidates, radius12 interaction/70–140 placement/36 separation, conservative112x112 grid at4-unit spacing,1-second retry, actual viewport-width detection and2-combat-second no-offense entry guard. Fresh deliberate Shoot cancels guard; captured/held UI input cannot. Ordinary successful use drains all current energy; optional clear travel/Boss-clear exit remain free with no refill. Barricades cannot strand an existing exit. These are authored written defaults; actual portal/nav/input validation remains T07/T10.
+
+## 25 October adopted encounter appendix
+
+Adopt all numerical tables, geometry and state rules in [beta encounters](../todo/02-gameplay/beta-encounters.md) as this document's detailed numerical appendix: fifteen finite normal-wave quotas/cadences/mixes, four guardian encounters, three difficulty pressure factors, heavy profile, spawn/clear placement and per-mode ownership. Existing base weapon/ordinary/boss damage and bounded HP curves remain as stated there. Boss phases use 60%/30%, superseding the older 50% trigger; Boss mode repeats, Swarm is boss-free, Chaos starts at300 seconds then180-second opportunities, Campaign has four levels/no miniboss. This adoption supersedes conflicting historical schedule/optional-boss/Compactor-end-fan text below; no heavy end-charge bullet fan is required by the beta profile. Default numbers are authored under delegation, not measured balance or implemented systems.
+
 ## 25 October material profile coverage
 
 Adopt [explicit debris/enemy/guardian families](../todo/03-economy/scrap-types.md#3-assignment-rules): nine metal debris kinds plus polymer Coil; basic can/battery/monitor map to METAL/POWER/CIRCUIT, ranged/heavy to METAL, Shellback/Brood Hauler to METAL, Coilmaw to POLYMER and Nestheart to CIRCUIT. Material does not change any reward range, Luck eligibility, Salvage, score, energy, shop cost or service. Planned heavy/boss visuals must follow these profile instructions. Metadata implementation and actual art/runtime acceptance remain open.

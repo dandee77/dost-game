@@ -1,5 +1,7 @@
 # Skills & Upgrades Context
 
+**25 October adopted rank data:** [All19 target ability overrides and safety](../todo/04-verification/numerical-and-load-contract.md#ability-rank-defaults-and-continuations) adopts existing base/growth rows where compatible and explicitly replaces timed shield/rings/drone, global magnet and manual Blink behavior. [Cannon composition](../todo/07-upgrade-proposals/weapon-composition.md) keeps primary attributes/signatures separate. These written defaults complete remaining numerical context, not source conversion or performance/balance acceptance. Prototype descriptions below remain historical/current-source evidence.
+
 **25 October written card adoption:** [34-entry catalog/selection](../todo/07-upgrade-proposals/beta-card-selection.md) and [26-node capabilities](../todo/07-upgrade-proposals/card-compatibility.md) now define rarity, acquisition, eligibility and deterministic chooser/stock contracts. Old candidate/unknown-mapping statements below are historical; combined-fire numerical/performance and actual source conversion remain open.
 
 **Q45 HUD target:** [Compact owned-ability icons](ui-rules.md#compact-automatic-ability-hud--q45-confirmed-25-october) show genuine rank/cooldown/active/persistent state for the 19-entry target. Reuse existing SkillSystem data, add accurate read-only shield/droid timing as needed, and remove manual-Q prompts from the beta target. Prototype commands/text below are historical/current-source reference, not this HUD's delivery.

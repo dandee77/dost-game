@@ -1,5 +1,7 @@
 # TODO — Remaining Work
 
+**Current —25 October DOC-59: written game context ready for implementation.** Start with [the complete handoff](00-planning/implementation-handoff.md). All six remaining specification areas are supplied, including Q46's optional red-edge warning/shake settings. Eleven written PREP items closed; **32 umbrella tasks remain for actual implementation/production/testing/release/human review**. These are not unanswered design questions. Current changes are context Markdown only; owner is available for needed content, with no further answer required for this handoff. Older delivery counts/owner-away instructions below are historical.
+
 **Latest written delivery — 25 October DOC-58:** [Material source coverage](03-economy/scrap-types.md#3-assignment-rules) completes PREP-20 with explicit debris, basic/ranged/heavy and guardian mappings plus future source/visual acceptance. Current open umbrella count **43**. Metadata/art/runtime implementation remains open; these are not 43 unanswered questions. Context files only, with questions held while owner away. Earlier counts are historical.
 
 **Latest written delivery — 25 October:** PREP-23/24 [numeric attributes and Luck](03-economy/attribute-and-luck-contract.md) is adopted from existing defaults, including exact source/price/payout/snapshot math. Current open umbrella count **44**; source/asset/runtime/economy work remains open. Context/planning only, questions held. Earlier dated counts are historical.
@@ -89,33 +91,22 @@ todo/
 
 Read the required context references first, then the planning register, world/science/story, gameplay, scrap taxonomy and preparation checklist. Numbers remain authoritative in context/game-design.md; this folder supplies detailed briefs, not competing tuning sources. Confirmed choices, delegated selections, proposed defaults and content still needed are labeled separately.
 
-## Pending context files
+## Current implementation context
 
-| File | What remains to be done |
+The adopted [implementation handoff](00-planning/implementation-handoff.md) is the entry point. Written game-content prerequisites are supplied; actual implementation, assets, measured balance/performance and human release evidence remain open.
+
+| File | Current written delivery |
 |---|---|
-| [Field return portals](02-gameplay/return-portals.md) | Selected random portal/F interaction replacing manual teleport; shield/half-energy gates, limited-range pointer; count/placement/replenishment still open |
-| [Scoring, results and leaderboards](02-gameplay/results-and-leaderboards.md) | Adopted four-mode score/event/outcome/tie rules, names, versioned local data, anti-farming and safe save/recovery; runtime still open |
-| [Automatic targeting/Blink](02-gameplay/automatic-targeting.md) | 19-ability target/trigger/debt matrix, nearest single target, droid spread and safe Blink defaults; written contract delivered, runtime open |
-| [Background art handoff](09-art/background-brief.md) | Instructions for teammate production: scene identities, shared layers, verified replacement formats, prompt starting points and delivery checks; no assets generated |
-| [Scavenger art direction](09-art/creature-direction.md) | Confirmed hidden-body/seam direction with low/boss silhouette guidance and enclosed orbital cores; teammate produces actual assets |
-| [Audio direction and routing](09-art/audio-direction.md) | Dark synth track/SFX/voice handoff, scene matrix, one-owner gains/fades/focus/skip/exit/failure rules; production/runtime pending |
-| [Weapon/attribute/rarity review](07-upgrade-proposals/README.md) | Five-tier weapon proposal, 25% shop attributes, Luck, complete automatic roster and Legendary Blink; details awaiting confirmation |
-| [Maintained task list](06-task-list/tasks.md) | Prioritized open work, decisions and verified preparation checkboxes; update when work changes |
-| [Ideas and attention](06-task-list/ideas.md) | Suggestions and alternatives with explicit review status; not automatically active scope |
-| [Completion history](06-task-list/completed.md) | Dated results and evidence, with clear separation from pending implementation |
-| [Suggested game names](05-suggested-names/README.md) | Selected SCRAPBOUND: Last Hope and preserved earlier naming proposals |
-| [Decisions and gaps](00-planning/decisions-and-gaps.md) | Confirmed/proposed choices, missing non-art systems, priorities, boss/schedule templates and tutorial/result proposals |
-| [World and campaign](01-story/world-and-campaign.md) | HOPE acronym, 2718-2733 timeline, biological waste-eater origin, colony functions and source-boss campaign |
-| [Player identity](01-story/player-identity.md) | Player-entered Cadet [Name], prelaunch validation, session/restart preservation and captured-name result submission; UI still pending |
-| [Science notes](01-story/science-notes.md) | Primary-source environmental framing, fictional boundaries and explanation of retired narrative terms |
-| [Narrative theme](01-story/narrative-theme.md) | Neglect, postponed responsibility, consequences, hopeful recovery and original slogan options |
-| [Scrap types](03-economy/scrap-types.md) | Four selected material labels, one wallet and enemy-tier values; authored source mappings and later integration remain |
-| [Preparation checklist](04-verification/preparation-checklist.md) | Documentation review, checkpoint content gates and later runtime acceptance scenarios |
-| [gameplay.md](02-gameplay/gameplay.md) | Detailed handoff: colony hub, four modes, field progression, trade scrap, paid services, shop, shield/portals, UI, lifecycle and verification; dated older sections are superseded by current contracts |
-| [Text-only story trailer](01-story/story-trailer-text.md) | Standalone storytelling script from the chat; untimed literary draft for later production |
-| [story-context.md](01-story/story-context.md) | Alternating story text and animated/gameplay footage: 40-second intro, ending and 90-second trailer; final boss content/art/optional voice still pending |
-
-The handoffs now live in topic folders. `gameplay.md` was formerly `context/todo.md`; `story-context.md` was formerly `context/story-context.md`. They have been moved, not copied. The original pause/scrap/difficulty specification is replaced by the gameplay handoff.
+| [Encounters](02-gameplay/beta-encounters.md) | Fifteen Campaign waves, three difficulties, heavy and four complete guardians, legal arenas/spawns/cleanup |
+| [Return portals](02-gameplay/return-portals.md) | Exact gates/placement/search/detection/commit/Resume and Boss-clear exception |
+| [Weapon composition](07-upgrade-proposals/weapon-composition.md) | All26 adopted profiles, exact cards/crit/snapshots/signature rules |
+| [Numerical/load contract](04-verification/numerical-and-load-contract.md) | All19 ability overrides, uncapped progression safety, exact-event constraints and measurable benchmarks |
+| [Panel input/settings](02-gameplay/ui-input-and-settings.md) | Complete state/focus/input/readability and optional red-edge warning/shake |
+| [Final production script](01-story/final-production-script.md) | Final40/24/90 copy,14 voiced beats and source-checked future cutscene/result pipeline |
+| [Cards](07-upgrade-proposals/beta-card-selection.md) / [attributes/Luck](03-economy/attribute-and-luck-contract.md) | Complete grades/eligibility/RNG/acquisition and numeric-source/price/reward contracts |
+| [Results](02-gameplay/results-and-leaderboards.md) / [identity](01-story/player-identity.md) | Four-mode score/outcome/local records and player-entered Cadet identity |
+| [Art backgrounds](09-art/background-brief.md) / [creatures](09-art/creature-direction.md) / [audio](09-art/audio-direction.md) | Teammate production instructions; no assets produced here |
+| [Tasks](06-task-list/tasks.md) | Implementation/release checks remain separately open; no written spec is a delivered feature |
 
 ## Gameplay implementation checkpoints
 
@@ -163,17 +154,15 @@ Item **04** and completed P1–P5/P5.1/P6-checkpoint-1 work are intentionally no
 
 On 23 October owner accepted the latest weapon names/tree with T4/T5 branching (1/3/5/7/10), then requested balanced stats. Full proposed profiles/signatures are in game-design.md; numerical adoption, card compatibility and live viability remain open. Weapon questions resumed; attribute/Luck/rarity proposals remain review items. Boss designs, mode schedules, final names, hub/arena layouts and broad economy review are deferred for now. Keep those tasks open; do not ask for those decisions during this preparation.
 
-## Decisions and content still needed
+## Remaining implementation and human review
 
-See [the detailed gap register](00-planning/decisions-and-gaps.md) for all remaining non-art specifications and proposed defaults. The HOPE name and source-cleanup story now replace the former settlement/tree premise.
+Game-content defaults are adopted in the current handoff; do not reopen settled Campaign, shield/input, title, voice, card or numerical choices as unanswered questions. Remaining work is actual implementation/production/playtesting and explicit human facts.
 
-- [ ] Owner's final boss roster, attacks, phases, telegraphs, art and encounter definitions.
-- [ ] Review proposed starter shield, Return Home input/consumption and suspended-world resume rules.
-- [ ] Playtest chosen currency ranges, repair costs, skill prices, level/return growth and mode schedules.
-- [ ] Final title, narrative visual treatment, optional voice and original production assets; story cards are required.
-- [ ] Submission prioritization if the full requested scope cannot be verified by the deadline.
-
-Paid repair, random enemy trade drops and delegated shop inventory/prices have already been resolved in the handoff. Do not turn them back into unanswered permission questions.
+- Implement and validate the four modes, fifteen waves, four guardians, nineteen abilities and26 cannon nodes through H00–H14.
+- Produce/integrate art/audio/captions and separate truthful gameplay-demo/trailer exports with provenance.
+- Measure economy, per-level duration, weapon viability, reset/suspension and numerical/load safety.
+- Resolve real release/eligibility/history/forms/hardware evidence; assign final uploader. Do not invent those answers.
+- Owner reviews the full audit and team verifies deliverables before a release-complete claim.
 
 ## Reference documents stay in context/
 

@@ -89,8 +89,10 @@ Entity (abstract)
 │   ├── MidLevelEnemy                   existing (strafing shooter)
 │   ├── HighLevelEnemy                  planned (16, charging tank)
 │   └── Boss (abstract)                 planned (17)
-│       ├── HoarderBoss                 planned (18)
-│       └── CoreBoss                    planned (19)
+│       ├── ShellbackBoss               planned beta guardian
+│       ├── CoilmawBoss                 planned beta guardian
+│       ├── BroodHaulerBoss             planned beta guardian
+│       └── NestheartBoss               planned beta guardian
 ├── ScrapPickup                         planned (12)
 └── Dock                                planned (13)
 ```
@@ -187,6 +189,7 @@ All use the same pattern: `static X& GetInstance()` with a function-local static
 - Changed by: 03 to 14, 17, 19, 22, 23, 24, 27
 
 ### Cutscene (planned)
+- 25 October source check: no Cutscene/Intro/Ending source exists. [Final playback contract](../todo/01-story/final-production-script.md#supported-runtime-pipeline-source-inspection) replaces this older slide/typewriter sketch with beat/layer/voice/cue data, one presentation clock and fresh one-press advance/whole-sequence Skip. Implement this base before derived types; no runtime MP4/video library or duplicate cutscene framework.
 - Files: src/Cutscene.hpp, src/Cutscene.cpp
 - Status: planned (item 20)
 - Kind: abstract base, derives from `Scene`
@@ -200,7 +203,7 @@ All use the same pattern: `static X& GetInstance()` with a function-local static
   class Cutscene : public Scene {
   public:
       std::string update() override;   // advances, handles skip; returns nextScene() when done
-      void draw() override;            // slide image with slow zoom, typewriter text, skip hint
+      void draw() override;            // beat layers, readable full card, complete captions and Skip
       void onSwitch() override;        // slides = buildSlides(); index = 0; play music
       void onExit() override;
   protected:
@@ -209,19 +212,19 @@ All use the same pattern: `static X& GetInstance()` with a function-local static
       virtual std::string musicKey() const = 0;
   };
   ```
-- Behavior: Space, Enter or left click finishes the typewriter, a second press advances. Esc skips the whole cutscene. Text uses `Theme` cutscene type sizes, inside the safe area.
+- Behavior target: fresh Space/Enter/LMB advances one beat; Esc/Skip skips sequence. No typewriter-first-click stage. Stop voice/cues together and consume the transition input; focus pause freezes exact presentation state. Extend the planned slide value to include typed beat/layer/cue metadata, not a parallel timer owner.
 
 ### IntroCutscene (planned)
 - Files: src/IntroCutscene.hpp, src/IntroCutscene.cpp
 - Status: planned (item 20)
 - Kind: derived from `Cutscene`, scene `"Intro"`
-- Behavior: the 7 intro slides from `project-overview.md`. `nextScene()` returns `"MainMenu"`. Shown once per launch: `LoadingScreen` returns `"Intro"`; the menu never returns to it.
+- Behavior: five8-second card/motion pairs,40 seconds, then MainMenu. Once per application session: LoadingScreen returns Intro after final GPU upload; menu/restart never replays it. Natural completion/Skip marks seen once.
 
 ### EndingCutscene (planned)
 - Files: src/EndingCutscene.hpp, src/EndingCutscene.cpp
 - Status: planned (item 21)
 - Kind: derived from `Cutscene`, scene `"Ending"`
-- Behavior: ending slides; then shows run stats from `RunContext::lastResult`; `nextScene()` returns `"Leaderboard"` if the score qualifies, otherwise `"MainMenu"`.
+- Behavior: three8-second pairs,24 seconds, after final Campaign result frozen in RunContext. Natural completion/Skip reveals that same immutable result inside Ending's results state using extended existing GameOverOverlay/result presentation. No automatic scene return to Game/resetRun, leaderboard submission or menu. Explicit Menu/Restart/Save actions follow the final playback/result contracts.
 
 ### LeaderboardScene (planned)
 - Files: src/LeaderboardScene.hpp, src/LeaderboardScene.cpp
@@ -381,6 +384,7 @@ All use the same pattern: `static X& GetInstance()` with a function-local static
 - Sprites: `mid_level_enemy` (12 frames), `mid_level_enemy_destruct` (7 frames), 64 x 64 px.
 
 ### HighLevelEnemy (planned)
+- 25 October target: [heavy profile](../todo/02-gameplay/beta-encounters.md#normal-profiles-and-difficulty) adopts80 HP,10 damage,10/40 roam/charge speed,5 radius and timed windup/charge/recovery. The older end-charge fan below is superseded; no source class/asset exists yet. Use the existing planned subclass rather than a second heavy implementation.
 - Files: src/HighLevelEnemy.hpp, src/HighLevelEnemy.cpp
 - Status: planned (item 16)
 - Kind: derived
@@ -391,6 +395,7 @@ All use the same pattern: `static X& GetInstance()` with a function-local static
 - Gotchas: the charge must not be stopped by knockback. Ignore knockback while in `CHARGE`.
 
 ### Boss (planned)
+- 25 October target: [complete encounter contract](../todo/02-gameplay/beta-encounters.md#boss-state-phases-and-attack-selection) governs arrival,60%/30% phases, attacks/reservations, HP snapshots, per-instance ownership and cleanup. Existing planned API examples below are sketches, not source. EnemyManager must support multiple distinct bosses for Chaos; no singleton getBoss shortcut/static name-ID may define the runtime catalog. All four new subclasses below remain planned.
 - Files: src/Boss.hpp, src/Boss.cpp
 - Status: planned (item 17)
 - Kind: abstract base
@@ -418,19 +423,16 @@ All use the same pattern: `static X& GetInstance()` with a function-local static
 - Behavior shared by all bosses: 2 s intro (drifts in, invulnerable, HUD shows name), phase changes at health thresholds, no knockback, contact damage without being removed, large scrap drop on death.
 - Gotchas: bosses are large; draw them directly in `draw()` (not through the Animator) so they render above other enemies, or set an Animator layer if item 17 adds one. Record which.
 
-### HoarderBoss (planned)
-- Files: src/HoarderBoss.hpp, src/HoarderBoss.cpp
-- Status: planned (item 18)
-- Kind: derived from `Boss`
-- In-game name: The Hoarder (wave 5)
-- Behavior: see `game-design.md` Bosses.
+### Beta guardian subclasses (planned)
 
-### CoreBoss (planned)
-- Files: src/CoreBoss.hpp, src/CoreBoss.cpp
-- Status: planned (item 19)
-- Kind: derived from `Boss`
-- In-game name: The Core (wave 10, final)
-- Behavior: see `game-design.md` Bosses. Its death in Story mode triggers `GAME_VICTORY`.
+| Class / future files | Base | Identity / ownership |
+|---|---|---|
+| ShellbackBoss / src/ShellbackBoss.hpp/.cpp | Boss | C01, Boss slot1, Chaos; Ram/Fan |
+| CoilmawBoss / src/CoilmawBoss.hpp/.cpp | Boss | C02, Boss slot2, Chaos; Volley/Sweep |
+| BroodHaulerBoss / src/BroodHaulerBoss.hpp/.cpp | Boss | C03, Boss slot3, Chaos; Release/Residue |
+| NestheartBoss / src/NestheartBoss.hpp/.cpp | Boss | C04, Boss slot4, Chaos; Volley/Pulse/Release |
+
+Declare/implement Boss first, then these derived types. No source files or sprites are delivered by this registry. HoarderBoss/CoreBoss were obsolete planned names and are retired rather than extra beta types. Shared encounter data, state transitions, material and tests follow the encounter appendix; final Campaign success also requires surviving required adds resolved and immutable result ordering, not a direct scene switch from a death callback.
 
 ---
 
@@ -693,6 +695,7 @@ All use the same pattern: `static X& GetInstance()` with a function-local static
 - API: `startDamageAnimation()`, `update()`, `draw()` (red screen-edge gradient), `reset()`
 
 ### GameOverOverlay
+- 25 October target: extend this existing presentation boundary for immutable RunResult display/actions shared by Game-owned noncampaign results and Ending's post-sequence results state. One scene draws/handles it at a time; it owns no score ledger/result persistence. Preserve existing death-animation behavior separately. This extension is not implemented.
 - Files: src/GameOverOverlay.*
 - Status: existing
 - Kind: singleton

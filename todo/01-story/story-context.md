@@ -1,5 +1,7 @@
 # Story Cards, Animation and Trailer
 
+**25 October final written copy/pipeline:** [Production script](final-production-script.md) adopts exact card/voice lines,40/24/90-second allocations and14 voiced beats, plus source-checked layered PNG/sheet playback, focus/advance/Skip and frozen-result routes. Cutscene is planned, not an existing compiled base. Ending shows its frozen result without reentering Game/resetRun. PREP-12/19 writing complete; actual voice/assets/export/renderer/owner review remain open. Older proposed text below is background; production uses the final script.
+
 **25 October Q32 music:** Dark electronic/synth throughout. Intro uses restrained ominous textures; ending allows a quiet hopeful motif; trailer escalates rhythm/editing while the narrator stays calm and serious. [Audio handoff](../09-art/audio-direction.md) defines three shared music assets, scene routing, ducking and pause/skip/exit behavior. No music/audio is generated here.
 
 **25 October Q31/Q41 narrator performance:** Use the same original AI-generated English voice across intro/ending/trailer, with **natural human sound** and **calm, serious** delivery. Intro carries measured regret, ending restrained hope, trailer purposeful composure; increased editing/action pace does not imply shouting/rushing. Preserve natural sentence stress/pauses without robotic station processing. [Voice contract](../08-review/owner-questionnaire.md#narration-contract) supplies teammate production direction; gender/pitch/provider remain production choices. No voice audio is generated here.
@@ -82,8 +84,7 @@ Use ordinary greenhouse or food-production modules as evidence of life support, 
 | Mode | Story role | Limits of its outcome |
 |---|---|---|
 | Swarm | Continuous salvage patrol | Endless normal threats; no campaign conclusion |
-| Survival | Hold a route for a fixed operational window | Success at the displayed combat-time deadline |
-| Boss | Intercept one major threat | Local encounter success, not automatically the campaign source |
+| Boss | Intercept a repeating sequence of major threats | Each kill opens a station exit; next deliberate launch continues, with no one-boss final victory |
 | Chaos | Emergency containment in a densely contaminated region | Endless swarms and scheduled bosses; one boss kill does not end the mode |
 | Campaign | Reach and isolate concentrated source sites | Final source clearance opens a corridor for restoration teams |
 
@@ -152,7 +153,7 @@ Later acceptance: every spoken line is readable at actual display size, all voic
 - Advance never leaves the previous card over the next footage. A skipped beat stops its presentation effects cleanly. Holding a button does not skip every beat: require a fresh press.
 - Intro is marked seen only for this application session. No persistent save or replay-menu feature is required. Ending plays after each valid campaign clear.
 - Presentation owns its own clock; gameplay, loot RNG, damage and mode timers are inactive. Pause/focus handling follows the chosen UI lifecycle, without hidden combat progress.
-- Use the existing cutscene base and rendering pipeline after checking the class registry. Verify supported animation before committing to a file format; no library adoption is authorized by these notes.
+- Implement the planned Cutscene base first; current source has no cutscene/video decoder. Follow the final script's layered PNG/sheet/Scene pipeline, inherited Intro/Ending behavior and result route; no new library is needed.
 
 ## 9. Production inventory and acceptance
 

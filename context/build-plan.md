@@ -2,9 +2,9 @@
 
 The order in which the game is built between **14 October** and the **25 October 2026** submission. Each numbered item is one unit of work: one branch, one pull request, one entry in `progress-tracker.md`. Do not start an item until its dependencies meet the Definition of Done in `code-standards.md`.
 
-## Current checkpoint — DOC-58 material source coverage
+## Current checkpoint — DOC-59 remaining beta context delivered
 
-Deliver PREP-20 written material coverage for ten debris kinds, three basic variants, ranged/heavy and four planned guardians. Inspect existing sprites/source; preserve reward values and no-drop/merge semantics; record the independent basic-sprite selectors for later T02 integration. Verified profile coverage, Markdown-only scope, links/tables and unchanged-source build. Actual metadata/art/loot acceptance remains open. Next preparation priorities are encounter/spawn data, portal geometry/lifecycle and the ordered implementation handoff. Context/planning only; hold questions while owner away.
+All six written areas are delivered in [the implementation handoff](../todo/00-planning/implementation-handoff.md) and its linked encounter, portal, weapon/numeric, UI/settings and final-script appendices. Verified stage/roster/composition/clock/geometry arithmetic and coverage, all local file/heading links, Markdown tables/scope and unchanged-source build. Q46 owner answer is recorded; other defaults are delegated initial tuning, not measured balance. PREP-01/02/07/10/12/14/19/21/22/27/29 writing complete;32 umbrella implementation/production/review/release tasks remain. Current changes are context files only. Next actual implementation slice is H00 baseline audit, followed by H01 typed run/reset/RNG; do not begin source work as part of this documentation delivery.
 
 ## Task-list maintenance for every work item
 

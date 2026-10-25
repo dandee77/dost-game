@@ -1,5 +1,7 @@
 # Beta field-card compatibility - 25 October 2026
 
+**25 October composition adopted:** [Numerical cannon contract](weapon-composition.md) now completes burst/fan/bank/AP/signature composition. [Rank/load contract](../04-verification/numerical-and-load-contract.md) specifies all19 ability target overrides. Earlier remaining-PREP-27 wording below describes the pre-adoption checkpoint; actual handlers/tests/balance still remain T04/T08/T10.
+
 Authored under delegated technical/content work while the owner is away. Q35 hides cards until useful, Q40 retains compatible pattern cards, Q37 excludes Legendary pity and Q38 requires a valid pick. This is the eligibility/data contract, not completed weapon behavior or balanced numerical composition. [Game design](../../context/game-design.md#25-october-card-capability-mapping) owns gameplay rules/numbers; exact burst/fan/signature-load tuning remains PREP-27.
 
 ## Capability mapping for all 26 cannon nodes

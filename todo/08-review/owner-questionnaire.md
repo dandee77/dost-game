@@ -51,6 +51,7 @@
 | Q43: Show normal-enemy health bars or bosses only? | **Normal enemies too, when damaged** | Small overhead bars while alive/below full HP/in view; no fade timeout. Use actual spawn-scaled max HP and preserve across presets. Bosses keep named HUD; normal adds get small bars. Implementation remains open. |
 | Q44: Floating damage numbers for all hits, critical only or hidden? | **All hits** | Positive outgoing damage from primary/abilities/periodic effects remains visible. Actual applied amount, explicit critical tier and same-target/tier cosmetic grouping; existing popup owners reused. Complete hit metadata/grouping/runtime readability remain open. |
 | Q45: Combat HUD cooldown icons for learned automatic abilities? | **Yes—compact ability icons** | One read-only icon per owned ability, ranks and genuine cooldown/active/persistent states. Starter shield and independent droid rebuilds use accurate owner data; no manual skill prompts. Art/HUD integration remains open. |
+| Q46: Critical-hull sound and visual warning? | **Visual only, optional in Settings; soft red gradient from the sides. Also add screen-shake settings** | [Detailed comfort contract](../02-gameplay/ui-input-and-settings.md) defines optional stationary edge tint, transparent center, independent shake strength and persistence. Thresholds/Low shake default are delegated, not individually owner-selected. No warning alarm. Actual rendering/settings integration remains open. |
 
 ## Boss-mode retirement
 
@@ -112,7 +113,7 @@ Default to **Medium** on first launch or invalid/missing preference, then load t
 
 ## Local preferences contract
 
-Use a small versioned settings.cfg beside the executable, resolved through the existing application asset-directory convention. Store Master, Music, SFX/Voice and graphics preset only. Application loads once and owns preferences across scenes. Future implementation puts filename/defaults in Config, slider geometry in Theme and reuses existing resource/audio ownership.
+Use a small versioned settings.cfg beside the executable, resolved through the existing application asset-directory convention. Store Master, Music, SFX/Voice, graphics preset and Q46's low-hull-warning/screen-shake preferences. Application loads once and owns preferences across scenes. Future implementation puts filename/defaults in Config, slider geometry in Theme and reuses existing resource/audio ownership.
 
 ```text
 version=1
@@ -120,9 +121,11 @@ master=1.0
 music=1.0
 sfx=1.0
 graphics=medium
+low_hull_warning=true
+screen_shake=low
 ```
 
-These are author-selected defaults: full category gains and Medium quality. Gains must be finite and clamped to 0..1; unknown graphics values use Medium. Missing fields use their defaults. Ignore unknown keys; last valid duplicate wins. Missing/malformed/unreadable files cannot prevent launch. Unknown schema version uses defaults without silently rewriting that file during load. Log problems once as events.
+These are author-selected defaults except owner-selected Medium quality: full gains, low-hull warning On and shake Low. Gains must be finite and clamped to0..1; unknown graphics values use Medium. Warning accepts true/false and shake off/low/medium/high, with On/Low fallback. Missing fields use defaults, so older version1 files remain compatible. Ignore unknown keys; last valid duplicate wins. Missing/malformed/unreadable files cannot prevent launch. Unknown schema version uses defaults without silently rewriting that file during load. Log problems once as events.
 
 Preview slider changes live. Persist on slider release, confirmed preset change or Settings close; never write every frame while dragging. Write a temporary sibling then atomically replace the completed file. If permissions/disk errors prevent saving, keep working session values, show a short Settings error and keep the game usable. Do not clear user preferences on resetRun or write run state, seed, scrap, levels, unlocks or leaderboard records into this file.
 

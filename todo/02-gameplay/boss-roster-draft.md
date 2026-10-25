@@ -1,5 +1,7 @@
 # Boss roster for review — 24 October 2026
 
+**25 October adoption:** [Complete encounter appendix](beta-encounters.md) adopts all four identities/base tuning, 60%/30% phases, attack geometry/selection, adds/ownership/death and legal arenas. Older proposal/review language below is historical. Written PREP-01 data is complete; actual bosses/art/telegraphs/playtesting remain T06/PROJECT-07/T10.
+
 **25 October Q28 boss art:** Living cores remain mostly hidden behind scrap shells, with small organic seams. Shellback recovery parts armor enough to suggest binding tissue, not a fully exposed body. All four follow [creature direction](../09-art/creature-direction.md); visual seams create no extra weak point, hitbox, phase or damage rule.
 
 **24 October Q25 retirement:** A living Boss-mode player at the station can confirm Retire Run, preserving earned score, boss clears and active time as Retired. No pending encounter credit, extra reward or cycle advance. Cancel preserves the upcoming automatic boss. No mid-fight retirement/travel or revival; [current contract](../../context/game-design.md#24-october-boss-mode-retirement---q25-confirmed).

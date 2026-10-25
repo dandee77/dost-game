@@ -1,5 +1,7 @@
 # Mothership Weapon Tree
 
+**25 October numerical adoption:** Existing26 profile/signature rows are adopted initial beta defaults. [Composition appendix](weapon-composition.md) completes exact burst/fan/bank/penetration/snapshot/crit/signature rules; [numerical/load contract](../04-verification/numerical-and-load-contract.md) specifies safety and actual acceptance. PREP-22/27 writing complete; older proposed/mapping-pending text is historical. T08/T10/runtime balance remains open.
+
 **25 October Q35:** Modifier cards require a supported benefit to the current equipped weapon/owned abilities; a future branch is insufficient. [Eligibility contract](attributes-and-luck.md#current-build-card-eligibility--q35-confirmed-25-october) preserves ranks across equipment changes. Exact card-to-node mapping remains PREP-22/27.
 
 **23 October 2026. Accepted names and branching structure; numerical tuning is a draft.** The owner accepted this list/path after requesting choices at both T4 and T5, then asked for balanced stats. This supersedes the earlier six-family proposal. All stats, geometry, signatures and damage accounting are in [game design](../../context/game-design.md#23-october-weapon-stat-draft--accepted-tree-proposed-tuning). No source/assets changed.

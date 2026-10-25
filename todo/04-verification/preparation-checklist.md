@@ -1,5 +1,7 @@
 # Preparation Review and Future Acceptance
 
+**25 October current review boundary:** [Adopted handoff](../00-planning/implementation-handoff.md) and its six completed context contracts replace older proposed/missing-data descriptions. Written verification covers links INCLUDING heading anchors, table shape, numeric/roster/timeline/policy coverage and unchanged-source build. Checkboxes below remain future/independent acceptance until their actual conditions are tested; do not bulk-tick runtime/asset/human checks. Owner approval/release evidence remain separate.
+
 **21 October 2026.** This is a documentation checklist. Future runtime checks below are instructions for a later authorized implementation session, not tests performed now. [Gameplay](../02-gameplay/gameplay.md) contains the detailed T01-T10 verification cases.
 
 ## 1. Context-only change boundary
@@ -44,7 +46,7 @@
 - [ ] Source shutdown never requires a random boss drop or purification item.
 - [ ] Spending trade currency never subtracts salvage level progress or Return Home charge.
 
-- [ ] Weapon quotes are 500/1500/4000/10000 with 16000 total on every path; 20–25-minute Swarm timing is measured, not inferred from prices. Survival shares prices and normally ends with a lower-tier build.
+- [ ] Weapon quotes are500/1500/4000/10000 with16000 total on every path;20–25-minute Swarm timing is measured, not inferred from prices. Four modes only; no Survival pricing/objective remains active.
 - [ ] Attribute/owned-rank prices are 5x, special acquisitions 10x; gains do not multiply with prices.
 - [ ] Hull repair quotes 10 scrap per missing HP and restores exactly payment/full-quote of the deficit, preserving fractional HP. Full Repair/Repair What I Can Afford show exact previews; zero wallet yields no free heal.
 - [ ] Verify the adopted five-size battery contract at runtime: remove old overcharge before adding charge, preserve damaged normal shield, quote proportional prices, commit payment/shield atomically, preview weaker replacements and cap regeneration at normal capacity. PREP-28 design is adopted; runtime checks remain pending.

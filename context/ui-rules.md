@@ -1,5 +1,9 @@
 # UI Rules
 
+## 25 October complete panel and visual-comfort contract
+
+[All-panel input/settings specification](../todo/02-gameplay/ui-input-and-settings.md) supplies entry/exit/focus/input consumption for every normal panel, keyboard controls, disabled/error/transaction handling and safe layouts. Q46 confirms visual-only low-hull warning, optionally disabled in Settings, and configurable screen shake. Use soft stationary red side gradients (transparent center, no alarm/flashing),25% enter/30% leave hull thresholds, On default; shake Off/Low/Medium/High with delegated Low default and stable HUD/aim. These independently saved preferences extend settings.cfg. This current contract supersedes older no-shake, five-mode, optional-voice, growing-energy and combined-shield-repair presentation text below. No renderer/settings code or usability test is delivered here.
+
 ## Compact automatic-ability HUD — Q45 confirmed, 25 October
 
 Show one compact icon for each owned automatic/persistent ability, including the rank-1 starter Deflector. Use the 19-entry target catalog, not the 18-entry manual prototype or all 34 field cards. Numeric/pattern attributes, Luck, weapon tiers and world portals are not ability cooldown icons. Filter owned entries in stable target-catalog order; acquisition may insert a new entry, but cooldown changes never reorder icons. No locked/unowned placeholders or earned rank/army cap.
@@ -173,21 +177,21 @@ See [todo/02-gameplay/gameplay.md](../todo/02-gameplay/gameplay.md) sections 3-5
 |---|---|
 | S-03 Main menu | Start Game -> difficulty; retain shared minimal Settings access; modes chosen in hub |
 | S-12 Difficulty | Easy/Hard/Impossible, effects summary, explicit Confirm and Back |
-| S-13 Colony hub | Same pilot ship, safe navigation, visible inhabited colony, mothership, repair berth, shop and five labeled portals |
+| S-13 Colony hub | Same pilot ship, safe navigation, inhabited colony, mothership, repair berth, shop and four labeled mode portals |
 | S-14 Portal preview | Objective, mode/difficulty, ending condition, Launch/Resume; crossing radius alone never launches |
 | S-04 Field HUD | Wallet and level progress at top center; distinct portal-energy meter/50% tick/nearby F/block reason; hull/shield, objective/timer, MENU |
 | S-05 Field cards | NEW/UPGRADE, real changing stats, automatic/persistent tags; triggered by scrap, not wave clear or elapsed time |
 | S-06 Skill shop | Upgrade Owned and Rare Offers, shared card-stat preview, rank, price, Buy/disabled reason, sold and empty-stock states |
 | S-07 Pause | Resume/Settings/Quit to Main Menu with confirmation; resumes to original hub/field state |
-| Repair | Hull, affordable hull patch, shield or combined service; exact restoration/cost/post-purchase balance before confirmation; visible 3-second progress; no free repair |
+| Repair | Full Hull Repair or Repair What I Can Afford; exact restoration/cost/wallet preview,3-second service. Shield Batteries are separate shop purchases, no combined/free shield service |
 
-Mode portals are Swarm, Survival, Boss, Chaos and Campaign. Use names/shapes as well as color. The colony background should show human habitation without walking characters or an NPC-dialogue system. Use existing textures and shapes until assets are supplied; this session creates no assets.
+Mode portals are Swarm, Chaos, Boss and Campaign. Use names/shapes as well as color. The colony background shows human habitation without walking characters or an NPC-dialogue system. Use existing textures/shapes until assets are supplied; this context session creates no assets.
 
-Normal field upgrades remain free. Shop inventory/prices are selected under the owner's delegation; paid repairs use the same wallet. Label currency “Trade Scrap” and progression “Salvage”; show separate aggregated gain feedback, e.g. “+3 Scrap / +2 Salvage”, with clear tutorial copy explaining both. Lifetime collected means trade earned, not available wallet. Return Home cannot say Ready while shield is offline. Meter maximum visibly increases with player level.
+Normal field upgrades remain free. Shop inventory/prices are selected under delegation; repairs use the same wallet. Label currency “Trade Scrap” and progression “Salvage”; show distinct aggregated gain feedback, e.g. “+3 Scrap / +2 Salvage”. Lifetime collected means trade earned, not available wallet. Ordinary return cannot say Ready while shield is offline. Energy maximum stays1000 and ordinary threshold500 at every level; Boss-clear/checkpoint travel has its separate bypass.
 
 Repair UI disables unaffordable/full components, offers an affordable hull patch when appropriate, and always allows Undock/Resume. Paid Reinforced Hull previews say “Maximum HP only; repair sold separately”; field-card previews retain the actual max/current HP effect. If a fixed rare offer is later learned through a field card, label it Owned and disable acquisition rather than rerolling or double-selling it.
 
-Intro/trailer treatment is in [todo/01-story/story-context.md](../todo/01-story/story-context.md): a short story-text card clears, then its animated scene/gameplay clip plays; repeat with trailer pacing. Use the same safe area/type constraints. Required story sentences belong on their own beats, not continuously over combat. Footage needs moving action; narration is optional. No new art is generated in this documentation session.
+Intro/trailer treatment follows [final production copy](../todo/01-story/final-production-script.md): story card clears before its motion block. Required original English narration has complete captions over cards/footage, with no duplicate matching overlay. Preserve safe-area/body-type rules; actual motion/audio production remains for the teammate. No new art is generated here.
 
 Preserve existing 3840x2160 canvas, 1280x720 initial window, CRT-safe regions, mapped mouse input, Button style and Theme tokens. No UI text at the cropped screen edge. Keep accepted red debris glow and complete destruction art. Selected field return portals replace the planned Q Return Home ability. F interacts inside a return portal or at hub services, with frame input consumed at transitions; E retains auto-fire. Portal pointer appears only within the selected detection radius (roughly one visible screen); broken-shield portals remain visible with Shield Offline. Do not present a manual skill slot.
 
@@ -485,7 +489,7 @@ Reuse what exists before adding new effects.
 | Compactor windup | Toxic flash on the sprite | New |
 | Boss death | Explosion confetti at the boss, large scrap spray | Reuse |
 
-No camera shake by default; the CRT shader already adds motion. Add shake only if the balance pass finds hits feel weak, and keep it under 1 world unit.
+Q46 requests adjustable camera shake: use the [current comfort contract](../todo/02-gameplay/ui-input-and-settings.md#screen-shake), Off/Low/Medium/High, delegated default Low. It displaces only world rendering, never aim/collision/HUD. The older no-shake default is superseded.
 
 ---
 
@@ -497,7 +501,7 @@ Top-to-bottom composition. Screen IDs from `project-overview.md`.
 Default-font progress text centered at y 1800. Replace with a `TEXT_BODY` progress bar only if time allows (fonts are already loaded before this scene).
 
 ### S-02 Intro cutscene (`IntroCutscene`)
-Full-screen slide image with a slow 3% zoom over its duration. Bottom text box: `COLOR_OVERLAY` panel x 300 to 3540, y 1550 to 1950, text in `secondary_font` `TEXT_BODY_SM`, typewriter at 40 characters per second. Caption bottom-right "SPACE: NEXT   ESC: SKIP" in `TEXT_CAPTION`, muted.
+Follow [final script/pipeline](../todo/01-story/final-production-script.md): five8-second card/motion pairs,40 seconds, full readable card text without typewriter, complete voice captions and fresh-press advance/Skip. Planned Cutscene base must be implemented first. Once/application launch, then MainMenu; focus Resume preserves exact beat.
 
 ### S-03 Main menu (`MainMenu`)
 Animated background. Title (`TEXT_DISPLAY`): new game title in two lines (first line sky blue, second line toxic green, both at 55% opacity like the SA title). Buttons, left-aligned: Story, Endless, Leaderboard, Credits, Exit. Footer: "DOST Level Up 3.0 - 2026" in `TEXT_CAPTION`. Remove "Equity Quest - 2024" and the Settings button.
@@ -518,7 +522,7 @@ See the layout above. Entering plays the deposit count-up first, then enables th
 Existing overlay and stats, plus: mode, wave reached, scrap lost (cargo at death). If the score qualifies, a name entry box appears before the buttons (`NameEntry`, `TEXT_H1`, blinking cursor, Enter to save).
 
 ### S-09 Ending cutscene (`EndingCutscene`)
-Same layout as the intro, `COLOR_LIFE` accents. Final card shows run stats and "ENDLESS MODE: THE JUNK KEEPS COMING".
+Three8-second pairs,24 seconds, after final Campaign objectives and immutable result commit. [Ending route](../todo/01-story/final-production-script.md#destinations-result-ownership-and-controls) shows that frozen result inside Ending after natural completion/Skip; no automatic Game scene reset, leaderboard save or magical Earth restoration. Actual assets/playback remain open.
 
 ### S-10 Leaderboard (`LeaderboardScene`)
 Title "LEADERBOARD". Current-rules mode/difficulty filters and top-10 rows: rank, name, score, active time and outcome, plus Boss clears or Campaign progress as relevant. Highlight latest run ID in COLOR_SCRAP; Back returns to MainMenu. Use the 25 October result contract; old two-column Story/Endless layout is retired.

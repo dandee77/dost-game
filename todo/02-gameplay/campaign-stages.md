@@ -1,5 +1,7 @@
 # Campaign star-field stages — 24 October revision
 
+**25 October complete spawn data:** [Encounter appendix](beta-encounters.md#all-fifteen-campaign-normal-waves) supplies all15 finite quotas/mixes/cadences, exact difficulty factors, guardian/add rules and legal spawn/clear geometry. Later references to unauthored tables are historical. Runtime, actual per-level timing, art and balance acceptance remain open; no new stage or Campaign question is needed.
+
 ## Optional station visit after a wave - latest owner revision
 
 Clearing a normal wave opens a safe checkpoint with **Enter Station** and **Next Wave** (or **Stage Boss** after the last normal wave). The owner now wants station visits to be optional. This supersedes the earlier forced base visit after every wave.

@@ -1,5 +1,7 @@
 # Beta hub, arenas and map layout
 
+**25 October encounter geometry adopted:** [Arena/spawn/clear supplement](beta-encounters.md#ownership-clocks-and-common-geometry) fixes finite circles, clear entry, non-solid scenery, normal/boss bounded candidates and clear-exit fallback. It also explicitly excludes BarricadeEvent from finite encounters. This completes written PREP-07 placement data; runtime navigation/camera/Blink/readability checks remain required.
+
 **24 October 2026. Delegated layout draft for SCRAPBOUND: Last Hope.** Owner requested drafting from the existing inhabited HOPE space setting. These are authoring defaults, not rendered assets or playtest results. Geometry authority: [game design](../../context/game-design.md#24-october-delegated-beta-layout-geometry). Presentation authority: [UI rules](../../context/ui-rules.md).
 
 ## Ship-based HOPE hub

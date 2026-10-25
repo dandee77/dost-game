@@ -1,5 +1,7 @@
 # Story Trailer — Text Only
 
+**25 October production authority:** This longer literary text is a synopsis/reference. Use the [final90-second card/voice script](final-production-script.md#final-trailer-90-seconds) for production, not this entire passage as another voice track. Wording review is complete under delegation; actual voice timing/owner review/video remain separate.
+
 **25 October Q42 captions:** Caption every final spoken trailer line, including speech over animated/gameplay footage. Supply timed phrase cues from the actual recording and readable captions in the export; avoid duplicate overlays on already-captioned footage. This untimed script does not itself deliver audio, cue timing or video.
 
 **25 October Q31/Q41 performance direction:** Read this with the shared original AI-generated English narrator: natural human sound, calm and serious. Convey weight and resolve with natural emphasis and measured pauses; intensifying footage/edit/music need not turn the voice into shouting or robotic station processing. Keep the saved voice profile used by intro/ending. Final clip timing follows the production storyboard; this remains text, not audio/video.
